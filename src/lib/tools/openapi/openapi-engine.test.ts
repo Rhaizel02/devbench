@@ -172,6 +172,23 @@ describe('bounded OpenAPI parser', () => {
 	});
 });
 describe('internal JSON Pointer references', () => {
+	it('does not resolve scoped schema refs as if they belonged to the root document', () => {
+		const c = parse(
+			small({
+				components: {
+					schemas: {
+						Scoped: {
+							$id: 'https://never.example.test/schema',
+							properties: { a: { $ref: '#/components/schemas/Other' } }
+						},
+						Other: { type: 'string' }
+					}
+				}
+			})
+		);
+		expect(c.references[0].status).toBe('unsupported');
+		expect(() => parse(small({ 'x-id': 9007199254740992 }))).toThrow(/safe precision/);
+	});
 	it('decodes URI fragments before tokens and round trips percent/slashes/Unicode', () => {
 		const root = { a: { 'b/c~%雪': 42 }, list: [7] };
 		const path = at(at('#', 'a'), 'b/c~%雪');

@@ -1,5 +1,12 @@
 # DevBench — Roadmap
 
+## Current V1.5 release candidate
+
+Canvas V1.4 integrated intact into main at `666dc73207ba0a2a9f26c686e1ad2e2a796f670f`, verified by CI. OpenAPI Contract Workbench adds the 28th entry on `feature/openapi-explorer-v15`: bounded local parsing/exploration, request preview/handoff and contract diff. No V1.5 merge to main is authorized. [Contract](V15_OPENAPI_GOAL.md), [progress](GOAL_PROGRESS_V15.md), [implementation/limits](docs/OPENAPI_V15.md) and VALIDATION contain acceptance evidence.
+
+P2: dedicated assistive/cross-browser coverage; additional explicitly unsupported OpenAPI serialization/dialects, richer compatibility semantics and webhook/callback navigation. Do not broaden this RC or treat zero reported breaks as guaranteed compatibility. Prior release counts and branch statements below are historical.
+
+
 ## V1.4 — Architecture Canvas RC, rama aislada
 
 DRAW-01 es la entrada 27: pizarra de formas/tinta/texto, estilos, transformaciones e historial; jerarquía creada por usuario con apertura directa/portal y huérfanos; proyectos locales IndexedDB con autosave, importación migrada v1/v2, rescate JSON y PNG. Lab sigue disponible. Se conserva main V1.3 y sus 26 slugs, sin merge ni force push. Contrato/evidencia/aceptación en `V14_ARCHITECTURE_CANVAS_GOAL.md`, `GOAL_PROGRESS_V14.md` y `docs/ARCHITECTURE_CANVAS_V14.md`.

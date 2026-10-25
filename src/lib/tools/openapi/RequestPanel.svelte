@@ -14,6 +14,7 @@
 		requestDefaults,
 		prepareRequest,
 		redactContractRequest,
+		isCredential,
 		type RequestOptions
 	} from './request-engine';
 	let { contract, operation }: { contract: Contract; operation: Operation } = $props();
@@ -91,7 +92,7 @@
 							options.variables = Object.fromEntries(
 								Object.entries(operation.servers[options.server]?.variables ?? {}).map(([k, v]) => [
 									k,
-									v.default
+									isCredential(contract, operation, k) ? '' : v.default
 								])
 							);
 					}}

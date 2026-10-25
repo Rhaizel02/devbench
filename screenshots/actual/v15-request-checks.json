@@ -1,0 +1,38 @@
+[
+  {
+    "scene": "request",
+    "width": 390,
+    "theme": "light",
+    "documentWidth": 390
+  },
+  {
+    "scene": "request",
+    "width": 390,
+    "theme": "dark",
+    "documentWidth": 390
+  },
+  {
+    "scene": "request",
+    "width": 768,
+    "theme": "light",
+    "documentWidth": 768
+  },
+  {
+    "scene": "request",
+    "width": 768,
+    "theme": "dark",
+    "documentWidth": 768
+  },
+  {
+    "scene": "request",
+    "width": 1440,
+    "theme": "light",
+    "documentWidth": 1440
+  },
+  {
+    "scene": "request",
+    "width": 1440,
+    "theme": "dark",
+    "documentWidth": 1440
+  }
+]

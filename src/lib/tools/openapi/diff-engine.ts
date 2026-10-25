@@ -353,7 +353,9 @@ export function compareContracts(before: Contract, after: Contract): ContractDif
 			add(
 				at(path, 'security'),
 				'security',
-				!a.security.length && b.security.length && !b.security.some((r) => !Object.keys(r).length)
+				(!a.security.length || a.security.some((r) => !Object.keys(r).length)) &&
+					b.security.length &&
+					!b.security.some((r) => !Object.keys(r).length)
 					? 'breaking'
 					: 'potential',
 				'Effective authentication alternatives changed (OR alternatives / AND schemes).'
@@ -478,8 +480,22 @@ export function compareContracts(before: Contract, after: Contract): ContractDif
 			);
 	}
 	if (
-		stable(before.securitySchemes.map((s) => [s.name, s.details])) !==
-		stable(after.securitySchemes.map((s) => [s.name, s.details]))
+		stable(
+			before.securitySchemes
+				.map((s) => [
+					s.name,
+					Object.fromEntries(Object.entries(s.details).filter(([k]) => !documentation.includes(k)))
+				])
+				.sort(([a], [b]) => String(a).localeCompare(String(b)))
+		) !==
+		stable(
+			after.securitySchemes
+				.map((s) => [
+					s.name,
+					Object.fromEntries(Object.entries(s.details).filter(([k]) => !documentation.includes(k)))
+				])
+				.sort(([a], [b]) => String(a).localeCompare(String(b)))
+		)
 	)
 		add(
 			'#/components/securitySchemes',

@@ -200,6 +200,21 @@
 				· {contract.statistics.bytes.toLocaleString()} bytes
 			</p>
 		</header>
+		<details class="contract-metadata">
+			<summary>Contract servers, tags and security schemes</summary>
+			{#each contract.servers as server, i (i)}<p>
+					<code>{server.url}</code>
+					{server.description}
+				</p>{:else}<p>No root servers declared.</p>{/each}
+			{#each contract.tags as tag (tag.name)}<p>
+					<strong>{tag.name}</strong>
+					{tag.description}
+				</p>{/each}
+			{#each contract.securitySchemes as scheme (scheme.name)}<details>
+					<summary>{scheme.name} · {scheme.type}</summary>
+					<pre>{JSON.stringify(scheme.details, null, 2).slice(0, 12000)}</pre>
+				</details>{/each}
+		</details>
 		{#if contract.issues.length}<details class="diagnostics">
 				<summary>{contract.issues.length} diagnostics (up to 200)</summary
 				>{#each contract.issues as issue, rowIndex1 (rowIndex1)}<p>
@@ -275,6 +290,16 @@
 </div>
 
 <style>
+	.contract-metadata {
+		padding: 12px 0;
+		overflow-wrap: anywhere;
+	}
+	.contract-metadata pre {
+		white-space: pre-wrap;
+		max-height: 240px;
+		overflow: auto;
+		font-size: 12px;
+	}
 	.openapi {
 		min-width: 0;
 	}
@@ -323,6 +348,7 @@
 	}
 	.contract-summary > .tool-help {
 		width: 100%;
+		white-space: normal;
 	}
 	h2 {
 		font-size: 18px;

@@ -28,6 +28,55 @@ function p(extra: Partial<Parameter> = {}): Parameter {
 	};
 }
 describe('OpenAPI request serialization', () => {
+	it('never auto-populates credential server variables and blocks ambiguous ref siblings', () => {
+		const raw = sampleContract();
+		raw.servers = [
+			{ url: 'https://example.test/{token}', variables: { token: { default: 'DO_NOT_AUTOFILL' } } }
+		];
+		const c = parseContract(JSON.stringify(raw)),
+			op = c.operations[0],
+			{ options } = requestDefaults(c, op);
+		expect(options.variables.token).toBe('');
+		expect(() => prepareRequest(c, op, options)).toThrow(/Credential-bearing/);
+		const referenced = sampleContract();
+		const paths = referenced.paths as Record<string, JsonValue>;
+		referenced['x-item'] = paths['/orders'];
+		delete paths['/orders'];
+		paths['/ref'] = { $ref: '#/x-item', servers: [{ url: 'https://override.test' }] };
+		const contract = parseContract(JSON.stringify(referenced));
+		expect(contract.operations.filter((o) => o.route === '/ref').every((o) => o.unresolved)).toBe(
+			true
+		);
+		expect(contract.issues.some((i) => i.message.includes('siblings are not merged'))).toBe(true);
+	});
+	it('bounds branching reference samples and preserves nonsensitive query wire encoding', () => {
+		const raw = sampleContract(),
+			schemas = (raw.components as Record<string, JsonValue>).schemas as Record<string, JsonValue>;
+		for (let i = 0; i < 8; i++)
+			schemas['Branch' + i] = {
+				type: 'object',
+				properties: Object.fromEntries(
+					Array.from({ length: 25 }, (_, n) => [
+						'p' + n,
+						(i === 7
+							? { type: 'string' }
+							: { $ref: '#/components/schemas/Branch' + (i + 1) }) as JsonValue
+					])
+				)
+			};
+		const c = parseContract(JSON.stringify(raw)),
+			warnings: string[] = [];
+		const value = schemaSample(c, '#/components/schemas/Branch0', warnings);
+		expect(JSON.stringify(value).length).toBeLessThan(40000);
+		expect(warnings.join(' ')).toContain('budget');
+		const safe = redactContractRequest(c, c.operations[0], {
+			method: 'GET',
+			url: 'https://example.test/a?tags=a,b&token=SECRET&sp=a%20b',
+			headers: [],
+			body: null
+		});
+		expect(safe.url).toBe('https://example.test/a?tags=a,b&token=REDACTED&sp=a%20b');
+	});
 	it.each([
 		[p(), 'a/b ?', 'a%2Fb%20%3F'],
 		[p(), ['a', 'b'], 'a,b'],

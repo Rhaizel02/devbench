@@ -1,5 +1,13 @@
 # B1 validation report
 
+## V1.5 OpenAPI RC — current acceptance
+
+Canvas H0 integration is complete: main `666dc73207ba0a2a9f26c686e1ad2e2a796f670f`, exact CI 40233753793 success, preserving the complete RC history. OpenAPI stays on `feature/openapi-explorer-v15`; **28 entries**, existing 27 retained. H2/H3/H4 CIs 40235203199 / 40235471677 / 40235751268 succeeded. H5 and final exact-SHA CI are tracked in GOAL_PROGRESS_V15.md.
+
+Selective checks: check 0 errors/warnings; 54 OpenAPI units; five Chromium flows pass. The new browser flows exercise imported/pasted contracts, filtering, internal refs/cycles/breadcrumbs, four code targets, real clipboard/download, invalidation/errors/reset/reload, redacted one-shot HTTP handoff, directional diff/export, keyboard palette/favorites and a real 404. Explorer/schema/request/diff cover 390/768/1440 dark/light with no measured horizontal page overflow. Synthetic descriptions/remote refs do not produce external requests or DOM HTML. OpenAPI leaves no payload in URLs/history/localStorage/sessionStorage/cookies/IndexedDB/cache/console. Same-origin static GETs are legitimate resources; Canvas keeps its independent documented local-project exception.
+
+Full clean installation/regression results and final GO/NO-GO will be appended only after completion. Evidence and exact limitations: [OPENAPI_V15](docs/OPENAPI_V15.md), `screenshots/actual/v15-*.png` and layout JSON files. Previous validation sections below preserve historical entry counts, branch states and dates; their old main statements do not describe the current release.
+
 ## V1.4 — Architecture Canvas Release Candidate
 
 RC on `feature/architecture-canvas-v14`, **27 entries**, lazy/prerendered `/tools/architecture-canvas/` and retained lab. `main` remains V1.3. Check: 0 errors/warnings. Lint and build pass. **256 unit tests / 16 files** pass, including full v1 migration (Unicode IDs, text child links and anchored text connections), v2 roundtrip/hostile imports/cycles/history/autosave failures. **36 local Chromium flows pass**, with the two historical explicitly remote production-audit flows skipped. After the final migration extension, all units and the seven Canvas flows pass again; final CI repeats the complete suite on the pushed commit.
@@ -151,3 +159,7 @@ Real browser cases prove the hostile regex worker is terminated, the main thread
 Evidence: `screenshots/actual/release-matrix.json`, `checks.json`, `dependency-audit.json`, final captures 23–26, test sources and milestone commits. README/FEATURES/ROADMAP/architecture now describe the actual 18 tools, privacy, static build and precise limitations. DESIGN tokens remain unchanged. **P0/P1: none known. P2: optional density/alignment refinements and broader Firefox/WebKit/screen-reader QA; Chromium is the verified browser.** Final commit publication and its CI result are recorded in GOAL_PROGRESS and the completion message. Hosting remains a separate user decision.
 
 Published F implementation: `c0b1676cc9030f07d1cd956d680f8cc07504695c`. Its complete GitHub Actions job passed every step, including all 16 Chromium flows: [CI run 40161871703](https://github.com/Rhaizel02/devbench/actions/runs/40161871703). The following closing checkpoint changes development metadata only; the final pushed SHA and matching CI are confirmed in the completion message.
+
+### V1.5 final local gate
+
+Clean npm ci: 253 packages, zero audit vulnerabilities. Full suite: 41 Chromium flows pass, 2 explicitly remote historical audits skipped, zero flaky/unexpected tests (109.6 s). After the final credential/reference guard: check 0 errors/warnings, lint, **310 units / 20 files**, static build **28 tool directories**, and five relevant OpenAPI flows pass again. Final exact-SHA CI still must be verified before delivery. Evidence: screenshots/actual/v15-h6-validation.json; full detailed local runner JSON is in ignored work/v15-h6-browser.json. No open P0/P1; declared unsupported cases and dedicated assistive/cross-browser coverage are P2.

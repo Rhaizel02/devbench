@@ -1,6 +1,6 @@
 # Progreso DevBench V1.5 — OpenAPI Contract Workbench
 
-**Estado actual:** H0 aceptado, main `666dc73207ba0a2a9f26c686e1ad2e2a796f670f`, CI 40233753793 correcta. Rama actual `feature/openapi-explorer-v15`; H1 define DTOs y límites, check 0 errores/avisos y lint correctos. Siguiente H2: parser/refs/worker y tests. Catálogo 27 hasta explorador real. No merge V1.5 a main.
+**Estado actual:** H0–H5 completos; H6 local verificado: npm ci sin vulnerabilidades, check 0 errores/avisos, lint, 310 tests/20 archivos, build 28 herramientas, 41 Playwright completos + 2 auditorías remotas omitidas. Tras ajustes finales de seguridad: unidad/check/lint/build y cinco flujos OpenAPI repetidos correctamente. Preparando commit/push H6 y CI exacta. V1.5 NO fusionada a main.
 
 ## Reanudar
 
@@ -16,15 +16,15 @@ Leer V15_OPENAPI_GOAL.md, este archivo y Goal activo. El Goal referencia el text
 
 ## Hitos
 
-| Hito               | Estado       | Próxima evidencia                                                                         |
-| ------------------ | ------------ | ----------------------------------------------------------------------------------------- |
-| H0 integrar Canvas | Aceptado     | Main `666dc732…`, CI 40233753793; 27 rutas, 256 unitarios/36 Playwright.                  |
-| H1 rama V1.5       | Implementado | Rama desde main verificado, motores leídos, DTOs/límites y docs; check/lint pasan.        |
-| H2 parser/modelo   | Pendiente    | Worker acotado JSON/YAML, OAS 3.0/3.1, pointers/ciclos/externas sin red y tests.          |
-| H3 explorador      | Pendiente    | Operaciones/detalles/seguridad efectiva, schemas progresivos y UX real.                   |
-| H4 HTTP            | Pendiente    | Preview editable, estilos documentados, redacción y handoff builder de un uso.            |
-| H5 diff            | Pendiente    | Dos contratos, clasificación cauta, refs/ciclos/documentación y export seguro.            |
-| H6 RC              | Pendiente    | 28 entradas, capturas/revisiones, instalación limpia, suite/CI completa, docs y GO/NO-GO. |
+| Hito          | Estado                             | Evidencia                                                                                             |
+| ------------- | ---------------------------------- | ----------------------------------------------------------------------------------------------------- |
+| H0 Canvas     | Aceptado                           | Main 666dc732; CI 40233753793 success.                                                                |
+| H1 rama       | Completo                           | 1be1c21; CI 40234461470 success.                                                                      |
+| H2 parser     | Completo                           | 8dea18f; CI 40235203199 success.                                                                      |
+| H3 explorador | Completo                           | 1bea08e; CI 40235471677 success.                                                                      |
+| H4 HTTP       | Completo                           | 2670712; CI 40235751268 success.                                                                      |
+| H5 diff       | Implementado/verificado local      | 6c080afdacbd06fdd3a0ec420b1cf44f7875af53; CI 40236155232 instalada/pruebas en curso al último sondeo. |
+| H6 RC         | Local aceptado, CI final pendiente | 28 entradas, 310 unidades, 41 flows; evidencia v15-h6-validation.json.                                |
 
 ## Histórico de checkpoints e incidencias
 
@@ -67,3 +67,9 @@ H3 SHA 1bea08e. Serialización form/simple/label/matrix/deepObject plano y array
 ### H5 — comparación implementada
 
 H4 SHA 2670712e50c2843935f3968d1a254f1350f6bfed, CI 40235751268 success; H3 CI 40235471677 y H2 CI 40235203199 success. Diff worker 3,5 s, pares visitados, 2.000 cambios; endpoints/parámetros/DTO/status/headers/auth/schema con dirección request/response y clasificaciones cautas. Export JSON/Markdown solo metadatos/cambios y escapes. Cuatro Playwright correctos, 51 tests OpenAPI; capturas de preview/diff. Se acota también el muestreo ante DAG ramificados y se conserva encoding de query al redactar. Siguiente H6: auditoría selectiva de requisitos, controles completos, capturas finales y docs/CI.
+
+### H6 — verificación local terminada
+
+Session 27266 terminó exit 0: npm ci 253 paquetes/0 vulnerabilidades, check/lint, 309 tests antes del último test de seguridad, build y 41 flujos Chromium correctos/2 externos omitidos (1,8 min, cero flaky). Session 97630 terminó exit 0 con los ajustes finales: 310 tests/20 archivos, check 0 errores/avisos, lint, build y los cinco flows nuevos correctos. No repetir instalación ni la suite local completa sin una nueva causa; CI exacta repetirá todo.
+
+Se bloquearon variables/path con credenciales y Path Item refs con siblings ambiguos; defaults no arrastran credenciales. Capturas reales de explorer 6 combinaciones y vistas schema/request/diff, layout 6 combinaciones por vista; revisadas desktop oscuro y móvil claro, más schema. Se restauran únicamente capturas históricas regeneradas por la suite. Motores Canvas intactos. P0/P1 abiertos: ninguno. Pendiente: CI exacta/publicación y verificación HTTPS sin bypass; registrar SHAs y cerrar contrato.

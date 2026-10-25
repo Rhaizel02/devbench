@@ -135,4 +135,13 @@
 	.media > strong {
 		margin-right: 12px;
 	}
+	@media (max-width: 767px) {
+		button,
+		summary {
+			min-height: 44px;
+		}
+		pre {
+			font-size: 14px;
+		}
+	}
 </style>

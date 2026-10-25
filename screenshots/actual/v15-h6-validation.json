@@ -1,0 +1,50 @@
+{
+  "date": "2026-10-25",
+  "branch": "feature/openapi-explorer-v15",
+  "canvasMain": "666dc73207ba0a2a9f26c686e1ad2e2a796f670f",
+  "baseMilestone": "6c080afdacbd06fdd3a0ec420b1cf44f7875af53",
+  "tools": 28,
+  "node": "24.22.1",
+  "npmCi": "pass; 0 vulnerabilities",
+  "check": "0 errors / 0 warnings",
+  "lint": "pass",
+  "unit": {
+    "newOpenApi": 54,
+    "files": 20,
+    "passed": 310
+  },
+  "build": "pass; 28 prerendered tool directories",
+  "browser": {
+    "flaky": 0,
+    "skipped": 2,
+    "unexpected": 0,
+    "afterFinalFixes": "five relevant OpenAPI flows passed again",
+    "passed": 41
+  },
+  "responsive": {
+    "widths": [
+      390,
+      768,
+      1440
+    ],
+    "views": [
+      "explorer",
+      "schemas",
+      "request",
+      "diff"
+    ],
+    "themes": [
+      "dark",
+      "light"
+    ],
+    "overflow": "none measured"
+  },
+  "privacy": "synthetic payload absent from traffic, URLs/history, preference/session storage, cookies, IndexedDB, caches and console; no external refs fetched",
+  "screenshots": "v15-explorer-*.png; v15-schemas-dark-1440.png; v15-request-dark-1440.png; v15-diff-dark-1440.png",
+  "limitations": [
+    "Chromium smoke is not WCAG/cross-browser certification",
+    "Remote HTTPS check separate from publication",
+    "No universal conformance/backward compatibility guarantee"
+  ],
+  "openP0P1": []
+}

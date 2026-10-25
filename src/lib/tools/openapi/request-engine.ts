@@ -37,6 +37,10 @@ export function serializeParameter(
 	if (p.allowReserved)
 		throw new ToolError('allowReserved: true is not supported. Review encoding before transfer.');
 	if (p.in === 'path') {
+		if (members.some((v) => v === '.' || v === '..'))
+			throw new ToolError(
+				'Dot-segment path values are unsupported; URL normalization would change the route.'
+			);
 		if (!['simple', 'label', 'matrix'].includes(p.style))
 			throw new ToolError('Unsupported path serialization style.');
 		const joined =
@@ -234,7 +238,10 @@ export function requestDefaults(
 		options: {
 			server: 0,
 			variables: Object.fromEntries(
-				Object.entries(op.servers[0]?.variables ?? {}).map(([k, v]) => [k, v.default])
+				Object.entries(op.servers[0]?.variables ?? {}).map(([k, v]) => [
+					k,
+					isCredential(c, op, k) ? '' : v.default
+				])
 			),
 			base: 'https://api.example.test',
 			values,
@@ -262,7 +269,13 @@ export function prepareRequest(c: Contract, op: Operation, o: RequestOptions): R
 	let server = op.servers[o.server]?.url ?? '/';
 	const definition = op.servers[o.server];
 	server = server.replace(/\{([^{}]+)\}/g, (_, key: string) => {
-		const v = o.variables[key] ?? definition?.variables[key]?.default;
+		const v =
+			o.variables[key] ??
+			(isCredential(c, op, key) ? undefined : definition?.variables[key]?.default);
+		if (isCredential(c, op, key))
+			throw new ToolError(
+				'Credential-bearing server variables are unsupported; use a non-secret server.'
+			);
 		if (v === undefined) throw new ToolError('Missing server variable.');
 		const choices = definition?.variables[key]?.enum;
 		if (choices && !choices.includes(v))
@@ -290,6 +303,10 @@ export function prepareRequest(c: Contract, op: Operation, o: RequestOptions): R
 		headers: { name: string; value: string }[] = [],
 		cookies: string[] = [];
 	for (const p of op.parameters) {
+		if (p.in === 'path' && isCredential(c, op, p.name))
+			throw new ToolError(
+				'Credential-bearing path parameters are unsupported; they cannot be redacted safely in the generated route.'
+			);
 		const text = o.values[p.key] ?? '';
 		if (!text.trim()) {
 			if (p.required) throw new ToolError('Provide required parameter: ' + p.name);
@@ -302,6 +319,8 @@ export function prepareRequest(c: Contract, op: Operation, o: RequestOptions): R
 			throw new ToolError('Parameter ' + p.name + ' must be JSON (quote strings).');
 		}
 		let parameter = p;
+		if (isCredential(c, op, p.name) && value !== null && typeof value === 'object')
+			throw new ToolError('Credential parameters require scalar values.');
 		if (p.content.length) {
 			if (p.content.length !== 1 || !/^application\/(?:[\w.-]+\+)?json$/.test(p.content[0].name))
 				throw new ToolError('Parameter content supports JSON only.');
@@ -315,6 +334,8 @@ export function prepareRequest(c: Contract, op: Operation, o: RequestOptions): R
 		if (result.cookie !== undefined) cookies.push(result.cookie);
 	}
 	if (/[{}]/.test(route)) throw new ToolError('Unresolved path parameter.');
+	if (route.split('/').some((segment) => segment === '.' || segment === '..'))
+		throw new ToolError('Dot-segment routes are unsupported.');
 	if (cookies.length) headers.push({ name: 'Cookie', value: cookies.join('; ') });
 	let body: string | null = null;
 	if (o.media) {

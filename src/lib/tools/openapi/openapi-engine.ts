@@ -459,6 +459,18 @@ export function parseContract(input: string, format: InputFormat = 'auto'): Cont
 		const parentParams = parameters(item.parameters, at(p, 'parameters')),
 			pathServers =
 				item.servers === undefined ? undefined : servers(item.servers, at(p, 'servers'));
+		if (
+			object(raw)?.$ref !== undefined &&
+			Object.keys(object(raw)!).some(
+				(k) => !['$ref', 'summary', 'description'].includes(k) && !k.startsWith('x-')
+			)
+		) {
+			parentParams.unresolved = true;
+			issue(
+				at('#/paths', route),
+				'Path Item $ref siblings are not merged; request preparation is blocked.'
+			);
+		}
 		for (const key of Object.keys(item))
 			if (
 				![...HTTP_METHODS, '$ref', 'summary', 'description', 'servers', 'parameters'].includes(

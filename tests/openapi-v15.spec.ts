@@ -1,8 +1,53 @@
 import { test, expect, type Page } from '@playwright/test';
 import { sampleContract } from '../src/lib/tools/openapi/fixtures';
 import { evidencePath } from './support/environment';
-import { mkdir } from 'node:fs/promises';
+import { mkdir, writeFile } from 'node:fs/promises';
 import { readFile } from 'node:fs/promises';
+async function responsive(page: Page, scene: string) {
+	const checks = [];
+	for (const width of [390, 768, 1440]) {
+		await page.setViewportSize({ width, height: 1000 });
+		for (const theme of ['light', 'dark']) {
+			await page.getByLabel('Color theme', { exact: true }).selectOption(theme);
+			await page.evaluate(async () => {
+				await document.fonts.ready;
+				(document.activeElement as HTMLElement)?.blur();
+				scrollTo(0, 0);
+			});
+			const documentWidth = await page.evaluate(() => document.documentElement.scrollWidth);
+			expect(documentWidth).toBeLessThanOrEqual(width);
+			checks.push({ scene, width, theme, documentWidth });
+			if (width === 1440 && theme === 'dark')
+				await page.screenshot({
+					path: evidencePath(`v15-${scene}-dark-1440.png`),
+					fullPage: true,
+					animations: 'disabled'
+				});
+		}
+	}
+	await writeFile(evidencePath(`v15-${scene}-checks.json`), JSON.stringify(checks, null, 2) + '\n');
+}
+test('OpenAPI registry, keyboard palette, favorites, deep links and real 404', async ({ page }) => {
+	await page.goto('/');
+	await expect(page.getByText('28 tools · 28 available', { exact: true })).toBeVisible();
+	await page.keyboard.press('Control+k');
+	await page.getByRole('combobox', { name: 'Find a tool', exact: true }).fill('openapi');
+	await page.keyboard.press('Enter');
+	await expect(page).toHaveURL(/\/tools\/openapi-explorer\/$/);
+	await page.getByRole('button', { name: 'Pin tool', exact: true }).click();
+	await expect(page.getByRole('button', { name: 'Pinned', exact: true })).toBeVisible();
+	await page.reload();
+	await expect(page.getByRole('button', { name: 'Pinned', exact: true })).toBeVisible();
+	await page.getByRole('button', { name: 'Synthetic example', exact: true }).focus();
+	await page.keyboard.press('Enter');
+	await page.getByRole('button', { name: 'Parse contract', exact: true }).focus();
+	await page.keyboard.press('Space');
+	await expect(page.getByRole('heading', { name: 'Synthetic Orders API' })).toBeVisible();
+	await page.getByRole('button', { name: 'Schemas', exact: true }).focus();
+	await page.keyboard.press('Enter');
+	await expect(page.getByLabel('Component schemas', { exact: true })).toBeVisible();
+	expect((await page.goto('/tools/never-exists-v15/'))?.status()).toBe(404);
+});
 test('OpenAPI comparison performs directional analysis, filters, exports and invalidates stale results', async ({
 	page,
 	context
@@ -16,6 +61,7 @@ test('OpenAPI comparison performs directional analysis, filters, exports and inv
 		page.getByRole('heading', { name: 'Comparison results', exact: true })
 	).toBeVisible();
 	await expect(page.getByText('Operation removed.', { exact: true })).toBeVisible();
+	await responsive(page, 'diff');
 	await page.getByLabel('Diff severity', { exact: true }).selectOption('breaking');
 	await expect(page.getByText('Operation added.', { exact: true })).toHaveCount(0);
 	await page.getByLabel('Diff export format', { exact: true }).selectOption('markdown');
@@ -41,6 +87,7 @@ test('OpenAPI comparison performs directional analysis, filters, exports and inv
 	).toBeEmpty();
 });
 async function load(page: Page) {
+	await page.setViewportSize({ width: 1440, height: 1000 });
 	await page.goto('/tools/openapi-explorer/');
 	await page.getByRole('button', { name: 'Synthetic example', exact: true }).click();
 	await page.getByRole('button', { name: 'Parse contract', exact: true }).click();
@@ -64,6 +111,7 @@ test('OpenAPI editable preview, four code targets, verified copy/download and on
 	await expect(page.getByLabel('Prepared request preview', { exact: true })).not.toContainText(
 		'PRIVATE_BODY_876'
 	);
+	await responsive(page, 'request');
 	for (const target of ['curl', 'fetch', 'java', 'spring']) {
 		await page.getByLabel('OpenAPI code target', { exact: true }).selectOption(target);
 		await expect(page.getByLabel('OpenAPI generated code', { exact: true })).toContainText(
@@ -116,6 +164,7 @@ test('OpenAPI import, real exploration, reference navigation, errors, invalidati
 	await page.getByRole('button', { name: 'Open schema', exact: true }).first().click();
 	await page.getByRole('button', { name: 'Open referenced schema', exact: true }).click();
 	await expect(page.getByRole('button', { name: 'properties.quantity' })).toBeVisible();
+	await responsive(page, 'schemas');
 	await page.getByRole('button', { name: 'Order', exact: true }).click();
 	await page.getByRole('button', { name: 'properties.parent' }).click();
 	await page.getByRole('button', { name: 'Open referenced schema', exact: true }).click();
@@ -151,6 +200,10 @@ test('OpenAPI responsive themes and local-only payload lifecycle', async ({ page
 	await page.goto('/tools/openapi-explorer/');
 	const payload = sampleContract();
 	(payload.info as Record<string, string>).description = 'PRIVATE_OPENAPI_7539';
+	(payload.components as Record<string, unknown>).schemas = {
+		External: { $ref: 'https://never.example.test/PRIVATE_OPENAPI_7539' },
+		Hostile: { type: 'string', description: '<img src="https://never.example.test/image">' }
+	};
 	await page
 		.getByRole('textbox', { name: 'OpenAPI source', exact: true })
 		.fill(JSON.stringify(payload));
@@ -162,6 +215,10 @@ test('OpenAPI responsive themes and local-only payload lifecycle', async ({ page
 		for (const theme of ['dark', 'light']) {
 			await page.getByLabel('Color theme', { exact: true }).selectOption(theme);
 			await page.evaluate(() => document.fonts.ready);
+			await page.evaluate(() => {
+				(document.activeElement as HTMLElement)?.blur();
+				scrollTo(0, 0);
+			});
 			expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(
 				width
 			);

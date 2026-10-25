@@ -1,5 +1,12 @@
 # DevBench — Alcance funcional cerrado
 
+## V1.5 RC — OpenAPI Contract Workbench
+
+BACK-10 / Backend / `/tools/openapi-explorer/` is available as entry **28**, lazy and prerendered from the same registry used by Home/search/palette/favorites/recents. All 27 preceding tools remain. JSON/YAML paste/local-file import, OAS 3.0.x/3.1.x structural parser, contextual errors, bounded cancellable workers and internal-reference graph. Unsupported 3.2/Swagger 2, remote refs/URI scopes and complex encodings are explicit; no fetch or conformance guarantee.
+
+Explorer includes real metadata/servers/tags/security, searchable/filterable operation details and progressive schema navigation. HTTP preparation includes server precedence/variables, supported parameter serialization, editable samples/body/overrides, explicit preview, four reused generators and always-redacted one-shot Builder handoff. Diff compares two local contracts, explains directional changes with four cautious severity classes and exports safe metadata-only JSON/Markdown reports. Inputs/results stay in memory; reset/reload/teardown clear them. Canvas alone keeps its documented IndexedDB exception. Full support and limits: [OpenAPI report](docs/OPENAPI_V15.md). The following release sections are historical; V1.4 is now integrated in main and V1.5 is isolated awaiting acceptance.
+
+
 ## V1.4 Release Candidate — Architecture Canvas
 
 Rama aislada `feature/architecture-canvas-v14`. **27 entradas disponibles**: las 26 anteriores más DRAW-01, Utilities, `/tools/architecture-canvas/`, lazy/prerender y catálogo/paleta/favoritos/recientes comunes. Lab `/lab/architecture-canvas/` permanece. Pizarra con rectángulo/redondeado, elipse, rombo, texto directo, flecha/línea y lápiz; preview/Escape, colores HEX/presets, relleno/transparencia, trazo, fuente/tamaño y sketch estable. Selección Shift, movimiento, resize, duplicado, capas, undo/redo y extremos libres/anclados ajustables. Jerarquía creada/asociada por usuario, breadcrumb y portal al mismo hijo, cámaras persistentes, reduced motion, ciclos rechazados y huérfanos recuperables/borrados con confirmación.

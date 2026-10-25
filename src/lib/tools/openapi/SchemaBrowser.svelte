@@ -111,7 +111,9 @@
 			{#if children.length > limit}<button class="button" onclick={() => (limit += 30)}
 					>Show 30 more schema children</button
 				>{/if}
-		{/if}{/if}
+		{:else}<p role="alert">
+				Unsupported schema target: expected an object or boolean schema.
+			</p>{/if}{/if}
 </div>
 
 <style>
@@ -169,5 +171,14 @@
 	p {
 		white-space: pre-wrap;
 		overflow-wrap: anywhere;
+	}
+	@media (max-width: 767px) {
+		button {
+			min-height: 44px;
+		}
+		.schema-path,
+		pre {
+			font-size: 14px;
+		}
 	}
 </style>
