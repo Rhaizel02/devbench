@@ -1,3 +1,4 @@
+import { evidencePath } from './support/environment';
 import { test, expect } from '@playwright/test';
 test('logs group entries, retain exceptions, filter explicitly and copy selected entry', async ({
 	page,
@@ -66,7 +67,7 @@ test('environment inputs are hidden and no secret enters exports, storage, URL, 
 	}
 	await page.setViewportSize({ width: 390, height: 844 });
 	await page.getByLabel('Color theme', { exact: true }).selectOption('light');
-	await page.screenshot({ path: 'screenshots/actual/30-env-light-mobile.png', fullPage: true });
+	await page.screenshot({ path: evidencePath('30-env-light-mobile.png'), fullPage: true });
 	const metadata = await page.evaluate(() =>
 		JSON.stringify({
 			local: { ...localStorage },

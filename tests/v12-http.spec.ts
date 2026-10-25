@@ -1,3 +1,5 @@
+import { evidencePath } from './support/environment';
+import { targetOrigin } from './support/environment';
 import { test, expect } from '@playwright/test';
 import { mkdir, writeFile } from 'node:fs/promises';
 test('request code stays local, redacts secrets, imports cURL and produces real language outputs', async ({
@@ -7,7 +9,7 @@ test('request code stays local, redacts secrets, imports cURL and produces real 
 	await context.grantPermissions(['clipboard-read', 'clipboard-write']);
 	const external: string[] = [];
 	page.on('request', (r) => {
-		if (!r.url().startsWith('http://127.0.0.1:4173')) external.push(r.url());
+		if (!r.url().startsWith(targetOrigin + '/')) external.push(r.url());
 	});
 	await page.goto('/tools/http-request/');
 	await page.getByRole('button', { name: 'Load synthetic example', exact: true }).click();
@@ -73,7 +75,7 @@ test('header categories and contextual warnings are real and raw exports remain 
 		);
 	}
 	await page.getByLabel('Color theme', { exact: true }).selectOption('dark');
-	await page.screenshot({ path: 'screenshots/actual/29-headers-dark-desktop.png', fullPage: true });
+	await page.screenshot({ path: evidencePath('29-headers-dark-desktop.png'), fullPage: true });
 	await page.reload();
 	await expect(page.getByRole('textbox', { name: 'HTTP header block', exact: true })).toHaveText(
 		''

@@ -1,3 +1,4 @@
+import { evidencePath } from './support/environment';
 import { test, expect } from '@playwright/test';
 import { readFile } from 'node:fs/promises';
 
@@ -76,20 +77,20 @@ test('Base64 Unicode, URL parameter editing, mobile layout and memory cleanup', 
 		(document.activeElement as HTMLElement)?.blur();
 		scrollTo(0, 0);
 	});
-	await page.screenshot({ path: 'screenshots/actual/09-url-light-desktop.png', fullPage: true });
+	await page.screenshot({ path: evidencePath('09-url-light-desktop.png'), fullPage: true });
 	await page.setViewportSize({ width: 390, height: 844 });
 	await page.evaluate(() => scrollTo(0, 0));
-	await page.screenshot({ path: 'screenshots/actual/10-url-light-mobile.png', fullPage: true });
+	await page.screenshot({ path: evidencePath('10-url-light-mobile.png'), fullPage: true });
 	await page.goto('/tools/json-diff/');
 	await page.getByLabel('Color theme', { exact: true }).selectOption('dark');
 	await page.getByRole('button', { name: 'Load synthetic example', exact: true }).click();
 	await page.getByRole('button', { name: 'Compare JSON', exact: true }).click();
 	await page.evaluate(() => scrollTo(0, 0));
 	expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
-	await page.screenshot({ path: 'screenshots/actual/11-diff-dark-mobile.png', fullPage: true });
+	await page.screenshot({ path: evidencePath('11-diff-dark-mobile.png'), fullPage: true });
 	await page.setViewportSize({ width: 1440, height: 1000 });
 	await page.evaluate(() => scrollTo(0, 0));
-	await page.screenshot({ path: 'screenshots/actual/12-diff-dark-desktop.png', fullPage: true });
+	await page.screenshot({ path: evidencePath('12-diff-dark-desktop.png'), fullPage: true });
 	const persisted = await page.evaluate(() =>
 		JSON.stringify({
 			local: { ...localStorage },

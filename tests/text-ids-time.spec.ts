@@ -1,3 +1,5 @@
+import { evidencePath } from './support/environment';
+import { targetOrigin } from './support/environment';
 import { test, expect } from '@playwright/test';
 
 test('text diff, secure IDs and strict timestamp UI work with current outputs', async ({
@@ -17,7 +19,7 @@ test('text diff, secure IDs and strict timestamp UI work with current outputs', 
 	await page.getByLabel('Text diff view', { exact: true }).selectOption('split');
 	await page.evaluate(() => scrollTo(0, 0));
 	await page.screenshot({
-		path: 'screenshots/actual/15-text-diff-dark-desktop.png',
+		path: evidencePath('15-text-diff-dark-desktop.png'),
 		fullPage: true
 	});
 	await page.setViewportSize({ width: 390, height: 844 });
@@ -30,7 +32,7 @@ test('text diff, secure IDs and strict timestamp UI work with current outputs', 
 		scrollTo(0, 0);
 	});
 	await page.screenshot({
-		path: 'screenshots/actual/16-text-diff-light-mobile.png',
+		path: evidencePath('16-text-diff-light-mobile.png'),
 		fullPage: true
 	});
 	await page.goto('/tools/id-generator/');
@@ -64,7 +66,7 @@ test('text diff, secure IDs and strict timestamp UI work with current outputs', 
 	expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
 	await page.evaluate(() => scrollTo(0, 0));
 	await page.screenshot({
-		path: 'screenshots/actual/17-timestamp-light-tablet.png',
+		path: evidencePath('17-timestamp-light-tablet.png'),
 		fullPage: true
 	});
 });
@@ -76,7 +78,7 @@ test('all twelve V1 tools have real deep routes, palette navigation and payload 
 		external: string[] = [];
 	page.on('pageerror', (error) => errors.push(error.message));
 	page.on('request', (request) => {
-		if (!request.url().startsWith('http://127.0.0.1:4173/')) external.push(request.url());
+		if (!request.url().startsWith(targetOrigin + '/')) external.push(request.url());
 	});
 	const routes: [string, string][] = [
 		['json-studio', 'Format JSON'],

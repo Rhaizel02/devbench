@@ -1,3 +1,4 @@
+import { evidencePath } from './support/environment';
 import { test, expect } from '@playwright/test';
 
 test('cron DST, Unicode transforms and parameter-first SQL lists work in the browser', async ({
@@ -23,7 +24,7 @@ test('cron DST, Unicode transforms and parameter-first SQL lists work in the bro
 	await page.getByLabel('Color theme', { exact: true }).selectOption('dark');
 	await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark');
 	await page.evaluate(() => scrollTo(0, 0));
-	await page.screenshot({ path: 'screenshots/actual/21-cron-dark-desktop.png', fullPage: true });
+	await page.screenshot({ path: evidencePath('21-cron-dark-desktop.png'), fullPage: true });
 	await page.goto('/tools/string-toolkit/');
 	await page
 		.getByRole('textbox', { name: 'String input', exact: true })
@@ -51,7 +52,7 @@ test('cron DST, Unicode transforms and parameter-first SQL lists work in the bro
 		(document.activeElement as HTMLElement)?.blur();
 		scrollTo(0, 0);
 	});
-	await page.screenshot({ path: 'screenshots/actual/22-sql-in-light-mobile.png', fullPage: true });
+	await page.screenshot({ path: evidencePath('22-sql-in-light-mobile.png'), fullPage: true });
 	await page.getByLabel('SQL IN value type', { exact: true }).selectOption('numbers');
 	await expect(page.getByRole('button', { name: 'Copy output', exact: true })).toBeDisabled();
 	await page.getByRole('button', { name: 'Build IN list', exact: true }).click();

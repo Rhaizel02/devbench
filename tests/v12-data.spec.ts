@@ -1,3 +1,5 @@
+import { evidencePath } from './support/environment';
+import { targetOrigin } from './support/environment';
 import { test, expect } from '@playwright/test';
 import { readFile } from 'node:fs/promises';
 
@@ -31,7 +33,7 @@ test('JSONPath real paths, values, clipboard/download, invalidation and direct r
 			);
 		}
 	}
-	await page.screenshot({ path: 'screenshots/actual/27-query-light-desktop.png', fullPage: true });
+	await page.screenshot({ path: evidencePath('27-query-light-desktop.png'), fullPage: true });
 	await page.getByLabel('JSONPath expression').fill('$.missing');
 	await page.getByLabel('Query example', { exact: true }).selectOption('$');
 	await expect(page.getByLabel('JSONPath expression')).toHaveValue('$');
@@ -50,7 +52,7 @@ test('Schema validation, inference and hostile pattern termination stay local', 
 	const external: string[] = [];
 	page.on('pageerror', (error) => errors.push(error.message));
 	page.on('request', (request) => {
-		if (!request.url().startsWith('http://127.0.0.1:4173')) external.push(request.url());
+		if (!request.url().startsWith(targetOrigin + '/')) external.push(request.url());
 	});
 	await page.goto('/tools/json-schema/');
 	await page.getByRole('button', { name: 'Load synthetic example', exact: true }).click();
@@ -60,7 +62,7 @@ test('Schema validation, inference and hostile pattern termination stay local', 
 	);
 	await page.setViewportSize({ width: 390, height: 844 });
 	await page.getByLabel('Color theme', { exact: true }).selectOption('dark');
-	await page.screenshot({ path: 'screenshots/actual/28-schema-dark-mobile.png', fullPage: true });
+	await page.screenshot({ path: evidencePath('28-schema-dark-mobile.png'), fullPage: true });
 	await page.setViewportSize({ width: 1440, height: 1000 });
 	await page
 		.getByRole('textbox', { name: 'JSON Schema', exact: true })

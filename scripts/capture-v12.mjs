@@ -2,7 +2,9 @@ import { chromium, expect } from '@playwright/test';
 import { mkdir, writeFile, access } from 'node:fs/promises';
 import assert from 'node:assert/strict';
 import { tools } from '../src/lib/tools/tool-registry.ts';
-const base = 'http://127.0.0.1:4173';
+const externalURL = process.env.PLAYWRIGHT_BASE_URL;
+const base = new URL(externalURL ?? 'http://127.0.0.1:4173').origin;
+const evidenceDirectory = externalURL ? 'screenshots/production' : 'screenshots/actual';
 const browser = await chromium.launch();
 const context = await browser.newContext({ reducedMotion: 'reduce' });
 const page = await context.newPage();
@@ -35,10 +37,10 @@ const scenes = [
 ];
 const measurements = [];
 const routes = [];
-await mkdir('screenshots/actual', { recursive: true });
+await mkdir(evidenceDirectory, { recursive: true });
 try {
 	for (const tool of tools) {
-		await access('build/tools/' + tool.slug + '/index.html');
+		if (!externalURL) await access('build/tools/' + tool.slug + '/index.html');
 		assert.equal((await page.goto(base + '/tools/' + tool.slug + '/'))?.status(), 200);
 		await page.locator('.studio-actions button').first().waitFor();
 		await page.waitForLoadState('networkidle');
@@ -92,7 +94,7 @@ try {
 						(scene.slug === 'pipeline-builder' && width === 390 && theme === 'light'));
 				if (baseline || representative) {
 					await page.screenshot({
-						path: 'screenshots/actual/v12-' + scene.slug + '-' + theme + '-' + width + '.png',
+						path: evidenceDirectory + '/v12-' + scene.slug + '-' + theme + '-' + width + '.png',
 						fullPage: true,
 						animations: 'disabled'
 					});
@@ -106,10 +108,13 @@ try {
 	assert.deepEqual(failedResources, []);
 	assert.deepEqual(consoleErrors, []);
 	await writeFile(
-		'screenshots/actual/v12-checks.json',
+		evidenceDirectory + '/v12-checks.json',
 		JSON.stringify(
 			{
-				scope: 'local static build only',
+				scope: externalURL ? 'published HTTPS deployment' : 'local static build only',
+				baseURL: base,
+				checkedAt: new Date().toISOString(),
+				browser: browser.version(),
 				routes,
 				unknownRoute: 404,
 				measurements,

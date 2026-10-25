@@ -1,0 +1,907 @@
+{
+  "checkedAt": "2026-10-25T11:55:27.623Z",
+  "baseURL": "https://devbench-aw3.pages.dev",
+  "browser": "chromium",
+  "version": "156.0.8078.4",
+  "operations": [
+    "one-shot Quick Paste",
+    "JSONPath",
+    "JSON Schema worker",
+    "three pipeline recipes",
+    "stale result",
+    "reset",
+    "mobile drawer and tabs keyboard"
+  ],
+  "payloadLeaks": 0,
+  "cookies": 0,
+  "errors": [],
+  "failedResources": [],
+  "console": [],
+  "requests": [
+    {
+      "url": "https://devbench-aw3.pages.dev/",
+      "method": "GET",
+      "type": "document"
+    },
+    {
+      "url": "https://devbench-aw3.pages.dev/_app/immutable/entry/start.BYbPG-P8.js",
+      "method": "GET",
+      "type": "script"
+    },
+    {
+      "url": "https://devbench-aw3.pages.dev/_app/immutable/entry/payload.DSmR2FwN.js",
+      "method": "GET",
+      "type": "script"
+    },
+    {
+      "url": "https://devbench-aw3.pages.dev/_app/immutable/chunks/CRzLMJPS.js",
+      "method": "GET",
+      "type": "script"
+    },
+    {
+      "url": "https://devbench-aw3.pages.dev/_app/immutable/chunks/RT3BJEaA.js",
+      "method": "GET",
+      "type": "script"
+    },
+    {
+      "url": "https://devbench-aw3.pages.dev/_app/immutable/chunks/DslbJ03W.js",
+      "method": "GET",
+      "type": "script"
+    },
+    {
+      "url": "https://devbench-aw3.pages.dev/_app/immutable/chunks/CZhvimUC.js",
+      "method": "GET",
+      "type": "script"
+    },
+    {
+      "url": "https://devbench-aw3.pages.dev/_app/immutable/chunks/CmnvEp8e.js",
+      "method": "GET",
+      "type": "script"
+    },
+    {
+      "url": "https://devbench-aw3.pages.dev/_app/immutable/chunks/D7h6eK8g.js",
+      "method": "GET",
+      "type": "script"
+    },
+    {
+      "url": "https://devbench-aw3.pages.dev/_app/immutable/entry/app.DEq3I0WP.js",
+      "method": "GET",
+      "type": "script"
+    },
+    {
+      "url": "https://devbench-aw3.pages.dev/_app/immutable/nodes/0.Bl-ILqzu.js",
+      "method": "GET",
+      "type": "script"
+    },
+    {
+      "url": "https://devbench-aw3.pages.dev/_app/immutable/chunks/XKyaHtl9.js",
+      "method": "GET",
+      "type": "script"
+    },
+    {
+      "url": "https://devbench-aw3.pages.dev/_app/immutable/chunks/DWe_mY2U.js",
+      "method": "GET",
+      "type": "script"
+    },
+    {
+      "url": "https://devbench-aw3.pages.dev/_app/immutable/chunks/DpvxJFLf.js",
+      "method": "GET",
+      "type": "script"
+    },
+    {
+      "url": "https://devbench-aw3.pages.dev/_app/immutable/chunks/tW_SKMqH.js",
+      "method": "GET",
+      "type": "script"
+    },
+    {
+      "url": "https://devbench-aw3.pages.dev/_app/immutable/chunks/Gh2n3i89.js",
+      "method": "GET",
+      "type": "script"
+    },
+    {
+      "url": "https://devbench-aw3.pages.dev/_app/immutable/chunks/lGIVuxVb.js",
+      "method": "GET",
+      "type": "script"
+    },
+    {
+      "url": "https://devbench-aw3.pages.dev/_app/immutable/nodes/2.Cjf9FtgT.js",
+      "method": "GET",
+      "type": "script"
+    },
+    {
+      "url": "https://devbench-aw3.pages.dev/_app/immutable/chunks/BHXtVqOR.js",
+      "method": "GET",
+      "type": "script"
+    },
+    {
+      "url": "https://devbench-aw3.pages.dev/_app/immutable/chunks/D_e0bBJk.js",
+      "method": "GET",
+      "type": "script"
+    },
+    {
+      "url": "https://devbench-aw3.pages.dev/_app/immutable/assets/0.BbzQVbeO.css",
+      "method": "GET",
+      "type": "stylesheet"
+    },
+    {
+      "url": "https://devbench-aw3.pages.dev/_app/immutable/assets/geist-latin-400-normal.B40WzpMT.woff2",
+      "method": "GET",
+      "type": "font"
+    },
+    {
+      "url": "https://devbench-aw3.pages.dev/_app/immutable/assets/geist-latin-600-normal.CSETrqM2.woff2",
+      "method": "GET",
+      "type": "font"
+    },
+    {
+      "url": "https://devbench-aw3.pages.dev/_app/immutable/assets/jetbrains-mono-latin-400-normal.V6pRDFza.woff2",
+      "method": "GET",
+      "type": "font"
+    },
+    {
+      "url": "https://devbench-aw3.pages.dev/_app/immutable/assets/geist-latin-500-normal.CTWBw9NS.woff2",
+      "method": "GET",
+      "type": "font"
+    },
+    {
+      "url": "https://devbench-aw3.pages.dev/_app/immutable/nodes/1.Blaq1ROc.js",
+      "method": "GET",
+      "type": "script"
+    },
+    {
+      "url": "https://devbench-aw3.pages.dev/_app/immutable/nodes/3.CPeUzSnf.js",
+      "method": "GET",
+      "type": "script"
+    },
+    {
+      "url": "https://devbench-aw3.pages.dev/_app/immutable/chunks/DJkult3c.js",
+      "method": "GET",
+      "type": "script"
+    },
+    {
+      "url": "https://devbench-aw3.pages.dev/_app/immutable/chunks/aEmB-zfJ.js",
+      "method": "GET",
+      "type": "script"
+    },
+    {
+      "url": "https://devbench-aw3.pages.dev/_app/immutable/chunks/BWXoine9.js",
+      "method": "GET",
+      "type": "script"
+    },
+    {
+      "url": "https://devbench-aw3.pages.dev/_app/immutable/chunks/auL6coUy.js",
+      "method": "GET",
+      "type": "script"
+    },
+    {
+      "url": "https://devbench-aw3.pages.dev/_app/immutable/chunks/C-g6IeEO.js",
+      "method": "GET",
+      "type": "script"
+    },
+    {
+      "url": "https://devbench-aw3.pages.dev/_app/immutable/chunks/Cyj_xi0C.js",
+      "method": "GET",
+      "type": "script"
+    },
+    {
+      "url": "https://devbench-aw3.pages.dev/_app/immutable/chunks/BPEGYJBL.js",
+      "method": "GET",
+      "type": "script"
+    },
+    {
+      "url": "https://devbench-aw3.pages.dev/_app/immutable/chunks/DDSWUear.js",
+      "method": "GET",
+      "type": "script"
+    },
+    {
+      "url": "https://devbench-aw3.pages.dev/_app/immutable/chunks/BmjUQQkL.js",
+      "method": "GET",
+      "type": "script"
+    },
+    {
+      "url": "https://devbench-aw3.pages.dev/_app/immutable/chunks/B1hLVK6Z.js",
+      "method": "GET",
+      "type": "script"
+    },
+    {
+      "url": "https://devbench-aw3.pages.dev/_app/immutable/chunks/C6jWxvUe.js",
+      "method": "GET",
+      "type": "script"
+    },
+    {
+      "url": "https://devbench-aw3.pages.dev/_app/immutable/chunks/ANC812et.js",
+      "method": "GET",
+      "type": "script"
+    },
+    {
+      "url": "https://devbench-aw3.pages.dev/_app/immutable/chunks/CcOQyWdO.js",
+      "method": "GET",
+      "type": "script"
+    },
+    {
+      "url": "https://devbench-aw3.pages.dev/_app/immutable/chunks/C4N7T5vJ.js",
+      "method": "GET",
+      "type": "script"
+    },
+    {
+      "url": "https://devbench-aw3.pages.dev/tools/json-query/",
+      "method": "GET",
+      "type": "document"
+    },
+    {
+      "url": "https://devbench-aw3.pages.dev/_app/immutable/entry/start.BYbPG-P8.js",
+      "method": "GET",
+      "type": "script"
+    },
+    {
+      "url": "https://devbench-aw3.pages.dev/_app/immutable/entry/payload.DSmR2FwN.js",
+      "method": "GET",
+      "type": "script"
+    },
+    {
+      "url": "https://devbench-aw3.pages.dev/_app/immutable/chunks/CRzLMJPS.js",
+      "method": "GET",
+      "type": "script"
+    },
+    {
+      "url": "https://devbench-aw3.pages.dev/_app/immutable/chunks/RT3BJEaA.js",
+      "method": "GET",
+      "type": "script"
+    },
+    {
+      "url": "https://devbench-aw3.pages.dev/_app/immutable/chunks/DslbJ03W.js",
+      "method": "GET",
+      "type": "script"
+    },
+    {
+      "url": "https://devbench-aw3.pages.dev/_app/immutable/chunks/CZhvimUC.js",
+      "method": "GET",
+      "type": "script"
+    },
+    {
+      "url": "https://devbench-aw3.pages.dev/_app/immutable/chunks/CmnvEp8e.js",
+      "method": "GET",
+      "type": "script"
+    },
+    {
+      "url": "https://devbench-aw3.pages.dev/_app/immutable/chunks/D7h6eK8g.js",
+      "method": "GET",
+      "type": "script"
+    },
+    {
+      "url": "https://devbench-aw3.pages.dev/_app/immutable/entry/app.DEq3I0WP.js",
+      "method": "GET",
+      "type": "script"
+    },
+    {
+      "url": "https://devbench-aw3.pages.dev/_app/immutable/nodes/0.Bl-ILqzu.js",
+      "method": "GET",
+      "type": "script"
+    },
+    {
+      "url": "https://devbench-aw3.pages.dev/_app/immutable/chunks/XKyaHtl9.js",
+      "method": "GET",
+      "type": "script"
+    },
+    {
+      "url": "https://devbench-aw3.pages.dev/_app/immutable/chunks/DWe_mY2U.js",
+      "method": "GET",
+      "type": "script"
+    },
+    {
+      "url": "https://devbench-aw3.pages.dev/_app/immutable/chunks/DpvxJFLf.js",
+      "method": "GET",
+      "type": "script"
+    },
+    {
+      "url": "https://devbench-aw3.pages.dev/_app/immutable/chunks/tW_SKMqH.js",
+      "method": "GET",
+      "type": "script"
+    },
+    {
+      "url": "https://devbench-aw3.pages.dev/_app/immutable/chunks/Gh2n3i89.js",
+      "method": "GET",
+      "type": "script"
+    },
+    {
+      "url": "https://devbench-aw3.pages.dev/_app/immutable/chunks/lGIVuxVb.js",
+      "method": "GET",
+      "type": "script"
+    },
+    {
+      "url": "https://devbench-aw3.pages.dev/_app/immutable/nodes/3.CPeUzSnf.js",
+      "method": "GET",
+      "type": "script"
+    },
+    {
+      "url": "https://devbench-aw3.pages.dev/_app/immutable/assets/0.BbzQVbeO.css",
+      "method": "GET",
+      "type": "stylesheet"
+    },
+    {
+      "url": "https://devbench-aw3.pages.dev/_app/immutable/assets/geist-latin-400-normal.B40WzpMT.woff2",
+      "method": "GET",
+      "type": "font"
+    },
+    {
+      "url": "https://devbench-aw3.pages.dev/_app/immutable/assets/geist-latin-600-normal.CSETrqM2.woff2",
+      "method": "GET",
+      "type": "font"
+    },
+    {
+      "url": "https://devbench-aw3.pages.dev/_app/immutable/assets/jetbrains-mono-latin-400-normal.V6pRDFza.woff2",
+      "method": "GET",
+      "type": "font"
+    },
+    {
+      "url": "https://devbench-aw3.pages.dev/_app/immutable/assets/geist-latin-500-normal.CTWBw9NS.woff2",
+      "method": "GET",
+      "type": "font"
+    },
+    {
+      "url": "https://devbench-aw3.pages.dev/_app/immutable/nodes/1.Blaq1ROc.js",
+      "method": "GET",
+      "type": "script"
+    },
+    {
+      "url": "https://devbench-aw3.pages.dev/_app/immutable/chunks/Dt0MvbL3.js",
+      "method": "GET",
+      "type": "script"
+    },
+    {
+      "url": "https://devbench-aw3.pages.dev/_app/immutable/chunks/C9GBo_a6.js",
+      "method": "GET",
+      "type": "script"
+    },
+    {
+      "url": "https://devbench-aw3.pages.dev/_app/immutable/chunks/BHXtVqOR.js",
+      "method": "GET",
+      "type": "script"
+    },
+    {
+      "url": "https://devbench-aw3.pages.dev/_app/immutable/chunks/aEmB-zfJ.js",
+      "method": "GET",
+      "type": "script"
+    },
+    {
+      "url": "https://devbench-aw3.pages.dev/_app/immutable/chunks/BWXoine9.js",
+      "method": "GET",
+      "type": "script"
+    },
+    {
+      "url": "https://devbench-aw3.pages.dev/_app/immutable/chunks/D_e0bBJk.js",
+      "method": "GET",
+      "type": "script"
+    },
+    {
+      "url": "https://devbench-aw3.pages.dev/_app/immutable/chunks/auL6coUy.js",
+      "method": "GET",
+      "type": "script"
+    },
+    {
+      "url": "https://devbench-aw3.pages.dev/_app/immutable/chunks/CNEEP5xO.js",
+      "method": "GET",
+      "type": "script"
+    },
+    {
+      "url": "https://devbench-aw3.pages.dev/_app/immutable/chunks/Cyj_xi0C.js",
+      "method": "GET",
+      "type": "script"
+    },
+    {
+      "url": "https://devbench-aw3.pages.dev/_app/immutable/chunks/DvSMnC4z.js",
+      "method": "GET",
+      "type": "script"
+    },
+    {
+      "url": "https://devbench-aw3.pages.dev/_app/immutable/chunks/vDOZGmrY.js",
+      "method": "GET",
+      "type": "script"
+    },
+    {
+      "url": "https://devbench-aw3.pages.dev/_app/immutable/chunks/BPEGYJBL.js",
+      "method": "GET",
+      "type": "script"
+    },
+    {
+      "url": "https://devbench-aw3.pages.dev/_app/immutable/chunks/DDSWUear.js",
+      "method": "GET",
+      "type": "script"
+    },
+    {
+      "url": "https://devbench-aw3.pages.dev/_app/immutable/chunks/BmjUQQkL.js",
+      "method": "GET",
+      "type": "script"
+    },
+    {
+      "url": "https://devbench-aw3.pages.dev/_app/immutable/chunks/B1hLVK6Z.js",
+      "method": "GET",
+      "type": "script"
+    },
+    {
+      "url": "https://devbench-aw3.pages.dev/_app/immutable/chunks/C6jWxvUe.js",
+      "method": "GET",
+      "type": "script"
+    },
+    {
+      "url": "https://devbench-aw3.pages.dev/_app/immutable/chunks/ANC812et.js",
+      "method": "GET",
+      "type": "script"
+    },
+    {
+      "url": "https://devbench-aw3.pages.dev/_app/immutable/chunks/CcOQyWdO.js",
+      "method": "GET",
+      "type": "script"
+    },
+    {
+      "url": "https://devbench-aw3.pages.dev/_app/immutable/chunks/C4N7T5vJ.js",
+      "method": "GET",
+      "type": "script"
+    },
+    {
+      "url": "https://devbench-aw3.pages.dev/_app/immutable/workers/data.worker-Bym0ZAAp.js",
+      "method": "GET",
+      "type": "script"
+    },
+    {
+      "url": "https://devbench-aw3.pages.dev/_app/immutable/workers/data.worker-Bym0ZAAp.js",
+      "method": "GET",
+      "type": "script"
+    },
+    {
+      "url": "https://devbench-aw3.pages.dev/tools/json-schema/",
+      "method": "GET",
+      "type": "document"
+    },
+    {
+      "url": "https://devbench-aw3.pages.dev/_app/immutable/entry/start.BYbPG-P8.js",
+      "method": "GET",
+      "type": "script"
+    },
+    {
+      "url": "https://devbench-aw3.pages.dev/_app/immutable/entry/payload.DSmR2FwN.js",
+      "method": "GET",
+      "type": "script"
+    },
+    {
+      "url": "https://devbench-aw3.pages.dev/_app/immutable/chunks/CRzLMJPS.js",
+      "method": "GET",
+      "type": "script"
+    },
+    {
+      "url": "https://devbench-aw3.pages.dev/_app/immutable/chunks/RT3BJEaA.js",
+      "method": "GET",
+      "type": "script"
+    },
+    {
+      "url": "https://devbench-aw3.pages.dev/_app/immutable/chunks/DslbJ03W.js",
+      "method": "GET",
+      "type": "script"
+    },
+    {
+      "url": "https://devbench-aw3.pages.dev/_app/immutable/chunks/CZhvimUC.js",
+      "method": "GET",
+      "type": "script"
+    },
+    {
+      "url": "https://devbench-aw3.pages.dev/_app/immutable/chunks/CmnvEp8e.js",
+      "method": "GET",
+      "type": "script"
+    },
+    {
+      "url": "https://devbench-aw3.pages.dev/_app/immutable/chunks/D7h6eK8g.js",
+      "method": "GET",
+      "type": "script"
+    },
+    {
+      "url": "https://devbench-aw3.pages.dev/_app/immutable/entry/app.DEq3I0WP.js",
+      "method": "GET",
+      "type": "script"
+    },
+    {
+      "url": "https://devbench-aw3.pages.dev/_app/immutable/nodes/0.Bl-ILqzu.js",
+      "method": "GET",
+      "type": "script"
+    },
+    {
+      "url": "https://devbench-aw3.pages.dev/_app/immutable/chunks/XKyaHtl9.js",
+      "method": "GET",
+      "type": "script"
+    },
+    {
+      "url": "https://devbench-aw3.pages.dev/_app/immutable/chunks/DWe_mY2U.js",
+      "method": "GET",
+      "type": "script"
+    },
+    {
+      "url": "https://devbench-aw3.pages.dev/_app/immutable/chunks/DpvxJFLf.js",
+      "method": "GET",
+      "type": "script"
+    },
+    {
+      "url": "https://devbench-aw3.pages.dev/_app/immutable/chunks/tW_SKMqH.js",
+      "method": "GET",
+      "type": "script"
+    },
+    {
+      "url": "https://devbench-aw3.pages.dev/_app/immutable/chunks/Gh2n3i89.js",
+      "method": "GET",
+      "type": "script"
+    },
+    {
+      "url": "https://devbench-aw3.pages.dev/_app/immutable/chunks/lGIVuxVb.js",
+      "method": "GET",
+      "type": "script"
+    },
+    {
+      "url": "https://devbench-aw3.pages.dev/_app/immutable/nodes/3.CPeUzSnf.js",
+      "method": "GET",
+      "type": "script"
+    },
+    {
+      "url": "https://devbench-aw3.pages.dev/_app/immutable/assets/0.BbzQVbeO.css",
+      "method": "GET",
+      "type": "stylesheet"
+    },
+    {
+      "url": "https://devbench-aw3.pages.dev/_app/immutable/assets/geist-latin-400-normal.B40WzpMT.woff2",
+      "method": "GET",
+      "type": "font"
+    },
+    {
+      "url": "https://devbench-aw3.pages.dev/_app/immutable/assets/geist-latin-600-normal.CSETrqM2.woff2",
+      "method": "GET",
+      "type": "font"
+    },
+    {
+      "url": "https://devbench-aw3.pages.dev/_app/immutable/assets/jetbrains-mono-latin-400-normal.V6pRDFza.woff2",
+      "method": "GET",
+      "type": "font"
+    },
+    {
+      "url": "https://devbench-aw3.pages.dev/_app/immutable/assets/geist-latin-500-normal.CTWBw9NS.woff2",
+      "method": "GET",
+      "type": "font"
+    },
+    {
+      "url": "https://devbench-aw3.pages.dev/_app/immutable/nodes/1.Blaq1ROc.js",
+      "method": "GET",
+      "type": "script"
+    },
+    {
+      "url": "https://devbench-aw3.pages.dev/_app/immutable/chunks/Diok4sxV.js",
+      "method": "GET",
+      "type": "script"
+    },
+    {
+      "url": "https://devbench-aw3.pages.dev/_app/immutable/chunks/auL6coUy.js",
+      "method": "GET",
+      "type": "script"
+    },
+    {
+      "url": "https://devbench-aw3.pages.dev/_app/immutable/chunks/C9GBo_a6.js",
+      "method": "GET",
+      "type": "script"
+    },
+    {
+      "url": "https://devbench-aw3.pages.dev/_app/immutable/chunks/BHXtVqOR.js",
+      "method": "GET",
+      "type": "script"
+    },
+    {
+      "url": "https://devbench-aw3.pages.dev/_app/immutable/chunks/aEmB-zfJ.js",
+      "method": "GET",
+      "type": "script"
+    },
+    {
+      "url": "https://devbench-aw3.pages.dev/_app/immutable/chunks/BWXoine9.js",
+      "method": "GET",
+      "type": "script"
+    },
+    {
+      "url": "https://devbench-aw3.pages.dev/_app/immutable/chunks/D_e0bBJk.js",
+      "method": "GET",
+      "type": "script"
+    },
+    {
+      "url": "https://devbench-aw3.pages.dev/_app/immutable/chunks/CNEEP5xO.js",
+      "method": "GET",
+      "type": "script"
+    },
+    {
+      "url": "https://devbench-aw3.pages.dev/_app/immutable/chunks/Cyj_xi0C.js",
+      "method": "GET",
+      "type": "script"
+    },
+    {
+      "url": "https://devbench-aw3.pages.dev/_app/immutable/chunks/vDOZGmrY.js",
+      "method": "GET",
+      "type": "script"
+    },
+    {
+      "url": "https://devbench-aw3.pages.dev/_app/immutable/chunks/BPEGYJBL.js",
+      "method": "GET",
+      "type": "script"
+    },
+    {
+      "url": "https://devbench-aw3.pages.dev/_app/immutable/chunks/DDSWUear.js",
+      "method": "GET",
+      "type": "script"
+    },
+    {
+      "url": "https://devbench-aw3.pages.dev/_app/immutable/chunks/BmjUQQkL.js",
+      "method": "GET",
+      "type": "script"
+    },
+    {
+      "url": "https://devbench-aw3.pages.dev/_app/immutable/chunks/B1hLVK6Z.js",
+      "method": "GET",
+      "type": "script"
+    },
+    {
+      "url": "https://devbench-aw3.pages.dev/_app/immutable/chunks/C6jWxvUe.js",
+      "method": "GET",
+      "type": "script"
+    },
+    {
+      "url": "https://devbench-aw3.pages.dev/_app/immutable/chunks/ANC812et.js",
+      "method": "GET",
+      "type": "script"
+    },
+    {
+      "url": "https://devbench-aw3.pages.dev/_app/immutable/chunks/CcOQyWdO.js",
+      "method": "GET",
+      "type": "script"
+    },
+    {
+      "url": "https://devbench-aw3.pages.dev/_app/immutable/chunks/C4N7T5vJ.js",
+      "method": "GET",
+      "type": "script"
+    },
+    {
+      "url": "https://devbench-aw3.pages.dev/_app/immutable/workers/data.worker-Bym0ZAAp.js",
+      "method": "GET",
+      "type": "script"
+    },
+    {
+      "url": "https://devbench-aw3.pages.dev/_app/immutable/workers/data.worker-Bym0ZAAp.js",
+      "method": "GET",
+      "type": "script"
+    },
+    {
+      "url": "https://devbench-aw3.pages.dev/tools/pipeline-builder/",
+      "method": "GET",
+      "type": "document"
+    },
+    {
+      "url": "https://devbench-aw3.pages.dev/_app/immutable/entry/start.BYbPG-P8.js",
+      "method": "GET",
+      "type": "script"
+    },
+    {
+      "url": "https://devbench-aw3.pages.dev/_app/immutable/entry/payload.DSmR2FwN.js",
+      "method": "GET",
+      "type": "script"
+    },
+    {
+      "url": "https://devbench-aw3.pages.dev/_app/immutable/chunks/CRzLMJPS.js",
+      "method": "GET",
+      "type": "script"
+    },
+    {
+      "url": "https://devbench-aw3.pages.dev/_app/immutable/chunks/RT3BJEaA.js",
+      "method": "GET",
+      "type": "script"
+    },
+    {
+      "url": "https://devbench-aw3.pages.dev/_app/immutable/chunks/DslbJ03W.js",
+      "method": "GET",
+      "type": "script"
+    },
+    {
+      "url": "https://devbench-aw3.pages.dev/_app/immutable/chunks/CZhvimUC.js",
+      "method": "GET",
+      "type": "script"
+    },
+    {
+      "url": "https://devbench-aw3.pages.dev/_app/immutable/chunks/CmnvEp8e.js",
+      "method": "GET",
+      "type": "script"
+    },
+    {
+      "url": "https://devbench-aw3.pages.dev/_app/immutable/chunks/D7h6eK8g.js",
+      "method": "GET",
+      "type": "script"
+    },
+    {
+      "url": "https://devbench-aw3.pages.dev/_app/immutable/entry/app.DEq3I0WP.js",
+      "method": "GET",
+      "type": "script"
+    },
+    {
+      "url": "https://devbench-aw3.pages.dev/_app/immutable/nodes/0.Bl-ILqzu.js",
+      "method": "GET",
+      "type": "script"
+    },
+    {
+      "url": "https://devbench-aw3.pages.dev/_app/immutable/chunks/XKyaHtl9.js",
+      "method": "GET",
+      "type": "script"
+    },
+    {
+      "url": "https://devbench-aw3.pages.dev/_app/immutable/chunks/DWe_mY2U.js",
+      "method": "GET",
+      "type": "script"
+    },
+    {
+      "url": "https://devbench-aw3.pages.dev/_app/immutable/chunks/DpvxJFLf.js",
+      "method": "GET",
+      "type": "script"
+    },
+    {
+      "url": "https://devbench-aw3.pages.dev/_app/immutable/chunks/tW_SKMqH.js",
+      "method": "GET",
+      "type": "script"
+    },
+    {
+      "url": "https://devbench-aw3.pages.dev/_app/immutable/chunks/Gh2n3i89.js",
+      "method": "GET",
+      "type": "script"
+    },
+    {
+      "url": "https://devbench-aw3.pages.dev/_app/immutable/chunks/lGIVuxVb.js",
+      "method": "GET",
+      "type": "script"
+    },
+    {
+      "url": "https://devbench-aw3.pages.dev/_app/immutable/nodes/3.CPeUzSnf.js",
+      "method": "GET",
+      "type": "script"
+    },
+    {
+      "url": "https://devbench-aw3.pages.dev/_app/immutable/assets/0.BbzQVbeO.css",
+      "method": "GET",
+      "type": "stylesheet"
+    },
+    {
+      "url": "https://devbench-aw3.pages.dev/_app/immutable/assets/geist-latin-400-normal.B40WzpMT.woff2",
+      "method": "GET",
+      "type": "font"
+    },
+    {
+      "url": "https://devbench-aw3.pages.dev/_app/immutable/assets/geist-latin-600-normal.CSETrqM2.woff2",
+      "method": "GET",
+      "type": "font"
+    },
+    {
+      "url": "https://devbench-aw3.pages.dev/_app/immutable/assets/jetbrains-mono-latin-400-normal.V6pRDFza.woff2",
+      "method": "GET",
+      "type": "font"
+    },
+    {
+      "url": "https://devbench-aw3.pages.dev/_app/immutable/assets/geist-latin-500-normal.CTWBw9NS.woff2",
+      "method": "GET",
+      "type": "font"
+    },
+    {
+      "url": "https://devbench-aw3.pages.dev/_app/immutable/nodes/1.Blaq1ROc.js",
+      "method": "GET",
+      "type": "script"
+    },
+    {
+      "url": "https://devbench-aw3.pages.dev/_app/immutable/chunks/B0zV9fPF.js",
+      "method": "GET",
+      "type": "script"
+    },
+    {
+      "url": "https://devbench-aw3.pages.dev/_app/immutable/chunks/aEmB-zfJ.js",
+      "method": "GET",
+      "type": "script"
+    },
+    {
+      "url": "https://devbench-aw3.pages.dev/_app/immutable/chunks/auL6coUy.js",
+      "method": "GET",
+      "type": "script"
+    },
+    {
+      "url": "https://devbench-aw3.pages.dev/_app/immutable/chunks/Cyj_xi0C.js",
+      "method": "GET",
+      "type": "script"
+    },
+    {
+      "url": "https://devbench-aw3.pages.dev/_app/immutable/chunks/C9GBo_a6.js",
+      "method": "GET",
+      "type": "script"
+    },
+    {
+      "url": "https://devbench-aw3.pages.dev/_app/immutable/chunks/BHXtVqOR.js",
+      "method": "GET",
+      "type": "script"
+    },
+    {
+      "url": "https://devbench-aw3.pages.dev/_app/immutable/chunks/BWXoine9.js",
+      "method": "GET",
+      "type": "script"
+    },
+    {
+      "url": "https://devbench-aw3.pages.dev/_app/immutable/chunks/D_e0bBJk.js",
+      "method": "GET",
+      "type": "script"
+    },
+    {
+      "url": "https://devbench-aw3.pages.dev/_app/immutable/chunks/CNEEP5xO.js",
+      "method": "GET",
+      "type": "script"
+    },
+    {
+      "url": "https://devbench-aw3.pages.dev/_app/immutable/chunks/C_W4AtGt.js",
+      "method": "GET",
+      "type": "script"
+    },
+    {
+      "url": "https://devbench-aw3.pages.dev/_app/immutable/chunks/BPCgnAQR.js",
+      "method": "GET",
+      "type": "script"
+    },
+    {
+      "url": "https://devbench-aw3.pages.dev/_app/immutable/chunks/C-g6IeEO.js",
+      "method": "GET",
+      "type": "script"
+    },
+    {
+      "url": "https://devbench-aw3.pages.dev/_app/immutable/assets/Pipeline.BrAkgMLw.css",
+      "method": "GET",
+      "type": "stylesheet"
+    },
+    {
+      "url": "https://devbench-aw3.pages.dev/_app/immutable/chunks/BPEGYJBL.js",
+      "method": "GET",
+      "type": "script"
+    },
+    {
+      "url": "https://devbench-aw3.pages.dev/_app/immutable/chunks/DDSWUear.js",
+      "method": "GET",
+      "type": "script"
+    },
+    {
+      "url": "https://devbench-aw3.pages.dev/_app/immutable/chunks/BmjUQQkL.js",
+      "method": "GET",
+      "type": "script"
+    },
+    {
+      "url": "https://devbench-aw3.pages.dev/_app/immutable/chunks/B1hLVK6Z.js",
+      "method": "GET",
+      "type": "script"
+    },
+    {
+      "url": "https://devbench-aw3.pages.dev/_app/immutable/chunks/C6jWxvUe.js",
+      "method": "GET",
+      "type": "script"
+    },
+    {
+      "url": "https://devbench-aw3.pages.dev/_app/immutable/chunks/C4N7T5vJ.js",
+      "method": "GET",
+      "type": "script"
+    },
+    {
+      "url": "https://devbench-aw3.pages.dev/_app/immutable/workers/pipeline.worker-Dg2yxMqb.js",
+      "method": "GET",
+      "type": "script"
+    },
+    {
+      "url": "https://devbench-aw3.pages.dev/_app/immutable/workers/pipeline.worker-Dg2yxMqb.js",
+      "method": "GET",
+      "type": "script"
+    },
+    {
+      "url": "https://devbench-aw3.pages.dev/_app/immutable/workers/pipeline.worker-Dg2yxMqb.js",
+      "method": "GET",
+      "type": "script"
+    },
+    {
+      "url": "https://devbench-aw3.pages.dev/_app/immutable/nodes/2.Cjf9FtgT.js",
+      "method": "GET",
+      "type": "script"
+    }
+  ]
+}

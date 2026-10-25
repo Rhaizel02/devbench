@@ -1,3 +1,4 @@
+import { evidencePath } from './support/environment';
 import { test, expect } from '@playwright/test';
 import { readFile, writeFile, mkdir } from 'node:fs/promises';
 
@@ -57,12 +58,12 @@ test('CSV quoting/download and TypeScript/Java inference use real outputs', asyn
 		(document.activeElement as HTMLElement)?.blur();
 		scrollTo(0, 0);
 	});
-	await page.screenshot({ path: 'screenshots/actual/18-code-light-desktop.png', fullPage: true });
+	await page.screenshot({ path: evidencePath('18-code-light-desktop.png'), fullPage: true });
 	await page.setViewportSize({ width: 390, height: 844 });
 	await page.getByRole('tab', { name: 'Output', exact: true }).click();
 	expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
 	await page.evaluate(() => scrollTo(0, 0));
-	await page.screenshot({ path: 'screenshots/actual/19-code-light-mobile.png', fullPage: true });
+	await page.screenshot({ path: evidencePath('19-code-light-mobile.png'), fullPage: true });
 });
 
 test('cURL redaction/reveal, rejected shell constructs, privacy and V1.1 navigation', async ({
@@ -103,7 +104,7 @@ test('cURL redaction/reveal, rejected shell constructs, privacy and V1.1 navigat
 	await page.setViewportSize({ width: 768, height: 1024 });
 	expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
 	await page.evaluate(() => scrollTo(0, 0));
-	await page.screenshot({ path: 'screenshots/actual/20-curl-dark-tablet.png', fullPage: true });
+	await page.screenshot({ path: evidencePath('20-curl-dark-tablet.png'), fullPage: true });
 	await page.getByRole('link', { name: 'Tools', exact: true }).click();
 	await expect(page.getByText(/\d+ tools · \d+ available/)).toBeVisible();
 	await page.keyboard.press('Control+k');

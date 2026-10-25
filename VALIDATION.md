@@ -1,5 +1,7 @@
 # B1 validation report
 
+The published V1.2 deployment was separately audited on 2026-10-25 against HTTPS Cloudflare Pages. See [PRODUCTION_VALIDATION.md](PRODUCTION_VALIDATION.md) for the actual version, 25-route operation matrix, privacy/network evidence, browser limitations and acceptance decision. The local results below remain historical.
+
 ## V1.2 final local acceptance — 2026-10-25
 
 This section is current V1.2 evidence; the B1/V1/V1.1 sections below remain historical. All 24 individual tools plus Pipeline Builder are available with 25 unique lazy/prerendered routes. No prior slug was removed. `GOAL_PROGRESS_V12.md` records milestone commits and CI; final matching CI is a required publication gate.

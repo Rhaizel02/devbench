@@ -1,0 +1,152 @@
+{
+  "baseURL": "https://devbench-aw3.pages.dev",
+  "checkedAt": "2026-10-25T11:56:17.151Z",
+  "referenceCommit": "596e84fcca23655c34b5251365ca570313ceeed0",
+  "acceptedFlows": 16,
+  "uniqueChromiumFlows": 15,
+  "cases": [
+    {
+      "source": "production-v12",
+      "file": "v12-connected.spec.ts",
+      "title": "three recipes execute, intermediate preview is explicit, reordering fails at the right step and reset clears everything",
+      "status": "passed",
+      "durationMs": 4761
+    },
+    {
+      "source": "production-v12",
+      "file": "v12-connected.spec.ts",
+      "title": "JSON handoffs consume once, invalidate stale results and never persist payloads",
+      "status": "passed",
+      "durationMs": 10538
+    },
+    {
+      "source": "production-v12",
+      "file": "v12-connected.spec.ts",
+      "title": "HTTP handoffs are explicitly redacted; logs transfer as plain text",
+      "status": "passed",
+      "durationMs": 4138
+    },
+    {
+      "source": "production-v12",
+      "file": "v12-data.spec.ts",
+      "title": "JSONPath real paths, values, clipboard/download, invalidation and direct routes",
+      "status": "passed",
+      "durationMs": 2530
+    },
+    {
+      "source": "production-v12",
+      "file": "v12-data.spec.ts",
+      "title": "Schema validation, inference and hostile pattern termination stay local",
+      "status": "passed",
+      "durationMs": 3639
+    },
+    {
+      "source": "production-v12",
+      "file": "v12-diagnostics.spec.ts",
+      "title": "environment inputs are hidden and no secret enters exports, storage, URL, network or errors",
+      "status": "passed",
+      "durationMs": 2343
+    },
+    {
+      "source": "production-v12",
+      "file": "v12-http.spec.ts",
+      "title": "request code stays local, redacts secrets, imports cURL and produces real language outputs",
+      "status": "passed",
+      "durationMs": 2023
+    },
+    {
+      "source": "production-v12",
+      "file": "v12-http.spec.ts",
+      "title": "header categories and contextual warnings are real and raw exports remain redacted",
+      "status": "passed",
+      "durationMs": 2816
+    },
+    {
+      "source": "production-extra-final",
+      "file": "v12-release.spec.ts",
+      "title": "all seven V1.2 routes operate, reset, reload and keep payloads out of persistence and network",
+      "status": "passed",
+      "durationMs": 12869
+    },
+    {
+      "source": "production-reused-final",
+      "file": "smoke.spec.ts",
+      "title": "strict JSON, real output, tree paths, clipboard and download",
+      "status": "passed",
+      "durationMs": 2317
+    },
+    {
+      "source": "production-reused-final",
+      "file": "smoke.spec.ts",
+      "title": "navigation, themes, palette, favorites, responsive drawer and tabs",
+      "status": "passed",
+      "durationMs": 1702
+    },
+    {
+      "source": "production-reused-final",
+      "file": "release.spec.ts",
+      "title": "release matrix: all 18 static tools operate, copy, reset, reload and handle invalid/empty input privately",
+      "status": "passed",
+      "durationMs": 26053
+    },
+    {
+      "source": "production-reused-final",
+      "file": "v12-diagnostics.spec.ts",
+      "title": "logs group entries, retain exceptions, filter explicitly and copy selected entry",
+      "status": "passed",
+      "durationMs": 1197
+    },
+    {
+      "source": "production-extra-final",
+      "file": "production.spec.ts",
+      "title": "production provenance matches the reference deployment and distinguishes old V1.1",
+      "status": "passed",
+      "durationMs": 2092
+    },
+    {
+      "source": "production-extra-final",
+      "file": "production.spec.ts",
+      "title": "production privacy and cross-browser smoke: one-shot paste, workers, recipes and keyboard",
+      "status": "passed",
+      "durationMs": 6017
+    },
+    {
+      "source": "production-webkit",
+      "file": "production.spec.ts",
+      "title": "production privacy and cross-browser smoke: one-shot paste, workers, recipes and keyboard",
+      "status": "passed",
+      "durationMs": 8842
+    }
+  ],
+  "unsuccessfulAttempts": [
+    {
+      "source": "production-v12",
+      "file": "v12-diagnostics.spec.ts",
+      "title": "logs group entries, retain exceptions, filter explicitly and copy selected entry",
+      "status": "failed",
+      "durationMs": 1357,
+      "error": "Error: browserContext.close: ENOENT: no such file or directory, open 'C:\\Users\\bobby\\Documents\\ChatGPT\\DevBench\\test-results\\production\\.playwright-artifacts-0\\traces\\d9af9f41e76d666a75ae-e0bd877a4034fe295f73-recording10.network'"
+    },
+    {
+      "source": "production-existing",
+      "file": "release.spec.ts",
+      "title": "release matrix: all 18 static tools operate, copy, reset, reload and handle invalid/empty input privately",
+      "status": "timedOut",
+      "durationMs": 30020,
+      "error": "Test timeout of 30000ms exceeded."
+    },
+    {
+      "source": "production-firefox",
+      "file": "production.spec.ts",
+      "title": "production privacy and cross-browser smoke: one-shot paste, workers, recipes and keyboard",
+      "status": "failed",
+      "durationMs": 1,
+      "error": "Error: browserType.launch: spawn UNKNOWN"
+    }
+  ],
+  "notes": [
+    "The first log test had an artifact-directory collision with another runner; its assertions passed on the isolated rerun.",
+    "An earlier 18-tool sweep exceeded the local 30-second test budget; the external target now has a 120-second budget and the isolated run passed.",
+    "Firefox failed at browser launch, before a page existed; no Firefox website result is claimed."
+  ]
+}

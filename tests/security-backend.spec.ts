@@ -1,3 +1,4 @@
+import { evidencePath } from './support/environment';
 import { test, expect } from '@playwright/test';
 
 test('JWT is decoded without verification, hashes and dialect formatting are real', async ({
@@ -24,7 +25,7 @@ test('JWT is decoded without verification, hashes and dialect formatting are rea
 	await page.getByLabel('Color theme', { exact: true }).selectOption('dark');
 	await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark');
 	await page.evaluate(() => scrollTo(0, 0));
-	await page.screenshot({ path: 'screenshots/actual/13-jwt-dark-desktop.png', fullPage: true });
+	await page.screenshot({ path: evidencePath('13-jwt-dark-desktop.png'), fullPage: true });
 	await page.getByLabel('Color theme', { exact: true }).selectOption('light');
 	await expect(page.locator('html')).toHaveAttribute('data-theme', 'light');
 	await page.setViewportSize({ width: 390, height: 844 });
@@ -32,7 +33,7 @@ test('JWT is decoded without verification, hashes and dialect formatting are rea
 		(document.activeElement as HTMLElement)?.blur();
 		scrollTo(0, 0);
 	});
-	await page.screenshot({ path: 'screenshots/actual/14-jwt-light-mobile.png', fullPage: true });
+	await page.screenshot({ path: evidencePath('14-jwt-light-mobile.png'), fullPage: true });
 	await page.setViewportSize({ width: 1440, height: 1000 });
 	await page.goto('/tools/hash-generator/');
 	await page.getByRole('textbox', { name: 'Text to hash', exact: true }).fill('abc');

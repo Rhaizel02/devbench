@@ -1,3 +1,5 @@
+import { evidencePath } from './support/environment';
+import { targetOrigin } from './support/environment';
 import { test, expect } from '@playwright/test';
 import { mkdir, writeFile } from 'node:fs/promises';
 import { tools } from '../src/lib/tools/tool-registry';
@@ -271,10 +273,10 @@ test('release matrix: all 18 static tools operate, copy, reset, reload and handl
 	expect(requests.join('')).not.toContain(jwt);
 	expect(logs.join('')).not.toContain(marker);
 	expect(errors).toEqual([]);
-	expect(requests.filter((url) => !url.startsWith('http://127.0.0.1:4173/'))).toEqual([]);
-	await mkdir('screenshots/actual', { recursive: true });
+	expect(requests.filter((url) => !url.startsWith(targetOrigin + '/'))).toEqual([]);
+	await mkdir(evidencePath('.'), { recursive: true });
 	await writeFile(
-		'screenshots/actual/release-matrix.json',
+		evidencePath('release-matrix.json'),
 		JSON.stringify(
 			{
 				tools: matrix,

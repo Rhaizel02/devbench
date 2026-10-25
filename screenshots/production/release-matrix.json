@@ -1,0 +1,206 @@
+{
+  "tools": [
+    {
+      "id": "DATA-01",
+      "slug": "json-studio",
+      "direct": 200,
+      "operation": "passed",
+      "clipboard": "passed",
+      "reset": "passed",
+      "reload": "passed",
+      "empty": "informative empty state",
+      "invalid": "passed"
+    },
+    {
+      "id": "DATA-02",
+      "slug": "json-diff",
+      "direct": 200,
+      "operation": "passed",
+      "clipboard": "passed",
+      "reset": "passed",
+      "reload": "passed",
+      "empty": "actionable error",
+      "invalid": "passed"
+    },
+    {
+      "id": "DATA-03",
+      "slug": "json-yaml",
+      "direct": 200,
+      "operation": "passed",
+      "clipboard": "passed",
+      "reset": "passed",
+      "reload": "passed",
+      "empty": "action disabled",
+      "invalid": "passed"
+    },
+    {
+      "id": "ENC-01",
+      "slug": "base64-toolkit",
+      "direct": 200,
+      "operation": "passed",
+      "clipboard": "passed",
+      "reset": "passed",
+      "reload": "passed",
+      "empty": "valid empty result",
+      "invalid": "all text accepted; byte limits tested separately"
+    },
+    {
+      "id": "ENC-02",
+      "slug": "url-toolkit",
+      "direct": 200,
+      "operation": "passed",
+      "clipboard": "passed",
+      "reset": "passed",
+      "reload": "passed",
+      "empty": "actionable error",
+      "invalid": "passed"
+    },
+    {
+      "id": "SEC-01",
+      "slug": "jwt-inspector",
+      "direct": 200,
+      "operation": "passed",
+      "clipboard": "passed",
+      "reset": "passed",
+      "reload": "passed",
+      "empty": "actionable error",
+      "invalid": "passed"
+    },
+    {
+      "id": "SEC-02",
+      "slug": "hash-generator",
+      "direct": 200,
+      "operation": "passed",
+      "clipboard": "passed",
+      "reset": "passed",
+      "reload": "passed",
+      "empty": "valid empty result",
+      "invalid": "all text accepted; byte limits tested separately"
+    },
+    {
+      "id": "BACK-01",
+      "slug": "sql-formatter",
+      "direct": 200,
+      "operation": "passed",
+      "clipboard": "passed",
+      "reset": "passed",
+      "reload": "passed",
+      "empty": "action disabled",
+      "invalid": "passed"
+    },
+    {
+      "id": "BACK-02",
+      "slug": "regex-tester",
+      "direct": 200,
+      "operation": "passed",
+      "clipboard": "passed",
+      "reset": "passed",
+      "reload": "passed",
+      "empty": "valid empty result",
+      "invalid": "passed"
+    },
+    {
+      "id": "TEXT-01",
+      "slug": "text-diff",
+      "direct": 200,
+      "operation": "passed",
+      "clipboard": "passed",
+      "reset": "passed",
+      "reload": "passed",
+      "empty": "valid empty result",
+      "invalid": "all text accepted; byte limits tested separately"
+    },
+    {
+      "id": "UTIL-01",
+      "slug": "id-generator",
+      "direct": 200,
+      "operation": "passed",
+      "clipboard": "passed",
+      "reset": "passed",
+      "reload": "passed",
+      "empty": "valid empty result",
+      "invalid": "passed"
+    },
+    {
+      "id": "UTIL-02",
+      "slug": "timestamp-converter",
+      "direct": 200,
+      "operation": "passed",
+      "clipboard": "passed",
+      "reset": "passed",
+      "reload": "passed",
+      "empty": "actionable error",
+      "invalid": "passed"
+    },
+    {
+      "id": "DATA-04",
+      "slug": "json-csv",
+      "direct": 200,
+      "operation": "passed",
+      "clipboard": "passed",
+      "reset": "passed",
+      "reload": "passed",
+      "empty": "action disabled",
+      "invalid": "passed"
+    },
+    {
+      "id": "CODE-01",
+      "slug": "json-code",
+      "direct": 200,
+      "operation": "passed",
+      "clipboard": "passed",
+      "reset": "passed",
+      "reload": "passed",
+      "empty": "action disabled",
+      "invalid": "passed"
+    },
+    {
+      "id": "BACK-03",
+      "slug": "curl-inspector",
+      "direct": 200,
+      "operation": "passed",
+      "clipboard": "passed",
+      "reset": "passed",
+      "reload": "passed",
+      "empty": "actionable error",
+      "invalid": "passed"
+    },
+    {
+      "id": "BACK-04",
+      "slug": "cron-explorer",
+      "direct": 200,
+      "operation": "passed",
+      "clipboard": "passed",
+      "reset": "passed",
+      "reload": "passed",
+      "empty": "actionable error",
+      "invalid": "passed"
+    },
+    {
+      "id": "TEXT-02",
+      "slug": "string-toolkit",
+      "direct": 200,
+      "operation": "passed",
+      "clipboard": "passed",
+      "reset": "passed",
+      "reload": "passed",
+      "empty": "valid empty result",
+      "invalid": "all text accepted; byte limits tested separately"
+    },
+    {
+      "id": "BACK-05",
+      "slug": "sql-in-builder",
+      "direct": 200,
+      "operation": "passed",
+      "clipboard": "passed",
+      "reset": "passed",
+      "reload": "passed",
+      "empty": "actionable error",
+      "invalid": "passed"
+    }
+  ],
+  "privacy": "passed: storage/history/URL/cookies/Cache API/IndexedDB/requests/logs",
+  "externalRequests": 0,
+  "runtimeErrors": 0,
+  "unknownRoute": 404
+}

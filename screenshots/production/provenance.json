@@ -1,0 +1,35 @@
+{
+  "checkedAt": "2026-10-25T11:55:21.464Z",
+  "stableURL": "https://devbench-aw3.pages.dev",
+  "referenceCommit": "596e84fcca23655c34b5251365ca570313ceeed0",
+  "referenceDeployment": "https://f90b68ea.devbench-aw3.pages.dev",
+  "cloudflareCheckID": 121151246262,
+  "fingerprints": [
+    {
+      "path": "/",
+      "status": 200,
+      "sha256": "0db99fce6066c47179bb3a2e6ebde5806c59e28ac3af98638171b72db48c5901"
+    },
+    {
+      "path": "/_app/version.json",
+      "status": 200,
+      "sha256": "1a9ca9a8c761b36ea2a26875ba182a51def32995406177c84edfb2037e41f265",
+      "buildVersion": "{\"version\":\"1792926370429\"}"
+    },
+    {
+      "path": "/tools/json-query/",
+      "status": 200,
+      "sha256": "0d4559b2c9cbcf60844b7bdc58db5e91db65d4a0deea25538e873405e3165d7e"
+    }
+  ],
+  "infrastructureHeaders": {
+    "server": "cloudflare",
+    "referrerPolicy": "strict-origin-when-cross-origin",
+    "contentTypeOptions": "nosniff",
+    "hasCloudflareNELHeader": true
+  },
+  "previousDeployment": "https://f72dc9f2.devbench-aw3.pages.dev",
+  "previousVersion": "V1.1",
+  "unknownTool": 404,
+  "unknownPage": 404
+}
