@@ -1,0 +1,73 @@
+# DevBench V1.4 — contrato de Release Candidate
+
+## Autoridad, base y resultado esperado
+
+Este documento amplía el objetivo explícito del usuario: entregar una RC funcional de Architecture Canvas. No cierra el trabajo con un plan, una maqueta o la mera compatibilidad con el spike. Se aplica junto al Goal activo y GOAL_PROGRESS_V14.md; ambos deben leerse al reanudar una sesión o compactación. El objetivo completo A–E permanece vigente hasta que exista evidencia de aceptación o un bloqueo real demostrado. Las propuestas de próximos bloques del informe del spike no limitan esta autorización posterior.
+
+Repositorio Rhaizel02/devbench. Base main V1.3 fa0490f5872262614ba9fe0370377295f3112fae, 26 entradas disponibles. Base del desarrollo: spike 476ca84edec75d9904ef531e9f514646722291ae. Rama exclusiva feature/architecture-canvas-v14, creada desde ese spike. No modificar ni fusionar main, no force push. Conservar Svelte 5, SvelteKit 3, TypeScript strict, adapter-static, Tailwind 4 y distribución Cloudflare Pages. No introducir React, servidor, autenticación, IA externa, colaboración remota ni telemetría.
+
+La RC debe sentirse como una pizarra para pensar y dibujar sistemas: espacio amplio, formas y trazos mezclados libremente, edición directa, colores útiles, controles discretos. No basta añadir puertos y más paneles al editor de nodos. No copiar marca ni activos de Excalidraw. Mantener los tokens de DevBench y su shell sin rediseñar Home/sidebar. La UI será en inglés. La estética sketch debe ser suave y legible; evaluar Rough.js frente a trazos deterministas propios y dejar la decisión y coste documentados.
+
+## Hitos ejecutables y puertas de calidad
+
+H0 — Contrato y recuperación: inspeccionar HEAD/status y documentos normativos, crear esta ampliación sustantiva y el registro de progreso antes de cambiar código de producto. Registrar bases, rama y alcance. Hacer commit/push del contrato. No afirmar aceptación técnica a partir de esta puerta documental.
+
+H1 — Dominio, evolución y almacenamiento: introducir DTO v2 independiente del renderer, parser de datos no fiables, migración v1 sin pérdida de IDs/contenido/jerarquía, comandos e historial acotado, almacenamiento exclusivo Canvas y controlador de autosave probado. Los tests deben verificar ciclos, referencias, serialización, roundtrip, importaciones inválidas y fallos de guardado. Mantener la ruta lab y las 26 entradas hasta aceptar el editor. Commit/push y comprobar CI, sin presentar componentes todavía incompletos como RC.
+
+H2 — Pizarra y edición: implementar herramientas de arrastre con preview/Escape, formas, tinta, texto directo, propiedades, conexiones ajustables/ancladas, selección múltiple, resize, capas e historial. Validar interacciones reales y estilos con tests proporcionados; no esperar a la última revisión para detectar que los botones no actúan. Conservar los gestos y la navegación del spike cuando no contradigan el producto. Commit/push y CI de este hito.
+
+H3 — Proyectos y jerarquía de usuario: integrar el almacenamiento y la importación/exportación con gestión real de proyectos, crear/asociar/renombrar hijos desde UI, huérfanos y estados honestos de error. Construir tres niveles manualmente durante Playwright y probar recarga, ambas entradas al mismo destino y conservación de cámaras. Capturar la UX responsive real. Commit/push con evidencia y CI.
+
+H4 — Integración RC y aceptación: solo al existir la funcionalidad A–D registrar Architecture Canvas como entrada 27, con lazy loading y ruta prerenderizada. Mantener lab para revisión. Actualizar contratos de catálogo, documentación e informes; ejecutar suite completa y CI. Auditar A–E requisito por requisito, revisar capturas 1440/768/390 en claro/oscuro y verificar preview real si es accesible. Corregir P0/P1 y registrar P2. Commit/push final, SHA, estado CI y decisión GO/NO-GO fundamentada.
+
+Cada hito debe dejar GOAL_PROGRESS_V14.md con qué cambió, evidencia ejecutada, limitaciones, SHA relevante y siguiente acción concreta. Si un test está pendiente o falla se escribe así; el color de CI no sustituye la observación de UX. No introducir rondas artificiales de polish ni auditorías exhaustivas de producción V1.2.
+
+## A — Creación y apariencia
+
+Herramientas: selección, pan, rectángulo, rectángulo redondeado, elipse, rombo, texto, flecha, línea y lápiz. Las figuras y conectores se crean arrastrando sobre el lienzo con una preview antes de soltar. Escape cancela el gesto sin dejar elementos ni entradas inútiles de historial. El texto se crea/edita en posición mediante un editor de texto superpuesto al lienzo; no obligar a escribir toda anotación en un formulario lateral. El contenido no se interpreta como HTML.
+
+Propiedades por elemento: borde, relleno o transparente, presets de colores y HEX editable/validado, grosor, continuo/discontinuo, tipografía y tamaño de texto. Las actualizaciones seleccionadas son inmediatas y conservan IDs. La herramienta activa guarda un estilo de creación en memoria; el proyecto exportado incluye las propiedades de sus elementos. Selección múltiple aplica propiedades a todas las figuras compatibles, sin convertir silenciosamente un trazo en otra clase de figura. Diferenciar selección de color de relleno y borde mediante etiquetas claras.
+
+La tinta conserva puntos en coordenadas del mundo, suaviza lo razonable y tiene límite visible de puntos por trazo y elementos por diagrama. No ejecutar trabajo por cada punto que reserialice todo el proyecto en disco. El estilo sketch debe ser estable: no aleatorizar la geometría en cada repaint ni desplazar conectores por un cambio de tema. Los colores explícitos del documento deben sobrevivir al tema, recarga y exportación. Debe poder dibujarse una flecha libre aunque no haya un nodo al que anclarla.
+
+## B — Edición e historial
+
+Seleccionar con clic/tap y añadir/quitar mediante Shift. Mover una selección múltiple preserva sus posiciones relativas y anclajes. Resize mediante controles visibles de selección; no CAD, routing inteligente, rotación ni agrupaciones complejas como condición de cierre. Duplicar crea nuevos IDs; si se duplica una selección con conexiones internas se remapean a las copias sin perder las originales. Borrar quita conexiones incidentes cuando procede y nunca elimina un diagrama hijo de forma implícita. Subir/bajar o traer/enviar al fondo modifica realmente el orden de renderizado/exportación.
+
+Undo/redo recupera estados coherentes de edición, incluyendo eliminación, propiedades, jerarquía y transformaciones. Un arrastre constituye una acción, no cientos de pasos. Tras undo, una nueva edición descarta redo. El historial debe ser acotado para no consumir memoria indefinidamente y no persistir datos de otros proyectos. Cambiar de proyecto limpia la selección y su historial. No interceptar Ctrl/Cmd+Z, Delete, letras de herramientas ni flechas cuando se escribe en inputs o texto directo. Mantener Ctrl/Cmd+K global y las expectativas de foco del shell.
+
+Pan por herramienta y gesto disponible, rueda con zoom al cursor y controles accesibles. Fit explícito, jamás sustituir automáticamente el viewport editado por un Fit que vuelva ilegibles los títulos en móvil. En 390 px la vista inicial debe usar escala legible y permitir pan para recorrer el documento, con indicación para encontrar contenido. Las líneas/flechas permiten ajustar ambos extremos; un extremo anclado mantiene su relación con la figura al moverla o redimensionarla. Desanclar o reanclar debe ser posible mediante el gesto de extremo. No exigir routing complejo ni evitar toda superposición.
+
+## C — Jerarquía editable
+
+Cualquier figura apta puede crear un diagrama hijo nuevo, asociarse a uno existente o desvincularse desde UI. Renombrar diagramas sin regenerar IDs. Tanto apertura directa como zoom animado resuelven el mismo childDiagramId. Breadcrumb navegable, cámaras/ediciones por nivel y cancelación con Escape. Reduced motion evita animación y abre el mismo destino. El zoom visual sigue siendo una transición de cámara, no se promete zoom semántico infinito.
+
+Rechazar un hijo inexistente y cualquier ciclo directo o indirecto, incluso en diagramas no accesibles desde la raíz. Validar antes de aplicar, sin dejar estado parcialmente roto. Los diagramas sin padre deben ser visibles como huérfanos recuperables: abrir/asociar o borrar expresamente con confirmación. No borrar un hijo al borrar la figura que lo contiene, ni borrar la raíz desde el gestor de huérfanos. Al borrar explícitamente un diagrama retirar sus enlaces entrantes y conservar los descendientes como huérfanos; describir este comportamiento al usuario.
+
+Aceptación específica: en un proyecto nuevo y vacío crear una figura y su hijo, dentro crear otra figura y su hijo, editar el tercer nivel, volver al primero y entrar por el portal. Deben observarse los mismos IDs, etiquetas y viewport. Esta prueba no puede sustituirse por abrir los tres niveles precargados del spike.
+
+## D — Datos, persistencia y exportación
+
+Proyecto versionado con Project/Diagram/Element/Connection/Viewport, referencias por IDs y sin objetos Konva. El parser recibe unknown, aplica límites de bytes/cantidad/profundidad/texto/puntos/valores finitos y reconstruye campos permitidos. No usar eval, código del input, innerHTML, URLs arbitrarias de activos ni instancias gráficas serializadas. Rechazar versiones futuras, propiedades peligrosas y relaciones rotas con error útil, sin reemplazar el proyecto abierto. Migrar la versión 1 del spike preservando títulos, IDs, geometría, puntos de tinta, cámaras y conexiones. Añadir estilos por defecto explícitos; no convertir todo en un documento nuevo sin trazabilidad.
+
+IndexedDB es una excepción de privacidad autorizada SOLO para Architecture Canvas. Documentarlo junto a la UI y contratos anteriores. Las demás herramientas conservan su regla de payload solo en memoria. Ningún documento en localStorage/sessionStorage, cookies, URL/query/hash/history, consola o requests. Sin peticiones a servicios de diagramas ni CDN de fuentes/código. Solo recursos estáticos legítimos del origen. Al borrar un proyecto se elimina su registro de IndexedDB y se solicita confirmación; no vaciar la base de otras aplicaciones.
+
+Gestor real: crear/listar/abrir/renombrar/borrar proyectos. Autosave con debounce y serialización al momento del guardado, estados Loading/Unsaved/Saving/Saved/Error claros. Escrituras ordenadas para que una lenta no sobrescriba la última edición. Al cambiar/salir intentar completar el guardado pendiente de forma honesta; no prometer garantías ante cierre abrupto del proceso. Bloqueo de DB, indisponibilidad, cuota y transacciones fallidas conservan el proyecto en memoria, permiten reintento y exportación de rescate. No mostrar Saved si la transacción no se confirmó. Avisar si se abandona con cambios sin guardar, sin secuestrar la navegación normal tras guardado.
+
+Importar archivo JSON como proyecto nuevo validado, sin sobrescribir el abierto ni otro con ID coincidente. Si hace falta, asignar nuevo ID de proyecto, manteniendo IDs internos estables. Exportar todo el proyecto, todos los diagramas/huérfanos y viewport; comprobar roundtrip mediante parser. Descarga Blob local revocada, feedback después de acción real y errores honestos. Añadir export PNG del diagrama si es viable con Konva, limitada en tamaño/píxeles y encuadrada al contenido, sin controles de selección ni mutar la cámara del usuario. No incluir importación de imágenes arbitrarias o código de barras.
+
+## E — Integración, accesibilidad y evidencia
+
+La entrada 27 se añade al catálogo únicamente en la puerta RC, con slug conocido, Home/búsqueda/favoritos/recientes/paleta desde el registro único. Route entries prerenderizadas y carga cliente diferida del editor, manteniendo SSR del shell. Lab permanece disponible. Los 26 slugs anteriores y sus comportamientos no se sustituyen por la pizarra. Actualizar las aserciones históricas del recuento solo donde cambie su contrato, sin borrar pruebas de privacidad ni regresiones útiles.
+
+Capturas reales en screenshots/actual: 1440 oscuro/claro, 768 oscuro/claro, 390 oscuro/claro; incluir jerarquía creada manualmente y documento con colores/formas/tinta. Revisar las imágenes, no solo generarlas. Teclado: foco visible, outline DOM operativo para seleccionar/renombrar/abrir, diálogos con Escape y retorno del foco, atajos sin interferencia con inputs. Táctil básico: crear/seleccionar/pan con puntero táctil sin overflow; no se requiere presión ni experiencia multitáctil avanzada. Documentar límites de accesibilidad sin afirmar certificación WCAG.
+
+Tests de dominio: migración v1 con datos completos, roundtrip v2, ciclos, IDs/anclajes/referencias, undo/redo, límites y JSON hostil. Tests de autosave: debounce, última escritura, errores/quota/bloqueo, reintento y recuperación; IndexedDB real en navegador para recarga y borrado. Playwright: colores/HEX, texto directo, creación por arrastre y Escape, lápiz, flecha libre/anclada, selección/resize/undo, proyectos/hijos nuevos, ambas navegaciones, reload, export JSON/PNG y privacidad con marcadores sintéticos. Usar evidencia del comportamiento, no solo render de la página.
+
+Registrar una medición representativa de creación/movimiento/zoom con centenares de elementos/trazos dentro de límites; medir duración real y errores sin inventar FPS ni prometer miles de nodos. Ejecutar check/lint/build y tests selectivos por hito, suite completa y CI al cierre. No desactivar una prueba para ocultar fallo de contrato; ajustar pruebas del spike solo para la sustitución autorizada y mantener su cobertura útil.
+
+## Cierre y clasificación
+
+P0: pérdida/corrupción de datos, fuga de payload, importación que ejecuta código o rompe aislamiento. P1: función requerida inutilizable, autosave que afirma éxito sin guardar, jerarquía corrupta, operaciones centrales inaccesibles o móvil ilegible. Se corrigen antes de RC. P2: mejoras menores de acabado, routing avanzado, presión de lápiz o certificación asistiva pendientes que no impiden el uso básico aprobado; se documentan sin ciclos separados de polish.
+
+GO exige evidencia inspeccionada para A–E, CI final en verde o un bloqueo externo documentado con alcance exacto, main intacta y push correcto a la rama V1.4. Entregar SHA completo, enlace a rama/preview realmente publicada, informe de aceptación GO/NO-GO, capturas y límites. Una preview con error HTTPS no se presenta como prueba remota superada. No marcar el Goal completo por falta de tokens/tiempo ni porque exista un commit verde. Si hay trabajo pendiente, conservar el Goal activo y la siguiente acción verificable en el progreso.
