@@ -120,10 +120,12 @@ export function schemaSample(
 	path: string,
 	warnings: string[],
 	seen = new Set<string>(),
-	depth = 0
+	depth = 0,
+	budget = { remaining: 300 }
 ): JsonValue {
-	if (depth > 8 || seen.size > 100) {
-		warnings.push('Sample truncated at recursion/size budget.');
+	if (depth > 8 || --budget.remaining < 0) {
+		if (!warnings.includes('Sample truncated at recursion/size budget.'))
+			warnings.push('Sample truncated at recursion/size budget.');
 		return null;
 	}
 	if (seen.has(path)) {
@@ -145,7 +147,7 @@ export function schemaSample(
 		}
 		if (c.family === '3.1' && Object.keys(s).some((k) => k !== '$ref' && k !== 'description'))
 			warnings.push('Reference siblings need manual review; sample is illustrative.');
-		return schemaSample(c, ref.resolvedTarget, warnings, seen, depth + 1);
+		return schemaSample(c, ref.resolvedTarget, warnings, seen, depth + 1, budget);
 	}
 	if (s.$id !== undefined || s.$dynamicRef !== undefined) {
 		warnings.push('URI scopes/dynamic references need a manual sample.');
@@ -176,13 +178,14 @@ export function schemaSample(
 								encodeURIComponent(key.replace(/~/g, '~0').replace(/\//g, '~1')),
 							warnings,
 							seen,
-							depth + 1
+							depth + 1,
+							budget
 						)
 			]);
 		return Object.fromEntries(entries);
 	}
 	if (type === 'array' && s.items !== undefined)
-		return [schemaSample(c, path + '/items', warnings, seen, depth + 1)];
+		return [schemaSample(c, path + '/items', warnings, seen, depth + 1, budget)];
 	if (type === 'integer' || type === 'number') return typeof s.minimum === 'number' ? s.minimum : 1;
 	if (type === 'boolean') return true;
 	if (type === 'null') return null;
@@ -354,9 +357,27 @@ export function redactContractRequest(
 ): RequestDraft {
 	const safe = redactRequest(request),
 		names = credentialNames(c, op).map((n) => n.toLowerCase()),
-		url = new URL(safe.url);
-	for (const key of [...url.searchParams.keys()])
-		if (names.includes(key.toLowerCase())) url.searchParams.set(key, 'REDACTED');
+		url = new URL(request.url);
+	url.username = '';
+	url.password = '';
+	url.hash = '';
+	url.search = url.search
+		.slice(1)
+		.split('&')
+		.filter(Boolean)
+		.map((part) => {
+			const key = part.split('=')[0];
+			let decoded: string;
+			try {
+				decoded = decodeURIComponent(key.replace(/\+/g, ' '));
+			} catch {
+				throw new ToolError('Invalid query encoding.');
+			}
+			return sensitiveHeader(decoded) || names.includes(decoded.toLowerCase())
+				? key + '=REDACTED'
+				: part;
+		})
+		.join('&');
 	return {
 		...safe,
 		url: url.href,

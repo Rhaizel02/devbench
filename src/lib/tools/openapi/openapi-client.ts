@@ -1,28 +1,34 @@
 import { ToolError, assertTextLimit } from '../tool-errors';
-import { OPENAPI_LIMITS, type Contract } from './model';
+import { OPENAPI_LIMITS, type Contract, type ContractDiff } from './model';
 import type { OpenApiTask } from './openapi.worker';
-export function startOpenApiTask(task: OpenApiTask): {
-	promise: Promise<Contract>;
+export function startOpenApiTask<T extends Contract | ContractDiff = Contract>(
+	task: OpenApiTask
+): {
+	promise: Promise<T>;
 	cancel: () => void;
 } {
 	assertTextLimit(task.input, OPENAPI_LIMITS.bytes);
+	if (task.kind === 'diff') assertTextLimit(task.after, OPENAPI_LIMITS.bytes);
 	const worker = new Worker(new URL('./openapi.worker.ts', import.meta.url), { type: 'module' });
 	let cancel = () => {},
 		settled = false;
-	const promise = new Promise<Contract>((resolve, reject) => {
+	const promise = new Promise<T>((resolve, reject) => {
 		const finish = () => {
 			settled = true;
 			clearTimeout(timer);
 			worker.terminate();
 		};
-		const timer = setTimeout(() => {
-			finish();
-			reject(
-				new ToolError(
-					'Contract exceeded the 2-second processing budget. Worker terminated; reduce the input and retry.'
-				)
-			);
-		}, OPENAPI_LIMITS.parseMs);
+		const timer = setTimeout(
+			() => {
+				finish();
+				reject(
+					new ToolError(
+						'Processing budget exceeded. Worker terminated; reduce the input and retry.'
+					)
+				);
+			},
+			task.kind === 'diff' ? OPENAPI_LIMITS.diffMs : OPENAPI_LIMITS.parseMs
+		);
 		cancel = () => {
 			if (!settled) {
 				finish();
@@ -33,7 +39,7 @@ export function startOpenApiTask(task: OpenApiTask): {
 			if (settled) return;
 			finish();
 			if (event.data.error) reject(new ToolError(event.data.error));
-			else resolve(event.data.result as Contract);
+			else resolve(event.data.result as T);
 		};
 		worker.onerror = (event) => {
 			event.preventDefault();

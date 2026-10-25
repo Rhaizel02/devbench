@@ -9,6 +9,7 @@
 	import OperationDetail from './OperationDetail.svelte';
 	import SchemaBrowser from './SchemaBrowser.svelte';
 	import RequestPanel from './RequestPanel.svelte';
+	import DiffPanel from './DiffPanel.svelte';
 	let input = $state(''),
 		format = $state<InputFormat>('auto');
 	let result = $state<{ input: string; format: InputFormat; contract: Contract } | null>(null);
@@ -21,7 +22,7 @@
 		deprecated = $state(false),
 		selected = $state(''),
 		schemaInitial = $state('');
-	let pending: ReturnType<typeof startOpenApiTask> | undefined;
+	let pending: ReturnType<typeof startOpenApiTask<Contract>> | undefined;
 	let ticket = 0,
 		disposed = false;
 	const contract = $derived(
@@ -133,6 +134,12 @@
 		>
 	</div>
 	<div class="view-switch" role="group" aria-label="Contract workspace">
+		<button
+			class="button"
+			disabled={!contract}
+			aria-pressed={view === 'compare'}
+			onclick={() => (view = 'compare')}>Compare</button
+		>
 		<button class="button" aria-pressed={view === 'input'} onclick={() => (view = 'input')}
 			>Input</button
 		><button
@@ -241,6 +248,7 @@
 						</p>{/if}
 				</div>
 			</div>
+		{:else if view === 'compare'}<DiffPanel baseline={input} {format} />
 		{:else if view === 'request' && operation}<div class="detail-panel">
 				<RequestPanel {contract} {operation} />
 			</div>

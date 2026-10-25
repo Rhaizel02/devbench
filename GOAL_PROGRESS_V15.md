@@ -63,3 +63,7 @@ H2 SHA 8dea18f0b7a306c1634f300ca016bd6e0aa3277e. H1 CI 40234461470 completed/suc
 ### H4 — HTTP implementado
 
 H3 SHA 1bea08e. Serialización form/simple/label/matrix/deepObject plano y arrays delimitados acotada; combinaciones desconocidas bloqueadas. Petición editable, preview explícita, cuatro generadores existentes, redacción por defecto y API keys con nombres propios. Handoff BACK-10→BACK-06 redactado de un consumo, cuerpo placeholder. 39 tests OpenAPI correctos; check sin errores/avisos; tres flujos Playwright correctos incluyendo clipboard, archivo descargado, error e invalidación y reload limpio. H5 pendiente. H3 capturas revisadas, no auditoría remota afirmada.
+
+### H5 — comparación implementada
+
+H4 SHA 2670712e50c2843935f3968d1a254f1350f6bfed, CI 40235751268 success; H3 CI 40235471677 y H2 CI 40235203199 success. Diff worker 3,5 s, pares visitados, 2.000 cambios; endpoints/parámetros/DTO/status/headers/auth/schema con dirección request/response y clasificaciones cautas. Export JSON/Markdown solo metadatos/cambios y escapes. Cuatro Playwright correctos, 51 tests OpenAPI; capturas de preview/diff. Se acota también el muestreo ante DAG ramificados y se conserva encoding de query al redactar. Siguiente H6: auditoría selectiva de requisitos, controles completos, capturas finales y docs/CI.

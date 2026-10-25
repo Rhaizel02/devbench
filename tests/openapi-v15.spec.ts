@@ -3,6 +3,43 @@ import { sampleContract } from '../src/lib/tools/openapi/fixtures';
 import { evidencePath } from './support/environment';
 import { mkdir } from 'node:fs/promises';
 import { readFile } from 'node:fs/promises';
+test('OpenAPI comparison performs directional analysis, filters, exports and invalidates stale results', async ({
+	page,
+	context
+}) => {
+	await context.grantPermissions(['clipboard-read', 'clipboard-write']);
+	await load(page);
+	await page.getByRole('button', { name: 'Compare', exact: true }).click();
+	await page.getByRole('button', { name: 'Synthetic evolution', exact: true }).click();
+	await page.getByRole('button', { name: 'Compare contracts', exact: true }).click();
+	await expect(
+		page.getByRole('heading', { name: 'Comparison results', exact: true })
+	).toBeVisible();
+	await expect(page.getByText('Operation removed.', { exact: true })).toBeVisible();
+	await page.getByLabel('Diff severity', { exact: true }).selectOption('breaking');
+	await expect(page.getByText('Operation added.', { exact: true })).toHaveCount(0);
+	await page.getByLabel('Diff export format', { exact: true }).selectOption('markdown');
+	await page.getByRole('button', { name: 'Copy output', exact: true }).click();
+	expect(await page.evaluate(() => navigator.clipboard.readText())).toContain('Operation removed');
+	const downloadPromise = page.waitForEvent('download');
+	await page.getByRole('button', { name: 'Download', exact: true }).click();
+	const download = await downloadPromise;
+	expect(download.suggestedFilename()).toBe('openapi-diff.md');
+	expect(await readFile((await download.path())!, 'utf8')).not.toContain('Synthetic notebook');
+	await page.screenshot({ path: evidencePath('v15-diff-dark-1440.png'), fullPage: true });
+	await page
+		.getByRole('textbox', { name: 'After OpenAPI source', exact: true })
+		.fill('invalid: true');
+	await expect(page.getByRole('heading', { name: 'Comparison results', exact: true })).toHaveCount(
+		0
+	);
+	await page.getByRole('button', { name: 'Compare contracts', exact: true }).click();
+	await expect(page.getByRole('alert')).toBeVisible();
+	await page.getByRole('button', { name: 'Clear comparison', exact: true }).click();
+	await expect(
+		page.getByRole('textbox', { name: 'After OpenAPI source', exact: true })
+	).toBeEmpty();
+});
 async function load(page: Page) {
 	await page.goto('/tools/openapi-explorer/');
 	await page.getByRole('button', { name: 'Synthetic example', exact: true }).click();
