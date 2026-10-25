@@ -12,6 +12,28 @@ export type Tool = {
 };
 export const tools: Tool[] = [
 	{
+		id: 'BACK-06',
+		slug: 'http-request',
+		name: 'HTTP Request Builder',
+		category: 'Backend',
+		description: 'Build requests and generate code without sending them.',
+		keywords: 'fetch java spring curl http api',
+		status: 'available',
+		version: 'V1.2',
+		icon: 'terminal'
+	},
+	{
+		id: 'BACK-07',
+		slug: 'http-headers',
+		name: 'HTTP Headers Inspector',
+		category: 'Backend',
+		description: 'Understand caching, CORS, CSP and cookies locally.',
+		keywords: 'header cache security response request',
+		status: 'available',
+		version: 'V1.2',
+		icon: 'shield'
+	},
+	{
 		id: 'DATA-05',
 		slug: 'json-query',
 		name: 'JSON Query Explorer',
