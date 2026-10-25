@@ -33,6 +33,8 @@ export type Reference = {
 	ref: string;
 	status: 'internal' | 'external' | 'missing' | 'cycle' | 'unsupported';
 	target?: string;
+	resolvedTarget?: string;
+	chain?: string[];
 	message?: string;
 };
 export type Server = {

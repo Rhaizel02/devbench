@@ -1,6 +1,6 @@
 import { parseDocument, stringify, isMap, isSeq, isAlias, isScalar, LineCounter } from 'yaml';
 import { validateJson } from '../json-studio/json-engine';
-import { ToolError, assertTextLimit } from '../tool-errors';
+import { ToolError, assertTextLimit, TEXT_LIMIT } from '../tool-errors';
 const allowedTags = new Set([
 	'tag:yaml.org,2002:str',
 	'tag:yaml.org,2002:null',
@@ -46,8 +46,8 @@ export function jsonToYaml(input: string): string {
 		throw new ToolError('Could not serialize this JSON structure as YAML.');
 	}
 }
-export function yamlToJson(input: string): string {
-	assertTextLimit(input);
+export function yamlToJson(input: string, maximum = TEXT_LIMIT, indentation: 0 | 2 = 2): string {
+	assertTextLimit(input, maximum);
 	if (!input.trim()) throw new ToolError('Enter YAML to convert.');
 	const lineCounter = new LineCounter();
 	try {
@@ -108,7 +108,7 @@ export function yamlToJson(input: string): string {
 		}
 		const value: unknown = document.toJS({ mapAsMap: false, maxAliasCount: 0 });
 		validateShape(value);
-		return JSON.stringify(value, null, 2);
+		return JSON.stringify(value, null, indentation);
 	} catch (error) {
 		if (error instanceof ToolError) throw error;
 		throw new ToolError(

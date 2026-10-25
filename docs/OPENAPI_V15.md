@@ -25,3 +25,9 @@ La familia 3.0 emplea su subconjunto de Schema Object y `nullable`; 3.1 admite e
 ## Puertas pendientes
 
 H2 parser/referencias y pruebas, H3 explorador, H4 preview/handoff HTTP, H5 comparación/export seguro y H6 aceptación de 28 entradas, UX/privacidad/capturas, instalación limpia y CI completa. Los límites iniciales se declaran en el modelo (2 MiB, 64 niveles, 100.000 nodos, 2.000 operaciones, 4.000 esquemas, worker 2 s/3,5 s diff); se comprobarán con pruebas. No hay resultados inventados de funciones aún no implementadas.
+
+## H2 implemented
+
+Local JSON / safe YAML parsing supports OAS 3.0.x and 3.1.x. Strict JSON mode rejects trailing commas; Auto may identify YAML-compatible flow syntax as YAML. Swagger 2 / OAS 3.2 rejected. Internal URI-fragment JSON Pointers resolve own properties with percent / tilde escapes. Bare reference cycles, missing/external references, anchors and URI scopes remain explicit diagnostics; nothing is fetched. Reference Object siblings follow the 3.0 / 3.1 distinction. Schema-only 3.1 documents are supported. This is structural inspection, not a universal conformance validator.
+
+Budgets: 2 MiB source, 64 levels, 100,000 nodes, 2,000 operations, 4,000 subschemas, 12,000 refs, 200 diagnostics, 256 KiB text values, 8 MiB worker result, 2 s cancellable worker. YAML aliases / custom executable tags rejected. Integers outside JavaScript safe precision rejected; quote large IDs. Decimal IEEE-754 precision applies. Payloads stay in component/worker memory.

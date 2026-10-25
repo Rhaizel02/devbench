@@ -51,3 +51,7 @@ Main merge `666dc73207ba0a2a9f26c686e1ad2e2a796f670f`, CI 40233753793 correcta e
 H1 añade únicamente DTOs/presupuestos puros y documentación de arquitectura/fuentes; catálogo sigue en 27 hasta que H3 tenga un explorador real. Motores HTTP/JSON/YAML/schema/handoff/worker/CodeEditor leídos. Semántica de 3.0 vs 3.1 contrastada en especificaciones oficiales; evitar tratar OAS 3.0 como Draft 2020-12. Source credentials se redactarán con el motor existente y también nombres API-key declarados.
 
 Siguiente acción: check/lint de la base H1, commit/push y empezar parser/referencias/worker H2. Mantener límites, invalidación y privacidad desde el principio. Verificar CI por hito sin repetir auditoría HTTPS ni omitir fallos TLS.
+
+### H2 — parser validado
+
+Parser JSON/YAML 3.0.x/3.1.x, DTO efectivo, JSON Pointer URI/escapes, ciclos y referencias externas sin red; worker cancelable 2 s y límites. No conformance universal ni URI scopes. 27 casos nuevos; total 283 tests / 17 archivos correctos, check 0 errores/avisos, lint y build correctos. Catálogo permanece 27 hasta H3. Siguiente: explorador real. CI H1 40234461470 pendiente de resultado final al último sondeo.
