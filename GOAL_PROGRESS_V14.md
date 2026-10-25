@@ -1,5 +1,7 @@
 # Progreso DevBench V1.4
 
+**Estado actual: RC A–E completada.** Implementación `db08081f151ca66f8e493e0204a1534649d030ea`, push confirmado y [CI 40216614515](https://github.com/Rhaizel02/devbench/actions/runs/40216614515) verificada en verde: instalación limpia/check/lint/256 unitarios/build/36 flujos Chromium; dos auditorías históricas remotas omitidas. Main permanece intacta. El commit documental posterior registra estas verificaciones sin cambiar código de producto.
+
 ## Reanudación
 
 Leer V14_ARCHITECTURE_CANVAS_GOAL.md y este archivo, consultar Goal activo, HEAD/status y evidencia antes de continuar. Objetivo completo: RC A–E; no basta el spike. No fusionar main.
@@ -12,13 +14,13 @@ Leer V14_ARCHITECTURE_CANVAS_GOAL.md y este archivo, consultar Goal activo, HEAD
 
 ## Hitos
 
-| Hito                        | Estado       | Evidencia / siguiente acción                                                                                                     |
-| --------------------------- | ------------ | -------------------------------------------------------------------------------------------------------------------------------- |
-| H0 contrato                 | Aceptado     | `007fccfe6125765c7dea60fcf592bd9c9cd1626f`; contrato de 14.862 bytes, push y CI 40211787379 correctos.                           |
-| H1 dominio + almacenamiento | Implementado | `fadb2f998200d1ae03886f6b127306932dae0671`; 24 tests, check/lint/build y CI 40212165405 correctos.                               |
-| H2 pizarra                  | Implementado | `a586324ffc4ff45c9263e9d68af1d163cfbd689e`; 3 Playwright, 35 unitarios, check/lint/build y CI 40213237929 correctos.             |
-| H3 proyectos + jerarquía    | Aceptado     | `83f8121522d9e70c64213f2dc29c006a648cd136`; proyectos reales, 5 Playwright, 36 unitarios; CI 40214204914 correcto.               |
-| H4 RC                       | RC           | RC: A–E aceptados localmente; 27 rutas/entradas, 256 unitarios y 36 flujos completos. CI exacto de cierre se verifica tras push. |
+| Hito                        | Estado       | Evidencia / siguiente acción                                                                                              |
+| --------------------------- | ------------ | ------------------------------------------------------------------------------------------------------------------------- |
+| H0 contrato                 | Aceptado     | `007fccfe6125765c7dea60fcf592bd9c9cd1626f`; contrato de 14.862 bytes, push y CI 40211787379 correctos.                    |
+| H1 dominio + almacenamiento | Implementado | `fadb2f998200d1ae03886f6b127306932dae0671`; 24 tests, check/lint/build y CI 40212165405 correctos.                        |
+| H2 pizarra                  | Implementado | `a586324ffc4ff45c9263e9d68af1d163cfbd689e`; 3 Playwright, 35 unitarios, check/lint/build y CI 40213237929 correctos.      |
+| H3 proyectos + jerarquía    | Aceptado     | `83f8121522d9e70c64213f2dc29c006a648cd136`; proyectos reales, 5 Playwright, 36 unitarios; CI 40214204914 correcto.        |
+| H4 RC                       | Aceptado     | `db08081f151ca66f8e493e0204a1534649d030ea`; 27 entradas, 256 unitarios, 36 flujos; CI 40216614515 y Cloudflare correctos. |
 
 ## Incidencias y aceptación
 
@@ -62,4 +64,6 @@ Se corrigió volver a breadcrumb válido al borrar el huérfano abierto y permit
 
 Informe docs/ARCHITECTURE_CANVAS_V14.md: matriz A–E, GO para RC, límites y P2. README/FEATURES/ROADMAP/VALIDATION actualizados. P0/P1 abiertos: ninguno en el alcance verificado. P2: certificación asistiva/paridad Firefox-WebKit, táctil avanzado y métricas de documentos enormes/largas sesiones; no nuevas iteraciones de polish. El dato persistido únicamente en IndexedDB Canvas es autorización explícita; ningún payload en URL/logs/red/localStorage. Se conserva el respaldo JSON como medio de recuperación.
 
-Cierre: el commit RC de esta rama contiene la evidencia y contratos; su SHA/CI/preview exactos se obtienen de GitHub tras push y se informan en la entrega. El Goal solo se marca completo cuando esos checks y la auditoría A–E quedan confirmados. No quedan funciones A–E pendientes; no fusionar main ni ampliar alcance.
+Cierre de implementación: `db08081f151ca66f8e493e0204a1534649d030ea`, [CI verificada](https://github.com/Rhaizel02/devbench/actions/runs/40216614515), Cloudflare Pages successful para ese mismo SHA. Preview inmutable publicada: https://97d9bf72.devbench-aw3.pages.dev/tools/architecture-canvas/. El intento Playwright HTTPS contra esa URL se bloqueó antes de cargar por `net::ERR_CERT_AUTHORITY_INVALID`; se declara como prueba remota bloqueada y no como pasada. No se deshabilitó validación TLS ni se atribuye una causa sin evidencia. El código sí está verificado localmente y en CI; no se repite auditoría de producción.
+
+La entrega comprueba además el check del commit documental final, cuyo SHA se comunica al usuario. No quedan funciones A–E pendientes. GO para RC en la rama; P2 y límites documentados; no fusionar main ni ampliar alcance.
