@@ -2,6 +2,8 @@
 
 ## V1.2 delivery
 
+BACK-08 Log & Stack Trace Inspector and BACK-09 Environment Comparator are implemented. Common Java log formats are bounded and unknown text is retained. Environment values remain concealed until explicit reveal; exports are always key/status metadata only.
+
 BACK-06 HTTP Request Builder and BACK-07 HTTP Headers Inspector are implemented with local-only generation/parsing, redaction by default and documented client restrictions. No requests are executed.
 
 DATA-05 JSON Query Explorer and DATA-06 JSON Schema Lab are implemented. Exact bounded syntax, interpreted validation, internal-only references and conservative inference limits are documented in README and the workspaces. Remaining V1.2 milestones are tracked separately in GOAL_PROGRESS_V12.md; the V1/V1.1 scope below is historical and preserved.

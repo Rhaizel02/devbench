@@ -12,6 +12,28 @@ export type Tool = {
 };
 export const tools: Tool[] = [
 	{
+		id: 'BACK-08',
+		slug: 'log-inspector',
+		name: 'Log & Stack Trace Inspector',
+		category: 'Backend',
+		description: 'Explore Java and Spring logs without uploading them.',
+		keywords: 'exception stack trace root cause debug',
+		status: 'available',
+		version: 'V1.2',
+		icon: 'terminal'
+	},
+	{
+		id: 'BACK-09',
+		slug: 'environment-comparator',
+		name: 'Environment Comparator',
+		category: 'Backend',
+		description: 'Compare environment keys with values hidden by default.',
+		keywords: 'env config dotenv deployment compare',
+		status: 'available',
+		version: 'V1.2',
+		icon: 'diff'
+	},
+	{
 		id: 'BACK-06',
 		slug: 'http-request',
 		name: 'HTTP Request Builder',

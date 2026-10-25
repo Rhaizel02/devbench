@@ -12,7 +12,20 @@
 	let query = $state('');
 	let selected = $state(0);
 	let returnFocus: HTMLElement | null = null;
-	const results = $derived(searchTools(query));
+	const results = $derived(
+		searchTools(query).sort((a, b) => {
+			const term = query.trim().toLowerCase();
+			const score = (name: string) =>
+				name.toLowerCase() === term
+					? 3
+					: name.toLowerCase().startsWith(term)
+						? 2
+						: name.toLowerCase().includes(term)
+							? 1
+							: 0;
+			return score(b.name) - score(a.name);
+		})
+	);
 	$effect(() => {
 		if (!dialog) return;
 		if (app.paletteOpen && !dialog.open) {
