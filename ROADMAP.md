@@ -1,14 +1,25 @@
 # DevBench — Roadmap
 
-**V1** son 12 herramientas; **V1.1** son otras 6. Una herramienta es `available` solo cuando hace lo prometido. Al cerrar un bloque contrastaremos el resumen de Codex con el commit real y priorizaremos P0/P1; P2 irán al backlog.
+Las 12 herramientas V1 y las 6 V1.1 del alcance aprobado están implementadas. Los estados `available` dependen del motor y pantalla reales, no de una promesa del roadmap. La matriz final está en `screenshots/actual/release-matrix.json`; `VALIDATION.md` conserva la evidencia histórica y por hito.
 
-| Bloque | Contenido | Riesgo / pruebas |
+| Bloque / hito | Contenido | Estado |
 |---|---|---|
-| **B1 — ahora** | SvelteKit estático + shell/Home, temas, favoritos, recientes, paleta, Quick Paste básico, JSON Studio real | JSON estricto, privacidad, movilidad/teclado, rutas prerender |
-| B2 | JSON Diff, JSON ↔ YAML, Base64 Toolkit, URL Toolkit | Unicode, conversiones reversibles, parsing y errores |
-| B3 | JWT Inspector, Hash Generator, SQL Formatter, Regex Tester | Decode ≠ verify, hash Web Crypto, SQL no semántico, regex sin bloqueo |
-| B4 | Text Diff, ID Generator, Timestamp Converter, pulido transversal | Entropía, fechas y zonas, errores de inputs |
-| B5 — V1.1 | JSON ↔ CSV, JSON → Code, cURL Inspector | Escape, inferencia de tipos, no ejecutar comandos |
-| B6 — V1.1 | Cron Explorer, String Toolkit, SQL IN Builder; opcional Smart Input avanzado | Timezones, inyección SQL, correctitud |
+| B1 | Base SvelteKit estática, shell/Home, temas, favoritos, recientes, paleta, Quick Paste básico y JSON Studio | Completo |
+| B2 / A | JSON Diff, JSON ↔ YAML, Base64 Toolkit, URL Toolkit | Completo |
+| B3 / B | JWT Inspector, Hash Generator, SQL Formatter, Regex Tester | Completo |
+| B4 / C | Text Diff, ID Generator, Timestamp Converter e integración V1 | Completo: 12/12 V1 |
+| B5 / D | JSON ↔ CSV, JSON → Code, cURL Inspector | Completo |
+| B6 / E | Cron Explorer, String Toolkit, SQL IN Builder y Quick Paste con múltiples destinos | Completo: 18/18 |
+| F | Matriz de release, privacidad, responsive/temas, instalación limpia, dependencias, documentación y CI final | Ver `GOAL_PROGRESS.md` y `VALIDATION.md` |
 
-**Fuera de compromiso:** PWA/offline, pipelines de transformación, OpenAPI inspector, `EXPLAIN`, backend/usuarios. Solo explorar tras V1 estable y si aportan utilidad real.
+## Checkpoints publicados
+
+- [A — datos/codificación](https://github.com/Rhaizel02/devbench/commit/100d6a5063a8bafba416bb6a41d530ebe6a26fcd)
+- [B — seguridad/backend](https://github.com/Rhaizel02/devbench/commit/71ccb7062f3900438fb6bdd45734bbc618deacd6)
+- [C — V1 completo](https://github.com/Rhaizel02/devbench/commit/7bd59ab3d68b06967ca48802b3dc5dc2a4e04e12)
+- [D — datos/código/cURL](https://github.com/Rhaizel02/devbench/commit/772d3f790a85f2189caf5ab2570e668de578d6fb)
+- [E — 18 herramientas](https://github.com/Rhaizel02/devbench/commit/b3cc31ed524bdb67df348c4b6667e50fa29d8ec7)
+
+Las limitaciones de CSV, inferencia, cron avanzado, fechas, SQL literal y privacidad se documentan expresamente en README/workspaces. Solo se corrigen P0/P1 antes de cerrar; pequeños ajustes de densidad/alineación son P2.
+
+Fuera de esta entrega: PWA/offline, pipelines, OpenAPI, EXPLAIN, backend/usuarios y despliegue web. Requieren una decisión futura independiente.

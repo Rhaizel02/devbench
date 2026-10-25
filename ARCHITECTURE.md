@@ -123,3 +123,9 @@ La estructura es orientativa. No generar carpetas vacías, hooks de dependencia,
 - [Tailwind CSS 4 en SvelteKit](https://tailwindcss.com/docs/installation/framework-guides/sveltekit)
 - [CodeMirror 6](https://codemirror.net/docs/guide/)
 - [Lucide Svelte 5](https://www.npmjs.com/package/@lucide/svelte)
+
+## Implementación V1.1 — nota de evolución
+
+La arquitectura aprobada de B1 se conserva: una aplicación estática, sin servicios de datos ni backend. Actualmente el registro expone las 18 herramientas. `tool-workspaces.ts` es un mapa pequeño de imports diferidos dentro de la ruta SvelteKit; no añade otro router ni una plataforma de plugins. `TextWorkspace.svelte` comparte el flujo input/output entre conversiones concretas y los inspectores mantienen su presentación propia. CodeMirror se monta/destruye en cliente y carga sintaxis por idioma; la regex se evalúa en un Worker dedicado que se termina al vencer el presupuesto o abandonar la herramienta.
+
+Los payloads permanecen en componentes/contexto por instancia; Quick Paste lleva destino y unidad explícitos y se consume una vez. La aplicación guarda únicamente las preferencias sanitizadas descritas arriba. SvelteKit puede guardar índices de navegación/desplazamiento en sessionStorage durante una recarga; los contenedores de snapshots permanecen vacíos y no incluyen entradas/resultados. La matriz de release inspecciona estas formas y la ausencia de marcadores confidenciales en todos los canales persistentes o de red.

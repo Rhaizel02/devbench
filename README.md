@@ -2,7 +2,7 @@
 
 A focused, local-first developer workbench. **All 18 approved V1/V1.1 tools are implemented**; final release verification is tracked in `GOAL_PROGRESS.md`. The UI is in English.
 
-Repository: [Rhaizel02/devbench](https://github.com/Rhaizel02/devbench). The source is published on GitHub; website deployment remains outside B1.
+Repository: [Rhaizel02/devbench](https://github.com/Rhaizel02/devbench). Source publication is complete; static hosting can be configured separately.
 
 ## Run locally
 
@@ -31,6 +31,8 @@ Browser checks:
 npx playwright install chromium
 npm run test:e2e
 ```
+
+With the static preview running, `npm run capture` saves genuine browser screenshots and measured layout checks.
 
 ## Available tools and shell
 
@@ -63,6 +65,8 @@ Inputs and outputs remain in interface memory. They are not uploaded, logged, pl
 
 Only `devbench.preferences.v1` is written to localStorage: a theme, favorite tool IDs, and recent tool IDs/timestamps. Invalid metadata is discarded; storage failures do not prevent use. Clipboard access and download are explicit actions. Clipboard failures are reported without claiming success.
 
+SvelteKit may write internal navigation indices and scroll positions to sessionStorage during reload/navigation. Its snapshot containers remain empty; workspace contents are not captured. Release tests inspect these shapes and check that synthetic confidential markers are absent from storage, history, URLs, requests and logs.
+
 Fonts and all runtime assets are bundled locally. There is no backend, analytics, authentication, service worker or CDN dependency. Serving the app still loads static assets over the network.
 
 ## Architecture
@@ -71,7 +75,7 @@ Svelte 5 runes, SvelteKit 3, strict TypeScript 6, Vite, Tailwind CSS 4, Lucide a
 
 Home and all implemented tool routes are prerendered with trailing slashes and build-time SSR. Tool workspaces and their libraries load lazily; CodeMirror is mounted only in the browser and destroyed on unmount. Pure TypeScript engines handle transformations, detection and preference validation separately from the UI.
 
-`npm run build` creates `build/`, ready for static hosting. The bundled `404.html` prevents implicit SPA fallback on compatible hosts such as Cloudflare Pages. Hosting is outside B1.
+`npm run build` creates `build/`, ready for static hosting. Configure Node 24, build with `npm ci` then `npm run build`, and publish the `build` directory. The host must serve each `/tools/<slug>/index.html` and return `404.html` with status 404 for unknown paths; use no SPA rewrite to the Home page. If hosting under a subpath, set the SvelteKit base path before building. No production server or hosting credentials are needed to build locally.
 
 ## Limits and behavior
 
@@ -86,7 +90,13 @@ Home and all implemented tool routes are prerendered with trailing slashes and b
 
 ## Verification and references
 
-`screenshots/01–08` are preserved design references, not claims of application behavior. Actual browser captures are saved in `screenshots/actual/` after QA. GitHub Actions runs check, lint, unit tests, static build and three browser smoke scenarios.
+`screenshots/01–08` are preserved design references. Genuine browser captures are saved in `screenshots/actual/`: [Home dark](screenshots/actual/01-home-dark-desktop.png), [JSON Studio light](screenshots/actual/05-json-light-desktop.png), [code editor light tablet](screenshots/actual/25-final-code-light-tablet.png) and [cURL dark mobile](screenshots/actual/26-final-curl-dark-mobile.png).
+
+The final local clean install on Node 24.22.1 passed check (zero errors/warnings), lint, **149 unit tests**, static build and **16 Chromium flows**. The [18-tool acceptance matrix](screenshots/actual/release-matrix.json) records real operations, copying, reset, reload and empty/invalid states. [Layout evidence](screenshots/actual/checks.json) contains 32 measurements, including every dark/light × 390/768/1440 combination for a complex diff, security inspector, editor and request table. System themes, palette/drawer/tab keyboard behavior, payload privacy, worker termination and blocked permissions are exercised. [Dependency audit](screenshots/actual/dependency-audit.json) reports zero findings in both production and full dependency audits at verification time. GitHub Actions repeats check/lint/unit/build/browser gates on pushes.
+
+Verification uses Chromium and emulated viewport sizes; further browser/screen-reader coverage and minor density tuning are P2 follow-ups. No known P0/P1 remains. `VALIDATION.md` preserves B1 history and appends milestone/release evidence.
+
+## Additional tool limits
 
 JSON Diff caps traversal at 100,000 nodes / 128 levels and results at 1,000 changes. YAML rejects aliases, unsupported tags, duplicate/non-string keys, non-finite values and unsafe YAML integers; comments are not retained. Base64 decodes text only and rejects invalid UTF-8 and noncanonical padding bits. URL query editing supports up to 2,000 rows and follows URLSearchParams normalization, including `+` as space; credentials enter exported results only after explicit reveal.
 

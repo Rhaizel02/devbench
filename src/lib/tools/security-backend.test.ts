@@ -135,18 +135,20 @@ describe('bounded worker regex engine', () => {
 			1000
 		);
 	});
-	it.each(["$$-$&-$`-$'-$1-$2-$10-$01-$99-$<word>", 'plain', '$0'])(
-		'matches native replacement semantics for bounded patterns',
-		(replacement) => {
-			expect(evaluateRegex({ ...input, replace: true, replacement }).replacement).toBe(
-				input.text.replace(new RegExp(input.pattern, input.flags), replacement)
-			);
-			expect(
-				evaluateRegex({ ...input, pattern: '(?<=a)b', text: 'ab', replace: true, replacement })
-					.replacement
-			).toBe('ab'.replace(/(?<=a)b/gu, replacement));
-		}
-	);
+	it.each([
+		"$$-$&-$`-$'-$1-$2-$10-$01-$99-$<word>",
+		'plain',
+		'$0',
+		'$<missing>-$<toString>-$<__proto__>'
+	])('matches native replacement semantics for bounded patterns', (replacement) => {
+		expect(evaluateRegex({ ...input, replace: true, replacement }).replacement).toBe(
+			input.text.replace(new RegExp(input.pattern, input.flags), replacement)
+		);
+		expect(
+			evaluateRegex({ ...input, pattern: '(?<=a)b', text: 'ab', replace: true, replacement })
+				.replacement
+		).toBe('ab'.replace(/(?<=a)b/gu, replacement));
+	});
 	it('handles sticky and non-global replacement; invalid flags/patterns/limits safely', () => {
 		expect(
 			evaluateRegex({

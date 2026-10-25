@@ -1,0 +1,21 @@
+{
+  "node": "v24.22.1",
+  "productionExitCode": 0,
+  "production": {
+    "info": 0,
+    "low": 0,
+    "moderate": 0,
+    "high": 0,
+    "critical": 0,
+    "total": 0
+  },
+  "fullExitCode": 0,
+  "fullIncludingBundledDevDependencies": {
+    "info": 0,
+    "low": 0,
+    "moderate": 0,
+    "high": 0,
+    "critical": 0,
+    "total": 0
+  }
+}

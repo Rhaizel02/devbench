@@ -85,7 +85,9 @@ export function evaluateRegex(input: RegexInput): RegexResult {
 					if (code === "'") return input.text.slice(match.end);
 					if (code.startsWith('<'))
 						return Object.keys(match.groups).length
-							? (match.groups[code.slice(1, -1)] ?? '')
+							? Object.hasOwn(match.groups, code.slice(1, -1))
+								? (match.groups[code.slice(1, -1)] ?? '')
+								: ''
 							: token;
 					const n = Number(code);
 					if (n > 0 && n <= match.captures.length) return match.captures[n - 1] ?? '';

@@ -72,7 +72,7 @@ describe('usable code inferred from finite sample evidence', () => {
 			'a-b': { 'x"\n': 1 },
 			a_b: { class: null },
 			'42': [true, 'x'],
-			__proto__: 'value'
+			['__proto__']: 'value'
 		});
 		const source = inferCode(sample, 'typescript', '123 odd-root');
 		const filename = '/__devbench_generated_synthetic.ts';

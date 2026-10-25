@@ -91,3 +91,19 @@ Workbench web para desarrolladores, especialmente útil en tareas cotidianas de 
 - Todas las transformaciones se ejecutan sin llamadas de red de datos de usuario.
 - Sin P0/P1 abiertos, build limpio y tests relevantes pasando.
 - README del repositorio explica objetivo, privacidad, arquitectura, instalación y capturas reales.
+
+## Estado de implementación — cierre V1/V1.1 (2026-10-25)
+
+Las 18 herramientas del alcance original están implementadas y marcadas `available` en `src/lib/tools/tool-registry.ts`; las rutas prerender y el directorio usan ese mismo registro. Los contratos de las secciones 2–3 se conservan. El alcance de entrega se amplió mediante `DEV_BENCH_AUTONOMOUS_GOAL.md`, sin añadir PWA, backend, autenticación, telemetría ni despliegue.
+
+| IDs | Estado y evidencia |
+|---|---|
+| DATA-01/02/03/04 | JSON Studio, JSON Diff, JSON ↔ YAML y JSON ↔ CSV disponibles |
+| ENC-01/02 | Base64 Toolkit y URL Toolkit disponibles |
+| SEC-01/02 | JWT Inspector (sin verificar firma) y Hash Generator disponibles |
+| BACK-01/02/03/04/05 | SQL Formatter, Regex Tester aislado, cURL Inspector, Cron Explorer y SQL IN Builder disponibles |
+| TEXT-01/02 | Text Diff y String Toolkit disponibles |
+| UTIL-01/02 | ID Generator y Timestamp Converter disponibles |
+| CODE-01 | TypeScript y Java records disponibles |
+
+Quick Paste ofrece destinos implementados por clic explícito, consume el dato una vez y distingue segundos/milisegundos cuando el número es ambiguo. Las limitaciones precisas de formato, precisión, cron avanzado, CSV e inferencia están en README y en cada workspace. `screenshots/actual/release-matrix.json` registra operaciones, copia real, reset, recarga y estados vacíos/erróneos de las 18 rutas; `VALIDATION.md` conserva el historial B1 y la evidencia por hito.

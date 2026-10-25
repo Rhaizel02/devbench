@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
+	import { onMount, tick } from 'svelte';
 	import type { EditorView } from '@codemirror/view';
 	let {
 		value = $bindable(''),
@@ -30,6 +30,10 @@
 	});
 	onMount(() => {
 		let disposed = false;
+		const measure = () => {
+			if (!disposed) view?.requestMeasure();
+		};
+		document.fonts.addEventListener('loadingdone', measure);
 		void Promise.all([
 			import('@codemirror/view'),
 			import('@codemirror/state'),
@@ -132,12 +136,17 @@
 						effects: wrapping.reconfigure(enabled ? v.EditorView.lineWrapping : [])
 					});
 				ready = true;
+				void tick().then(async () => {
+					await document.fonts.ready;
+					measure();
+				});
 			})
 			.catch(() => {
 				if (!disposed) failed = true;
 			});
 		return () => {
 			disposed = true;
+			document.fonts.removeEventListener('loadingdone', measure);
 			ready = false;
 			view?.destroy();
 			view = undefined;

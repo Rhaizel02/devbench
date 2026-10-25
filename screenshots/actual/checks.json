@@ -47,10 +47,178 @@
       "status": 200,
       "viewport": 768,
       "content": 768
+    },
+    {
+      "scene": "json-diff",
+      "theme": "dark",
+      "status": 200,
+      "viewport": 390,
+      "content": 390
+    },
+    {
+      "scene": "json-diff",
+      "theme": "light",
+      "status": 200,
+      "viewport": 390,
+      "content": 390
+    },
+    {
+      "scene": "json-diff",
+      "theme": "dark",
+      "status": 200,
+      "viewport": 768,
+      "content": 768
+    },
+    {
+      "scene": "json-diff",
+      "theme": "light",
+      "status": 200,
+      "viewport": 768,
+      "content": 768
+    },
+    {
+      "scene": "json-diff",
+      "theme": "dark",
+      "status": 200,
+      "viewport": 1440,
+      "content": 1440
+    },
+    {
+      "scene": "json-diff",
+      "theme": "light",
+      "status": 200,
+      "viewport": 1440,
+      "content": 1440
+    },
+    {
+      "scene": "jwt-inspector",
+      "theme": "dark",
+      "status": 200,
+      "viewport": 390,
+      "content": 390
+    },
+    {
+      "scene": "jwt-inspector",
+      "theme": "light",
+      "status": 200,
+      "viewport": 390,
+      "content": 390
+    },
+    {
+      "scene": "jwt-inspector",
+      "theme": "dark",
+      "status": 200,
+      "viewport": 768,
+      "content": 768
+    },
+    {
+      "scene": "jwt-inspector",
+      "theme": "light",
+      "status": 200,
+      "viewport": 768,
+      "content": 768
+    },
+    {
+      "scene": "jwt-inspector",
+      "theme": "dark",
+      "status": 200,
+      "viewport": 1440,
+      "content": 1440
+    },
+    {
+      "scene": "jwt-inspector",
+      "theme": "light",
+      "status": 200,
+      "viewport": 1440,
+      "content": 1440
+    },
+    {
+      "scene": "json-code",
+      "theme": "dark",
+      "status": 200,
+      "viewport": 390,
+      "content": 390
+    },
+    {
+      "scene": "json-code",
+      "theme": "light",
+      "status": 200,
+      "viewport": 390,
+      "content": 390
+    },
+    {
+      "scene": "json-code",
+      "theme": "dark",
+      "status": 200,
+      "viewport": 768,
+      "content": 768
+    },
+    {
+      "scene": "json-code",
+      "theme": "light",
+      "status": 200,
+      "viewport": 768,
+      "content": 768
+    },
+    {
+      "scene": "json-code",
+      "theme": "dark",
+      "status": 200,
+      "viewport": 1440,
+      "content": 1440
+    },
+    {
+      "scene": "json-code",
+      "theme": "light",
+      "status": 200,
+      "viewport": 1440,
+      "content": 1440
+    },
+    {
+      "scene": "curl-inspector",
+      "theme": "dark",
+      "status": 200,
+      "viewport": 390,
+      "content": 390
+    },
+    {
+      "scene": "curl-inspector",
+      "theme": "light",
+      "status": 200,
+      "viewport": 390,
+      "content": 390
+    },
+    {
+      "scene": "curl-inspector",
+      "theme": "dark",
+      "status": 200,
+      "viewport": 768,
+      "content": 768
+    },
+    {
+      "scene": "curl-inspector",
+      "theme": "light",
+      "status": 200,
+      "viewport": 768,
+      "content": 768
+    },
+    {
+      "scene": "curl-inspector",
+      "theme": "dark",
+      "status": 200,
+      "viewport": 1440,
+      "content": 1440
+    },
+    {
+      "scene": "curl-inspector",
+      "theme": "light",
+      "status": 200,
+      "viewport": 1440,
+      "content": 1440
     }
   ],
   "systemTheme": "passed",
-  "knownRoutes": 12,
+  "knownRoutes": 18,
   "unknownRoute": 404,
   "browserErrors": [],
   "externalRequests": []

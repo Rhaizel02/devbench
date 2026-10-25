@@ -1,65 +1,60 @@
 # DevBench autonomous goal progress
 
-## Current checkpoint
+## Release checkpoint
 
-The complete `DEV_BENCH_AUTONOMOUS_GOAL.md` is now present at repository root and has been read. The earlier missing-document blocker is resolved. Supplied pack notes are preserved in `docs/goal-pack/`. Work only in the physical repository `C:\Users\bobby\Documents\ChatGPT\DevBench`, branch main, origin Rhaizel02/devbench.
+All 18 approved V1/V1.1 tools and local release acceptance are complete. Final publication and matching GitHub CI remain before closing the Goal. Repository: physical `C:\Users\bobby\Documents\ChatGPT\DevBench`, branch main, origin Rhaizel02/devbench. Original goal contract is preserved in `DEV_BENCH_AUTONOMOUS_GOAL.md`; supplied package notes are in `docs/goal-pack/`.
 
-The goal remains active and incomplete. B1 baseline is verified; milestones A–E are complete (18/18 working tools); final F release verification remains. Do not stop at a milestone or mark complete before 18/18 plus every final gate.
+## Acceptance table — 18/18
 
-## Tool matrix
+Every row passed a real direct static route, operation, clipboard copy, reset, reload and appropriate empty/invalid state. Detailed outcomes are in `screenshots/actual/release-matrix.json`.
 
-| Tool                | State                                          |
-| ------------------- | ---------------------------------------------- |
-| JSON Studio         | B1 complete; regression checks passing         |
-| JSON Diff           | A complete; unit and browser acceptance passed |
-| JSON ↔ YAML         | A complete; unit and browser acceptance passed |
-| Base64 Toolkit      | A complete; unit and browser acceptance passed |
-| URL Toolkit         | A complete; unit and browser acceptance passed |
-| JWT Inspector       | B complete                                     |
-| Hash Generator      | B complete                                     |
-| SQL Formatter       | B complete                                     |
-| Regex Tester        | B complete                                     |
-| Text Diff           | C complete                                     |
-| ID Generator        | C complete                                     |
-| Timestamp Converter | C complete                                     |
-| JSON ↔ CSV          | D complete                                     |
-| JSON → Code         | D complete                                     |
-| cURL Inspector      | D complete                                     |
-| Cron Explorer       | E complete                                     |
-| String Toolkit      | E complete                                     |
-| SQL IN Builder      | E complete                                     |
+| ID      | Tool                | State                                                         |
+| ------- | ------------------- | ------------------------------------------------------------- |
+| DATA-01 | JSON Studio         | Accepted                                                      |
+| DATA-02 | JSON Diff           | Accepted                                                      |
+| DATA-03 | JSON ↔ YAML         | Accepted                                                      |
+| DATA-04 | JSON ↔ CSV          | Accepted                                                      |
+| ENC-01  | Base64 Toolkit      | Accepted                                                      |
+| ENC-02  | URL Toolkit         | Accepted                                                      |
+| SEC-01  | JWT Inspector       | Accepted; signature never verified                            |
+| SEC-02  | Hash Generator      | Accepted                                                      |
+| BACK-01 | SQL Formatter       | Accepted; never executes/validates queries                    |
+| BACK-02 | Regex Tester        | Accepted; worker timeout/termination/retry verified           |
+| BACK-03 | cURL Inspector      | Accepted; parse-only, redacted by default                     |
+| BACK-04 | Cron Explorer       | Accepted; explicit Unix/Spring and tested DST correction      |
+| BACK-05 | SQL IN Builder      | Accepted; parameterized by default                            |
+| TEXT-01 | Text Diff           | Accepted                                                      |
+| TEXT-02 | String Toolkit      | Accepted                                                      |
+| UTIL-01 | ID Generator        | Accepted; cryptographic randomness                            |
+| UTIL-02 | Timestamp Converter | Accepted; strict dates/units/zones                            |
+| CODE-01 | JSON → Code         | Accepted; strict synthetic TS diagnostics and Java 17 fixture |
 
-## Milestones / evidence
+## Final local verification
 
-- B1 audit passed check (0 errors/warnings), lint, 30 unit tests, static build and 3 browser flows on Node 24.22.1.
-- A: four pure engines, lazy workspaces, shared two-pane text workspace, language-aware client-only CodeMirror, truthful registry counts. Check passes; 70 unit tests pass; static build passes. Lint passes; all 5 Chromium flows pass, including real clipboard/download, option invalidation, route cleanup, privacy markers and 390/768/1440 width checks. Captures 09–12 inspected in dark/light desktop/mobile.
-- B: JWT strict decoder and visible claim inspector, Web Crypto hashes, sql-formatter 15.9.0 for three dialects, isolated regex worker. Check passes with zero errors/warnings; 95 unit tests, static build and all 7 browser flows pass. Browser hostile-regex test proves worker termination, responsive UI and successful retry. Dark/light inspector captures 13–14 inspected, width checks at 390/768/1440. Lint passes.
-- C: jsdiff bounded line comparison, secure RFC UUID v4/v7 and ULID generation, strict epoch/ISO/calendar/IANA conversion. Check (0 errors/warnings), lint, 103 unit tests, static build and all 9 browser flows pass. All 12 real V1 deep routes, palette, favorite persistence, memory cleanup and unknown 404 verified. Captures 15–17 inspected. Early preference initialization removes the saved-theme flash.
-- D: Papa Parse CSV conversion with explicit loss/quoting policies; TypeScript/Java inference; parse-only cURL with default redaction and reveal. Check passes (0 errors/warnings), 135 unit tests, static build and all 11 browser flows pass. Generated TypeScript passes strict semantic checks; the browser-generated synthetic Java fixture compiles with javac --release 17. Captures 18–20 inspected. Lint and rebuilt browser delimiter/reveal checks pass.
-- E: Croner/cronstrue with explicit Unix OR vs Spring AND, seconds-first format, restricted ? and no L/W/#; calendar corrections enumerate both overlaps and skip nonexistent wall times, including half-hour Lord Howe transitions. Unicode strings, parameter-first SQL IN and explicit one-shot JSON/JWT/URL/SQL/timestamp transfer implemented. 148 unit tests, check (0 errors/warnings), lint, static build and all 13 browser flows pass. All Quick Paste destinations transfer once with explicit timestamp units. Captures 21–22 inspected.
-- F pending. Follow the full goal contracts in order, including real worker termination for hostile regex, secure IDs, date/DST semantics, safe cURL subset and explicit Spring cron behavior.
-- Final F must run npm ci/check/lint/test/build/e2e/capture/audit, verify all 18 routes and unknown 404, inspect real dark/light/mobile screenshots, append VALIDATION evidence, update README/FEATURES/ROADMAP, push and verify final CI.
+- Node 24.22.1: fresh npm ci; check (0 errors/warnings); lint; 149 unit tests in 8 files; static build; all 16 Chromium browser flows passed.
+- Static output contains 18 tool index pages. All direct links/reloads work; unknown slug returns 404.
+- Privacy markers absent from local/session storage, history, URLs, cookies, Cache API, IndexedDB, requests and logs. No external runtime requests or uncaught browser errors. SvelteKit sessionStorage contains only inspected navigation/scroll metadata and empty snapshot containers; no workspace snapshots.
+- All Quick Paste destinations require explicit click and consume text once; numeric ambiguity exposes JSON/seconds/milliseconds choices. Leaving/reopening clears inputs.
+- Hostile regex terminates its worker at the 500 ms budget; UI heartbeat/theme and retry work. Large diff/CSV inputs reject safely. Blocked storage/clipboard report failure without preventing transformation; mobile tabs support keyboard focus.
+- Capture workflow: 12 current images, 32 no-overflow measurements, including all 24 dark/light × 390/768/1440 combinations for new diff/security/editor/table screens. Real captures 23–26 reviewed against approved tokens/reference geometry; original references unchanged.
+- Production and full npm audits exit 0 with zero findings. Full audit also covers bundled packages declared under devDependencies. Evidence: dependency-audit.json, checks.json and release-matrix.json in screenshots/actual/.
+- README, FEATURES, ROADMAP, architecture note and appended VALIDATION reflect actual functions and limits. DESIGN tokens are unchanged.
 
-## Decisions / limitations
+## Limits and priorities
 
-- A tools: 1 MiB UTF-8 input cap. JSON comparison: 100,000 nodes, 128 levels, 1,000 changes, progressive display. Native JSON numeric/duplicate-key semantics disclosed.
-- YAML 1.2 core using yaml 2.9.1; reject aliases, unsupported tags, non-string keys, nonfinite numbers and unsafe YAML integer precision. No custom constructors.
-- Base64 UTF-8 only, fatal decoding, canonical bits checked, explicit whitespace/missing-padding options.
-- URL component operations distinct from absolute inspection; repeated/empty parameters retained; credentials redacted from result/copy/download until explicit reveal; no requests to pasted URLs.
-- B limits: JWT 64 KiB / 10,000 nodes / 64 levels; SQL 128 KiB; regex 4 KiB pattern / 100,000 bytes text / 1,000 matches / 500 ms worker timeout. No verification/execution claims. SHA uses Web Crypto only.
-- C limits: text 128 KiB/2,000 lines/300 ms/1,000 edits; ID batches 1–100, secure randomness only, no monotonic guarantee; timestamps 1,024 bytes, integer ms / up to 3 decimal second digits, explicit ISO offsets.
-- No known P0/P1 after milestone C acceptance.
-- P2 backlog: minor density/alignment tuning only if valuable during F. Saved-theme first paint and mobile action wrapping addressed.
+No known P0/P1. P2: optional density/alignment refinements and broader Firefox/WebKit/screen-reader QA; Chromium/emulated viewports are the verified environment. Saved-theme flash and mobile action wrapping were addressed. CodeMirror remeasures after mount/font changes; capture visits visible editors before a full-page image so offscreen virtual geometry has been measured.
 
-## Published checkpoints
+Precise documented limits remain intentional: YAML aliases/custom tags and unsupported types reject; CSV loses null/missing/empty distinctions and imports strings; code inference is sample-based and Java field mapping may require manual binding; cURL is a literal POSIX subset with explicit reveal; cron L/W/#/macros/year fields are unsupported, with a five-year horizon and bounded correction; JS numeric precision and safe numeric SQL constraints apply. No deployment/backend/PWA is part of this goal.
 
-- Baseline: cbb518bc0d2327fbf4da42925a79098a801832ae. CI green: https://github.com/Rhaizel02/devbench/actions/runs/40149296687
-- A: 100d6a5063a8bafba416bb6a41d530ebe6a26fcd, pushed; CI success: https://github.com/Rhaizel02/devbench/actions/runs/40151084064
-- B: 71ccb7062f3900438fb6bdd45734bbc618deacd6, pushed; CI success: https://github.com/Rhaizel02/devbench/actions/runs/40151454095
-- C: 7bd59ab3d68b06967ca48802b3dc5dc2a4e04e12, pushed; CI success: https://github.com/Rhaizel02/devbench/actions/runs/40151816133
-- D: 772d3f790a85f2189caf5ab2570e668de578d6fb, pushed; CI success: https://github.com/Rhaizel02/devbench/actions/runs/40159890939
-- Initial audit/progress: 7080cbed4de7378e813d95a1c61e816bb364f87b, pushed.
+## Published milestone checkpoints
+
+- Baseline cbb518bc0d2327fbf4da42925a79098a801832ae — CI 40149296687.
+- A 100d6a5063a8bafba416bb6a41d530ebe6a26fcd — [CI success](https://github.com/Rhaizel02/devbench/actions/runs/40151084064).
+- B 71ccb7062f3900438fb6bdd45734bbc618deacd6 — [CI success](https://github.com/Rhaizel02/devbench/actions/runs/40151454095).
+- C 7bd59ab3d68b06967ca48802b3dc5dc2a4e04e12 — [CI success](https://github.com/Rhaizel02/devbench/actions/runs/40151816133).
+- D 772d3f790a85f2189caf5ab2570e668de578d6fb — [CI success](https://github.com/Rhaizel02/devbench/actions/runs/40159890939).
+- E b3cc31ed524bdb67df348c4b6667e50fa29d8ec7 — [CI success](https://github.com/Rhaizel02/devbench/actions/runs/40160865125).
 
 ## Next concrete step
 
-Publish E, then finish mandatory F: final 18-tool operation/error/copy matrix, privacy, layout/keyboard, hostile limits, npm ci/check/lint/test/build/e2e/capture/audit, accurate docs and final pushed SHA/green CI. Cron uses established parsing, plus fixed-offset enumeration around detected timezone transitions to correct the installed Croner 10.0.1 DST shifts/omissions; tests cover both gap and overlap in Madrid/Lord Howe and a start between repeated instants. No blockers. Never stop at E or mark complete without F.
+Publish F with this evidence, inspect actual CI on its SHA, record that checkpoint, and verify the final pushed HEAD before completing the Goal. No implementation work remains unless a final check fails. Do not create new scope or repeat passed gates without cause. Explicitly invoke bundled Node 24 with npm-cli.js; global npm.ps1 on this computer otherwise selects Node 22. No background preview server should remain.
