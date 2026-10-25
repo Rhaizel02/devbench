@@ -1,5 +1,13 @@
 # DevBench — Arquitectura y decisiones (ADR-001)
 
+## Excepción acotada V1.4 en la rama de Canvas
+
+El contrato autorizado de `V14_ARCHITECTURE_CANVAS_GOAL.md` amplía las reglas históricas: **Architecture Canvas puede persistir sus propios documentos** en IndexedDB `devbench.canvas.v2`; ninguna otra herramienta obtiene esta excepción. No localStorage de documentos, cookies, URL/history, logs ni tráfico de contenido. No se añade backend.
+
+`src/lib/canvas` separa DTO/migración/parser v2 e historial (TypeScript puro), transacciones/autosave (adaptador de navegador), renderer Konva y UI. Referencias por ID, schema versionado e importación que reconstruye campos permitidos; no `Stage.toJSON()`. Importar crea otro proyecto y no sustituye el actual. Guardado serial con debounce, feedback solo tras completar transacción, errores conservando memoria y JSON de rescate. El formato v1 del spike se migra con IDs/diagramas/cámara intactos. El dominio admite huérfanos recuperables; borrar una figura no borra sus hijos. Las restricciones de librería/renderizado y el estado de aceptación se detallan en `docs/ARCHITECTURE_CANVAS_V14.md`.
+
+Las secciones siguientes conservan las decisiones históricas; su prohibición general de IndexedDB tiene únicamente esta excepción expresa.
+
 - **Estado:** APROBADO para B1 y evolución V1/V1.1.
 - **Fecha:** 2026-10-25.
 - **Prioridad:** calidad del producto y simplicidad/mantenibilidad. Svelte se elige también porque queremos probarlo; no intentar justificarlo con promesas de rendimiento.

@@ -1,5 +1,13 @@
 # DevBench
 
+**V1.4 Release Candidate — Architecture Canvas**, on `feature/architecture-canvas-v14`: **27 available entries**, preserving the previous 26 tools. Open `/tools/architecture-canvas/`; `/lab/architecture-canvas/` remains available. Main is unchanged. See [the release contract](V14_ARCHITECTURE_CANVAS_GOAL.md), [progress](GOAL_PROGRESS_V14.md) and [RC acceptance report, screenshots and limits](docs/ARCHITECTURE_CANVAS_V14.md).
+
+The whiteboard supports drag-created rectangles/rounded rectangles/ellipses/diamonds, direct text, pencil, free or anchored arrows/lines, colors/HEX, fill/transparency, stroke/font styles, Shift selection, move/resize, duplicate/delete/layers and undo/redo. Create and associate child diagrams, rename, navigate with breadcrumbs or a cancellable zoom portal, and recover unlinked diagrams. Keyboard shortcuts respect text inputs; mobile starts at readable 100% with pan. PNG export is transparent and excludes controls.
+
+**Canvas alone autosaves project documents to IndexedDB in this browser** (`devbench.canvas.v2`); all other tools keep payloads in memory. Manage local projects, import spike v1/current v2 as a new project, and export full JSON for backup/rescue. Saving waits 600 ms and reports success only after a transaction completes. Quota/blocked-storage failures retain memory and offer retry. Conflicting edits from another tab are rejected; export a rescue JSON and reload the newer version. Nothing is uploaded, added to URLs, logged or stored as document content in localStorage. Browser clearing/private browsing can remove projects; abrupt closure before Saved can lose the latest edit. This is not remote backup or real-time collaboration.
+
+Limits: 20 local projects, 8 MiB/project JSON, 100 diagrams, 500 figures + 500 connectors/diagram, 2,000 points/stroke and 100,000 total points. Undo is bounded to 30 snapshots/about 20 MiB and resets on project switch/reload. PNG: 4,096 px per axis / 12 MP; use JSON for larger boards. Straight connectors anchor to figure boxes; no CAD routing, rotation, grouping, pressure or advanced multi-touch. Chromium and basic touch emulation are tested; no screen-reader certification or large-document FPS guarantee. The sections below preserve previous release details.
+
 DevBench **V1.3 — Text & Test Data Utilities** has **26 available entries**: 25 individual tools plus Pipeline Builder. It extends String Toolkit and adds **Test Data Generator** at `/tools/test-data-generator/` under Utilities. The existing registry supplies Home, search, palette, favorites and recent tools. All V1.2 slugs remain; no navigation redesign, new dependencies, backend or V1.4 functions.
 
 ### Text statistics

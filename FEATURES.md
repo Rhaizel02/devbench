@@ -1,5 +1,11 @@
 # DevBench — Alcance funcional cerrado
 
+## V1.4 Release Candidate — Architecture Canvas
+
+Rama aislada `feature/architecture-canvas-v14`. **27 entradas disponibles**: las 26 anteriores más DRAW-01, Utilities, `/tools/architecture-canvas/`, lazy/prerender y catálogo/paleta/favoritos/recientes comunes. Lab `/lab/architecture-canvas/` permanece. Pizarra con rectángulo/redondeado, elipse, rombo, texto directo, flecha/línea y lápiz; preview/Escape, colores HEX/presets, relleno/transparencia, trazo, fuente/tamaño y sketch estable. Selección Shift, movimiento, resize, duplicado, capas, undo/redo y extremos libres/anclados ajustables. Jerarquía creada/asociada por usuario, breadcrumb y portal al mismo hijo, cámaras persistentes, reduced motion, ciclos rechazados y huérfanos recuperables/borrados con confirmación.
+
+Excepción de privacidad explícita: **solo Canvas** guarda proyectos en IndexedDB `devbench.canvas.v2`. El resto sigue en memoria. Hasta 20 proyectos locales, autosave 600 ms, cuota/bloqueo/reintento y rescate JSON; concurrencia entre pestañas rechaza sobrescrituras obsoletas. Import v1/v2 siempre como proyecto nuevo, conservando IDs internos y datos v1; futuras versiones/JSON hostil no sustituyen el abierto. PNG transparente sin controles, 4.096 px/eje y 12 MP. JSON 8 MiB, 100 diagramas, 500 figuras/conexiones por diagrama, 2.000 puntos/trazo y 100.000 totales. Historial 30 estados/~20 MiB. No backend, URLs con datos, telemetría ni APIs externas. Evidencia y límites en `GOAL_PROGRESS_V14.md` y `docs/ARCHITECTURE_CANVAS_V14.md`.
+
 ## V1.3 — Text & Test Data Utilities
 
 26 entradas disponibles: las 25 anteriores y UTIL-03 **Test Data Generator**, categoría Utilities, ruta estática `/tools/test-data-generator/`, carga diferida y registro común para Home/búsqueda/favoritos/recientes/paleta. Sin rediseños ni funciones V1.4.
