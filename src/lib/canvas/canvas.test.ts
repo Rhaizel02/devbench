@@ -38,13 +38,22 @@ function project() {
 afterEach(() => vi.useRealTimers());
 describe('versioned documents and hostile imports', () => {
 	it('migrates the complete v1 spike preserving every ID, label, point, camera and hierarchy', () => {
-		const source = createDemoProject(),
-			result = parseProject(JSON.stringify(source));
+		const source = createDemoProject();
+		source.diagrams[0].connections.push({
+			id: 'legacy-text-edge',
+			from: 'api',
+			to: source.diagrams[0].elements.find((e) => e.kind === 'text')!.id,
+			kind: 'line'
+		});
+		const result = parseProject(JSON.stringify(source));
 		expect(result.schemaVersion).toBe(2);
 		expect(result.id).toBe(source.id);
 		expect(result.rootDiagramId).toBe(source.rootDiagramId);
 		for (const d of source.diagrams) {
 			const migrated = result.diagrams.find((x) => x.id === d.id)!;
+			expect(Math.min(...migrated.elements.map((e) => e.z))).toBeGreaterThan(
+				Math.max(...migrated.connections.map((c) => c.z))
+			);
 			expect(migrated.title).toBe(d.title);
 			expect(migrated.viewport).toEqual(d.viewport);
 			for (const e of d.elements)
@@ -302,7 +311,7 @@ describe('ordered autosave and storage failures', () => {
 		expect(close).toHaveBeenCalled();
 	});
 	it('does not claim success if a storage transaction aborts', async () => {
-		const tx = { objectStore: () => ({ put: () => ({}) }) } as unknown as IDBTransaction;
+		const tx = { objectStore: () => ({ get: () => ({}) }) } as unknown as IDBTransaction;
 		const storage = new CanvasStorage({ transaction: () => tx } as unknown as IDBDatabase);
 		const saving = storage.save(project());
 		tx.onabort?.(new Event('abort'));

@@ -61,6 +61,7 @@
 	async function initialize(first = true) {
 		working = true;
 		try {
+			const previous = store;
 			store?.close();
 			store = undefined;
 			const db = await openCanvasDatabase();
@@ -68,7 +69,7 @@
 				db.close();
 				return;
 			}
-			store = new CanvasStorage(db);
+			store = previous ? previous.reopen(db) : new CanvasStorage(db);
 			rows = await store.list();
 			if (first && rows.length) {
 				const loaded = await store.load(rows[0].id);
@@ -191,9 +192,15 @@
 		navigation.cancel();
 		if (navigating) return;
 		navigating = true;
-		void saver
-			.flush()
-			.then(async (ok) => {
+		// Kit counteracts a cancelled popstate with history.go; wait for that restoration.
+		const restored =
+			navigation.type === 'popstate'
+				? new Promise<void>((resolve) =>
+						window.addEventListener('popstate', () => resolve(), { once: true })
+					)
+				: Promise.resolve();
+		void Promise.all([saver.flush(), restored])
+			.then(async ([ok]) => {
 				if (
 					!ok &&
 					!confirm('Autosave failed. Export a rescue JSON before leaving. Leave without saving?')
@@ -201,6 +208,10 @@
 					return;
 				if (navigation.to) {
 					skipNext = true;
+					if (navigation.type === 'popstate') {
+						window.history.go(navigation.delta);
+						return;
+					}
 					// eslint-disable-next-line svelte/no-navigation-without-resolve -- SvelteKit already resolved this same-app navigation destination.
 					await goto(navigation.to.url);
 				}
@@ -418,6 +429,12 @@
 		color: var(--color-accent);
 	}
 	@media (max-width: 450px) {
+		input,
+		.new-project .button,
+		.dialog-heading button,
+		.project-row button {
+			min-height: 44px;
+		}
 		dialog {
 			padding: 16px;
 		}
@@ -429,7 +446,7 @@
 			min-height: 44px;
 		}
 		.project-controls .button {
-			min-height: 40px;
+			min-height: 44px;
 		}
 	}
 </style>

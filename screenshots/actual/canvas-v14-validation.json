@@ -1,0 +1,526 @@
+{
+  "recordedAt": "2026-10-25T17:28:07.355Z",
+  "baseMain": "fa0490f5872262614ba9fe0370377295f3112fae",
+  "spike": "476ca84edec75d9904ef531e9f514646722291ae",
+  "branch": "feature/architecture-canvas-v14",
+  "route": "/tools/architecture-canvas/",
+  "lab": "/lab/architecture-canvas/",
+  "schema": 2,
+  "quality": {
+    "check": {
+      "errors": 0,
+      "warnings": 0
+    },
+    "lint": "passed",
+    "unit": {
+      "files": 16,
+      "tests": 256,
+      "result": "passed"
+    },
+    "build": "passed",
+    "focusedChromium": {
+      "stats": {
+        "startTime": "2026-10-25T17:26:29.723Z",
+        "duration": 49411.194,
+        "expected": 7,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      },
+      "tests": [
+        {
+          "title": "whiteboard transactions: drag, text, colors, sketch shapes, ink, anchors, resize, undo and export",
+          "ok": true,
+          "statuses": [
+            "passed"
+          ]
+        },
+        {
+          "title": "manual hierarchy: create three levels, same direct/zoom destination, camera restore and cycle errors",
+          "ok": true,
+          "statuses": [
+            "passed"
+          ]
+        },
+        {
+          "title": "readable responsive themes, keyboard/pointer pan and clean unmount",
+          "ok": true,
+          "statuses": [
+            "passed"
+          ]
+        },
+        {
+          "title": "local projects survive reload; import is a new roundtrip copy, invalid imports preserve current data, deletion is confirmed",
+          "ok": true,
+          "statuses": [
+            "passed"
+          ]
+        },
+        {
+          "title": "failed autosave keeps the board editable, exports rescue JSON and recovers on retry",
+          "ok": true,
+          "statuses": [
+            "passed"
+          ]
+        },
+        {
+          "title": "RC catalog, static deep link and representative board interaction budget",
+          "ok": true,
+          "statuses": [
+            "passed"
+          ]
+        },
+        {
+          "title": "a stale tab cannot overwrite another tab’s saved edits",
+          "ok": true,
+          "statuses": [
+            "passed"
+          ]
+        }
+      ]
+    },
+    "completeLocalChromium": {
+      "stats": {
+        "startTime": "2026-10-25T17:06:15.966Z",
+        "duration": 112113.835,
+        "expected": 36,
+        "skipped": 2,
+        "unexpected": 0,
+        "flaky": 0
+      },
+      "tests": [
+        {
+          "title": "whiteboard transactions: drag, text, colors, sketch shapes, ink, anchors, resize, undo and export",
+          "ok": true,
+          "statuses": [
+            "passed"
+          ]
+        },
+        {
+          "title": "manual hierarchy: create three levels, same direct/zoom destination, camera restore and cycle errors",
+          "ok": true,
+          "statuses": [
+            "passed"
+          ]
+        },
+        {
+          "title": "readable responsive themes, keyboard/pointer pan and clean unmount",
+          "ok": true,
+          "statuses": [
+            "passed"
+          ]
+        },
+        {
+          "title": "local projects survive reload; import is a new roundtrip copy, invalid imports preserve current data, deletion is confirmed",
+          "ok": true,
+          "statuses": [
+            "passed"
+          ]
+        },
+        {
+          "title": "failed autosave keeps the board editable, exports rescue JSON and recovers on retry",
+          "ok": true,
+          "statuses": [
+            "passed"
+          ]
+        },
+        {
+          "title": "RC catalog, static deep link and representative board interaction budget",
+          "ok": true,
+          "statuses": [
+            "passed"
+          ]
+        },
+        {
+          "title": "a stale tab cannot overwrite another tab’s saved edits",
+          "ok": true,
+          "statuses": [
+            "passed"
+          ]
+        },
+        {
+          "title": "CSV quoting/download and TypeScript/Java inference use real outputs",
+          "ok": true,
+          "statuses": [
+            "passed"
+          ]
+        },
+        {
+          "title": "cURL redaction/reveal, rejected shell constructs, privacy and V1.1 navigation",
+          "ok": true,
+          "statuses": [
+            "passed"
+          ]
+        },
+        {
+          "title": "structural comparison and safe YAML conversion have real, current outputs",
+          "ok": true,
+          "statuses": [
+            "passed"
+          ]
+        },
+        {
+          "title": "Base64 Unicode, URL parameter editing, mobile layout and memory cleanup",
+          "ok": true,
+          "statuses": [
+            "passed"
+          ]
+        },
+        {
+          "title": "production provenance matches the reference deployment and distinguishes old V1.1",
+          "ok": true,
+          "statuses": [
+            "skipped"
+          ]
+        },
+        {
+          "title": "production privacy and cross-browser smoke: one-shot paste, workers, recipes and keyboard",
+          "ok": true,
+          "statuses": [
+            "skipped"
+          ]
+        },
+        {
+          "title": "release matrix: all 18 static tools operate, copy, reset, reload and handle invalid/empty input privately",
+          "ok": true,
+          "statuses": [
+            "passed"
+          ]
+        },
+        {
+          "title": "large diff/CSV inputs reject before processing and the interface stays usable",
+          "ok": true,
+          "statuses": [
+            "passed"
+          ]
+        },
+        {
+          "title": "blocked preferences and clipboard report real failures while transformation still works",
+          "ok": true,
+          "statuses": [
+            "passed"
+          ]
+        },
+        {
+          "title": "cron DST, Unicode transforms and parameter-first SQL lists work in the browser",
+          "ok": true,
+          "statuses": [
+            "passed"
+          ]
+        },
+        {
+          "title": "Quick Paste transfers once to explicit destinations and never stores or sends payloads",
+          "ok": true,
+          "statuses": [
+            "passed"
+          ]
+        },
+        {
+          "title": "JWT is decoded without verification, hashes and dialect formatting are real",
+          "ok": true,
+          "statuses": [
+            "passed"
+          ]
+        },
+        {
+          "title": "catastrophic regex terminates its worker, keeps UI responsive and permits retry",
+          "ok": true,
+          "statuses": [
+            "passed"
+          ]
+        },
+        {
+          "title": "strict JSON, real output, tree paths, clipboard and download",
+          "ok": true,
+          "statuses": [
+            "passed"
+          ]
+        },
+        {
+          "title": "navigation, themes, palette, favorites, responsive drawer and tabs",
+          "ok": true,
+          "statuses": [
+            "passed"
+          ]
+        },
+        {
+          "title": "one-shot Quick Paste and payload-free storage, URLs, requests and logs",
+          "ok": true,
+          "statuses": [
+            "passed"
+          ]
+        },
+        {
+          "title": "text diff, secure IDs and strict timestamp UI work with current outputs",
+          "ok": true,
+          "statuses": [
+            "passed"
+          ]
+        },
+        {
+          "title": "all twelve V1 tools have real deep routes, palette navigation and payload cleanup",
+          "ok": true,
+          "statuses": [
+            "passed"
+          ]
+        },
+        {
+          "title": "three recipes execute, intermediate preview is explicit, reordering fails at the right step and reset clears everything",
+          "ok": true,
+          "statuses": [
+            "passed"
+          ]
+        },
+        {
+          "title": "JSON handoffs consume once, invalidate stale results and never persist payloads",
+          "ok": true,
+          "statuses": [
+            "passed"
+          ]
+        },
+        {
+          "title": "HTTP handoffs are explicitly redacted; logs transfer as plain text",
+          "ok": true,
+          "statuses": [
+            "passed"
+          ]
+        },
+        {
+          "title": "JSONPath real paths, values, clipboard/download, invalidation and direct routes",
+          "ok": true,
+          "statuses": [
+            "passed"
+          ]
+        },
+        {
+          "title": "Schema validation, inference and hostile pattern termination stay local",
+          "ok": true,
+          "statuses": [
+            "passed"
+          ]
+        },
+        {
+          "title": "logs group entries, retain exceptions, filter explicitly and copy selected entry",
+          "ok": true,
+          "statuses": [
+            "passed"
+          ]
+        },
+        {
+          "title": "environment inputs are hidden and no secret enters exports, storage, URL, network or errors",
+          "ok": true,
+          "statuses": [
+            "passed"
+          ]
+        },
+        {
+          "title": "request code stays local, redacts secrets, imports cURL and produces real language outputs",
+          "ok": true,
+          "statuses": [
+            "passed"
+          ]
+        },
+        {
+          "title": "header categories and contextual warnings are real and raw exports remain redacted",
+          "ok": true,
+          "statuses": [
+            "passed"
+          ]
+        },
+        {
+          "title": "all seven V1.2 routes operate, reset, reload and keep payloads out of persistence and network",
+          "ok": true,
+          "statuses": [
+            "passed"
+          ]
+        },
+        {
+          "title": "V1.3 live Unicode counter preserves transforms, handles limits without truncating, resets and stays private",
+          "ok": true,
+          "statuses": [
+            "passed"
+          ]
+        },
+        {
+          "title": "V1.3 text generator joins navigation, produces verified lengths and real downloads, invalidates and reloads empty",
+          "ok": true,
+          "statuses": [
+            "passed"
+          ]
+        },
+        {
+          "title": "V1.3 GTIN batch and manual validation preserve zeroes, validate checksums, export and reject exhaustion privately",
+          "ok": true,
+          "statuses": [
+            "passed"
+          ]
+        }
+      ]
+    },
+    "note": "The complete local suite ran before the final v1 text-anchor/layer-order and history-navigation extensions; all units and all seven updated Canvas flows passed after those extensions. Final CI checks the pushed commit and reruns the complete suite."
+  },
+  "routes": {
+    "count": 27,
+    "original26Preserved": true,
+    "slugs": [
+      "architecture-canvas",
+      "base64-toolkit",
+      "cron-explorer",
+      "curl-inspector",
+      "environment-comparator",
+      "hash-generator",
+      "http-headers",
+      "http-request",
+      "id-generator",
+      "json-code",
+      "json-csv",
+      "json-diff",
+      "json-query",
+      "json-schema",
+      "json-studio",
+      "json-yaml",
+      "jwt-inspector",
+      "log-inspector",
+      "pipeline-builder",
+      "regex-tester",
+      "sql-formatter",
+      "sql-in-builder",
+      "string-toolkit",
+      "test-data-generator",
+      "text-diff",
+      "timestamp-converter",
+      "url-toolkit"
+    ],
+    "labExists": true,
+    "unknownToolHTTP": 404,
+    "directAndReloadHTTP": 200
+  },
+  "lazyEntry": {
+    "dynamic": true,
+    "javascript": {
+      "file": "_app/immutable/chunks/B-imXJb2.js",
+      "rawBytes": 209370,
+      "gzipBytes": 64380
+    },
+    "css": [
+      {
+        "file": "_app/immutable/assets/CanvasEditor.DVMZ_Qkt.css",
+        "rawBytes": 9989,
+        "gzipBytes": 2096
+      }
+    ],
+    "sharedImportsExcluded": [
+      "_CgZfct53.js",
+      "_B__yVS3q.js",
+      "_CbQGWByh.js",
+      "_FSIjnsCd.js",
+      "_BWZ_HBaq.js",
+      "_Dbfbde7m.js",
+      "_CC4jc428.js"
+    ],
+    "note": "Not total cold-load cost."
+  },
+  "layouts": [
+    {
+      "width": 1440,
+      "theme": "dark",
+      "zoom": 1,
+      "overflow": false
+    },
+    {
+      "width": 1440,
+      "theme": "light",
+      "zoom": 1,
+      "overflow": false
+    },
+    {
+      "width": 768,
+      "theme": "dark",
+      "zoom": 1,
+      "overflow": false
+    },
+    {
+      "width": 768,
+      "theme": "light",
+      "zoom": 1,
+      "overflow": false
+    },
+    {
+      "width": 390,
+      "theme": "dark",
+      "zoom": 1,
+      "overflow": false
+    },
+    {
+      "width": 390,
+      "theme": "light",
+      "zoom": 1,
+      "overflow": false
+    }
+  ],
+  "performance": {
+    "figures": 300,
+    "strokes": 20,
+    "points": 400,
+    "connections": 200,
+    "importReadyMs": 1079,
+    "moveMs": 652,
+    "zoomMs": 101,
+    "note": "Wall-clock automated interaction durations, including input/DOM assertion and autosave debounce for import. Not FPS or a large-document guarantee."
+  },
+  "screenshots": [
+    "canvas-v14-1440-dark.png",
+    "canvas-v14-1440-light.png",
+    "canvas-v14-390-dark.png",
+    "canvas-v14-390-light.png",
+    "canvas-v14-768-dark.png",
+    "canvas-v14-768-light.png",
+    "canvas-v14-editing-dark.png",
+    "canvas-v14-manual-level-three.png",
+    "canvas-v14-manual-level-two.png"
+  ],
+  "privacy": {
+    "documentPersistence": "Canvas-only IndexedDB devbench.canvas.v2; synthetic payload deliberately verified there",
+    "forbiddenChannelsPassed": [
+      "URL",
+      "history",
+      "localStorage",
+      "sessionStorage",
+      "cookies",
+      "console",
+      "requests"
+    ],
+    "requests": "same-origin static GETs only in observed flows",
+    "other26": "Existing release matrices and V1.3 tests passed with their original memory-only privacy assertions"
+  },
+  "gates": {
+    "A": "drag creation, direct text, styles, ink and sketch",
+    "B": "selection/Shift, movement, resize, duplicate/delete/layers/history, anchored/free connectors",
+    "C": "manual three-level hierarchy, direct/portal, Escape/reduced motion, saved cameras, cycles and orphan recovery/deletion",
+    "D": "v1/v2 migration and hostile parser, actual IDB reload, projects, JSON/PNG, quota rescue/retry and stale-tab rejection",
+    "E": "27 lazy static entries, unchanged previous 26 slugs, responsive/touch/keyboard/performance and complete regression suite"
+  },
+  "issues": {
+    "P0": [],
+    "P1": [],
+    "P2": [
+      "Screen-reader certification and Firefox/WebKit parity not performed",
+      "Advanced touch/pen, routing, rotation, grouping and collaborative editing are outside this RC",
+      "Only representative board timing measured; no FPS, 50k-shape or long-session heap guarantee"
+    ]
+  },
+  "limits": {
+    "projectBytes": 8388608,
+    "localProjects": 20,
+    "diagrams": 100,
+    "elementsPerDiagram": 500,
+    "connectionsPerDiagram": 500,
+    "strokePoints": 2000,
+    "totalPoints": 100000,
+    "historyStates": 30,
+    "historyBudgetMiB": 20,
+    "pngMaxAxis": 4096,
+    "pngMaxPixels": 12000000
+  },
+  "recommendation": "GO as a release candidate on the isolated branch. No merge to main. Exact final CI and Cloudflare deployment are checked after push; no production audit is claimed."
+}

@@ -1,0 +1,10 @@
+{
+  "figures": 300,
+  "strokes": 20,
+  "points": 400,
+  "connections": 200,
+  "importReadyMs": 1079,
+  "moveMs": 652,
+  "zoomMs": 101,
+  "note": "Wall-clock automated interaction durations, including input/DOM assertion and autosave debounce for import. Not FPS or a large-document guarantee."
+}

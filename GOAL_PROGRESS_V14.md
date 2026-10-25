@@ -12,13 +12,13 @@ Leer V14_ARCHITECTURE_CANVAS_GOAL.md y este archivo, consultar Goal activo, HEAD
 
 ## Hitos
 
-| Hito                        | Estado       | Evidencia / siguiente acción                                                                                           |
-| --------------------------- | ------------ | ---------------------------------------------------------------------------------------------------------------------- |
-| H0 contrato                 | Aceptado     | `007fccfe6125765c7dea60fcf592bd9c9cd1626f`; contrato de 14.862 bytes, push y CI 40211787379 correctos.                 |
-| H1 dominio + almacenamiento | Implementado | `fadb2f998200d1ae03886f6b127306932dae0671`; 24 tests, check/lint/build y CI 40212165405 correctos.                     |
-| H2 pizarra                  | Implementado | `a586324ffc4ff45c9263e9d68af1d163cfbd689e`; 3 Playwright, 35 unitarios, check/lint/build y CI 40213237929 correctos.   |
-| H3 proyectos + jerarquía    | Implementado | Implementado: IndexedDB real, proyectos y rescate; 5 Playwright y 36 unitarios relevantes pasan; pendiente CI de hito. |
-| H4 RC                       | Pendiente    | Entrada 27 solo al aceptar A–D, capturas, suite/CI e informe.                                                          |
+| Hito                        | Estado       | Evidencia / siguiente acción                                                                                                     |
+| --------------------------- | ------------ | -------------------------------------------------------------------------------------------------------------------------------- |
+| H0 contrato                 | Aceptado     | `007fccfe6125765c7dea60fcf592bd9c9cd1626f`; contrato de 14.862 bytes, push y CI 40211787379 correctos.                           |
+| H1 dominio + almacenamiento | Implementado | `fadb2f998200d1ae03886f6b127306932dae0671`; 24 tests, check/lint/build y CI 40212165405 correctos.                               |
+| H2 pizarra                  | Implementado | `a586324ffc4ff45c9263e9d68af1d163cfbd689e`; 3 Playwright, 35 unitarios, check/lint/build y CI 40213237929 correctos.             |
+| H3 proyectos + jerarquía    | Aceptado     | `83f8121522d9e70c64213f2dc29c006a648cd136`; proyectos reales, 5 Playwright, 36 unitarios; CI 40214204914 correcto.               |
+| H4 RC                       | RC           | RC: A–E aceptados localmente; 27 rutas/entradas, 256 unitarios y 36 flujos completos. CI exacto de cierre se verifica tras push. |
 
 ## Incidencias y aceptación
 
@@ -49,3 +49,17 @@ Playwright 5/5 en 30,9 s sobre build estático: además de H2, tres niveles desd
 36 unitarios relevantes pasan; check 0 errores/avisos y build correctos. Lint detectó la navegación a una URL ya resuelta por SvelteKit; se añadió una excepción local explicada, sin volver a prefijar rutas. Reejecución completa de lint terminada con éxito.
 
 Pendiente para H4: registrar entrada 27 después de consolidar H3, deep link/prerender, favoritos/paleta, táctil básico y medición representativa. Suite completa/CI final e informe GO/NO-GO aún no ejecutados. No marcar Goal completo hasta probar A–E. Main intacta, no merge.
+
+## H4 — Release Candidate A–E
+
+Entrada 27 DRAW-01 / Utilities incorporada tras H3; mapa lazy, SSR/prerender y ruta `/tools/architecture-canvas/`, conservando lab. Las 26 implementaciones previas no cambian. Se ajustan sus aserciones de recuento a 27 sin eliminar matrices ni controles de privacidad. Main continúa en fa0490f, sin merge/force push. Fuentes/nuevos recursos locales: Konva y wrapper MIT; sin otra dependencia.
+
+Aceptación local: check 0 errores/avisos, lint/build y 256 unitarios (16 archivos) correctos. Suite completa Chromium: 36 flujos correctos / dos auditorías históricas remotas omitidas. Tras la extensión final de migración de texto v1, unidades completas y 7 flujos Canvas pasan; ampliar verificación de fuente/tamaño/grosor/capas/línea también pasa. CI del SHA de cierre repite toda la suite y se inspecciona antes de marcar completo el Goal.
+
+Siete flujos Canvas cubren estilos y operaciones reales, jerarquía manual vacía de tres niveles, cámaras/recarga/ciclos/huérfanos, reduced motion/Escape, seis temas/tamaños sin overflow, teclado/foco/outline, gesto táctil CDP, proyectos/importación/no-sobrescritura/confirmaciones, cuota/rescate/reintento, catálogo/pin/deep link/reload/404, carga representativa y dos pestañas con conflicto. Se añadieron revisiones atómicas en IndexedDB para impedir sobrescribir una edición ajena; el contenido no guardado sigue exportable. La migración conserva también conexiones v1 ancladas a texto.
+
+Se corrigió volver a breadcrumb válido al borrar el huérfano abierto y permitir Escape nativo del diálogo, sin secuestrarlo como atajo del lienzo. El lienzo desktop mantiene controles dentro del viewport; en móvil inicia al 100% con pan y controles principales de 44 px. Nueve capturas reales revisadas. Evidencia completa: screenshots/actual/canvas-v14-validation.json; carga de 300 figuras + 20 trazos/400 puntos + 200 flechas medida, sin afirmar FPS. Se restauraron solo capturas históricas regeneradas por regresiones para no reescribir su evidencia de otras versiones.
+
+Informe docs/ARCHITECTURE_CANVAS_V14.md: matriz A–E, GO para RC, límites y P2. README/FEATURES/ROADMAP/VALIDATION actualizados. P0/P1 abiertos: ninguno en el alcance verificado. P2: certificación asistiva/paridad Firefox-WebKit, táctil avanzado y métricas de documentos enormes/largas sesiones; no nuevas iteraciones de polish. El dato persistido únicamente en IndexedDB Canvas es autorización explícita; ningún payload en URL/logs/red/localStorage. Se conserva el respaldo JSON como medio de recuperación.
+
+Cierre: el commit RC de esta rama contiene la evidencia y contratos; su SHA/CI/preview exactos se obtienen de GitHub tras push y se informan en la entrega. El Goal solo se marca completo cuando esos checks y la auditoría A–E quedan confirmados. No quedan funciones A–E pendientes; no fusionar main ni ampliar alcance.

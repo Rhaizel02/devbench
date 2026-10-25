@@ -1,6 +1,6 @@
 # Architecture Canvas V1.4 — implementación y aceptación RC
 
-Estado: desarrollo en `feature/architecture-canvas-v14`; no es todavía una RC aceptada. Contrato completo en [V14_ARCHITECTURE_CANVAS_GOAL.md](../V14_ARCHITECTURE_CANVAS_GOAL.md), progreso y puertas pendientes en [GOAL_PROGRESS_V14.md](../GOAL_PROGRESS_V14.md).
+**GO — Release Candidate implementada y aceptada en la rama aislada `feature/architecture-canvas-v14`.** Main conserva V1.3. Ruta pública de la RC: **`/tools/architecture-canvas/`**; lab se mantiene en **`/lab/architecture-canvas/`**. 27 entradas disponibles. Contrato completo en [V14_ARCHITECTURE_CANVAS_GOAL.md](../V14_ARCHITECTURE_CANVAS_GOAL.md), evidencia por hito en [GOAL_PROGRESS_V14.md](../GOAL_PROGRESS_V14.md). El cierre comprueba CI/Cloudflare por el SHA final después del push; esos checks de GitHub son la autoridad para el estado remoto. No se atribuye a esta RC una auditoría de producción V1.2.
 
 ## Renderer y estética
 
@@ -32,4 +32,40 @@ H1: 24 pruebas unitarias, check sin diagnósticos, lint/build y CI completos. H2
 
 H3 amplía a cinco flujos reales: jerarquía construida desde proyecto nuevo/vacío, recarga de cámaras y etiquetas, huérfano recuperado mediante otra figura, IndexedDB inspeccionado y único, gestión/renombrado/borrado confirmado, importación inválida sin cambios, roundtrip como proyecto nuevo y fallo de cuota inyectado con rescate/reintento exitoso. 25 tests de dominio nuevos y 11 del spike relevantes. El dominio también preserva IDs Unicode y enlaces válidos en anotaciones v1.
 
-Capturas en `screenshots/actual/canvas-v14-*`: seis tamaños/temas, edición coloreada y niveles segundo/tercero creados manualmente. Se actualizarán en la puerta RC. La aceptación completa E, rendimiento representativo, táctil, catálogo 27 y decisión final GO/NO-GO siguen pendientes.
+## Puerta RC — aceptación A–E
+
+Node 24.22.1. `check`: 0 errores/avisos; `lint`, `build` y **256 tests unitarios / 16 archivos** correctos. Suite local completa: **36 flujos Chromium correctos**, dos tests históricos de auditoría remota omitidos expresamente. Después de extender la migración para anclar texto v1, se repitieron todos los unitarios y los siete flujos Canvas; estilos/tamaño/grosor/capas/línea se volvieron a comprobar al ampliar ese flujo. CI repite la suite completa sobre el SHA enviado.
+
+| Contrato        | Evidencia inspeccionada                                                                                                                                                                                                                                                                                                                                                                                  |
+| --------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| A · pizarra     | Arrastre/preview/Escape para las figuras, elipse/rombo/redondeado/texto y flecha/línea; edición de texto sobre lienzo; presets/HEX, relleno, grosor, discontinuo, fuente/tamaño y sketch. JSON descargado confirma valores reales; captura coloreada y PNG reales.                                                                                                                                       |
+| B · edición     | Puntero resize y movimiento, selección Shift, duplicación/borrado, orden delante/detrás, undo/redo, teclado/pan/rueda y Fit explícito. Conectores libres o anclados, extremos editables; dominio verifica remapeo y seguimiento al mover/resize. Cada gesto registra una acción.                                                                                                                         |
+| C · jerarquía   | Proyecto vacío creado desde UI y tres niveles nuevos; nombre/ID/destino compartidos entre Open y Zoom; Escape y reduced motion; vuelta/recarga conservando cámara y contenido. Ciclo rechazado; hijo huérfano reasociado y borrado explícito conservando descendientes. Borrar el diagrama abierto vuelve a un breadcrumb válido.                                                                        |
+| D · datos       | Parser unknown con límites, futuros/hostiles rechazados antes de sustituir estado; migración completa v1, IDs Unicode, texto con hijo y anclajes a texto; roundtrip v2. IndexedDB real, gestión de proyectos, reload, import nuevo ID, confirmación de borrado, cuota inyectada, rescate descargado y retry. Escrituras entre pestañas usan revisión en transacción y rechazan sobrescrituras obsoletas. |
+| E · integración | Registro único DRAW-01 / Utilities, 27 workspaces lazy, 27 archivos HTML de herramientas y lab, 26 slugs previos intactos. Paleta/pin, deep link/reload 200 y ruta desconocida 404. Seis vistas con 100% legible, sin overflow; teclado/outline/diálogo Escape/foco y gesto táctil CDP real. Matrices anteriores pasan.                                                                                  |
+
+El manifiesto identifica CanvasEditor como entrada dinámica: aproximadamente **209 kB JS / 64 kB gzip**, además de CSS/imports compartidos; no representa una visita fría completa. Sin Rough.js, React ni dependencia nueva respecto al spike. Licencias MIT de [Konva](../static/licenses/konva-MIT.txt) y [svelte-konva](../static/licenses/svelte-konva-MIT.txt) se incluyen como recursos locales.
+
+Carga representativa: **300 figuras, 20 trazos/400 puntos y 200 flechas**. La última medición local registró ~1,08 s importación hasta Saved, ~652 ms de movimiento con 12 muestras y ~101 ms de rueda hasta la aserción. Son tiempos de interacción automatizada, incluidos driver/DOM/debounce; no FPS ni garantía para documentos de miles de figuras. Los valores exactos están en [performance.json](../screenshots/actual/canvas-v14-performance.json).
+
+Privacidad observada: el marcador está en IndexedDB Canvas como se autoriza, y ausente de URL/history/localStorage/sessionStorage/cookies/consola/requests. Solo GET estáticos del origen en los flujos observados. Los tests anteriores conservan sus comprobaciones de memoria y no reciben la excepción Canvas. Salir destruye Canvas/observadores/animación; el proyecto vuelve desde IndexedDB, no desde un singleton de payloads. No se afirma una prueba de heap de larga duración.
+
+### Capturas reales revisadas
+
+| Vista        | Oscuro                                                | Claro                                                  |
+| ------------ | ----------------------------------------------------- | ------------------------------------------------------ |
+| Desktop 1440 | [PNG](../screenshots/actual/canvas-v14-1440-dark.png) | [PNG](../screenshots/actual/canvas-v14-1440-light.png) |
+| Tablet 768   | [PNG](../screenshots/actual/canvas-v14-768-dark.png)  | [PNG](../screenshots/actual/canvas-v14-768-light.png)  |
+| Móvil 390    | [PNG](../screenshots/actual/canvas-v14-390-dark.png)  | [PNG](../screenshots/actual/canvas-v14-390-light.png)  |
+
+[Edición con colores, trazos y conexiones](../screenshots/actual/canvas-v14-editing-dark.png), [segundo nivel creado a mano](../screenshots/actual/canvas-v14-manual-level-two.png), [tercer nivel creado a mano](../screenshots/actual/canvas-v14-manual-level-three.png). Son screenshots Chromium de la RC estática, no mockups. [Evidencia resumida y pruebas](../screenshots/actual/canvas-v14-validation.json).
+
+### Incidencias, límites y decisión
+
+**P0/P1 abiertos: ninguno en el alcance comprobado.** Se resolvieron eventos de doble clic, foco de Escape, nombres accesibles con hijos, navegación tras borrar el huérfano abierto, Escape de diálogo, preservación de enlaces v1 a texto y protección frente a otra pestaña que guardó una versión posterior. No se ocultan fallos de almacenamiento como Saved.
+
+**P2:** no hay certificación con lector de pantalla ni aceptación Firefox/WebKit; la prueba táctil es emulación CDP, no un dispositivo físico. No se midieron FPS sostenidos ni heap de largas sesiones/documentos enormes. El spike anterior tuvo un bloqueo HTTPS por certificado al intentar comprobar la preview desde este entorno; cualquier limitación remota del cierre se declara por separado, sin convertir una publicación de Cloudflare en una prueba de navegador superada.
+
+Límites funcionales explícitos: selección simple/Shift sin lasso, resize de esquina/dimensiones sin rotación/agrupación, conectores rectos anclados a cajas, sketch suave determinista sin texturas complejas, sin presión/pinch avanzado, imágenes, colaboración o zoom semántico infinito. Portal de cámara de 440 ms y entrada al mismo hijo. 20 proyectos locales, 8 MiB JSON, 100 diagramas, 500 figuras/500 conexiones por diagrama, 2.000 puntos/trazo, 100.000 puntos totales, historial 30 estados/~20 MiB; export PNG transparente 4.096 px/eje y 12 MP. No se exige ampliar estos límites para aceptar la RC.
+
+**GO para revisión y uso de la RC en esta rama**, con autoguardado local y exportación verificables. Mantener copias JSON cuando el documento importe: borrar datos del navegador, una sesión privada o un cierre abrupto antes de Saved pueden perder cambios. Conflicto entre pestañas: exportar rescate y recargar la versión guardada; no hay fusión colaborativa. Main permanece intacta y la decisión de fusionar/publicar esa rama queda fuera de este cierre.

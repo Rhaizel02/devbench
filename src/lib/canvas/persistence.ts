@@ -1,7 +1,20 @@
 import { clone, type Project } from './model';
 import { parseProject, serializeProject } from './serialization';
 export type SaveState = 'unsaved' | 'saving' | 'saved' | 'error';
-export type StoredProject = { id: string; title: string; updatedAt: number; json: string };
+export type StoredProject = {
+	id: string;
+	title: string;
+	updatedAt: number;
+	json: string;
+	revision?: number;
+};
+export class CanvasConflictError extends Error {
+	constructor() {
+		super(
+			'Canvas changed or was deleted in another tab. Export a rescue JSON, then reload to open the newer saved version.'
+		);
+	}
+}
 /** This database is the explicit Canvas-only exception to DevBench's memory-only policy. */
 export async function openCanvasDatabase(factory: IDBFactory = indexedDB): Promise<IDBDatabase> {
 	return new Promise((resolve, reject) => {
@@ -40,7 +53,13 @@ export async function openCanvasDatabase(factory: IDBFactory = indexedDB): Promi
 	});
 }
 export class CanvasStorage {
-	constructor(private db: IDBDatabase) {}
+	constructor(
+		private db: IDBDatabase,
+		private versions = new Map<string, number>()
+	) {}
+	reopen(db: IDBDatabase) {
+		return new CanvasStorage(db, new Map(this.versions));
+	}
 	private transaction<T>(
 		mode: IDBTransactionMode,
 		operation: (store: IDBObjectStore) => IDBRequest<T>
@@ -73,7 +92,9 @@ export class CanvasStorage {
 	async load(id: string): Promise<Project> {
 		const row = (await this.transaction('readonly', (s) => s.get(id))) as StoredProject | undefined;
 		if (!row) throw new Error('Project no longer exists.');
-		return parseProject(row.json);
+		const parsed = parseProject(row.json);
+		this.versions.set(id, row.revision ?? 0);
+		return parsed;
 	}
 	async save(project: Project): Promise<void> {
 		const row: StoredProject = {
@@ -82,10 +103,53 @@ export class CanvasStorage {
 			updatedAt: Date.now(),
 			json: serializeProject(project)
 		};
-		await this.transaction('readwrite', (s) => s.put(row));
+		await new Promise<void>((resolve, reject) => {
+			let conflict = false,
+				next = 0;
+			try {
+				const tx = this.db.transaction('projects', 'readwrite'),
+					store = tx.objectStore('projects'),
+					read = store.get(project.id);
+				tx.oncomplete = () => {
+					this.versions.set(project.id, next);
+					resolve();
+				};
+				tx.onerror = tx.onabort = () =>
+					reject(
+						conflict
+							? new CanvasConflictError()
+							: new Error(
+									'Canvas could not save (quota, permissions or closed storage). Export a rescue copy and retry.'
+								)
+					);
+				read.onsuccess = () => {
+					try {
+						const current = read.result as StoredProject | undefined,
+							known = this.versions.get(project.id),
+							actual = current?.revision ?? 0;
+						if (current?.json === row.json) {
+							next = actual;
+							return;
+						}
+						if ((current && known !== actual) || (!current && known !== undefined)) {
+							conflict = true;
+							tx.abort();
+							return;
+						}
+						next = actual + 1;
+						store.put({ ...row, revision: next });
+					} catch {
+						tx.abort();
+					}
+				};
+			} catch {
+				reject(new Error('Canvas storage is unavailable. Export a rescue copy and retry.'));
+			}
+		});
 	}
 	async remove(id: string): Promise<void> {
 		await this.transaction('readwrite', (s) => s.delete(id));
+		this.versions.delete(id);
 	}
 	close() {
 		this.db.close();
@@ -119,8 +183,13 @@ export function createAutosaver(
 				saved = target;
 				notify(saved === revision ? 'saved' : 'unsaved');
 				return true;
-			} catch {
-				notify('error', 'Autosave failed. Keep this tab open, retry or export a rescue JSON.');
+			} catch (reason) {
+				notify(
+					'error',
+					reason instanceof CanvasConflictError
+						? reason.message
+						: 'Autosave failed. Keep this tab open, retry or export a rescue JSON.'
+				);
 				return false;
 			}
 		})();

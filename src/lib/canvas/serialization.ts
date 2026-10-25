@@ -152,9 +152,7 @@ function parseV2(root: Obj): Project {
 				fail('A stroke needs at least two points.');
 			return result;
 		});
-		const nodes = new Set(
-			elements.filter((e) => !['stroke', 'text'].includes(e.kind)).map((e) => e.id)
-		);
+		const nodes = new Set(elements.filter((e) => e.kind !== 'stroke').map((e) => e.id));
 		const connections: Connection[] = list(d.connections, LIMITS.connections).map((raw) => {
 			const c = object(raw);
 			if (c.kind !== 'line' && c.kind !== 'arrow') fail('Unsupported connector.');
@@ -228,23 +226,19 @@ function migrateV1(root: Obj): Project {
 			elements: d.elements.map((e, i) => ({
 				...e,
 				style: { ...DEFAULT_STYLE, stroke: e.kind === 'stroke' ? '#20bfa9' : '#8899aa' },
-				z: i + 1
+				z: d.connections.length + i + 1
 			})),
 			connections: d.connections.map((c, i) => {
 				const [x1, y1, x2, y2] = connectionPoints(d, c),
 					from = d.elements.find((e) => e.id === c.from)!,
 					to = d.elements.find((e) => e.id === c.to)!;
-				// Legacy text anchors are retained as free endpoints; geometry and IDs are preserved.
-				const anchor = (node: typeof from, x: number, y: number): Endpoint =>
-					node.kind === 'text'
-						? { x, y }
-						: {
-								x,
-								y,
-								elementId: node.id,
-								u: (x - node.x) / node.width,
-								v: (y - node.y) / node.height
-							};
+				const anchor = (node: typeof from, x: number, y: number): Endpoint => ({
+					x,
+					y,
+					elementId: node.id,
+					u: (x - node.x) / node.width,
+					v: (y - node.y) / node.height
+				});
 				return {
 					id: c.id,
 					kind: c.kind,

@@ -119,6 +119,9 @@
 			historyVersion++;
 		}
 		project = valid;
+		const missing = path.findIndex((id) => !valid.diagrams.some((d) => d.id === id));
+		if (missing >= 0) path = path.slice(0, missing);
+		if (!path.length) path = [valid.rootDiagramId];
 	}
 	function commit(next: Diagram) {
 		action(() => changed(replaceDiagram(project, next)));
@@ -361,6 +364,7 @@
 	function key(event: KeyboardEvent) {
 		if (!editorRoot?.contains(event.target as Node) || event.altKey) return;
 		const target = event.target as HTMLElement;
+		if (target.closest('dialog[open]')) return;
 		if (target.matches('input,textarea,select') || target.isContentEditable) return;
 		if (event.key === 'Escape') {
 			event.preventDefault();
@@ -422,7 +426,7 @@
 <div class="board-editor" bind:this={editorRoot}>
 	<header class="board-heading">
 		<div>
-			<div class="eyebrow">ARCHITECTURE CANVAS · V1.4 LAB</div>
+			<div class="eyebrow">ARCHITECTURE CANVAS · V1.4 RC</div>
 			<h1>{project.title}</h1>
 		</div>
 		<div class="heading-actions">
@@ -844,8 +848,8 @@
 		border: 1px solid var(--color-border);
 		border-radius: 10px;
 		overflow: hidden;
-		height: calc(100dvh - 245px);
-		min-height: 510px;
+		height: calc(100dvh - 390px);
+		min-height: 400px;
 	}
 	.canvas-host {
 		height: 100%;
@@ -1091,8 +1095,8 @@
 			padding: 16px;
 		}
 		.board-workspace {
-			height: calc(100dvh - 240px);
-			min-height: 540px;
+			height: calc(100dvh - 370px);
+			min-height: 400px;
 		}
 		.key-hint {
 			display: none;
@@ -1135,6 +1139,19 @@
 		}
 	}
 	@media (max-width: 450px) {
+		.heading-actions .button,
+		.properties button,
+		.properties input,
+		.properties select,
+		.breadcrumbs button,
+		.outline-row button {
+			min-height: 44px;
+		}
+		.swatches button {
+			min-width: 44px;
+			width: 44px;
+			height: 44px;
+		}
 		.floating-toolbar button {
 			min-width: 42px;
 			min-height: 44px;
@@ -1148,14 +1165,14 @@
 			width: 208px;
 		}
 		.swatches button {
-			width: 26px;
-			height: 26px;
+			width: 44px;
+			height: 44px;
 		}
 		.board-heading {
 			flex-wrap: wrap;
 		}
 		.board-workspace {
-			min-height: 570px;
+			min-height: 420px;
 		}
 		.heading-actions {
 			margin-left: auto;
