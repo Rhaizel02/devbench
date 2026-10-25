@@ -16,7 +16,8 @@
 		"test": "npm run test:unit -- --run",
 		"test:e2e": "playwright test",
 		"preview:static": "node scripts/serve-static.mjs",
-		"capture": "node scripts/capture.mjs"
+		"capture": "node scripts/capture.mjs",
+		"capture:v12": "node scripts/capture-v12.mjs"
 	},
 	"devDependencies": {
 		"@codemirror/commands": "^6.11.1",

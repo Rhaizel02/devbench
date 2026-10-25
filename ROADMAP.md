@@ -1,6 +1,6 @@
 # DevBench — Roadmap
 
-Las 12 herramientas V1 y las 6 V1.1 del alcance aprobado están implementadas. Los estados `available` dependen del motor y pantalla reales, no de una promesa del roadmap. La matriz final está en `screenshots/actual/release-matrix.json`; `VALIDATION.md` conserva la evidencia histórica y por hito.
+Las 12 herramientas V1, 6 V1.1 y 6 individuales V1.2 más Pipeline Builder están implementadas: 25 entradas utilizables. Los estados `available` dependen de motores y pantallas reales. `GOAL_PROGRESS_V12.md` y `screenshots/actual/v12-checks.json` documentan V1.2; la matriz `release-matrix.json` y la tabla siguiente conservan V1/V1.1. `VALIDATION.md` conserva evidencia histórica y por hito.
 
 | Bloque / hito | Contenido | Estado |
 |---|---|---|
@@ -22,5 +22,15 @@ Las 12 herramientas V1 y las 6 V1.1 del alcance aprobado están implementadas. L
 
 Las limitaciones de CSV, inferencia, cron avanzado, fechas, SQL literal y privacidad se documentan expresamente en README/workspaces. Solo se corrigen P0/P1 antes de cerrar; pequeños ajustes de densidad/alineación son P2.
 
-Fuera de esta entrega: PWA/offline, pipelines, OpenAPI, EXPLAIN, backend/usuarios y despliegue web. Requieren una decisión futura independiente.
+## V1.2 — Backend & Connected Workbench
+
+| Hito | Alcance | Estado |
+|---|---|---|
+| A | JSON Query Explorer, JSON Schema Lab | Publicado y CI verde |
+| B | HTTP Request Builder, HTTP Headers Inspector | Publicado; regresión de relevancia de paleta corregida y verificada en C |
+| C | Log & Stack Trace Inspector, Environment Comparator | Publicado y CI verde |
+| D | Handoffs explícitos en memoria y Pipeline Builder | Publicado y CI verde |
+| E | 25 rutas, instalación limpia, privacidad, temas/tamaños, Node/Cloudflare y cierre | Aceptación local completa; publicación/CI final en GOAL_PROGRESS_V12.md |
+
+Fuera de V1.2: auditoría exhaustiva contra Cloudflare público (Goal posterior), PWA/offline, OpenAPI, EXPLAIN, backend/usuarios y recetas persistentes. El pipeline actual es lineal, local y acotado, sin scripts, ramas o requests. No se accede a la cuenta Cloudflare ni se afirma verificación de producción.
 

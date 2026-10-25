@@ -1,6 +1,7 @@
 import { chromium } from '@playwright/test';
 import { mkdir, writeFile } from 'node:fs/promises';
 import assert from 'node:assert/strict';
+import { tools } from '../src/lib/tools/tool-registry.ts';
 
 const folder = 'screenshots/actual';
 await mkdir(folder, { recursive: true });
@@ -175,26 +176,7 @@ try {
 	await page.waitForFunction(() => document.documentElement.dataset.theme === 'light');
 	await page.emulateMedia({ colorScheme: 'dark' });
 	await page.waitForFunction(() => document.documentElement.dataset.theme === 'dark');
-	for (const slug of [
-		'json-studio',
-		'json-diff',
-		'json-yaml',
-		'base64-toolkit',
-		'url-toolkit',
-		'jwt-inspector',
-		'hash-generator',
-		'sql-formatter',
-		'regex-tester',
-		'text-diff',
-		'id-generator',
-		'timestamp-converter',
-		'json-csv',
-		'json-code',
-		'curl-inspector',
-		'cron-explorer',
-		'string-toolkit',
-		'sql-in-builder'
-	]) {
+	for (const { slug } of tools) {
 		assert.equal(
 			(await page.request.get('http://127.0.0.1:4173/tools/' + slug + '/')).status(),
 			200
@@ -209,7 +191,7 @@ try {
 			{
 				checks,
 				systemTheme: 'passed',
-				knownRoutes: 18,
+				knownRoutes: tools.length,
 				unknownRoute: 404,
 				browserErrors: errors,
 				externalRequests
@@ -219,7 +201,9 @@ try {
 		) + '\n'
 	);
 	process.stdout.write(
-		'Saved 12 real captures and 32 layout measurements. All 18 routes, 404, themes, runtime errors and local resources verified.\n'
+		'Saved 12 real captures and 32 layout measurements. All ' +
+			tools.length +
+			' routes, 404, themes, runtime errors and local resources verified.\n'
 	);
 } finally {
 	await browser.close();

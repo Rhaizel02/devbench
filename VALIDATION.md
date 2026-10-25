@@ -1,5 +1,23 @@
 # B1 validation report
 
+## V1.2 final local acceptance — 2026-10-25
+
+This section is current V1.2 evidence; the B1/V1/V1.1 sections below remain historical. All 24 individual tools plus Pipeline Builder are available with 25 unique lazy/prerendered routes. No prior slug was removed. `GOAL_PROGRESS_V12.md` records milestone commits and CI; final matching CI is a required publication gate.
+
+On bundled Node **24.22.1**, a clean `npm ci`, check (**zero errors/warnings**), lint, **195 unit tests in 13 files**, and static build pass. The complete **26 Chromium browser flows** pass, including the original 18-tool operation/copy/reset/reload matrix and all seven new entries. JSON Query/Schema validation/inference, true clipboard/download contents, JSONPath normalized paths and zero matches, strict invalid/large inputs, internal-only references, escaping, redaction, Java logs, dotenv metadata exports, every committed handoff and all three pipeline recipes are exercised. A hostile schema regex terminates its worker and permits retry. Pipeline order, first failure/not-run states, intermediate preview opt-in, reset and byte/work limits pass. No arbitrary expression execution or network operation is introduced.
+
+Actual Java request code copied from the UI, including Unicode, quotes/backslashes/newlines and a near-64-KiB body, compiles with javac 17. Generated JavaScript receives TypeScript syntax diagnostics. Spring output is a documented imports/method-statements fragment for Framework 6.1+ / Boot 3.2+; bodies use explicit UTF-8 bytes. It was checked against official APIs, without installing Spring or claiming runtime execution. Client-specific header/CORS/default behavior remains documented.
+
+The V1.2 release test checks synthetic secret markers across localStorage/sessionStorage, URL/history, requests and console; cookies, Cache API and IndexedDB remain empty. Only sanitized application preferences persist. The original release test additionally enforces SvelteKit's exact harmless navigation/scroll metadata and empty snapshot containers. New tools reset/reload cleanly; transfers are explicit, instance-local, consumed once and cleared on leaving the target. HTTP handoffs carry redacted code only; no JWT/environment value handoff exists. Environment outputs never contain values, including after editor reveal. Blocked storage/clipboard and hostile regex responsiveness remain covered by the original regressions.
+
+`npm run capture:v12` verifies **25 direct and refreshed static pages**, missing-slug **404**, and **54** no-overflow scenes (Home, JSON Studio and seven V1.2 workspaces × dark/light × 390/768/1440). It saves **14** real synthetic captures under `screenshots/actual/v12-*`; `v12-checks.json` reports zero page errors, console errors, failed resources or external requests. Representative Home/Studio, query/schema, HTTP, logs, hidden environments and mobile/desktop pipeline views were visually reviewed against the approved zinc/teal tokens, local fonts, sidebar and split/mobile tab geometry. This is Chromium/emulated viewport coverage, not accessibility certification.
+
+Full and production-only npm audits both exit 0 with **zero findings**, recorded in `screenshots/actual/v12-dependency-audit.json`. The installed interpreted schema validator has zero runtime dependencies; official meta-schemas are bundled locally and never downloaded because of user input. Numeric overflow is rejected in bounded V1.2 JSON parsing rather than silently serializing infinity as null. Finite values retain native JavaScript precision and duplicate-key behavior.
+
+`.node-version` contains **24.22.1**, and Actions uses it. Cloudflare configuration remains repository root / `npm run build` / `build` with adapter-static. Manual `NODE_VERSION` settings can override runtime selection; no Cloudflare account/build/deployment or public production Playwright audit has been accessed or verified. That audit is reserved for a later Goal.
+
+No known P0/P1 after local acceptance. P2: broader Firefox/WebKit/screen-reader coverage and optional density/compact-control refinements. Intentional limits: explicit JSONPath subset; interpreted schema compliance exceptions, no remote/ID/dynamic references; common Java log and single-line dotenv formats; client-specific generated HTTP behavior; eight-step/1.5-second bounded pipelines with no saved recipes or scripts. All exact limits are in README/workspaces. Historical acceptance below is unchanged.
+
 Validated locally on 2026-10-25. Runtime: Node 24.22.1; npm 10.9.2. No global runtime changes.
 
 ## Results

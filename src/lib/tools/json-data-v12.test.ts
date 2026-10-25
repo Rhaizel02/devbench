@@ -41,6 +41,7 @@ describe('bounded JSONPath subset', () => {
 		expect(() => boundedJson('['.repeat(66) + '0' + ']'.repeat(66))).toThrow(/levels/);
 		expect(() => queryJson(JSON.stringify(Array(2001).fill(0)), '$[*]')).toThrow(/result limit/);
 		expect(() => queryJson('{"a":1,}', '$')).toThrow(/Invalid JSON/);
+		expect(() => queryJson('{"overflow":1e999}', '$')).toThrow(/finite JavaScript/);
 		const nested = JSON.stringify(Array.from({ length: 1000 }, () => ({ a: [1, 2, 3] })));
 		expect(() => queryJson(nested, '$..*..*..*..*..*..*')).toThrow();
 	});

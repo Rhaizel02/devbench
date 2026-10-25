@@ -39,6 +39,9 @@ describe('HTTP request generation without execution', () => {
 		).toEqual([]);
 		expect(generateRequest(r, 'java', true)).toContain('import java.net.http.HttpRequest;');
 		expect(generateRequest(r, 'spring', true)).toContain('.uri(URI.create(');
+		expect(generateRequest(r, 'spring', true)).toContain(
+			'.getBytes(java.nio.charset.StandardCharsets.UTF_8)'
+		);
 	});
 	it('redacts secrets by default and only explicit generation includes them', () => {
 		const r = buildRequest(

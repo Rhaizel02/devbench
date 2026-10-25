@@ -15,6 +15,8 @@ export function boundedJson(text: string): JsonValue {
 		const item = stack.pop()!;
 		if (++nodes > 50000 || item.depth > 64)
 			throw new ToolError('JSON limit: 50,000 nodes / 64 levels.');
+		if (typeof item.value === 'number' && !Number.isFinite(item.value))
+			throw new ToolError('A JSON number exceeds the finite JavaScript numeric range.');
 		if (item.value && typeof item.value === 'object')
 			for (const child of Object.values(item.value))
 				stack.push({ value: child, depth: item.depth + 1 });

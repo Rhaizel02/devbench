@@ -209,7 +209,9 @@ export function generateRequest(request: RequestDraft, target: CodeTarget, revea
 			.map((h) => '    headers.add(' + javaQuote(h.name) + ', ' + javaQuote(h.value) + ');\n')
 			.join('') +
 		'  })\n' +
-		(r.body === null ? '' : '  .body(' + javaQuote(r.body) + ')\n') +
+		(r.body === null
+			? ''
+			: '  .body(' + javaQuote(r.body) + '.getBytes(java.nio.charset.StandardCharsets.UTF_8))\n') +
 		'  .retrieve()\n  .toEntity(String.class);'
 	);
 }

@@ -33,6 +33,9 @@ test('JSONPath real paths, values, clipboard/download, invalidation and direct r
 	}
 	await page.screenshot({ path: 'screenshots/actual/27-query-light-desktop.png', fullPage: true });
 	await page.getByLabel('JSONPath expression').fill('$.missing');
+	await page.getByLabel('Query example', { exact: true }).selectOption('$');
+	await expect(page.getByLabel('JSONPath expression')).toHaveValue('$');
+	await page.getByLabel('JSONPath expression').fill('$.missing');
 	await expect(page.getByRole('button', { name: 'Copy output', exact: true })).toBeDisabled();
 	await page.getByRole('button', { name: 'Run query', exact: true }).click();
 	await expect(page.getByText('0 results — query succeeded with no matches.')).toBeVisible();

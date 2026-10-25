@@ -40,16 +40,19 @@
 	sample={'{"products":[{"name":"Notebook","price":12},{"name":"Pen","price":3},{"name":"Lamp","price":35}],"available":null}'}
 >
 	{#snippet options()}<label
-			>JSONPath <input aria-label="JSONPath expression" bind:value={query} /></label
+			>JSONPath <input
+				class="field-input"
+				aria-label="JSONPath expression"
+				bind:value={query}
+			/></label
 		><label
-			>Query example <select
-				aria-label="Query example"
-				onchange={(event) => (query = event.currentTarget.value)}
-				><option value="$.products[?(@.price < 20)]">Numeric filter</option><option
-					value="$.available">Simple property</option
-				><option value="$.products[0]">Array index</option><option value="$..name"
-					>Descendant</option
-				><option value="$.products[*]">Wildcard</option></select
+			>Query example <select aria-label="Query example" bind:value={query}
+				><option value="$">Root value</option><option value="$.products[?(@.price < 20)]"
+					>Numeric filter</option
+				><option value="$.available">Simple property</option><option value="$.products[0]"
+					>Array index</option
+				><option value="$..name">Descendant</option><option value="$.products[*]">Wildcard</option
+				></select
 			></label
 		>{/snippet}
 	{#snippet details()}<div class="tool-help">
