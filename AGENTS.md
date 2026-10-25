@@ -1,5 +1,7 @@
 # AGENTS.md — reglas de Codex para DevBench
 
+**Autorización V2.0 posterior:** V20_ARCHITECTURE_CANVAS_GOAL.md y GOAL_PROGRESS_V20.md gobiernan el trabajo actual. H0 autoriza integrar OpenAPI V1.5 en main después de validar integración/CI, superando solo para ello la antigua prohibición V1.5. Canvas 2.0 se desarrolla después en feature/architecture-canvas-v20 y NO se fusiona a main sin revisión posterior. Mantener base IndexedDB/proyectos/backups v1/v2; únicamente Canvas persiste documentos. Todo lo demás conserva privacidad en memoria.
+
 Antes de trabajar, leer `ARCHITECTURE.md`, `FEATURES.md` y `DESIGN.md` según la tarea. `CODEX_B1_PROMPT.md` describe el Bloque 1. Los PNG son **únicamente referencia visual**, no de lógica.
 
 **Excepción V1.4 autorizada por el usuario:** Architecture Canvas guarda sus proyectos únicamente en su base IndexedDB `devbench.canvas.v2`, con controles de proyectos/import/export y feedback de autosave. Las reglas históricas de payload solo en memoria siguen aplicando a todas las demás herramientas. Tampoco Canvas puede poner payloads en localStorage, URL, logs, cookies o tráfico.
