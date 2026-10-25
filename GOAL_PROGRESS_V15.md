@@ -55,3 +55,7 @@ Siguiente acción: check/lint de la base H1, commit/push y empezar parser/refere
 ### H2 — parser validado
 
 Parser JSON/YAML 3.0.x/3.1.x, DTO efectivo, JSON Pointer URI/escapes, ciclos y referencias externas sin red; worker cancelable 2 s y límites. No conformance universal ni URI scopes. 27 casos nuevos; total 283 tests / 17 archivos correctos, check 0 errores/avisos, lint y build correctos. Catálogo permanece 27 hasta H3. Siguiente: explorador real. CI H1 40234461470 pendiente de resultado final al último sondeo.
+
+### H3 — explorador real
+
+H2 SHA 8dea18f0b7a306c1634f300ca016bd6e0aa3277e. H1 CI 40234461470 completed/success. H3 añade explorador operaciones/seguridad/servidores/media, schema browser progresivo con breadcrumbs/referencias/ciclos, import local, invalidación y reset. Registro lazy real 28; se actualizan solo expectativas de cantidad en regresiones previas. Check 0 errores/avisos, 283 unitarios y dos Playwright correctos, seis capturas 390/768/1440 dark/light sin overflow. Desktop revisado visualmente. H4/H5 siguen pendientes.

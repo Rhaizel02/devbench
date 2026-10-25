@@ -465,7 +465,7 @@ test('RC catalog, static deep link and representative board interaction budget',
 	const clean = observe(page);
 	await page.setViewportSize({ width: 1440, height: 1000 });
 	await page.goto('/');
-	await expect(page.getByText('27 tools · 27 available', { exact: true })).toBeVisible();
+	await expect(page.getByText('28 tools · 28 available', { exact: true })).toBeVisible();
 	await page.keyboard.press('Control+k');
 	await page.getByRole('combobox', { name: 'Find a tool', exact: true }).fill('architecture');
 	await page.keyboard.press('Enter');

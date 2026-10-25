@@ -26,7 +26,7 @@ it('uses stable versioned, JSON-serializable, isolated data for all three levels
 	expect(childDestination(first, 'orders-diagram', 'service')).toBe('service-diagram');
 	first.diagrams[0].elements[0].label = 'edited';
 	expect(second.diagrams[0].elements[0].label).toBe('API');
-	expect(tools).toHaveLength(27);
+	expect(tools).toHaveLength(28);
 	expect(tools.some((tool) => tool.slug === 'architecture-canvas')).toBe(true);
 });
 it.each([

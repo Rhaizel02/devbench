@@ -15,7 +15,7 @@ test('all seven V1.2 routes operate, reset, reload and keep payloads out of pers
 	page.on('request', (request) => requests.push(request.url() + (request.postData() ?? '')));
 	page.on('console', (message) => logs.push(message.text()));
 	page.on('pageerror', (error) => errors.push(error.message));
-	expect(tools).toHaveLength(27);
+	expect(tools).toHaveLength(28);
 	const cases = [
 		{
 			slug: 'json-query',

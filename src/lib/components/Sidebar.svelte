@@ -13,8 +13,8 @@
 	<a class="brand" href={resolve('/')} onclick={close}
 		><span class="brand-symbol"><Icon name="terminal" size={18} /></span>DevBench<span
 			class="version"
-			>{listedTools.some((tool) => tool.version === 'V1.4')
-				? 'V1.4 RC'
+			>{listedTools.some((tool) => tool.version === 'V1.5')
+				? 'V1.5 RC'
 				: listedTools.some((tool) => tool.version === 'V1.3')
 					? 'V1.3'
 					: listedTools.some((tool) => tool.version === 'V1.2')

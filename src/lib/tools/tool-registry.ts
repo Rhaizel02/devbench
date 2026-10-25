@@ -7,10 +7,21 @@ export type Tool = {
 	description: string;
 	keywords: string;
 	status: 'available' | 'planned';
-	version: 'V1' | 'V1.1' | 'V1.2' | 'V1.3' | 'V1.4';
+	version: 'V1' | 'V1.1' | 'V1.2' | 'V1.3' | 'V1.4' | 'V1.5';
 	icon: string;
 };
 export const tools: Tool[] = [
+	{
+		id: 'BACK-10',
+		slug: 'openapi-explorer',
+		name: 'OpenAPI Contract Workbench',
+		category: 'Backend',
+		description: 'Explore local API contracts, prepare requests and compare versions.',
+		keywords: 'openapi swagger oas yaml schema contract diff http spring api',
+		status: 'available',
+		version: 'V1.5',
+		icon: 'braces'
+	},
 	{
 		id: 'DRAW-01',
 		slug: 'architecture-canvas',
