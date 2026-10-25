@@ -12,7 +12,7 @@
 		readonly?: boolean;
 		label: string;
 		wrap?: boolean;
-		language?: 'json' | 'yaml' | 'sql' | 'plain';
+		language?: 'json' | 'yaml' | 'sql' | 'typescript' | 'java' | 'plain';
 	} = $props();
 	const editorId = $props.id();
 	let host: HTMLDivElement;
@@ -40,7 +40,13 @@
 					? import('@codemirror/lang-yaml').then((module) => module.yaml())
 					: language === 'sql'
 						? import('@codemirror/lang-sql').then((module) => module.sql())
-						: Promise.resolve(null),
+						: language === 'typescript'
+							? import('@codemirror/lang-javascript').then((module) =>
+									module.javascript({ typescript: true })
+								)
+							: language === 'java'
+								? import('@codemirror/lang-java').then((module) => module.java())
+								: Promise.resolve(null),
 			import('@codemirror/language'),
 			import('@codemirror/search'),
 			import('@lezer/highlight')

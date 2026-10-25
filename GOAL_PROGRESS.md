@@ -4,7 +4,7 @@
 
 The complete `DEV_BENCH_AUTONOMOUS_GOAL.md` is now present at repository root and has been read. The earlier missing-document blocker is resolved. Supplied pack notes are preserved in `docs/goal-pack/`. Work only in the physical repository `C:\Users\bobby\Documents\ChatGPT\DevBench`, branch main, origin Rhaizel02/devbench.
 
-The goal remains active and incomplete. B1 baseline is verified; milestones A, B and C are complete (12/18 working tools; all V1). Do not stop at a milestone or mark complete before 18/18 plus every final gate.
+The goal remains active and incomplete. B1 baseline is verified; milestones A–D are complete (15/18 working tools). Do not stop at a milestone or mark complete before 18/18 plus every final gate.
 
 ## Tool matrix
 
@@ -22,9 +22,9 @@ The goal remains active and incomplete. B1 baseline is verified; milestones A, B
 | Text Diff           | C complete                                     |
 | ID Generator        | C complete                                     |
 | Timestamp Converter | C complete                                     |
-| JSON ↔ CSV          | D pending                                      |
-| JSON → Code         | D pending                                      |
-| cURL Inspector      | D pending                                      |
+| JSON ↔ CSV          | D complete                                     |
+| JSON → Code         | D complete                                     |
+| cURL Inspector      | D complete                                     |
 | Cron Explorer       | E pending                                      |
 | String Toolkit      | E pending                                      |
 | SQL IN Builder      | E pending                                      |
@@ -35,7 +35,8 @@ The goal remains active and incomplete. B1 baseline is verified; milestones A, B
 - A: four pure engines, lazy workspaces, shared two-pane text workspace, language-aware client-only CodeMirror, truthful registry counts. Check passes; 70 unit tests pass; static build passes. Lint passes; all 5 Chromium flows pass, including real clipboard/download, option invalidation, route cleanup, privacy markers and 390/768/1440 width checks. Captures 09–12 inspected in dark/light desktop/mobile.
 - B: JWT strict decoder and visible claim inspector, Web Crypto hashes, sql-formatter 15.9.0 for three dialects, isolated regex worker. Check passes with zero errors/warnings; 95 unit tests, static build and all 7 browser flows pass. Browser hostile-regex test proves worker termination, responsive UI and successful retry. Dark/light inspector captures 13–14 inspected, width checks at 390/768/1440. Lint passes.
 - C: jsdiff bounded line comparison, secure RFC UUID v4/v7 and ULID generation, strict epoch/ISO/calendar/IANA conversion. Check (0 errors/warnings), lint, 103 unit tests, static build and all 9 browser flows pass. All 12 real V1 deep routes, palette, favorite persistence, memory cleanup and unknown 404 verified. Captures 15–17 inspected. Early preference initialization removes the saved-theme flash.
-- D/E/F pending. Follow the full goal contracts in order, including real worker termination for hostile regex, secure IDs, date/DST semantics, safe cURL subset and explicit Spring cron behavior.
+- D: Papa Parse CSV conversion with explicit loss/quoting policies; TypeScript/Java inference; parse-only cURL with default redaction and reveal. Check passes (0 errors/warnings), 135 unit tests, static build and all 11 browser flows pass. Generated TypeScript passes strict semantic checks; the browser-generated synthetic Java fixture compiles with javac --release 17. Captures 18–20 inspected. Lint and rebuilt browser delimiter/reveal checks pass.
+- E/F pending. Follow the full goal contracts in order, including real worker termination for hostile regex, secure IDs, date/DST semantics, safe cURL subset and explicit Spring cron behavior.
 - Final F must run npm ci/check/lint/test/build/e2e/capture/audit, verify all 18 routes and unknown 404, inspect real dark/light/mobile screenshots, append VALIDATION evidence, update README/FEATURES/ROADMAP, push and verify final CI.
 
 ## Decisions / limitations
@@ -54,8 +55,9 @@ The goal remains active and incomplete. B1 baseline is verified; milestones A, B
 - Baseline: cbb518bc0d2327fbf4da42925a79098a801832ae. CI green: https://github.com/Rhaizel02/devbench/actions/runs/40149296687
 - A: 100d6a5063a8bafba416bb6a41d530ebe6a26fcd, pushed; CI success: https://github.com/Rhaizel02/devbench/actions/runs/40151084064
 - B: 71ccb7062f3900438fb6bdd45734bbc618deacd6, pushed; CI success: https://github.com/Rhaizel02/devbench/actions/runs/40151454095
+- C: 7bd59ab3d68b06967ca48802b3dc5dc2a4e04e12, pushed; CI success: https://github.com/Rhaizel02/devbench/actions/runs/40151816133
 - Initial audit/progress: 7080cbed4de7378e813d95a1c61e816bb364f87b, pushed.
 
 ## Next concrete step
 
-Publish C, then implement D: JSON ↔ CSV with explicit loss/quoting policies, TypeScript/Java inference with safe identifiers, and parse-only POSIX cURL inspection with redaction. Do not stop until E and F also complete. Runtime commands must explicitly invoke bundled Node 24 with npm-cli.js; global npm.ps1 otherwise selects Node 22. No blockers remain.
+Publish D, then implement E: confirmed Unix/Spring cron semantics and DST, Unicode string transforms, safe parameterized SQL IN, and one-shot multi-destination Quick Paste. E and F are mandatory; do not stop after D. Cron research: Croner supports domAndDow and timezone, but its default overlap policy is first occurrence only; verify/correct Spring overlap semantics before claiming support. No E source changes yet. Runtime commands must explicitly invoke bundled Node 24 with npm-cli.js; global npm.ps1 otherwise selects Node 22. No blockers remain.

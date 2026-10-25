@@ -216,18 +216,22 @@
 				</p>{/each}
 		</div>
 	</section>
-	<section class="roadmap-section" aria-labelledby="roadmap-title">
-		<div class="section-heading">
-			<h2 id="roadmap-title">On the workbench</h2>
-			<span class="subtle-tag">Planned for V1.1</span>
-		</div>
-		<div class="roadmap-grid">
-			{#each tools.filter((tool: Tool) => tool.version === 'V1.1') as tool (tool.id)}<div>
-					<strong>{tool.name}</strong>
-					<p>{tool.description}</p>
-				</div>{/each}
-		</div>
-	</section>
+	{#if tools.some((tool) => tool.version === 'V1.1' && tool.status === 'planned')}<section
+			class="roadmap-section"
+			aria-labelledby="roadmap-title"
+		>
+			<div class="section-heading">
+				<h2 id="roadmap-title">On the workbench</h2>
+				<span class="subtle-tag">Planned for V1.1</span>
+			</div>
+			<div class="roadmap-grid">
+				{#each tools.filter((tool: Tool) => tool.version === 'V1.1' && tool.status === 'planned') as tool (tool.id)}<div
+					>
+						<strong>{tool.name}</strong>
+						<p>{tool.description}</p>
+					</div>{/each}
+			</div>
+		</section>{/if}
 	<footer class="home-footer">
 		<span><strong>DevBench</strong> · A focused developer workbench</span><a
 			href={resolve('tools/json-studio/')}>Start with JSON Studio<ArrowRight size={13} /></a

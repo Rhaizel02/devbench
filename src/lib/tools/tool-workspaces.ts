@@ -11,5 +11,8 @@ export const toolWorkspaces: Record<string, () => Promise<{ default: Component }
 	'regex-tester': () => import('./regex-tester/RegexTester.svelte'),
 	'text-diff': () => import('./text-diff/TextDiff.svelte'),
 	'id-generator': () => import('./id-generator/IdGenerator.svelte'),
-	'timestamp-converter': () => import('./timestamp-converter/TimestampConverter.svelte')
+	'timestamp-converter': () => import('./timestamp-converter/TimestampConverter.svelte'),
+	'json-csv': () => import('./json-csv/JsonCsv.svelte'),
+	'json-code': () => import('./json-code/JsonCode.svelte'),
+	'curl-inspector': () => import('./curl-inspector/CurlInspector.svelte')
 };

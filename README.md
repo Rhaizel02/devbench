@@ -1,6 +1,6 @@
 # DevBench
 
-A focused, local-first developer workbench. **Milestone C: all 12 V1 tools implemented (12/18 total)**, with the remaining V1.1 tools tracked in `GOAL_PROGRESS.md` and `DEV_BENCH_AUTONOMOUS_GOAL.md`. The UI is in English.
+A focused, local-first developer workbench. **Milestone D: 15/18 tools implemented**, with the remaining V1.1 tools tracked in `GOAL_PROGRESS.md` and `DEV_BENCH_AUTONOMOUS_GOAL.md`. The UI is in English.
 
 Repository: [Rhaizel02/devbench](https://github.com/Rhaizel02/devbench). The source is published on GitHub; website deployment remains outside B1.
 
@@ -49,7 +49,10 @@ npm run test:e2e
 - Text Diff: unified/split line comparison with original CRLF/LF and final-newline information, optional trailing-space comparison, report copy/download.
 - ID Generator: crypto-backed UUID v4/v7 and ULID batches, individual/all copy and download.
 - Timestamp Converter: strict seconds/milliseconds/ISO conversion, negative/fractional epochs, UTC/local/IANA displays, invalid calendar rejection and copyable formats.
-- All twelve V1 tools have real static routes and working engines. The six V1.1 tools are an informational roadmap until their implementation milestones.
+- JSON ↔ CSV: maintained CSV parsing/quoting, delimiter and header options, multiline Unicode, explicit null/missing/nesting policies and formula warning.
+- JSON → Code: sample-based TypeScript interfaces/aliases and Java 17+ records, nested objects, observed optional fields and safe unique names.
+- cURL Inspector: parse-only POSIX literal subset, method/target/headers/query/body, default result redaction and explicit reveal. No commands, files or requests are executed.
+- All fifteen implemented tools have real static routes and working engines. Cron Explorer, String Toolkit and SQL IN Builder remain informational roadmap entries.
 
 ## Privacy
 
@@ -63,7 +66,7 @@ Fonts and all runtime assets are bundled locally. There is no backend, analytics
 
 Svelte 5 runes, SvelteKit 3, strict TypeScript 6, Vite, Tailwind CSS 4, Lucide and CodeMirror 6. SvelteKit configuration lives in Vite; native package import aliases use explicit file extensions. An authoritative typed registry drives navigation, Home, palette and prerender entries.
 
-Home and the twelve V1 tool routes are prerendered with trailing slashes and build-time SSR. Tool workspaces and their libraries load lazily; CodeMirror is mounted only in the browser and destroyed on unmount. Pure TypeScript engines handle transformations, detection and preference validation separately from the UI.
+Home and all implemented tool routes are prerendered with trailing slashes and build-time SSR. Tool workspaces and their libraries load lazily; CodeMirror is mounted only in the browser and destroyed on unmount. Pure TypeScript engines handle transformations, detection and preference validation separately from the UI.
 
 `npm run build` creates `build/`, ready for static hosting. The bundled `404.html` prevents implicit SPA fallback on compatible hosts such as Cloudflare Pages. Hosting is outside B1.
 
@@ -87,5 +90,9 @@ JSON Diff caps traversal at 100,000 nodes / 128 levels and results at 1,000 chan
 JWT caps input at 64 KiB, 10,000 decoded nodes and 64 levels; its dates describe untrusted claims at inspection time. SQL input is capped at 128 KiB, and unsupported dialect extensions produce errors without repeating the query. Regex caps pattern at 4 KiB, text at 100,000 UTF-8 bytes, replacement at 10,000 bytes, matches at 1,000 and captured/replacement text at 1 MiB. Offsets are UTF-16 indices, with an exclusive end. Zero-width Unicode matches advance by code point.
 
 Text Diff caps each side at 128 KiB / 2,000 lines, with a 300 ms / 1,000-edit budget and progressive rendering. Its export is a readable line report, not an applyable patch. Ignoring trailing spaces/tabs keeps both originals in split view and uses the left value for unchanged report rows. ID batches are clamped to 1–100; UUID v7/ULID contain generation timestamps, with no same-millisecond or clock-change monotonicity guarantee. Timestamp input caps at 1,024 bytes: decimal seconds accept up to three fractional digits, milliseconds are integers, ISO uses four-digit years and requires an explicit offset. IANA zones affect display; offset-free wall-clock times, invalid dates, leap seconds and 24:00 are rejected.
+
+CSV caps input at 1 MiB, records at 5,000, columns at 200 and cells at 64 KiB. CSV imports strings; null/missing/empty JSON values export as empty cells. Nested values require explicit stringification. Headers are unique/nonempty, missing-width rows fail, headerless data gets column1/column2 names. Formula-like cells are preserved with a warning, not executed or silently changed. Inferred types are samples, not validators: Java uses boxed/reference types, Object fallbacks and informational field mapping comments; TypeScript uses unknown for empty arrays. Code inference caps at 128 KiB, 20,000 nodes, 32 levels and 200 fields per object.
+
+cURL accepts one HTTP(S) target and a documented literal subset of -X/-H/-d/--data-raw/--data-binary/-G/--url with POSIX quoting. Unsupported flags, file references, shell expansions/operators/redirects and multiple targets fail explicitly. It is not PowerShell or a full curl emulator. Results hide credentials, sensitive header/query names, fragments and all bodies until explicit reveal; original input remains visible, and arbitrary secrets in paths/custom names cannot be detected. Limits: 128 KiB, 1,000 arguments, 200 headers and 64 KiB body.
 
 See `VALIDATION.md` for B1 history and `GOAL_PROGRESS.md` for milestone evidence and remaining work. The supplied goal package notes are preserved in `docs/goal-pack/`.

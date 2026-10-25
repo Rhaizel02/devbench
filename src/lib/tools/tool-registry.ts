@@ -150,7 +150,7 @@ export const tools: Tool[] = [
 		category: 'Data',
 		description: 'Convert records and delimited tables.',
 		keywords: 'csv',
-		status: 'planned',
+		status: 'available',
 		version: 'V1.1',
 		icon: 'braces'
 	},
@@ -161,7 +161,7 @@ export const tools: Tool[] = [
 		category: 'Code',
 		description: 'Infer Java records and TypeScript interfaces.',
 		keywords: 'types java',
-		status: 'planned',
+		status: 'available',
 		version: 'V1.1',
 		icon: 'braces'
 	},
@@ -172,7 +172,7 @@ export const tools: Tool[] = [
 		category: 'Backend',
 		description: 'Inspect a command without executing it.',
 		keywords: 'http',
-		status: 'planned',
+		status: 'available',
 		version: 'V1.1',
 		icon: 'terminal'
 	},

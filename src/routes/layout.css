@@ -1799,6 +1799,12 @@ dialog::backdrop {
 	overflow-wrap: anywhere;
 	font-size: 13px;
 }
+.value-row > strong {
+	min-width: 0;
+	max-width: 40%;
+	overflow-wrap: anywhere;
+	font-weight: 500;
+}
 .value-row .text-button {
 	flex-shrink: 0;
 }

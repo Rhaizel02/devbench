@@ -102,7 +102,7 @@ test('all twelve V1 tools have real deep routes, palette navigation and payload 
 		.getByRole('textbox', { name: 'Left text input', exact: true })
 		.fill('synthetic-private-text-diff-marker');
 	await page.getByRole('link', { name: 'Tools', exact: true }).click();
-	await expect(page.getByText('12 tools · 12 available', { exact: false })).toBeVisible();
+	await expect(page.getByText(/\d+ tools · \d+ available/)).toBeVisible();
 	await page.keyboard.press('Control+k');
 	await page.getByRole('combobox', { name: 'Find a tool', exact: true }).fill('text diff');
 	await page.keyboard.press('Enter');

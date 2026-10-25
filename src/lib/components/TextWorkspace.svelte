@@ -29,8 +29,8 @@
 		inputLabel?: string;
 		outputLabel?: string;
 		filename?: string;
-		inputLanguage?: 'plain' | 'json' | 'yaml' | 'sql';
-		outputLanguage?: 'plain' | 'json' | 'yaml' | 'sql';
+		inputLanguage?: 'plain' | 'json' | 'yaml' | 'sql' | 'typescript' | 'java';
+		outputLanguage?: 'plain' | 'json' | 'yaml' | 'sql' | 'typescript' | 'java';
 		options?: Snippet;
 		help?: Snippet;
 		onSwap?: () => void;

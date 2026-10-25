@@ -12,7 +12,7 @@
 <div class="sidebar-inner">
 	<a class="brand" href={resolve('/')} onclick={close}
 		><span class="brand-symbol"><Icon name="terminal" size={18} /></span>DevBench<span
-			class="version">V1</span
+			class="version">{listedTools.some((tool) => tool.version === 'V1.1') ? 'V1.1' : 'V1'}</span
 		></a
 	>
 	{#if close}<button class="drawer-close icon-button" onclick={close} aria-label="Close navigation"

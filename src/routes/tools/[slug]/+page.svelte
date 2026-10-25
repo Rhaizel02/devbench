@@ -8,18 +8,23 @@
 	let { data }: PageProps = $props();
 	const app = useAppState();
 	let Workspace = $state<Component | null>(null);
+	let loadedSlug = $state('');
 	let request = 0;
 	let loadError = $state(false);
 	async function loadWorkspace() {
 		const ticket = ++request;
 		const slug = data.tool.slug;
 		Workspace = null;
+		loadedSlug = '';
 		loadError = false;
 		try {
 			const loaded = await toolWorkspaces[slug]();
-			if (request === ticket && data.tool.slug === slug) Workspace = loaded.default;
+			if (request === ticket && data.tool.slug === slug) {
+				Workspace = loaded.default;
+				loadedSlug = slug;
+			}
 		} catch {
-			loadError = true;
+			if (request === ticket) loadError = true;
 		}
 	}
 	$effect(() => {
@@ -48,10 +53,8 @@
 		>
 	</div>
 	{#if data.tool.status === 'available'}
-		{#if Workspace}{#key data.tool.id}<Workspace />{/key}{:else if loadError}<div
-				class="notice error-message"
-				role="alert"
-			>
+		{#if Workspace && loadedSlug === data.tool.slug}{#key data.tool.id}<Workspace
+				/>{/key}{:else if loadError}<div class="notice error-message" role="alert">
 				The editor could not be loaded.<button class="button" onclick={loadWorkspace}
 					>Try again</button
 				>
