@@ -1,5 +1,7 @@
 # DESIGN.md — DevBench
 
+> **Canvas 2.0 (rama RC, no rediseño global):** lienzo dominante y encabezado comprimido; herramientas flotantes reconocibles, propiedades/proyectos/outline bajo demanda. Selección y handles en tamaño de pantalla, estados de grupo y referencias hijas explícitos. En 390 px, fila compacta de selección/mano/formas/flecha/texto/lápiz/más y panel contextual inferior; objetivos táctiles ≥44 px, sin acciones exclusivas de hover. Usar tokens zinc/teal existentes, colores del documento independientes, sin gradients ni ruido por frame. Estados maestros, medidas y evidencia incremental en `docs/ARCHITECTURE_CANVAS_V20.md`.
+
 > **Extensión V1.4 autorizada:** Architecture Canvas usa un workspace de pizarra con lienzo protagonista, toolbar compacta, inspector opcional y texto directo. Los colores de figuras/documento organizan sistemas y no cambian el acento teal del shell. En móvil se inicia a escala legible, con pan y 100% explícito; Fit no reemplaza cámaras. Solo Canvas dispone de autosave local de proyectos en IndexedDB, informado en UI. Se mantienen temas, navegación global y los demás workspaces. Contrato completo en `V14_ARCHITECTURE_CANVAS_GOAL.md`; capturas reales e informe en `docs/ARCHITECTURE_CANVAS_V14.md`.
 
 > **Estado:** diseño visual cerrado para implementación (2026-10-25). Fuente normativa para Codex. Los PNG de `screenshots/` son referencias visuales, **no** contratos funcionales. Si una captura, el HTML generado por Stitch o su DESIGN.md original contradice este documento o `FEATURES.md`, prevalecen estos dos documentos.

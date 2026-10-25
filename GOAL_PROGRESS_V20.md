@@ -1,6 +1,6 @@
 # Progreso DevBench V2.0
 
-**Estado actual: H0 en preparación.** Contrato completo guardado antes de modificar producto. Rama integration/openapi-v15 creada desde origin/main 666dc732. RC OpenAPI c51c73b; árbol inicial limpio. Próxima acción: incorporar RC por fast-forward, actualizar autorización AGENTS y ejecutar/verificar integración antes de promover main. No código Canvas2 hasta CI main aceptada.
+**Estado actual: H0 aceptado; H1/H2 en implementación en feature/architecture-canvas-v20.** Main exacto c3cd929a5aea231991973abd5744def9d13cf740, integración fast-forward preservando RC c51c73b. CI integración 40240617689 success; CI main 40241056802 success (attempt 2). Próxima acción: terminar pruebas IndexedDB/migración, checkpoint y continuar selección/grupos/geometría sin fusionar Canvas2 a main.
 
 ## Recuperación
 
@@ -10,9 +10,9 @@ Leer V20_ARCHITECTURE_CANVAS_GOAL.md completo y este archivo, inspeccionar HEAD/
 
 | Hito              | Estado    | Evidencia / siguiente acción                                                                                                                           |
 | ----------------- | --------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| H0 OpenAPI main   | En curso  | integración desde main, RC c51c73b, CI RC 40237359833 success ya inspeccionada en planificación; volver a confirmar.                                   |
-| H1 visual/base    | Pendiente | inspección previa Chromium: desktop superficie 1142x608, móvil 356x472, sin errores; capturas v14 inspeccionadas. Documentar/implementar solo tras H0. |
-| H2 modelo/datos   | Pendiente | v3, lectores v1/v2, backups congelados, protección CAS/original y tests antes de UI.                                                                   |
+| H0 OpenAPI main   | Aceptado  | integración desde main, RC c51c73b, CI RC 40237359833 success ya inspeccionada en planificación; volver a confirmar.                                   |
+| H1 visual/base    | En curso  | inspección previa Chromium: desktop superficie 1142x608, móvil 356x472, sin errores; capturas v14 inspeccionadas. Documentar/implementar solo tras H0. |
+| H2 modelo/datos   | En curso  | v3, lectores v1/v2, backups congelados, protección CAS/original y tests antes de UI.                                                                   |
 | H3 selección      | Pendiente | marquee/Shift/Escape/outline/bounds.                                                                                                                   |
 | H4 grupos         | Pendiente | grupos planos, resize proporcional, capas/alineación/distribución.                                                                                     |
 | H5 sketch         | Pendiente | Rough.js 4.6.6 MIT, cache determinista, tinta.                                                                                                         |
@@ -34,3 +34,11 @@ P0/P1 abiertos: ninguno confirmado al inicio. Riesgos que deben probarse: pérdi
 ## Checkpoints
 
 Inicial: main 666dc73207ba0a2a9f26c686e1ad2e2a796f670f; RC c51c73b089e7a8fb578eb74b3a3557e1d1dae433. Fetch confirmado sin cambios remotos. El Goal activo es implementar H0–H9 completos, no el plan anterior. Aún no se han ejecutado nuevos controles de integración ni modificado producto.
+
+## Checkpoint H0 aceptado y H1/H2 en curso
+
+Main c3cd929a5aea231991973abd5744def9d13cf740 con 28 herramientas: npm ci 0 vulnerabilidades; check 0/0; lint; 310 unitarios; build estático; 41 Playwright passed / 2 históricos remotos skipped. Integración CI 40240617689 success. Main CI 40241056802 attempt1 falló aserción Explore-disabled después de montar editor; diez repeticiones locales aisladas passed sin cambios; attempt2 success exacto mismo SHA. Registrar P2 race de carga/test a vigilar, no afirmar fix ni ocultar intento1. Cloudflare check success; HTTPS Chromium estable bloqueado ERR_CERT_AUTHORITY_INVALID, sin bypass.
+
+Rama Canvas creada desde main aceptado. Capturas reales base1440/390 guardadas; dirección visual e informe incremental en docs/ARCHITECTURE_CANVAS_V20.md. Backups v1/v2 congelados antes de cambiar lector. Modelo schema3 con lector legacy independiente/presupuestos anteriores, campos opcionales nuevos, grupos planos validados, migración pura sin efectos. Persistencia conserva base física, CAS y backup original inmutable en primer guardado migrado; abrir no debe reescribir. Descarga raw/original para recuperación de schema futuro. Historial limita ambas pilas y no serializa datos raster repetidamente. 37 unitarios Canvas passed; check0/0 antes del último ajuste; build/browser selectivos en ejecución (no aceptados todavía). Imágenes son DTO preparatorio, no funcionalidad terminada. Sin P0/P1 confirmado; NO-GO de RC hasta completar hitos centrales.
+
+Checkpoint de base H1/H2: 47 pruebas Canvas (25 anteriores + 12 migración + 10 operaciones) passed; check 0/0; eslint selectivo passed. Build estático passed. Siete flujos Canvas anteriores passed; nuevo flujo IndexedDB passed tras ajustar selector ambiguo (ningún fallo de datos). Migración v1/v2→v3, raw/original rescue, copia DAG independiente/linked, geometría rotada y motores de grupos/alineación/selection implementados. Motores todavía NO conectados a UI; H3–H7 no se consideran completados. Siguiente: renderer/gestos y UI de pizarra, pruebas visuales reales. CI del checkpoint pendiente tras push.

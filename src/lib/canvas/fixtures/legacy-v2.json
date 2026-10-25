@@ -1,0 +1,596 @@
+{
+	"schemaVersion": 2,
+	"id": "legacy-示例",
+	"title": "E-commerce architecture",
+	"rootDiagramId": "commerce",
+	"diagrams": [
+		{
+			"id": "commerce",
+			"title": "E-commerce",
+			"elements": [
+				{
+					"x": 30,
+					"y": 130,
+					"id": "api",
+					"kind": "rectangle",
+					"label": "API",
+					"width": 180,
+					"height": 106,
+					"z": 3,
+					"style": {
+						"stroke": "#8899aa",
+						"fill": "transparent",
+						"width": 2,
+						"font": "sans",
+						"fontSize": 20,
+						"dashed": false,
+						"sketch": true
+					}
+				},
+				{
+					"x": 310,
+					"y": 130,
+					"id": "orders",
+					"kind": "rectangle",
+					"label": "Pedidos",
+					"width": 180,
+					"height": 106,
+					"z": 4,
+					"style": {
+						"stroke": "#8899aa",
+						"fill": "transparent",
+						"width": 2,
+						"font": "sans",
+						"fontSize": 20,
+						"dashed": false,
+						"sketch": true
+					},
+					"childDiagramId": "orders-diagram"
+				},
+				{
+					"x": 590,
+					"y": 130,
+					"id": "inventory",
+					"kind": "rectangle",
+					"label": "Inventario",
+					"width": 180,
+					"height": 106,
+					"z": 5,
+					"style": {
+						"stroke": "#8899aa",
+						"fill": "transparent",
+						"width": 2,
+						"font": "sans",
+						"fontSize": 20,
+						"dashed": false,
+						"sketch": true
+					}
+				},
+				{
+					"x": 30,
+					"y": 25,
+					"id": "overview-note",
+					"kind": "text",
+					"label": "Follow a request. Open Pedidos to explore its internals.",
+					"width": 500,
+					"height": 55,
+					"z": 6,
+					"style": {
+						"stroke": "#8899aa",
+						"fill": "transparent",
+						"width": 2,
+						"font": "sans",
+						"fontSize": 20,
+						"dashed": false,
+						"sketch": true
+					},
+					"childDiagramId": "service-diagram"
+				},
+				{
+					"x": 305,
+					"y": 254,
+					"id": "overview-ink",
+					"kind": "stroke",
+					"label": "Synthetic freehand annotation",
+					"width": 190,
+					"height": 18,
+					"z": 7,
+					"style": {
+						"stroke": "#20bfa9",
+						"fill": "transparent",
+						"width": 2,
+						"font": "sans",
+						"fontSize": 20,
+						"dashed": false,
+						"sketch": true
+					},
+					"points": [
+						{
+							"x": 0,
+							"y": 12
+						},
+						{
+							"x": 40,
+							"y": 4
+						},
+						{
+							"x": 90,
+							"y": 15
+						},
+						{
+							"x": 135,
+							"y": 3
+						},
+						{
+							"x": 190,
+							"y": 8
+						}
+					]
+				},
+				{
+					"id": "v2-rounded",
+					"kind": "rounded",
+					"x": 40,
+					"y": 400,
+					"width": 180,
+					"height": 100,
+					"label": "café 👨‍👩‍👦 <script> synthetic",
+					"style": {
+						"stroke": "#20bfa9",
+						"fill": "#ffeebb",
+						"width": 3,
+						"dashed": true,
+						"font": "mono",
+						"fontSize": 24,
+						"sketch": true
+					},
+					"z": 100
+				},
+				{
+					"id": "v2-ellipse",
+					"kind": "ellipse",
+					"x": 260,
+					"y": 400,
+					"width": 180,
+					"height": 100,
+					"label": "café 👨‍👩‍👦 <script> synthetic",
+					"style": {
+						"stroke": "#20bfa9",
+						"fill": "#ffeebb",
+						"width": 3,
+						"dashed": true,
+						"font": "mono",
+						"fontSize": 24,
+						"sketch": true
+					},
+					"z": 101
+				},
+				{
+					"id": "v2-diamond",
+					"kind": "diamond",
+					"x": 480,
+					"y": 400,
+					"width": 180,
+					"height": 100,
+					"label": "café 👨‍👩‍👦 <script> synthetic",
+					"style": {
+						"stroke": "#20bfa9",
+						"fill": "#ffeebb",
+						"width": 3,
+						"dashed": true,
+						"font": "mono",
+						"fontSize": 24,
+						"sketch": true
+					},
+					"z": 102
+				},
+				{
+					"id": "v2-text",
+					"kind": "text",
+					"x": 700,
+					"y": 400,
+					"width": 180,
+					"height": 100,
+					"label": "café 👨‍👩‍👦 <script> synthetic",
+					"style": {
+						"stroke": "#20bfa9",
+						"fill": "#ffeebb",
+						"width": 3,
+						"dashed": true,
+						"font": "mono",
+						"fontSize": 24,
+						"sketch": true
+					},
+					"z": 103
+				}
+			],
+			"connections": [
+				{
+					"id": "api-orders",
+					"kind": "arrow",
+					"start": {
+						"x": 210,
+						"y": 183,
+						"elementId": "api",
+						"u": 1,
+						"v": 0.5
+					},
+					"end": {
+						"x": 310,
+						"y": 183,
+						"elementId": "orders",
+						"u": 0,
+						"v": 0.5
+					},
+					"style": {
+						"stroke": "#8899aa",
+						"fill": "transparent",
+						"width": 2,
+						"font": "sans",
+						"fontSize": 20,
+						"dashed": false,
+						"sketch": true
+					},
+					"z": 0
+				},
+				{
+					"id": "orders-inventory",
+					"kind": "arrow",
+					"start": {
+						"x": 490,
+						"y": 183,
+						"elementId": "orders",
+						"u": 1,
+						"v": 0.5
+					},
+					"end": {
+						"x": 590,
+						"y": 183,
+						"elementId": "inventory",
+						"u": 0,
+						"v": 0.5
+					},
+					"style": {
+						"stroke": "#8899aa",
+						"fill": "transparent",
+						"width": 2,
+						"font": "sans",
+						"fontSize": 20,
+						"dashed": false,
+						"sketch": true
+					},
+					"z": 1
+				},
+				{
+					"id": "free-v2",
+					"kind": "line",
+					"start": {
+						"x": -25,
+						"y": -40
+					},
+					"end": {
+						"x": 260,
+						"y": 610
+					},
+					"style": {
+						"stroke": "#8899aa",
+						"fill": "transparent",
+						"width": 2,
+						"font": "sans",
+						"fontSize": 20,
+						"dashed": false,
+						"sketch": true
+					},
+					"z": 0
+				}
+			],
+			"viewport": {
+				"x": 40,
+				"y": 60,
+				"zoom": 1
+			}
+		},
+		{
+			"id": "orders-diagram",
+			"title": "Pedidos",
+			"elements": [
+				{
+					"x": 30,
+					"y": 130,
+					"id": "controller",
+					"kind": "rectangle",
+					"label": "Controller",
+					"width": 180,
+					"height": 106,
+					"z": 3,
+					"style": {
+						"stroke": "#8899aa",
+						"fill": "transparent",
+						"width": 2,
+						"font": "sans",
+						"fontSize": 20,
+						"dashed": false,
+						"sketch": true
+					}
+				},
+				{
+					"x": 310,
+					"y": 130,
+					"id": "service",
+					"kind": "rectangle",
+					"label": "Service",
+					"width": 180,
+					"height": 106,
+					"z": 4,
+					"style": {
+						"stroke": "#8899aa",
+						"fill": "transparent",
+						"width": 2,
+						"font": "sans",
+						"fontSize": 20,
+						"dashed": false,
+						"sketch": true
+					},
+					"childDiagramId": "service-diagram"
+				},
+				{
+					"x": 590,
+					"y": 130,
+					"id": "database",
+					"kind": "rectangle",
+					"label": "Database",
+					"width": 180,
+					"height": 106,
+					"z": 5,
+					"style": {
+						"stroke": "#8899aa",
+						"fill": "transparent",
+						"width": 2,
+						"font": "sans",
+						"fontSize": 20,
+						"dashed": false,
+						"sketch": true
+					}
+				},
+				{
+					"x": 30,
+					"y": 25,
+					"id": "orders-note",
+					"kind": "text",
+					"label": "Boundary: request handling → application logic → data.",
+					"width": 520,
+					"height": 55,
+					"z": 6,
+					"style": {
+						"stroke": "#8899aa",
+						"fill": "transparent",
+						"width": 2,
+						"font": "sans",
+						"fontSize": 20,
+						"dashed": false,
+						"sketch": true
+					}
+				}
+			],
+			"connections": [
+				{
+					"id": "controller-service",
+					"kind": "arrow",
+					"start": {
+						"x": 210,
+						"y": 183,
+						"elementId": "controller",
+						"u": 1,
+						"v": 0.5
+					},
+					"end": {
+						"x": 310,
+						"y": 183,
+						"elementId": "service",
+						"u": 0,
+						"v": 0.5
+					},
+					"style": {
+						"stroke": "#8899aa",
+						"fill": "transparent",
+						"width": 2,
+						"font": "sans",
+						"fontSize": 20,
+						"dashed": false,
+						"sketch": true
+					},
+					"z": 0
+				},
+				{
+					"id": "service-database",
+					"kind": "arrow",
+					"start": {
+						"x": 490,
+						"y": 183,
+						"elementId": "service",
+						"u": 1,
+						"v": 0.5
+					},
+					"end": {
+						"x": 590,
+						"y": 183,
+						"elementId": "database",
+						"u": 0,
+						"v": 0.5
+					},
+					"style": {
+						"stroke": "#8899aa",
+						"fill": "transparent",
+						"width": 2,
+						"font": "sans",
+						"fontSize": 20,
+						"dashed": false,
+						"sketch": true
+					},
+					"z": 1
+				}
+			],
+			"viewport": {
+				"x": 40,
+				"y": 60,
+				"zoom": 1
+			}
+		},
+		{
+			"id": "service-diagram",
+			"title": "OrderService",
+			"elements": [
+				{
+					"x": 30,
+					"y": 130,
+					"id": "validation",
+					"kind": "rectangle",
+					"label": "Validación",
+					"width": 180,
+					"height": 106,
+					"z": 3,
+					"style": {
+						"stroke": "#8899aa",
+						"fill": "transparent",
+						"width": 2,
+						"font": "sans",
+						"fontSize": 20,
+						"dashed": false,
+						"sketch": true
+					}
+				},
+				{
+					"x": 310,
+					"y": 130,
+					"id": "persistence",
+					"kind": "rectangle",
+					"label": "Persistencia",
+					"width": 180,
+					"height": 106,
+					"z": 4,
+					"style": {
+						"stroke": "#8899aa",
+						"fill": "transparent",
+						"width": 2,
+						"font": "sans",
+						"fontSize": 20,
+						"dashed": false,
+						"sketch": true
+					}
+				},
+				{
+					"x": 590,
+					"y": 130,
+					"id": "event",
+					"kind": "rectangle",
+					"label": "Evento",
+					"width": 180,
+					"height": 106,
+					"z": 5,
+					"style": {
+						"stroke": "#8899aa",
+						"fill": "transparent",
+						"width": 2,
+						"font": "sans",
+						"fontSize": 20,
+						"dashed": false,
+						"sketch": true
+					}
+				},
+				{
+					"x": 30,
+					"y": 25,
+					"id": "service-note",
+					"kind": "text",
+					"label": "Validate the order, persist it, then publish a domain event.",
+					"width": 520,
+					"height": 55,
+					"z": 6,
+					"style": {
+						"stroke": "#8899aa",
+						"fill": "transparent",
+						"width": 2,
+						"font": "sans",
+						"fontSize": 20,
+						"dashed": false,
+						"sketch": true
+					}
+				}
+			],
+			"connections": [
+				{
+					"id": "validate-save",
+					"kind": "arrow",
+					"start": {
+						"x": 210,
+						"y": 183,
+						"elementId": "validation",
+						"u": 1,
+						"v": 0.5
+					},
+					"end": {
+						"x": 310,
+						"y": 183,
+						"elementId": "persistence",
+						"u": 0,
+						"v": 0.5
+					},
+					"style": {
+						"stroke": "#8899aa",
+						"fill": "transparent",
+						"width": 2,
+						"font": "sans",
+						"fontSize": 20,
+						"dashed": false,
+						"sketch": true
+					},
+					"z": 0
+				},
+				{
+					"id": "save-event",
+					"kind": "arrow",
+					"start": {
+						"x": 490,
+						"y": 183,
+						"elementId": "persistence",
+						"u": 1,
+						"v": 0.5
+					},
+					"end": {
+						"x": 590,
+						"y": 183,
+						"elementId": "event",
+						"u": 0,
+						"v": 0.5
+					},
+					"style": {
+						"stroke": "#8899aa",
+						"fill": "transparent",
+						"width": 2,
+						"font": "sans",
+						"fontSize": 20,
+						"dashed": false,
+						"sketch": true
+					},
+					"z": 1
+				}
+			],
+			"viewport": {
+				"x": 40,
+				"y": 60,
+				"zoom": 1
+			}
+		},
+		{
+			"id": "legacy-orphan",
+			"title": "Recoverable orphan",
+			"elements": [],
+			"connections": [],
+			"viewport": {
+				"x": -80,
+				"y": 91,
+				"zoom": 0.2
+			}
+		}
+	]
+}

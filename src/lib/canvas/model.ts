@@ -9,17 +9,30 @@ export type Style = {
 	font: 'sans' | 'mono' | 'serif';
 	fontSize: number;
 	sketch: boolean;
+	roughness?: number;
+	fillPattern?: 'solid' | 'hachure';
 };
 export type Element = Point & {
 	id: string;
-	kind: 'rectangle' | 'rounded' | 'ellipse' | 'diamond' | 'text' | 'stroke';
+	kind: 'rectangle' | 'rounded' | 'ellipse' | 'diamond' | 'text' | 'stroke' | 'image';
 	label: string;
 	width: number;
 	height: number;
 	points?: Point[];
 	childDiagramId?: string;
+	rotation?: number;
+	seed?: number;
+	assetId?: string;
 	style: Style;
 	z: number;
+};
+export type Group = { id: string; memberIds: string[] };
+export type Asset = {
+	id: string;
+	mime: 'image/png' | 'image/jpeg' | 'image/webp';
+	data: string;
+	width: number;
+	height: number;
 };
 export type Endpoint = Point & { elementId?: string; u?: number; v?: number };
 export type Connection = {
@@ -29,6 +42,9 @@ export type Connection = {
 	end: Endpoint;
 	style: Style;
 	z: number;
+	geometry?: 'straight' | 'curve' | 'elbow';
+	control?: Point;
+	heads?: 'none' | 'end' | 'both';
 };
 export type Diagram = {
 	id: string;
@@ -36,16 +52,18 @@ export type Diagram = {
 	elements: Element[];
 	connections: Connection[];
 	viewport: Viewport;
+	groups?: Group[];
 };
 export type Project = {
-	schemaVersion: 2;
+	schemaVersion: 3;
 	id: string;
 	title: string;
 	rootDiagramId: string;
 	diagrams: Diagram[];
+	assets?: Asset[];
 };
 export const LIMITS = {
-	bytes: 8 * 1024 * 1024,
+	bytes: 16 * 1024 * 1024,
 	diagrams: 100,
 	elements: 500,
 	connections: 500,
@@ -82,7 +100,7 @@ export const clone = <T>(value: T): T => structuredClone(value);
 export const newId = (prefix = 'item') => prefix + '-' + crypto.randomUUID();
 export function emptyProject(id: string, rootId: string, title = 'Untitled board'): Project {
 	return {
-		schemaVersion: 2,
+		schemaVersion: 3,
 		id,
 		title,
 		rootDiagramId: rootId,
@@ -97,7 +115,7 @@ export function emptyProject(id: string, rootId: string, title = 'Untitled board
 		]
 	};
 }
-export function getDiagram(project: Project, id: string): Diagram {
+export function getDiagram(project: Pick<Project, 'diagrams'>, id: string): Diagram {
 	return project.diagrams.find((d) => d.id === id) ?? fail('Diagram does not exist.');
 }
 export function replaceDiagram(project: Project, diagram: Diagram): Project {
@@ -106,24 +124,66 @@ export function replaceDiagram(project: Project, diagram: Diagram): Project {
 export function endpoint(diagram: Diagram, end: Endpoint): Point {
 	const node = diagram.elements.find((e) => e.id === end.elementId);
 	return node
-		? { x: node.x + node.width * (end.u ?? 0.5), y: node.y + node.height * (end.v ?? 0.5) }
+		? localToWorld(node, { x: node.width * (end.u ?? 0.5), y: node.height * (end.v ?? 0.5) })
 		: { x: end.x, y: end.y };
+}
+export function rotatePoint(point: Point, center: Point, degrees: number): Point {
+	const angle = (degrees * Math.PI) / 180,
+		x = point.x - center.x,
+		y = point.y - center.y;
+	return {
+		x: center.x + x * Math.cos(angle) - y * Math.sin(angle),
+		y: center.y + x * Math.sin(angle) + y * Math.cos(angle)
+	};
+}
+export function localToWorld(element: Element, point: Point): Point {
+	return rotatePoint(
+		{ x: element.x + point.x, y: element.y + point.y },
+		{ x: element.x + element.width / 2, y: element.y + element.height / 2 },
+		element.rotation ?? 0
+	);
+}
+export function worldToLocal(element: Element, point: Point): Point {
+	const p = rotatePoint(
+		point,
+		{ x: element.x + element.width / 2, y: element.y + element.height / 2 },
+		-(element.rotation ?? 0)
+	);
+	return { x: p.x - element.x, y: p.y - element.y };
+}
+export function elementCorners(e: Element): Point[] {
+	return [
+		{ x: 0, y: 0 },
+		{ x: e.width, y: 0 },
+		{ x: e.width, y: e.height },
+		{ x: 0, y: e.height }
+	].map((p) => localToWorld(e, p));
+}
+export function expandGroups(diagram: Diagram, ids: string[]): string[] {
+	const expanded = new Set(ids);
+	for (const group of diagram.groups ?? [])
+		if (group.memberIds.some((id) => expanded.has(id)))
+			for (const id of group.memberIds) expanded.add(id);
+	return [...expanded];
 }
 export function anchorAt(diagram: Diagram, point: Point): Endpoint {
 	const node = [...diagram.elements]
 		.sort((a, b) => b.z - a.z)
-		.find(
-			(e) =>
+		.find((e) => {
+			const p = worldToLocal(e, point);
+			return (
 				e.kind !== 'stroke' &&
 				e.kind !== 'text' &&
-				point.x >= e.x - 12 &&
-				point.x <= e.x + e.width + 12 &&
-				point.y >= e.y - 12 &&
-				point.y <= e.y + e.height + 12
-		);
+				p.x >= -12 &&
+				p.x <= e.width + 12 &&
+				p.y >= -12 &&
+				p.y <= e.height + 12
+			);
+		});
 	if (!node) return { ...point };
-	let u = Math.max(0, Math.min(1, (point.x - node.x) / node.width)),
-		v = Math.max(0, Math.min(1, (point.y - node.y) / node.height));
+	const local = worldToLocal(node, point);
+	let u = Math.max(0, Math.min(1, local.x / node.width)),
+		v = Math.max(0, Math.min(1, local.y / node.height));
 	const distances = [u, 1 - u, v, 1 - v],
 		side = distances.indexOf(Math.min(...distances));
 	if (side === 0) u = 0;
@@ -133,7 +193,7 @@ export function anchorAt(diagram: Diagram, point: Point): Endpoint {
 	return { ...point, elementId: node.id, u, v };
 }
 export function moveSelection(diagram: Diagram, ids: string[], delta: Point): Diagram {
-	const moving = new Set(ids);
+	const moving = new Set(expandGroups(diagram, ids));
 	const shift = (end: Endpoint) =>
 		moving.has(end.elementId ?? '')
 			? end
@@ -150,14 +210,23 @@ export function moveSelection(diagram: Diagram, ids: string[], delta: Point): Di
 		elements: diagram.elements.map((e) =>
 			moving.has(e.id) ? { ...e, x: e.x + delta.x, y: e.y + delta.y } : e
 		),
-		connections: diagram.connections.map((c) =>
-			moving.has(c.id) ? { ...c, start: shift(c.start), end: shift(c.end) } : c
-		)
+		connections: diagram.connections.map((c) => {
+			const internal = moving.has(c.start.elementId ?? '') && moving.has(c.end.elementId ?? '');
+			return moving.has(c.id) || internal
+				? {
+						...c,
+						...(moving.has(c.id) ? { start: shift(c.start), end: shift(c.end) } : {}),
+						...(c.control
+							? { control: { x: c.control.x + delta.x, y: c.control.y + delta.y } }
+							: {})
+					}
+				: c;
+		})
 	};
 }
 export function deleteSelection(diagram: Diagram, ids: string[]): Diagram {
-	const removing = new Set(ids);
-	return {
+	const removing = new Set(expandGroups(diagram, ids));
+	const next = {
 		...diagram,
 		elements: diagram.elements.filter((e) => !removing.has(e.id)),
 		connections: diagram.connections.filter(
@@ -167,13 +236,27 @@ export function deleteSelection(diagram: Diagram, ids: string[]): Diagram {
 				!removing.has(c.end.elementId ?? '')
 		)
 	};
+	const surviving = new Set([...next.elements, ...next.connections].map((e) => e.id));
+	if (diagram.groups)
+		next.groups = diagram.groups
+			.map((g) => ({ ...g, memberIds: g.memberIds.filter((id) => surviving.has(id)) }))
+			.filter((g) => g.memberIds.length >= 2);
+	return next;
 }
 export function duplicateSelection(
 	diagram: Diagram,
 	ids: string[],
 	id: () => string
 ): { diagram: Diagram; ids: string[] } {
+	ids = expandGroups(diagram, ids);
 	const mapping = new Map(ids.map((key) => [key, id()]));
+	for (const c of diagram.connections)
+		if (
+			!mapping.has(c.id) &&
+			mapping.has(c.start.elementId ?? '') &&
+			mapping.has(c.end.elementId ?? '')
+		)
+			mapping.set(c.id, id());
 	const z =
 		Math.max(0, ...diagram.elements.map((e) => e.z), ...diagram.connections.map((c) => c.z)) + 1;
 	const elements = diagram.elements
@@ -196,6 +279,7 @@ export function duplicateSelection(
 			id: mapping.get(c.id) ?? id(),
 			start: ends(c.start),
 			end: ends(c.end),
+			...(c.control ? { control: { x: c.control.x + 24, y: c.control.y + 24 } } : {}),
 			z: z + elements.length + i
 		}));
 	if (
@@ -207,7 +291,17 @@ export function duplicateSelection(
 		diagram: {
 			...diagram,
 			elements: [...diagram.elements, ...elements],
-			connections: [...diagram.connections, ...connections]
+			connections: [...diagram.connections, ...connections],
+			...(diagram.groups
+				? {
+						groups: [
+							...diagram.groups,
+							...diagram.groups
+								.filter((g) => g.memberIds.every((id) => mapping.has(id)))
+								.map((g) => ({ id: id(), memberIds: g.memberIds.map((id) => mapping.get(id)!) }))
+						]
+					}
+				: {})
 		},
 		ids: [...elements, ...connections].map((e) => e.id)
 	};
@@ -245,7 +339,7 @@ export function associateChild(
 	validateHierarchy(next);
 	return next;
 }
-export function validateHierarchy(project: Project) {
+export function validateHierarchy(project: Pick<Project, 'rootDiagramId' | 'diagrams'>) {
 	const visiting = new Set<string>(),
 		visited = new Set<string>();
 	function visit(id: string) {
@@ -292,12 +386,13 @@ export function zoomAt(view: Viewport, factor: number, point: Point): Viewport {
 }
 export function bounds(diagram: Diagram) {
 	const points = diagram.elements
-		.flatMap((e) => [
-			{ x: e.x, y: e.y },
-			{ x: e.x + e.width, y: e.y + e.height }
-		])
+		.flatMap(elementCorners)
 		.concat(
-			diagram.connections.flatMap((c) => [endpoint(diagram, c.start), endpoint(diagram, c.end)])
+			diagram.connections.flatMap((c) => [
+				endpoint(diagram, c.start),
+				endpoint(diagram, c.end),
+				...(c.control ? [c.control] : [])
+			])
 		);
 	if (!points.length) return { x: 0, y: 0, width: 400, height: 300 };
 	const x = Math.min(...points.map((p) => p.x)),

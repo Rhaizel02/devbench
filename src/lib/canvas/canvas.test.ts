@@ -46,7 +46,7 @@ describe('versioned documents and hostile imports', () => {
 			kind: 'line'
 		});
 		const result = parseProject(JSON.stringify(source));
-		expect(result.schemaVersion).toBe(2);
+		expect(result.schemaVersion).toBe(3);
 		expect(result.id).toBe(source.id);
 		expect(result.rootDiagramId).toBe(source.rootDiagramId);
 		for (const d of source.diagrams) {
@@ -114,7 +114,7 @@ describe('versioned documents and hostile imports', () => {
 		const current = project(),
 			before = serializeProject(current),
 			bad = structuredClone(current);
-		if (kind === 'future') (bad as unknown as { schemaVersion: number }).schemaVersion = 3;
+		if (kind === 'future') (bad as unknown as { schemaVersion: number }).schemaVersion = 99;
 		if (kind === 'duplicate') bad.diagrams[0].elements.push(figure());
 		if (kind === 'missing-child') bad.diagrams[0].elements[0].childDiagramId = 'absent';
 		if (kind === 'cycle') bad.diagrams[0].elements[0].childDiagramId = 'root';
