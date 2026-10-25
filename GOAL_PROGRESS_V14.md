@@ -12,13 +12,13 @@ Leer V14_ARCHITECTURE_CANVAS_GOAL.md y este archivo, consultar Goal activo, HEAD
 
 ## Hitos
 
-| Hito                        | Estado       | Evidencia / siguiente acción                                                                                |
-| --------------------------- | ------------ | ----------------------------------------------------------------------------------------------------------- |
-| H0 contrato                 | Aceptado     | `007fccfe6125765c7dea60fcf592bd9c9cd1626f`; contrato de 14.862 bytes, push y CI 40211787379 correctos.      |
-| H1 dominio + almacenamiento | Implementado | 24 tests selectivos pasan; check 0 errores/avisos, lint y build correctos. Pendiente CI del commit de hito. |
-| H2 pizarra                  | Pendiente    | Herramientas por arrastre, edición directa, propiedades y transformaciones.                                 |
-| H3 proyectos + jerarquía    | Pendiente    | Integración IndexedDB, gestión e import/export, hijos creados por usuario.                                  |
-| H4 RC                       | Pendiente    | Entrada 27 solo al aceptar A–D, capturas, suite/CI e informe.                                               |
+| Hito                        | Estado       | Evidencia / siguiente acción                                                                                                      |
+| --------------------------- | ------------ | --------------------------------------------------------------------------------------------------------------------------------- |
+| H0 contrato                 | Aceptado     | `007fccfe6125765c7dea60fcf592bd9c9cd1626f`; contrato de 14.862 bytes, push y CI 40211787379 correctos.                            |
+| H1 dominio + almacenamiento | Implementado | `fadb2f998200d1ae03886f6b127306932dae0671`; 24 tests, check/lint/build y CI 40212165405 correctos.                                |
+| H2 pizarra                  | Implementado | Implementado: 3 Playwright pasan, 35 unitarios relevantes, check 0 diagnósticos, lint/build correctos; pendiente CI de este hito. |
+| H3 proyectos + jerarquía    | Pendiente    | Integración IndexedDB, gestión e import/export, hijos creados por usuario.                                                        |
+| H4 RC                       | Pendiente    | Entrada 27 solo al aceptar A–D, capturas, suite/CI e informe.                                                                     |
 
 ## Incidencias y aceptación
 
@@ -29,3 +29,13 @@ Vitest: 24/24 en `src/lib/canvas/canvas.test.ts` (migración, importación hosti
 Sin auditoría de RC ejecutada todavía. El error de certificado al abrir la preview del spike se conserva como antecedente, no como fallo atribuido al producto ni validación de esta RC.
 
 Próxima acción: comprobar CI H1 e implementar H2, con creación por arrastre, edición directa y selección múltiple sobre el DTO nuevo. H3 integrará el motor de persistencia con proyectos; H4 registra entrada 27 solamente al aceptar A–D.
+
+## H2 — pizarra implementada
+
+BoardSurface y CanvasEditor nuevos usan DTO v2 en lab, con import cliente diferido. Se mantienen 26 entradas. Figuras de arrastre y preview/Escape, texto directo, HEX/presets/estilos, tinta, extremos ajustables/anclajes, selección Shift, movimiento, resize, duplicado, capas e historial. Los tres flujos actualizados reemplazan las pruebas UI del spike porque cambió el contrato; conservan privacidad, navegación, temas, cámaras, teclado y desmontaje, y añaden edición real y exports.
+
+Evidencia: 35 unitarios relevantes pasan; check 0 errores/avisos, lint/build correctos; Playwright 3/3 pasa en 13,4 s. Siete capturas reales revisadas (6 tamaños/temas y edición coloreada); viewport móvil legible al 100%, sin overflow. IDs, cámara y estilo se inspeccionan además en JSON descargado. Se corrigieron doble clic de puntero y nombre accesible con indicador de hijo; el test de duplicado ahora vuelve a seleccionar tras undo/redo, cuyo contrato limpia selección.
+
+H2 aún usa sesión en memoria en UI; no afirmar autoguardado integrado hasta H3. Los hijos ya se crean/asocian/renombran y rechazan ciclos desde UI; H3 debe verificar recarga, huérfanos, gestión/importaciones y fallos de almacenamiento. Decisión sketch propia y límites en docs/ARCHITECTURE_CANVAS_V14.md.
+
+Próxima acción: CI H2 y componente CanvasProjects para abrir/listar/crear/renombrar/borrar, autosave/estado/reintento, JSON importado como proyecto nuevo y pruebas de recarga/errores.

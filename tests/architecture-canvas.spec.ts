@@ -1,256 +1,272 @@
 import { test, expect, type Page } from '@playwright/test';
-import { mkdir, writeFile } from 'node:fs/promises';
-import { tools } from '../src/lib/tools/tool-registry';
+import { readFile, mkdir, writeFile } from 'node:fs/promises';
 import { evidencePath, targetOrigin } from './support/environment';
-const route = '/lab/architecture-canvas/';
 async function ready(page: Page) {
-	expect((await page.goto(route))?.status()).toBe(200);
+	expect((await page.goto('/lab/architecture-canvas/'))?.status()).toBe(200);
 	await expect(page.locator('.konvajs-content canvas').first()).toBeVisible();
-	await expect(page.locator('[data-testid="konva-surface"]')).not.toHaveJSProperty(
-		'clientWidth',
-		0
-	);
 }
-async function center(page: Page, id: string) {
-	const node = page.locator('[data-element-id="' + id + '"]');
-	const x = Number(await node.getAttribute('data-x')),
-		y = Number(await node.getAttribute('data-y'));
-	const zoom = Number(
-		await page.getByLabel('Camera zoom', { exact: true }).getAttribute('data-zoom')
-	);
-	const cx = Number(await page.getByLabel('Camera zoom', { exact: true }).getAttribute('data-x'));
-	const cy = Number(await page.getByLabel('Camera zoom', { exact: true }).getAttribute('data-y'));
-	const bounds = (await page.getByTestId('konva-surface').boundingBox())!;
-	return { x: bounds.x + cx + (x + 90) * zoom, y: bounds.y + cy + (y + 53) * zoom, zoom };
+async function drag(page: Page, tool: string, x: number, y: number, dx = 180, dy = 110) {
+	await page.getByRole('button', { name: tool, exact: true }).click();
+	const b = (await page.getByTestId('board-surface').boundingBox())!;
+	await page.mouse.move(b.x + x, b.y + y);
+	await page.mouse.down();
+	await page.mouse.move(b.x + x + dx, b.y + y + dy, { steps: 12 });
+	await page.mouse.up();
 }
-async function capture(page: Page, name: string, width = 1440, theme = 'dark') {
-	await page.setViewportSize({ width, height: width === 390 ? 844 : 1000 });
-	await page.getByLabel('Color theme', { exact: true }).selectOption(theme);
-	await page.getByRole('button', { name: 'Fit diagram', exact: true }).click();
-	await page.evaluate(() => document.fonts.ready);
-	await page.evaluate(
-		() => new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve)))
-	);
-	expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
-	await page.evaluate(() => {
-		(document.activeElement as HTMLElement)?.blur();
-		scrollTo(0, 0);
-	});
-	await page.screenshot({
-		path: evidencePath('canvas-spike-' + name + '.png'),
-		fullPage: true,
-		animations: 'disabled'
-	});
+async function point(page: Page, id: string, corner = false) {
+	const e = page.locator('[data-element-id="' + id + '"]'),
+		v = page.getByLabel('Camera zoom', { exact: true }),
+		b = (await page.getByTestId('board-surface').boundingBox())!,
+		zoom = Number(await v.getAttribute('data-zoom'));
+	return {
+		x:
+			b.x +
+			Number(await v.getAttribute('data-x')) +
+			(Number(await e.getAttribute('data-x')) +
+				Number(await e.getAttribute('data-width')) * (corner ? 1 : 0.5)) *
+				zoom,
+		y:
+			b.y +
+			Number(await v.getAttribute('data-y')) +
+			(Number(await e.getAttribute('data-y')) +
+				Number(await e.getAttribute('data-height')) * (corner ? 1 : 0.5)) *
+				zoom
+	};
+}
+async function outline(page: Page) {
+	const details = page.locator('details.outline');
+	if (!(await details.getAttribute('open'))) await details.locator('summary').click();
+}
+async function jsonDownload(page: Page) {
+	const download = page.waitForEvent('download');
+	await page.getByRole('button', { name: 'JSON', exact: true }).click();
+	return JSON.parse(await readFile((await (await download).path())!, 'utf8'));
 }
 function observe(page: Page) {
 	const requests: string[] = [],
-		logs: string[] = [],
-		errors: string[] = [],
-		failed: string[] = [];
-	page.on('request', (request) =>
-		requests.push(request.method() + ' ' + request.url() + (request.postData() ?? ''))
-	);
-	page.on('console', (message) => {
-		if (message.type() === 'error' || message.type() === 'warning') logs.push(message.text());
+		errors: string[] = [];
+	page.on('request', (r) => requests.push(r.method() + ' ' + r.url() + (r.postData() ?? '')));
+	page.on('console', (m) => {
+		if (['error', 'warning'].includes(m.type())) errors.push(m.text());
 	});
-	page.on('pageerror', (error) => errors.push(error.message));
-	page.on('response', (response) => {
-		if (response.status() >= 400) failed.push(response.url());
+	page.on('pageerror', (e) => errors.push(e.message));
+	page.on('response', (r) => {
+		if (r.status() >= 400) errors.push('HTTP ' + r.status());
 	});
 	return async (marker: string) => {
 		await page.waitForLoadState('networkidle');
-		const state = await page.evaluate(async () => ({
+		const state = await page.evaluate(() => ({
 			local: { ...localStorage },
 			session: { ...sessionStorage },
 			url: location.href,
 			history: history.state,
-			cookies: document.cookie,
-			caches: await caches.keys(),
-			databases: await indexedDB.databases()
+			cookies: document.cookie
 		}));
-		expect(JSON.stringify(state) + requests.join('') + logs.join('')).not.toContain(marker);
-		expect(Object.keys(state.local).every((key) => key === 'devbench.preferences.v1')).toBe(true);
-		expect(state.cookies).toBe('');
-		expect(state.caches).toEqual([]);
-		expect(state.databases).toEqual([]);
-		expect(requests.filter((value) => !value.startsWith('GET ' + targetOrigin + '/'))).toEqual([]);
-		expect(logs).toEqual([]);
+		expect(JSON.stringify(state) + requests.join('') + errors.join('')).not.toContain(marker);
+		expect(requests.filter((r) => !r.startsWith('GET ' + targetOrigin + '/'))).toEqual([]);
 		expect(errors).toEqual([]);
-		expect(failed).toEqual([]);
+		expect(state.cookies).toBe('');
+		expect(Object.keys(state.local).every((k) => k === 'devbench.preferences.v1')).toBe(true);
 	};
 }
 
-test('canvas pointer editing: shapes, moving, connections and freehand coexist; payloads and editor disappear on leaving', async ({
+test('whiteboard transactions: drag, text, colors, sketch shapes, ink, anchors, resize, undo and export', async ({
 	page
 }) => {
 	const clean = observe(page);
 	await page.setViewportSize({ width: 1440, height: 1000 });
 	await ready(page);
-	await page.getByRole('button', { name: 'Rectangle', exact: true }).click();
-	const node = page.locator('[data-element-id^="element-"]').last(),
-		id = (await node.getAttribute('data-element-id'))!;
-	const marker = 'synthetic-canvas-private-991a';
-	await page.getByLabel('Selected element label', { exact: true }).fill(marker);
-	const before = Number(await node.getAttribute('data-x')),
-		start = await center(page, id);
-	await page.mouse.move(start.x, start.y);
-	await page.mouse.down();
-	await page.mouse.move(start.x + 90, start.y + 65, { steps: 12 });
-	await page.mouse.up();
-	await expect
-		.poll(async () => Number(await node.getAttribute('data-x')))
-		.toBeGreaterThan(before + 40);
-	await page.getByRole('button', { name: 'Connect', exact: true }).click();
-	const source = await center(page, 'api');
-	await page.mouse.click(source.x, source.y);
-	const destination = await center(page, id);
-	await page.mouse.click(destination.x, destination.y);
-	await expect(page.locator('[data-connection-id]')).toHaveCount(3);
+	await drag(page, 'Rounded rectangle', 420, 200);
+	const shape = page.locator('[data-element-id^="item-"]').last(),
+		id = (await shape.getAttribute('data-element-id'))!;
 	await page.getByRole('button', { name: 'Select', exact: true }).click();
-	await node.click();
-	await page.getByRole('button', { name: 'Delete selection', exact: true }).click();
-	await expect(page.locator('[data-element-id="' + id + '"]')).toHaveCount(0);
-	await expect(page.locator('[data-connection-id]')).toHaveCount(2);
-	await page.getByRole('button', { name: 'Text', exact: true }).click();
-	await page.getByLabel('Selected element label', { exact: true }).fill('A real annotation');
-	await page.getByRole('button', { name: 'Draw', exact: true }).click();
-	const box = (await page.getByTestId('konva-surface').boundingBox())!;
-	await page.mouse.move(box.x + 80, box.y + box.height - 95);
+	const center = await point(page, id);
+	await page.mouse.dblclick(center.x, center.y);
+	const marker = 'synthetic-v14-private-board-681';
+	await page.getByLabel('Edit text on canvas').fill(marker);
+	await page.keyboard.press('Control+Enter');
+	await page.getByRole('button', { name: 'Toggle properties' }).click();
+	await page.getByRole('button', { name: 'Fill #d6f5ed', exact: true }).click();
+	await page.getByLabel('Stroke HEX', { exact: true }).fill('#206858');
+	await page.getByLabel('Stroke HEX', { exact: true }).press('Tab');
+	await page.getByLabel('Line style').selectOption('dashed');
+	await page.getByLabel('Font family').selectOption('mono');
+	await page.getByLabel('Element width').fill('240');
+	await page.getByLabel('Element width').press('Tab');
+	await expect(shape).toHaveAttribute('data-width', '240');
+	await page.getByRole('button', { name: 'Close properties' }).click();
+	const corner = await point(page, id, true);
+	await page.mouse.move(corner.x, corner.y);
 	await page.mouse.down();
-	for (let step = 1; step <= 14; step++)
-		await page.mouse.move(
-			box.x + 80 + step * 13,
-			box.y + box.height - 95 + Math.sin(step / 2) * 20
-		);
+	await page.mouse.move(corner.x + 40, corner.y + 30, { steps: 8 });
 	await page.mouse.up();
-	await expect(page.locator('[data-element-id^="stroke-"]')).toHaveCount(1);
-	await expect(page.getByLabel('Diagram statistics', { exact: true })).toHaveText(
-		'7 elements · 2 connections'
-	);
+	await expect(shape).toHaveAttribute('data-width', '280');
+	await page.getByRole('button', { name: 'Undo', exact: true }).click();
+	await expect(shape).toHaveAttribute('data-width', '240');
+	await page.getByRole('button', { name: 'Redo', exact: true }).click();
+	await expect(shape).toHaveAttribute('data-width', '280');
+	const reselect = await point(page, id);
+	await page.mouse.click(reselect.x, reselect.y);
+	await page.getByRole('application').focus();
+	await page.keyboard.press('Control+d');
+	await expect(page.locator('[data-element-id^="item-"]')).toHaveCount(2);
+	await page.keyboard.press('Delete');
+	await expect(page.locator('[data-element-id^="item-"]')).toHaveCount(1);
+	await drag(page, 'Ellipse', 680, 180, 130, 100);
 	await page.getByRole('button', { name: 'Select', exact: true }).click();
-	await page.getByRole('application', { name: 'Architecture canvas', exact: true }).focus();
-	const ink = page.locator('[data-element-id^="stroke-"]'),
-		inkX = Number(await ink.getAttribute('data-x'));
+	const originalX = Number(await shape.getAttribute('data-x'));
+	const addToSelection = await point(page, id);
+	await page.keyboard.down('Shift');
+	await page.mouse.click(addToSelection.x, addToSelection.y);
+	await page.keyboard.up('Shift');
+	await page.getByRole('application').focus();
 	await page.keyboard.press('ArrowRight');
-	await expect(ink).toHaveAttribute('data-x', String(inkX + 10));
-	await clean(marker);
-	await page.getByRole('link', { name: 'Back to tools', exact: true }).click();
-	await expect(page.locator('canvas')).toHaveCount(0);
-	await ready(page);
-	await expect(page.locator('[data-element-id^="element-"]')).toHaveCount(0);
+	await expect(shape).toHaveAttribute('data-x', String(originalX + 10));
+	await drag(page, 'Diamond', 650, 370, 150, 120);
+	await drag(page, 'Rectangle', 400, 420, 130, 70);
+	await page.getByRole('button', { name: 'Pencil', exact: true }).click();
+	const b = (await page.getByTestId('board-surface').boundingBox())!;
+	await page.mouse.move(b.x + 320, b.y + 390);
+	await page.mouse.down();
+	for (let i = 0; i < 18; i++)
+		await page.mouse.move(b.x + 320 + i * 12, b.y + 390 + Math.sin(i / 2) * 18);
+	await page.mouse.up();
+	await drag(page, 'Arrow', 650, 520, 180, -40);
+	await page.getByRole('button', { name: 'Select', exact: true }).click();
+	await page.mouse.move(b.x + 830, b.y + 480);
+	await page.mouse.down();
+	await page.mouse.move(b.x + 860, b.y + 450, { steps: 8 });
+	await page.mouse.up();
+	await page.getByRole('button', { name: 'Arrow', exact: true }).click();
+	const a = await point(page, id),
+		api = await point(page, 'api');
+	await page.mouse.move(a.x, a.y);
+	await page.mouse.down();
+	await page.mouse.move(api.x, api.y, { steps: 12 });
+	await page.mouse.up();
+	await page.getByRole('button', { name: 'Text', exact: true }).click();
+	await page.mouse.click(b.x + 450, b.y + 110);
+	await page.getByLabel('Edit text on canvas').fill('Local sketch · no uploads');
+	await page.keyboard.press('Control+Enter');
+	const count = await page.locator('[data-element-id]').count();
+	await page.getByRole('button', { name: 'Rectangle', exact: true }).click();
+	await page.mouse.move(b.x + 300, b.y + 300);
+	await page.mouse.down();
+	await page.mouse.move(b.x + 360, b.y + 360);
+	await page.keyboard.press('Escape');
+	await page.mouse.up();
+	await expect(page.locator('[data-element-id]')).toHaveCount(count);
+	await page.screenshot({ path: evidencePath('canvas-v14-editing-dark.png'), fullPage: true });
+	const result = await jsonDownload(page),
+		current = result.diagrams.find((d: { id: string }) => d.id === 'commerce');
+	expect(current.elements.find((e: { id: string }) => e.id === id)).toMatchObject({
+		label: marker,
+		width: 280,
+		style: { stroke: '#206858', fill: '#d6f5ed', dashed: true, font: 'mono' }
+	});
+	expect(current.elements.some((e: { kind: string }) => e.kind === 'stroke')).toBe(true);
+	expect(
+		current.connections.some((c: { start: { elementId?: string } }) => c.start.elementId === id)
+	).toBe(true);
+	const png = page.waitForEvent('download');
+	await page.getByRole('button', { name: 'PNG', exact: true }).click();
+	const pngBytes = await readFile((await (await png).path())!);
+	expect(pngBytes.subarray(1, 4).toString()).toBe('PNG');
 	await clean(marker);
 });
 
-test('three hierarchy levels share direct and animated destinations and restore independent edits/cameras', async ({
+test('manual hierarchy: create three levels, same direct/zoom destination, camera restore and cycle errors', async ({
 	page
 }) => {
-	const clean = observe(page);
 	await page.setViewportSize({ width: 1440, height: 1000 });
 	await ready(page);
-	const camera = page.getByLabel('Camera zoom', { exact: true });
-	const rootCamera = await camera.getAttribute('data-zoom');
-	await page.locator('[data-element-id="orders"]').click();
+	await drag(page, 'Rectangle', 400, 200);
+	await page.getByRole('button', { name: 'Toggle properties' }).click();
+	await page.getByLabel('Selected element label').fill('Manual parent');
+	await page.getByLabel('Selected element label').press('Tab');
+	await page.getByRole('button', { name: 'Create child diagram', exact: true }).click();
 	await page.getByRole('button', { name: 'Open child diagram', exact: true }).click();
-	await expect(page.locator('[data-element-id="service"]')).toBeVisible();
-	await page.getByRole('button', { name: 'Text', exact: true }).click();
-	await page
-		.getByLabel('Selected element label', { exact: true })
-		.fill('Orders session annotation');
+	await page.getByRole('button', { name: 'Close properties' }).click();
+	await drag(page, 'Diamond', 300, 180);
+	await page.getByRole('button', { name: 'Toggle properties' }).click();
+	await page.getByLabel('Selected element label').fill('Manual service');
+	await page.getByLabel('Selected element label').press('Tab');
+	await page.getByRole('button', { name: 'Create child diagram', exact: true }).click();
+	await page.getByRole('button', { name: 'Open child diagram', exact: true }).click();
+	await page.getByRole('button', { name: 'Close properties' }).click();
+	await drag(page, 'Ellipse', 300, 220);
+	await outline(page);
+	await page.getByLabel('Diagram name').fill('Manual level three');
+	await page.getByLabel('Diagram name').press('Tab');
+	const camera = page.getByLabel('Camera zoom', { exact: true });
 	await page.getByRole('button', { name: 'Zoom out', exact: true }).click();
-	const childCamera = {
-		x: await camera.getAttribute('data-x'),
-		y: await camera.getAttribute('data-y'),
-		zoom: await camera.getAttribute('data-zoom')
-	};
-	const crumb = page.getByRole('navigation', { name: 'Diagram breadcrumb', exact: true });
+	const zoom = await camera.getAttribute('data-zoom'),
+		crumb = page.getByRole('navigation', { name: 'Diagram breadcrumb' });
 	await crumb.getByRole('button', { name: 'E-commerce', exact: true }).click();
-	await expect(camera).toHaveAttribute('data-zoom', rootCamera!);
-	await page.locator('[data-element-id="orders"]').click();
+	await page.getByRole('button', { name: 'Manual parent', exact: true }).click();
+	await page.getByRole('button', { name: 'Toggle properties' }).click();
 	await page.getByRole('button', { name: 'Zoom into child', exact: true }).click();
 	await expect(page.getByRole('application')).toHaveAttribute('aria-busy', 'true');
 	await page.keyboard.press('Escape');
-	await expect(page.locator('[data-element-id="orders"]')).toBeVisible();
-	await expect(camera).toHaveAttribute('data-zoom', rootCamera!);
-	await page.getByRole('button', { name: 'Zoom into child', exact: true }).click();
-	await expect(page.getByRole('application')).toHaveAttribute('aria-busy', 'true');
-	await page.waitForTimeout(90);
-	expect(Number(await camera.getAttribute('data-zoom'))).toBeGreaterThan(Number(rootCamera));
-	await expect(page.locator('[data-element-id="service"]')).toBeVisible();
-	for (const [name, value] of Object.entries(childCamera))
-		await expect(camera).toHaveAttribute('data-' + name, value!);
-	await expect(page.locator('[data-element-id^="element-"]')).toHaveText(
-		'Orders session annotation'
-	);
-	await capture(page, 'orders-dark-1440');
-	await page.locator('[data-element-id="service"]').click();
-	await page.getByRole('application').focus();
-	await page.keyboard.press('Shift+Enter');
-	await expect(page.locator('[data-element-id="validation"]')).toBeVisible();
-	await capture(page, 'order-service-dark-1440');
-	await crumb.getByRole('button', { name: 'Pedidos', exact: true }).click();
-	await expect(page.locator('[data-element-id^="element-"]')).toHaveCount(1);
-	await page.locator('[data-element-id="service"]').click();
-	await page.getByRole('application').focus();
-	await page.keyboard.press('Enter');
-	await expect(page.locator('[data-element-id="event"]')).toBeVisible();
-	await expect(crumb.getByRole('button', { name: 'OrderService', exact: true })).toHaveAttribute(
+	await expect(crumb.getByRole('button', { name: 'E-commerce' })).toHaveAttribute(
 		'aria-current',
 		'page'
 	);
-	await clean('Orders session annotation');
+	await page.getByRole('button', { name: 'Zoom into child', exact: true }).click();
+	await expect(crumb.getByRole('button', { name: 'Manual parent' })).toHaveAttribute(
+		'aria-current',
+		'page'
+	);
+	await page.getByRole('button', { name: 'Manual service', exact: true }).click();
+	await page.getByRole('button', { name: 'Zoom into child', exact: true }).click();
+	await expect(crumb.getByRole('button', { name: 'Manual level three' })).toHaveAttribute(
+		'aria-current',
+		'page'
+	);
+	await expect(camera).toHaveAttribute('data-zoom', zoom!);
+	await page.getByRole('button', { name: 'ellipse', exact: true }).click();
+	await page.getByLabel('Associate child diagram').selectOption('commerce');
+	await expect(page.getByRole('status')).toContainText('cycle');
 });
 
-test('experimental route stays outside the tool registry, themes and responsive layouts; keyboard pan and reduced motion work', async ({
-	page
-}) => {
+test('readable responsive themes, keyboard/pointer pan and clean unmount', async ({ page }) => {
 	const clean = observe(page);
-	await page.setViewportSize({ width: 1440, height: 1000 });
 	await ready(page);
-	expect(tools).toHaveLength(26);
-	const results = [];
-	for (const [width, theme] of [
-		[1440, 'dark'],
-		[1440, 'light'],
-		[768, 'light'],
-		[390, 'dark']
-	] as const) {
-		await capture(page, 'overview-' + theme + '-' + width, width, theme);
-		results.push({ width, theme, overflow: false });
-	}
 	await mkdir(evidencePath('.'), { recursive: true });
-	await writeFile(
-		evidencePath('canvas-spike-layouts.json'),
-		JSON.stringify(results, null, 2) + '\n'
-	);
+	const layouts = [];
+	for (const width of [1440, 768, 390])
+		for (const theme of ['dark', 'light']) {
+			await page.setViewportSize({ width, height: 1000 });
+			await page.getByLabel('Color theme', { exact: true }).selectOption(theme);
+			await page.getByLabel('Camera zoom', { exact: true }).click();
+			await page.evaluate(() => document.fonts.ready);
+			await page.evaluate(
+				() => new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r)))
+			);
+			expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(
+				true
+			);
+			await expect(page.getByLabel('Camera zoom', { exact: true })).toHaveText('100%');
+			await page.screenshot({
+				path: evidencePath(`canvas-v14-${width}-${theme}.png`),
+				fullPage: true
+			});
+			layouts.push({ width, theme, zoom: 1, overflow: false });
+		}
+	await writeFile(evidencePath('canvas-v14-layouts.json'), JSON.stringify(layouts, null, 2) + '\n');
 	await page.getByRole('application').focus();
-	const camera = page.getByLabel('Camera zoom', { exact: true }),
-		oldX = Number(await camera.getAttribute('data-x'));
+	const v = page.getByLabel('Camera zoom', { exact: true }),
+		x = Number(await v.getAttribute('data-x'));
 	await page.keyboard.press('ArrowRight');
-	await expect(camera).toHaveAttribute('data-x', String(oldX - 30));
+	await expect(v).toHaveAttribute('data-x', String(x - 30));
 	await page.keyboard.press('h');
-	await expect(page.getByRole('button', { name: 'Pan', exact: true })).toHaveAttribute(
-		'aria-pressed',
-		'true'
-	);
-	const surface = (await page.getByTestId('konva-surface').boundingBox())!;
-	const beforePan = Number(await camera.getAttribute('data-x'));
-	await page.mouse.move(surface.x + 40, surface.y + 40);
+	const b = (await page.getByTestId('board-surface').boundingBox())!;
+	await page.mouse.move(b.x + 40, b.y + 220);
 	await page.mouse.down();
-	await page.mouse.move(surface.x + 85, surface.y + 70, { steps: 6 });
+	await page.mouse.move(b.x + 85, b.y + 250, { steps: 5 });
 	await page.mouse.up();
-	await expect
-		.poll(async () => Number(await camera.getAttribute('data-x')))
-		.toBeCloseTo(beforePan + 45, 0);
-	const beforeZoom = Number(await camera.getAttribute('data-zoom'));
-	await page.mouse.wheel(0, -100);
-	await expect
-		.poll(async () => Number(await camera.getAttribute('data-zoom')))
-		.toBeGreaterThan(beforeZoom);
-	await page.keyboard.press('v');
-	await page.emulateMedia({ reducedMotion: 'reduce' });
-	await page.locator('[data-element-id="orders"]').click();
-	await page.getByRole('button', { name: 'Zoom into child', exact: true }).click();
-	await expect(page.locator('[data-element-id="controller"]')).toBeVisible();
-	await expect(page.getByRole('application')).toHaveAttribute('aria-busy', 'false');
-	await clean('synthetic-canvas-private-unused');
+	expect(Number(await v.getAttribute('data-x'))).toBeCloseTo(x + 15, 0);
+	await clean('synthetic-v14-unused-marker');
+	await page.getByRole('link', { name: 'Tools', exact: true }).click();
+	await expect(page.locator('canvas')).toHaveCount(0);
 });

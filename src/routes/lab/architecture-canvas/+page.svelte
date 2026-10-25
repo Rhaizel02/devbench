@@ -4,7 +4,7 @@
 	let failed = $state(false);
 	onMount(() => {
 		let active = true;
-		void import('#lib/lab/architecture-canvas/ArchitectureEditor.svelte')
+		void import('#lib/canvas/CanvasEditor.svelte')
 			.then((module) => {
 				if (active) Editor = module.default;
 			})
