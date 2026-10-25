@@ -15,6 +15,7 @@
 		AlertCircle
 	} from '@lucide/svelte';
 	import CodeEditor from '#lib/components/CodeEditor.svelte';
+	import SendResult from '#lib/components/SendResult.svelte';
 	import { useAppState } from '#lib/state/app.svelte.js';
 	import JsonTree from './JsonTree.svelte';
 	import { validateJson, formatJson, minifyJson, type JsonResult } from './json-engine';
@@ -255,6 +256,7 @@
 			</div>
 		</div>
 	</div>
+	<SendResult source="DATA-01" text={current?.output ?? null} />
 	<div class="studio-footer">
 		<span><ShieldCheck size={13} />Runs locally in your browser. Inputs aren't uploaded.</span><span
 			class:error-message={feedbackError}

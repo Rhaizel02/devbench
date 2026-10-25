@@ -20,13 +20,19 @@
 	let ready = $state(false);
 	let failed = $state(false);
 	let wrapChange: ((enabled: boolean) => void) | undefined;
+	let labelChange: ((label: string) => void) | undefined;
 	$effect(() => {
 		const next = value;
 		if (ready && view && view.state.doc.toString() !== next)
 			view.dispatch({ changes: { from: 0, to: view.state.doc.length, insert: next } });
 	});
 	$effect(() => {
-		wrapChange?.(wrap);
+		const name = label;
+		const enabled = wrap;
+		if (ready) {
+			wrapChange?.(enabled);
+			labelChange?.(name);
+		}
 	});
 	onMount(() => {
 		let disposed = false;
@@ -58,6 +64,7 @@
 			.then(([v, s, c, j, l, search, highlight]) => {
 				if (disposed) return;
 				const wrapping = new s.Compartment();
+				const accessibility = new s.Compartment();
 				view = new v.EditorView({
 					parent: host,
 					state: s.EditorState.create({
@@ -88,11 +95,13 @@
 							j ?? [],
 							l.bracketMatching(),
 							search.highlightSelectionMatches(),
-							v.EditorView.contentAttributes.of({
-								'aria-label': label,
-								'aria-multiline': 'true',
-								spellcheck: 'false'
-							}),
+							accessibility.of(
+								v.EditorView.contentAttributes.of({
+									'aria-label': label,
+									'aria-multiline': 'true',
+									spellcheck: 'false'
+								})
+							),
 							s.EditorState.readOnly.of(readonly),
 							v.EditorView.editable.of(!readonly),
 							wrapping.of(wrap ? v.EditorView.lineWrapping : []),
@@ -134,6 +143,16 @@
 				wrapChange = (enabled) =>
 					view?.dispatch({
 						effects: wrapping.reconfigure(enabled ? v.EditorView.lineWrapping : [])
+					});
+				labelChange = (name) =>
+					view?.dispatch({
+						effects: accessibility.reconfigure(
+							v.EditorView.contentAttributes.of({
+								'aria-label': name,
+								'aria-multiline': 'true',
+								spellcheck: 'false'
+							})
+						)
 					});
 				ready = true;
 				void tick().then(async () => {

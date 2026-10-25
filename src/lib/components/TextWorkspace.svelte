@@ -4,6 +4,7 @@
 	import { ArrowRight, RotateCcw, FlaskConical, ArrowLeftRight, ShieldCheck } from '@lucide/svelte';
 	import CodeEditor from './CodeEditor.svelte';
 	import OutputActions from './OutputActions.svelte';
+	import SendResult from './SendResult.svelte';
 	import { errorMessage } from '#lib/tools/tool-errors.js';
 	let {
 		input = $bindable(''),
@@ -21,6 +22,7 @@
 		details,
 		onReset,
 		onExample,
+		sendSource = '',
 		onSwap,
 		allowEmpty = false,
 		inputLimitLabel = '1 MiB limit',
@@ -41,6 +43,7 @@
 		details?: Snippet<[string]>;
 		onReset?: () => void;
 		onExample?: () => void;
+		sendSource?: string;
 		onSwap?: () => void;
 		allowEmpty?: boolean;
 		inputLimitLabel?: string;
@@ -209,6 +212,7 @@
 		</div>
 	</div>
 	{#if help}<div class="tool-help">{@render help()}</div>{/if}
+	{#if sendSource}<SendResult source={sendSource} text={current?.output ?? null} />{/if}
 	<div class="studio-footer">
 		<span><ShieldCheck size={13} />Runs locally. Inputs aren't uploaded or saved.</span>
 	</div>

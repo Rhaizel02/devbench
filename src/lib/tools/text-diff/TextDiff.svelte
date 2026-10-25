@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { onMount } from 'svelte';
+	import { useAppState } from '#lib/state/app.svelte.js';
 	import CodeEditor from '#lib/components/CodeEditor.svelte';
 	import OutputActions from '#lib/components/OutputActions.svelte';
 	import { compareText } from './text-diff-engine';
@@ -6,6 +8,10 @@
 	let left = $state(''),
 		right = $state('');
 	let ignoreTrailing = $state(false);
+	const app = useAppState();
+	onMount(() => {
+		left = app.consumePaste('TEXT-01')?.text ?? '';
+	});
 	let view = $state('unified');
 	let limit = $state(200);
 	let error = $state('');

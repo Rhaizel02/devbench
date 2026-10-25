@@ -2,6 +2,8 @@
 
 ## V1.2 delivery
 
+FLOW-01 Pipeline Builder and compatible explicit Send to Tool handoffs are implemented. Nine fixed operations reuse existing engines in a bounded, interruptible linear worker. No custom scripts, network, persisted recipes or automatic secret transfers.
+
 BACK-08 Log & Stack Trace Inspector and BACK-09 Environment Comparator are implemented. Common Java log formats are bounded and unknown text is retained. Environment values remain concealed until explicit reveal; exports are always key/status metadata only.
 
 BACK-06 HTTP Request Builder and BACK-07 HTTP Headers Inspector are implemented with local-only generation/parsing, redaction by default and documented client restrictions. No requests are executed.

@@ -4,7 +4,7 @@
 	import CopyButton from '#lib/components/CopyButton.svelte';
 	import { startDataTask } from './data-client';
 	import type { Match } from './query-engine';
-	let query = $state('$.products[?(@.price < 20)]');
+	let query = $state('$');
 	let matches = $state<Match[]>([]);
 	let pending: ReturnType<typeof startDataTask<Match[]>> | undefined;
 	onDestroy(() => pending?.cancel());
@@ -21,10 +21,13 @@
 </script>
 
 <TextWorkspace
+	sendSource="DATA-05"
 	onReset={() => {
 		pending?.cancel();
 		matches = [];
+		query = '$';
 	}}
+	onExample={() => (query = '$.products[?(@.price < 20)]')}
 	{transform}
 	revision={query}
 	action="Run query"

@@ -17,6 +17,7 @@
 </script>
 
 <TextWorkspace
+	sendSource={direction === 'decode' ? 'ENC-01' : ''}
 	{transform}
 	revision={JSON.stringify({ direction, ...codecOptions })}
 	{sample}

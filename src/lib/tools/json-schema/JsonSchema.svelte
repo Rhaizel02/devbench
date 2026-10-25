@@ -19,6 +19,7 @@
 </script>
 
 <TextWorkspace
+	sendSource="DATA-06"
 	onReset={() => {
 		pending?.cancel();
 		schema = '';

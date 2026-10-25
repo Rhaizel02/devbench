@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { onMount } from 'svelte';
+	import { useAppState } from '#lib/state/app.svelte.js';
 	import TextWorkspace from '#lib/components/TextWorkspace.svelte';
 	import CodeEditor from '#lib/components/CodeEditor.svelte';
 	import { buildRequest, generateRequest, importCurl, type CodeTarget } from './http-engine';
@@ -13,6 +15,14 @@
 	let body = $state('');
 	let command = $state('');
 	let importError = $state('');
+	const app = useAppState();
+	onMount(() => {
+		const paste = app.consumePaste('BACK-06');
+		if (paste) {
+			command = paste.text;
+			loadCommand();
+		}
+	});
 	function loadCommand() {
 		try {
 			const r = importCurl(command);
@@ -47,6 +57,7 @@
 </script>
 
 <TextWorkspace
+	sendSource={target === 'curl' && !reveal ? 'BACK-06' : ''}
 	bind:input={body}
 	transform={(input) =>
 		generateRequest(buildRequest(method, url, headers, query, input, bodyMode), target, reveal)}

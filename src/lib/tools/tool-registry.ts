@@ -12,6 +12,17 @@ export type Tool = {
 };
 export const tools: Tool[] = [
 	{
+		id: 'FLOW-01',
+		slug: 'pipeline-builder',
+		name: 'Pipeline Builder',
+		category: 'Utilities',
+		description: 'Chain bounded local text transformations explicitly.',
+		keywords: 'workflow base64 url json yaml jsonpath pipeline',
+		status: 'available',
+		version: 'V1.2',
+		icon: 'swap'
+	},
+	{
 		id: 'BACK-08',
 		slug: 'log-inspector',
 		name: 'Log & Stack Trace Inspector',

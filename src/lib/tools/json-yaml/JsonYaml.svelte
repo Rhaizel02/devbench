@@ -12,6 +12,7 @@
 </script>
 
 <TextWorkspace
+	sendSource={direction === 'yaml-json' ? 'DATA-03' : ''}
 	{transform}
 	revision={direction}
 	{sample}

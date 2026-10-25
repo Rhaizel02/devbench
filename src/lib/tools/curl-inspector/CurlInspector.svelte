@@ -1,4 +1,8 @@
 <script lang="ts">
+	import { onMount } from 'svelte';
+	import { useAppState } from '#lib/state/app.svelte.js';
+	import SendResult from '#lib/components/SendResult.svelte';
+	import { generateRequest } from '../http-request/http-engine';
 	import CodeEditor from '#lib/components/CodeEditor.svelte';
 	import OutputActions from '#lib/components/OutputActions.svelte';
 	import CopyButton from '#lib/components/CopyButton.svelte';
@@ -6,6 +10,10 @@
 	import { errorMessage } from '../tool-errors';
 	let queryLimit = $state(100);
 	let input = $state('');
+	const app = useAppState();
+	onMount(() => {
+		input = app.consumePaste('BACK-03')?.text ?? '';
+	});
 	let reveal = $state(false);
 	let result = $state<CurlInspection | null>(null);
 	let resultKey = $state('');
@@ -118,6 +126,20 @@
 		mime="application/json;charset=utf-8"
 	/>
 </section>
+<SendResult
+	source="BACK-03"
+	text={current && !reveal && current.headers.every((header) => header.action === 'set')
+		? generateRequest(
+				{
+					method: current.method,
+					url: current.target,
+					headers: current.headers,
+					body: current.body
+				},
+				'curl'
+			)
+		: null}
+/>
 <div class="tool-help">
 	<p>
 		Supports one HTTP(S) URL, -X/--request, -H/--header, -d/--data, --data-raw, literal

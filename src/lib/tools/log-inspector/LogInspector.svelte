@@ -20,6 +20,7 @@
 </script>
 
 <TextWorkspace
+	sendSource="BACK-08"
 	{transform}
 	revision={JSON.stringify([level, text, thread, logger, view])}
 	action="Inspect logs"

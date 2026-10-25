@@ -24,6 +24,7 @@
 	formulas.
 </p>
 <TextWorkspace
+	pasteToolId="DATA-04"
 	transform={(input) =>
 		direction === 'json-csv' ? jsonToCsv(input, settings) : csvToJson(input, settings)}
 	revision={JSON.stringify({ direction, ...settings })}
