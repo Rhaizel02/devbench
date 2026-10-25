@@ -12,7 +12,7 @@
 	import type { LayoutProps } from './$types';
 	import { createAppState } from '#lib/state/app.svelte.js';
 	import { loadPreferences, savePreferences, type Theme } from '#lib/state/preferences.js';
-	import { v1Tools } from '#lib/tools/tool-registry.js';
+	import { listedTools } from '#lib/tools/tool-registry.js';
 	import Sidebar from '#lib/components/Sidebar.svelte';
 	import CommandPalette from '#lib/components/CommandPalette.svelte';
 	import favicon from '#lib/assets/favicon.svg';
@@ -29,7 +29,9 @@
 		} catch {
 			storageWarning = true;
 		}
-		const currentTool = v1Tools.find((item) => page.url.pathname === '/tools/' + item.slug + '/');
+		const currentTool = listedTools.find(
+			(item) => page.url.pathname === '/tools/' + item.slug + '/'
+		);
 		if (currentTool) app.visit(currentTool.id);
 		const media = matchMedia('(prefers-color-scheme: dark)');
 		systemDark = media.matches;
@@ -44,7 +46,7 @@
 		};
 	});
 	afterNavigate(() => {
-		const tool = v1Tools.find((item) => page.url.pathname === '/tools/' + item.slug + '/');
+		const tool = listedTools.find((item) => page.url.pathname === '/tools/' + item.slug + '/');
 		if (tool && ready) app.visit(tool.id);
 		if (page.url.pathname !== '/tools/json-studio/') app.pendingPaste = null;
 	});

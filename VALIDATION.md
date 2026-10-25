@@ -55,3 +55,7 @@ Measured document width equals viewport width in all eight scenes. `checks.json`
 B1 source is available locally and on GitHub. `origin` is configured as `https://github.com/Rhaizel02/devbench.git`, and `main` tracks `origin/main`. The final commit is reported in the completion message and can be inspected with `git rev-parse HEAD`. Publishing the source repository does not deploy the website.
 
 Next block: JSON Diff, JSON ↔ YAML, Base64 Toolkit and URL Toolkit, following `ROADMAP.md`.
+
+## Milestone A — 2026-10-25
+
+JSON Diff, JSON ↔ YAML, Base64 Toolkit and URL Toolkit are implemented. Node 24 checks: check (0 errors/warnings), lint, 70 unit tests, static build and all 5 browser flows pass. Browser flows verify clipboard/download contents, Unicode roundtrip, missing versus null, current-output invalidation, URL credentials redaction/query editing, memory cleanup and synthetic payload privacy. Width checks pass at 390/768/1440 px. Real captures 09–12 cover new dual-input and URL workspaces in dark/light and mobile/desktop; reviewed against existing tokens and shell geometry. Original B1 evidence above remains historical.

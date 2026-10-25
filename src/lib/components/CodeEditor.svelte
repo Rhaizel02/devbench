@@ -5,8 +5,16 @@
 		value = $bindable(''),
 		readonly = false,
 		label,
-		wrap = true
-	}: { value?: string; readonly?: boolean; label: string; wrap?: boolean } = $props();
+		wrap = true,
+		language = 'json'
+	}: {
+		value?: string;
+		readonly?: boolean;
+		label: string;
+		wrap?: boolean;
+		language?: 'json' | 'yaml' | 'plain';
+	} = $props();
+	const editorId = $props.id();
 	let host: HTMLDivElement;
 	let view: EditorView | undefined;
 	let ready = $state(false);
@@ -26,7 +34,11 @@
 			import('@codemirror/view'),
 			import('@codemirror/state'),
 			import('@codemirror/commands'),
-			import('@codemirror/lang-json'),
+			language === 'json'
+				? import('@codemirror/lang-json').then((module) => module.json())
+				: language === 'yaml'
+					? import('@codemirror/lang-yaml').then((module) => module.yaml())
+					: Promise.resolve(null),
 			import('@codemirror/language'),
 			import('@codemirror/search'),
 			import('@lezer/highlight')
@@ -61,7 +73,7 @@
 									}
 								])
 							),
-							j.json(),
+							j ?? [],
 							l.bracketMatching(),
 							search.highlightSelectionMatches(),
 							v.EditorView.contentAttributes.of({
@@ -128,13 +140,9 @@
 
 <div class="code-editor" bind:this={host} class:editor-loading={!ready}>
 	{#if !ready}<div class="editor-fallback">
-			<label for={readonly ? 'output-fallback' : 'input-fallback'}
+			<label for={editorId}
 				>{failed ? 'Code editor unavailable. Plain text mode is active.' : 'Loading editor…'}</label
-			><textarea
-				id={readonly ? 'output-fallback' : 'input-fallback'}
-				aria-label={label}
-				bind:value
-				{readonly}
-				spellcheck="false"></textarea>
+			><textarea id={editorId} aria-label={label} bind:value {readonly} spellcheck="false"
+			></textarea>
 		</div>{/if}
 </div>

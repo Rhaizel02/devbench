@@ -1,68 +1,55 @@
 # DevBench autonomous goal progress
 
-## Objective and current checkpoint
+## Current checkpoint
 
-Implement all 18 tools defined by the user-requested autonomous goal, preserving local-only processing, the Svelte 5/SvelteKit 3 stack, approved design and real validation. Completion still requires 18/18 functional tools, every final gate in the goal document, green CI and a published final commit.
+The complete `DEV_BENCH_AUTONOMOUS_GOAL.md` is now present at repository root and has been read. The earlier missing-document blocker is resolved. Supplied pack notes are preserved in `docs/goal-pack/`. Work only in the physical repository `C:\Users\bobby\Documents\ChatGPT\DevBench`, branch main, origin Rhaizel02/devbench.
 
-**Checkpoint 00 — initial audit (2026-10-25).** The goal is active and incomplete. No implementation stages beyond B1 have been completed.
+The goal remains active and incomplete. B1 baseline is verified; milestone A is complete (5/18 working tools). Do not stop at a milestone or mark complete before 18/18 plus every final gate.
 
-Audited implementation HEAD: `cbb518bc0d2327fbf4da42925a79098a801832ae`. It matched `origin/main`, with a clean worktree before this progress file was created. The working repository is the physical folder `C:\Users\bobby\Documents\ChatGPT\DevBench`.
+## Tool matrix
 
-## Missing required reference
+| Tool                | State                                          |
+| ------------------- | ---------------------------------------------- |
+| JSON Studio         | B1 complete; regression checks passing         |
+| JSON Diff           | A complete; unit and browser acceptance passed |
+| JSON ↔ YAML         | A complete; unit and browser acceptance passed |
+| Base64 Toolkit      | A complete; unit and browser acceptance passed |
+| URL Toolkit         | A complete; unit and browser acceptance passed |
+| JWT Inspector       | B pending                                      |
+| Hash Generator      | B pending                                      |
+| SQL Formatter       | B pending                                      |
+| Regex Tester        | B pending                                      |
+| Text Diff           | C pending                                      |
+| ID Generator        | C pending                                      |
+| Timestamp Converter | C pending                                      |
+| JSON ↔ CSV          | D pending                                      |
+| JSON → Code         | D pending                                      |
+| cURL Inspector      | D pending                                      |
+| Cron Explorer       | E pending                                      |
+| String Toolkit      | E pending                                      |
+| SQL IN Builder      | E pending                                      |
 
-`DEV_BENCH_AUTONOMOUS_GOAL.md` is absent from both the worktree and the fetched remote tree. It was also not found in the old checkout, local project folders, downloaded handoff archives or Downloads/Desktop/OneDrive filename searches.
+## Milestones / evidence
 
-The user's related chat is accessible, but its assistant artifact is returned only as a content reference; the goal document's contents were not retrievable from that evidence.
+- B1 audit passed check (0 errors/warnings), lint, 30 unit tests, static build and 3 browser flows on Node 24.22.1.
+- A: four pure engines, lazy workspaces, shared two-pane text workspace, language-aware client-only CodeMirror, truthful registry counts. Check passes; 70 unit tests pass; static build passes. Lint passes; all 5 Chromium flows pass, including real clipboard/download, option invalidation, route cleanup, privacy markers and 390/768/1440 width checks. Captures 09–12 inspected in dark/light desktop/mobile.
+- B/C/D/E/F pending. Follow the full goal contracts in order, including real worker termination for hostile regex, secure IDs, date/DST semantics, safe cURL subset and explicit Spring cron behavior.
+- Final F must run npm ci/check/lint/test/build/e2e/capture/audit, verify all 18 routes and unknown 404, inspect real dark/light/mobile screenshots, append VALIDATION evidence, update README/FEATURES/ROADMAP, push and verify final CI.
 
-A request for the document's path or text has been sent to the user. Do not invent a replacement document, its risk limits, stage requirements or completion criteria. This is the first goal-turn observation of the missing reference.
+## Decisions / limitations
 
-## Verified implementation state: 1/18
+- A tools: 1 MiB UTF-8 input cap. JSON comparison: 100,000 nodes, 128 levels, 1,000 changes, progressive display. Native JSON numeric/duplicate-key semantics disclosed.
+- YAML 1.2 core using yaml 2.9.1; reject aliases, unsupported tags, non-string keys, nonfinite numbers and unsafe YAML integer precision. No custom constructors.
+- Base64 UTF-8 only, fatal decoding, canonical bits checked, explicit whitespace/missing-padding options.
+- URL component operations distinct from absolute inspection; repeated/empty parameters retained; credentials redacted from result/copy/download until explicit reveal; no requests to pasted URLs.
+- No known P0/P1 after milestone A acceptance.
+- P2 backlog: theme-first-paint behavior and original mobile toolbar spacing to reassess during F.
 
-The registry alone is not proof of functionality. Inspection found only the JSON Studio engine/workspace and its tests. The other V1 routes render honest Coming later pages; V1.1 entries are roadmap metadata without tool routes.
+## Published checkpoints
 
-| Tool                | Engine and working screen                       |
-| ------------------- | ----------------------------------------------- |
-| JSON Studio         | Implemented; baseline checks rerun successfully |
-| JSON Diff           | Pending                                         |
-| JSON ↔ YAML         | Pending                                         |
-| Base64 Toolkit      | Pending                                         |
-| URL Toolkit         | Pending                                         |
-| JWT Inspector       | Pending                                         |
-| Hash Generator      | Pending                                         |
-| SQL Formatter       | Pending                                         |
-| Regex Tester        | Pending                                         |
-| Text Diff           | Pending                                         |
-| ID Generator        | Pending                                         |
-| Timestamp Converter | Pending                                         |
-| JSON ↔ CSV          | Pending                                         |
-| JSON → Code         | Pending                                         |
-| cURL Inspector      | Pending                                         |
-| Cron Explorer       | Pending                                         |
-| String Toolkit      | Pending                                         |
-| SQL IN Builder      | Pending                                         |
+- Baseline: cbb518bc0d2327fbf4da42925a79098a801832ae. CI green: https://github.com/Rhaizel02/devbench/actions/runs/40149296687
+- Initial audit/progress: 7080cbed4de7378e813d95a1c61e816bb364f87b, pushed.
 
-Existing Home, navigation, theme, favorites, recent tools, command palette and one-shot JSON Quick Paste are implemented. Their existing coverage does not prove the 17 pending tools.
+## Next concrete step
 
-## Fresh baseline verification
-
-Executed from the physical working repository with Node 24.22.1:
-
-- `npm run check`: passed, zero errors and warnings.
-- `npm run lint`: passed.
-- `npm run test`: 30 tests passed in three files.
-- `npm run build`: passed with static output.
-- `npm run test:e2e`: all three Chromium smoke scenarios passed.
-- Remote CI for the audited implementation HEAD: [successful run 40149296687](https://github.com/Rhaizel02/devbench/actions/runs/40149296687).
-
-These checks establish the B1 baseline only. They do not establish 18/18 functionality, full goal acceptance or new visual acceptance for future work.
-
-## Resume instructions
-
-1. Read this file, Git status/log and the actual goal document once supplied. Fetch the remote and preserve any intervening user work.
-2. Extract every stage, risk constraint and final acceptance gate from the goal document before implementing those stages.
-3. Use `FEATURES.md` for the 18 functional contracts, `ARCHITECTURE.md` for stack/privacy, and `DESIGN.md` plus the PNG references for visual direction.
-4. Follow the goal document's stages; `ROADMAP.md` currently groups the remaining tools into B2–B6 but is not a substitute for the missing goal document.
-5. Record implemented behavior, relevant tests and validation evidence at each checkpoint, commit and push, then continue to the next stage.
-6. Do not mark the goal complete until the full original objective has passed a requirement-by-requirement completion audit.
-
-The initial goal turn made progress by auditing authoritative state, rerunning the baseline and recording this checkpoint. The full implementation objective remains unchanged.
+Publish the completed A checkpoint, then implement B: JWT, Web Crypto hashes, maintained SQL formatter and genuinely interruptible regex worker. Runtime commands must explicitly invoke bundled Node 24 with npm-cli.js; global npm.ps1 otherwise selects Node 22. No blockers remain.

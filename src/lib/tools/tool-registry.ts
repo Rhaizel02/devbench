@@ -29,7 +29,7 @@ export const tools: Tool[] = [
 		category: 'Data',
 		description: 'Compare JSON structures and find changes.',
 		keywords: 'compare difference',
-		status: 'planned',
+		status: 'available',
 		version: 'V1',
 		icon: 'diff'
 	},
@@ -40,7 +40,7 @@ export const tools: Tool[] = [
 		category: 'Data',
 		description: 'Convert between JSON and YAML.',
 		keywords: 'convert yaml',
-		status: 'planned',
+		status: 'available',
 		version: 'V1',
 		icon: 'swap'
 	},
@@ -51,7 +51,7 @@ export const tools: Tool[] = [
 		category: 'Encoding',
 		description: 'Encode and decode UTF-8 and Base64.',
 		keywords: 'encode decode utf8',
-		status: 'planned',
+		status: 'available',
 		version: 'V1',
 		icon: 'binary'
 	},
@@ -62,7 +62,7 @@ export const tools: Tool[] = [
 		category: 'Encoding',
 		description: 'Inspect URLs and work with query parameters.',
 		keywords: 'uri percent encode decode query',
-		status: 'planned',
+		status: 'available',
 		version: 'V1',
 		icon: 'link'
 	},
@@ -211,18 +211,22 @@ export const tools: Tool[] = [
 	}
 ];
 export const v1Tools = tools.filter((tool) => tool.version === 'V1');
+export const listedTools = tools.filter(
+	(tool) => tool.version === 'V1' || tool.status === 'available'
+);
 export const categories: Category[] = [
 	'Data',
 	'Encoding',
 	'Security',
 	'Backend',
 	'Text',
-	'Utilities'
-];
+	'Utilities',
+	'Code'
+].filter((category) => listedTools.some((tool) => tool.category === category)) as Category[];
 export const toolHref = (tool: Tool) => `/tools/${tool.slug}/`;
 export function searchTools(query: string) {
 	const terms = query.toLowerCase().trim().split(/\s+/).filter(Boolean);
-	return v1Tools.filter((tool) =>
+	return listedTools.filter((tool) =>
 		terms.every((term) =>
 			`${tool.name} ${tool.category} ${tool.keywords}`.toLowerCase().includes(term)
 		)

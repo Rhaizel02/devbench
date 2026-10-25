@@ -13,7 +13,13 @@
 		SlidersHorizontal
 	} from '@lucide/svelte';
 	import { useAppState } from '#lib/state/app.svelte.js';
-	import { tools, v1Tools, categories, searchTools, type Tool } from '#lib/tools/tool-registry.js';
+	import {
+		tools,
+		listedTools,
+		categories,
+		searchTools,
+		type Tool
+	} from '#lib/tools/tool-registry.js';
 	import { detectPaste } from '#lib/tools/quick-paste.js';
 	import Icon from '#lib/components/Icon.svelte';
 	const app = useAppState();
@@ -25,10 +31,12 @@
 	const filtered = $derived(
 		searchTools(query).filter((tool) => category === 'All categories' || tool.category === category)
 	);
-	const favorites = $derived(v1Tools.filter((tool) => app.preferences.favorites.includes(tool.id)));
+	const favorites = $derived(
+		listedTools.filter((tool) => app.preferences.favorites.includes(tool.id))
+	);
 	const recent = $derived(
 		app.preferences.recent
-			.map((item) => v1Tools.find((tool) => tool.id === item.toolId)!)
+			.map((item) => listedTools.find((tool) => tool.id === item.toolId)!)
 			.filter(Boolean)
 	);
 	async function sendPaste() {
@@ -88,7 +96,7 @@
 					>{#if detected === 'JSON'}<button class="button primary compact" onclick={sendPaste}
 							>Open in JSON Studio<ArrowUpRight size={14} /></button
 						>{:else}<span class="muted"
-							>Coming later — {detected === 'JWT'
+							>Direct transfer coming later — {detected === 'JWT'
 								? 'JWT Inspector'
 								: detected === 'URL'
 									? 'URL Toolkit'
@@ -146,7 +154,10 @@
 		<div class="directory-heading">
 			<div class="section-heading">
 				<h2 id="directory-title">Tool directory</h2>
-				<span class="subtle-tag">12 tools · 1 available</span>
+				<span class="subtle-tag"
+					>{listedTools.length} tools · {listedTools.filter((tool) => tool.status === 'available')
+						.length} available</span
+				>
 			</div>
 			<div class="directory-controls">
 				<div class="directory-search">

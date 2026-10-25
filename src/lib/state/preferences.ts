@@ -1,4 +1,4 @@
-import { v1Tools } from '#lib/tools/tool-registry.js';
+import { listedTools } from '#lib/tools/tool-registry.js';
 export type Theme = 'dark' | 'light' | 'system';
 export type Preferences = {
 	theme: Theme;
@@ -7,7 +7,7 @@ export type Preferences = {
 };
 export const STORAGE_KEY = 'devbench.preferences.v1';
 export const defaultPreferences = (): Preferences => ({ theme: 'dark', favorites: [], recent: [] });
-const ids = new Set(v1Tools.map((tool) => tool.id));
+const ids = new Set(listedTools.map((tool) => tool.id));
 export function sanitizePreferences(value: unknown): Preferences {
 	const defaults = defaultPreferences();
 	if (!value || typeof value !== 'object') return defaults;

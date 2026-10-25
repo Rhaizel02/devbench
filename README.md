@@ -1,6 +1,6 @@
 # DevBench
 
-A focused, local-first developer workbench. **Block B1:** SvelteKit foundation, Home and a fully functional JSON Studio. The UI is in English.
+A focused, local-first developer workbench. **Milestone A: 5/18 tools implemented**, with the remaining tools tracked in `GOAL_PROGRESS.md` and `DEV_BENCH_AUTONOMOUS_GOAL.md`. The UI is in English.
 
 Repository: [Rhaizel02/devbench](https://github.com/Rhaizel02/devbench). The source is published on GitHub; website deployment remains outside B1.
 
@@ -32,13 +32,17 @@ npx playwright install chromium
 npm run test:e2e
 ```
 
-## Available in B1
+## Available tools and shell
 
 - Home with category filtering, directory search, Ctrl/Cmd+K command palette, favorites and up to six recent tools.
 - Dark (initial default), light and system themes; responsive navigation and mobile drawer.
 - Quick Paste detects likely JSON/JWT/URL/SQL locally. JSON transfers only after an explicit click. Other destinations are marked **Coming later**.
 - JSON Studio: strict validation; format with 2 spaces, 4 spaces or tabs; minify; CodeMirror input and read-only output; line wrapping; Code/Tree views; expand/collapse; key/value search; copy values, JSONPath or JSON Pointer; copy output; JSON download; synthetic example; reset.
-- All twelve V1 tools have static routes. The other eleven are honest **Coming later** pages. The six V1.1 tools are an informational roadmap.
+- JSON Diff: structural, type-sensitive comparison, escaped JSONPath, missing versus null, filters and progressive results.
+- JSON ↔ YAML: safe YAML 1.2 core conversion, syntax-aware editors, copy/download and direction swap.
+- Base64 Toolkit: strict UTF-8 encoding/decoding, standard and URL-safe alphabets, explicit padding/whitespace policies.
+- URL Toolkit: separate component encoding/decoding and absolute URL inspection, repeated query editing, credential redaction and reconstruction. Pasted URLs are never fetched.
+- All twelve V1 tools have static routes. Seven remain honest **Coming later** pages. The six V1.1 tools are an informational roadmap until their implementation milestones.
 
 ## Privacy
 
@@ -52,13 +56,13 @@ Fonts and all runtime assets are bundled locally. There is no backend, analytics
 
 Svelte 5 runes, SvelteKit 3, strict TypeScript 6, Vite, Tailwind CSS 4, Lucide and CodeMirror 6. SvelteKit configuration lives in Vite; native package import aliases use explicit file extensions. An authoritative typed registry drives navigation, Home, palette and prerender entries.
 
-Home and the twelve V1 tool routes are prerendered with trailing slashes and build-time SSR. JSON Studio is dynamically imported; CodeMirror is mounted only in the browser and destroyed on unmount. Pure TypeScript engines handle JSON, detection and preference validation separately from the UI.
+Home and the twelve V1 tool routes are prerendered with trailing slashes and build-time SSR. Tool workspaces and their libraries load lazily; CodeMirror is mounted only in the browser and destroyed on unmount. Pure TypeScript engines handle transformations, detection and preference validation separately from the UI.
 
 `npm run build` creates `build/`, ready for static hosting. The bundled `404.html` prevents implicit SPA fallback on compatible hosts such as Cloudflare Pages. Hosting is outside B1.
 
 ## Limits and behavior
 
-- Input limit: **5 MiB of UTF-8**. Processing is explicit rather than automatic while typing.
+- JSON Studio input limit: **5 MiB of UTF-8**; the four milestone A tools use **1 MiB**. Processing is explicit rather than automatic while typing.
 - Editing invalidates the previous output immediately. Validate, Format or Minify creates a current result; syntax errors preserve the input.
 - Root strings, numbers, booleans, arrays and `null` are valid JSON. Trailing commas are invalid.
 - Native `JSON.parse` / `JSON.stringify` semantics apply: JavaScript numeric precision, key order and duplicate-key behavior are not a lossless JSON representation.
@@ -71,4 +75,6 @@ Home and the twelve V1 tool routes are prerendered with trailing slashes and bui
 
 `screenshots/01–08` are preserved design references, not claims of application behavior. Actual browser captures are saved in `screenshots/actual/` after QA. GitHub Actions runs check, lint, unit tests, static build and three browser smoke scenarios.
 
-See `VALIDATION.md` for the final results and remaining P2 items. B2 follows `ROADMAP.md`: JSON Diff, JSON ↔ YAML, Base64 Toolkit and URL Toolkit.
+JSON Diff caps traversal at 100,000 nodes / 128 levels and results at 1,000 changes. YAML rejects aliases, unsupported tags, duplicate/non-string keys, non-finite values and unsafe YAML integers; comments are not retained. Base64 decodes text only and rejects invalid UTF-8 and noncanonical padding bits. URL query editing supports up to 2,000 rows and follows URLSearchParams normalization, including `+` as space; credentials enter exported results only after explicit reveal.
+
+See `VALIDATION.md` for B1 history and `GOAL_PROGRESS.md` for milestone evidence and remaining work. The supplied goal package notes are preserved in `docs/goal-pack/`.
