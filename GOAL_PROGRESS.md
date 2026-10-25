@@ -2,7 +2,7 @@
 
 ## Release checkpoint
 
-All 18 approved V1/V1.1 tools and local release acceptance are complete. Final publication and matching GitHub CI remain before closing the Goal. Repository: physical `C:\Users\bobby\Documents\ChatGPT\DevBench`, branch main, origin Rhaizel02/devbench. Original goal contract is preserved in `DEV_BENCH_AUTONOMOUS_GOAL.md`; supplied package notes are in `docs/goal-pack/`.
+All 18 approved V1/V1.1 tools and final release acceptance are complete. The published implementation checkpoint passed matching GitHub CI; this closing metadata commit must also be synchronized and its CI checked before marking the Goal complete. Repository: physical `C:\Users\bobby\Documents\ChatGPT\DevBench`, branch main, origin Rhaizel02/devbench. Original goal contract is preserved in `DEV_BENCH_AUTONOMOUS_GOAL.md`; supplied package notes are in `docs/goal-pack/`.
 
 ## Acceptance table — 18/18
 
@@ -55,6 +55,8 @@ Precise documented limits remain intentional: YAML aliases/custom tags and unsup
 - D 772d3f790a85f2189caf5ab2570e668de578d6fb — [CI success](https://github.com/Rhaizel02/devbench/actions/runs/40159890939).
 - E b3cc31ed524bdb67df348c4b6667e50fa29d8ec7 — [CI success](https://github.com/Rhaizel02/devbench/actions/runs/40160865125).
 
-## Next concrete step
+- F c0b1676cc9030f07d1cd956d680f8cc07504695c — [full CI success](https://github.com/Rhaizel02/devbench/actions/runs/40161871703): clean install, check, lint, 149 unit tests, static build and all 16 browser flows.
 
-Publish F with this evidence, inspect actual CI on its SHA, record that checkpoint, and verify the final pushed HEAD before completing the Goal. No implementation work remains unless a final check fails. Do not create new scope or repeat passed gates without cause. Explicitly invoke bundled Node 24 with npm-cli.js; global npm.ps1 on this computer otherwise selects Node 22. No background preview server should remain.
+## Closure
+
+No implementation or required verification remains. This final checkpoint only records the verified F commit/CI outcome and completion status. Confirm its final HEAD matches origin/main and its CI succeeds, then complete the Goal and stop. The final exact HEAD/CI link is delivered in the completion message; Git history records this metadata commit without a self-referential hash. Optional P2 is outside the completed scope. No background preview server remains and no hosting account/deployment was created.

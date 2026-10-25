@@ -10,7 +10,7 @@ Las 12 herramientas V1 y las 6 V1.1 del alcance aprobado están implementadas. L
 | B4 / C | Text Diff, ID Generator, Timestamp Converter e integración V1 | Completo: 12/12 V1 |
 | B5 / D | JSON ↔ CSV, JSON → Code, cURL Inspector | Completo |
 | B6 / E | Cron Explorer, String Toolkit, SQL IN Builder y Quick Paste con múltiples destinos | Completo: 18/18 |
-| F | Matriz de release, privacidad, responsive/temas, instalación limpia, dependencias, documentación y CI final | Ver `GOAL_PROGRESS.md` y `VALIDATION.md` |
+| F | Matriz de release, privacidad, responsive/temas, instalación limpia, dependencias, documentación y CI final | Completo; [CI validada](https://github.com/Rhaizel02/devbench/actions/runs/40161871703) y evidencia en VALIDATION.md |
 
 ## Checkpoints publicados
 
@@ -23,3 +23,4 @@ Las 12 herramientas V1 y las 6 V1.1 del alcance aprobado están implementadas. L
 Las limitaciones de CSV, inferencia, cron avanzado, fechas, SQL literal y privacidad se documentan expresamente en README/workspaces. Solo se corrigen P0/P1 antes de cerrar; pequeños ajustes de densidad/alineación son P2.
 
 Fuera de esta entrega: PWA/offline, pipelines, OpenAPI, EXPLAIN, backend/usuarios y despliegue web. Requieren una decisión futura independiente.
+

@@ -1,6 +1,6 @@
 # DevBench
 
-A focused, local-first developer workbench. **All 18 approved V1/V1.1 tools are implemented**; final release verification is tracked in `GOAL_PROGRESS.md`. The UI is in English.
+A focused, local-first developer workbench. **All 18 approved V1/V1.1 tools are implemented**; release acceptance is recorded in `GOAL_PROGRESS.md`. The UI is in English.
 
 Repository: [Rhaizel02/devbench](https://github.com/Rhaizel02/devbench). Source publication is complete; static hosting can be configured separately.
 
@@ -92,7 +92,7 @@ Home and all implemented tool routes are prerendered with trailing slashes and b
 
 `screenshots/01–08` are preserved design references. Genuine browser captures are saved in `screenshots/actual/`: [Home dark](screenshots/actual/01-home-dark-desktop.png), [JSON Studio light](screenshots/actual/05-json-light-desktop.png), [code editor light tablet](screenshots/actual/25-final-code-light-tablet.png) and [cURL dark mobile](screenshots/actual/26-final-curl-dark-mobile.png).
 
-The final local clean install on Node 24.22.1 passed check (zero errors/warnings), lint, **149 unit tests**, static build and **16 Chromium flows**. The [18-tool acceptance matrix](screenshots/actual/release-matrix.json) records real operations, copying, reset, reload and empty/invalid states. [Layout evidence](screenshots/actual/checks.json) contains 32 measurements, including every dark/light × 390/768/1440 combination for a complex diff, security inspector, editor and request table. System themes, palette/drawer/tab keyboard behavior, payload privacy, worker termination and blocked permissions are exercised. [Dependency audit](screenshots/actual/dependency-audit.json) reports zero findings in both production and full dependency audits at verification time. GitHub Actions repeats check/lint/unit/build/browser gates on pushes.
+The final local clean install on Node 24.22.1 passed check (zero errors/warnings), lint, **149 unit tests**, static build and **16 Chromium flows**. The [18-tool acceptance matrix](screenshots/actual/release-matrix.json) records real operations, copying, reset, reload and empty/invalid states. [Layout evidence](screenshots/actual/checks.json) contains 32 measurements, including every dark/light × 390/768/1440 combination for a complex diff, security inspector, editor and request table. System themes, palette/drawer/tab keyboard behavior, payload privacy, worker termination and blocked permissions are exercised. [Dependency audit](screenshots/actual/dependency-audit.json) reports zero findings in both production and full dependency audits at verification time. GitHub Actions repeats check/lint/unit/build/browser gates on pushes; the [published release passed full CI](https://github.com/Rhaizel02/devbench/actions/runs/40161871703).
 
 Verification uses Chromium and emulated viewport sizes; further browser/screen-reader coverage and minor density tuning are P2 follow-ups. No known P0/P1 remains. `VALIDATION.md` preserves B1 history and appends milestone/release evidence.
 
