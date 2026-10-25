@@ -2,6 +2,8 @@
 
 A focused, local-first developer workbench. **Block B1:** SvelteKit foundation, Home and a fully functional JSON Studio. The UI is in English.
 
+Repository: [Rhaizel02/devbench](https://github.com/Rhaizel02/devbench). The source is published on GitHub; website deployment remains outside B1.
+
 ## Run locally
 
 Requires **Node 24 LTS** and npm. Install dependencies and start the development server:

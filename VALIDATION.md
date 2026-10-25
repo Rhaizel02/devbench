@@ -14,7 +14,7 @@ Validated locally on 2026-10-25. Runtime: Node 24.22.1; npm 10.9.2. No global ru
 | `npm run test:e2e` | Passed; all 3 Chromium smoke scenarios                          |
 | `npm run capture`  | Passed; 8 browser screenshots plus measured checks              |
 
-The GitHub Actions workflow is configured but has not run on a remote service. No remote repository or deployment was created.
+The project has been pushed to the user-provided [Rhaizel02/devbench repository](https://github.com/Rhaizel02/devbench). GitHub Actions also passed on the B1 implementation commit: [CI run 40148574031](https://github.com/Rhaizel02/devbench/actions/runs/40148574031). Website deployment remains outside B1.
 
 ## Functionality exercised
 
@@ -52,6 +52,6 @@ Measured document width equals viewport width in all eight scenes. `checks.json`
 
 ## Handoff
 
-B1 is local only. The final commit is reported in the completion message and can be inspected with `git rev-parse HEAD`. There is no configured remote, so no push or deployment is claimed.
+B1 source is available locally and on GitHub. `origin` is configured as `https://github.com/Rhaizel02/devbench.git`, and `main` tracks `origin/main`. The final commit is reported in the completion message and can be inspected with `git rev-parse HEAD`. Publishing the source repository does not deploy the website.
 
 Next block: JSON Diff, JSON ↔ YAML, Base64 Toolkit and URL Toolkit, following `ROADMAP.md`.
