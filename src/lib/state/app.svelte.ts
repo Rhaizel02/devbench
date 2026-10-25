@@ -1,9 +1,14 @@
 import { getContext, setContext } from 'svelte';
 import { defaultPreferences, type Preferences } from './preferences';
 const key = Symbol('devbench-instance');
+export type PendingPaste = {
+	toolId: string;
+	text: string;
+	mode?: 'seconds' | 'milliseconds' | 'iso';
+};
 export class AppState {
 	preferences = $state<Preferences>(defaultPreferences());
-	pendingPaste: string | null = null;
+	pendingPaste: PendingPaste | null = null;
 	paletteOpen = $state(false);
 	toggleFavorite(id: string) {
 		this.preferences.favorites = this.preferences.favorites.includes(id)
@@ -16,10 +21,10 @@ export class AppState {
 			...this.preferences.recent.filter((item) => item.toolId !== id)
 		].slice(0, 6);
 	}
-	consumePaste() {
+	consumePaste(toolId: string) {
 		const value = this.pendingPaste;
 		this.pendingPaste = null;
-		return value;
+		return value?.toolId === toolId ? value : null;
 	}
 }
 export const createAppState = () => setContext(key, new AppState());

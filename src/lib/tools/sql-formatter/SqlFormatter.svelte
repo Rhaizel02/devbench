@@ -25,6 +25,7 @@
 	filename="devbench-formatted.sql"
 	{sample}
 	inputLimitLabel="128 KiB limit"
+	pasteToolId="BACK-01"
 >
 	{#snippet options()}<label
 			>Dialect<select aria-label="SQL dialect" bind:value={dialect}

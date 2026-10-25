@@ -1,9 +1,15 @@
 <script lang="ts">
+	import { onMount } from 'svelte';
+	import { useAppState } from '#lib/state/app.svelte.js';
 	import CodeEditor from '#lib/components/CodeEditor.svelte';
 	import OutputActions from '#lib/components/OutputActions.svelte';
 	import { inspectJwt, syntheticJwt, JWT_NOTICE, type JwtInspection } from './jwt-engine';
 	import { errorMessage, previewJson } from '../tool-errors';
 	let input = $state('');
+	const app = useAppState();
+	onMount(() => {
+		input = app.consumePaste('SEC-01')?.text ?? '';
+	});
 	let result = $state<JwtInspection | null>(null);
 	let inspectedInput = $state('');
 	let error = $state('');

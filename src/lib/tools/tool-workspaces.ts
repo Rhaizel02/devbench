@@ -14,5 +14,8 @@ export const toolWorkspaces: Record<string, () => Promise<{ default: Component }
 	'timestamp-converter': () => import('./timestamp-converter/TimestampConverter.svelte'),
 	'json-csv': () => import('./json-csv/JsonCsv.svelte'),
 	'json-code': () => import('./json-code/JsonCode.svelte'),
-	'curl-inspector': () => import('./curl-inspector/CurlInspector.svelte')
+	'curl-inspector': () => import('./curl-inspector/CurlInspector.svelte'),
+	'cron-explorer': () => import('./cron-explorer/CronExplorer.svelte'),
+	'string-toolkit': () => import('./string-toolkit/StringToolkit.svelte'),
+	'sql-in-builder': () => import('./sql-in-builder/SqlInBuilder.svelte')
 };

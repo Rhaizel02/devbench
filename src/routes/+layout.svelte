@@ -48,7 +48,12 @@
 	afterNavigate(() => {
 		const tool = listedTools.find((item) => page.url.pathname === '/tools/' + item.slug + '/');
 		if (tool && ready) app.visit(tool.id);
-		if (page.url.pathname !== '/tools/json-studio/') app.pendingPaste = null;
+		if (
+			app.pendingPaste &&
+			page.url.pathname !==
+				'/tools/' + listedTools.find((tool) => tool.id === app.pendingPaste?.toolId)?.slug + '/'
+		)
+			app.pendingPaste = null;
 	});
 	$effect(() => {
 		const preferences = $state.snapshot(app.preferences);

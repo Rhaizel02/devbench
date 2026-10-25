@@ -1,5 +1,6 @@
 <script lang="ts">
-	import { onDestroy, type Snippet } from 'svelte';
+	import { onDestroy, onMount, type Snippet } from 'svelte';
+	import { useAppState } from '#lib/state/app.svelte.js';
 	import { ArrowRight, RotateCcw, FlaskConical, ArrowLeftRight, ShieldCheck } from '@lucide/svelte';
 	import CodeEditor from './CodeEditor.svelte';
 	import OutputActions from './OutputActions.svelte';
@@ -19,7 +20,8 @@
 		help,
 		onSwap,
 		allowEmpty = false,
-		inputLimitLabel = '1 MiB limit'
+		inputLimitLabel = '1 MiB limit',
+		pasteToolId = ''
 	}: {
 		input?: string;
 		transform: (input: string) => string | Promise<string>;
@@ -36,8 +38,13 @@
 		onSwap?: () => void;
 		allowEmpty?: boolean;
 		inputLimitLabel?: string;
+		pasteToolId?: string;
 	} = $props();
 	const id = $props.id();
+	const app = useAppState();
+	onMount(() => {
+		if (pasteToolId) input = app.consumePaste(pasteToolId)?.text ?? input;
+	});
 	let result = $state<{ input: string; revision: string; output: string } | null>(null);
 	let error = $state('');
 	let errorInput = $state('');

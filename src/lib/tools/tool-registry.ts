@@ -183,7 +183,7 @@ export const tools: Tool[] = [
 		category: 'Backend',
 		description: 'Understand schedules and upcoming runs.',
 		keywords: 'schedule',
-		status: 'planned',
+		status: 'available',
 		version: 'V1.1',
 		icon: 'clock'
 	},
@@ -194,7 +194,7 @@ export const tools: Tool[] = [
 		category: 'Text',
 		description: 'Transform casing and separators.',
 		keywords: 'case slug',
-		status: 'planned',
+		status: 'available',
 		version: 'V1.1',
 		icon: 'text'
 	},
@@ -205,7 +205,7 @@ export const tools: Tool[] = [
 		category: 'Backend',
 		description: 'Build parameterized lists for SQL.',
 		keywords: 'query list',
-		status: 'planned',
+		status: 'available',
 		version: 'V1.1',
 		icon: 'database'
 	}

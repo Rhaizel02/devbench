@@ -1,6 +1,6 @@
 # DevBench
 
-A focused, local-first developer workbench. **Milestone D: 15/18 tools implemented**, with the remaining V1.1 tools tracked in `GOAL_PROGRESS.md` and `DEV_BENCH_AUTONOMOUS_GOAL.md`. The UI is in English.
+A focused, local-first developer workbench. **All 18 approved V1/V1.1 tools are implemented**; final release verification is tracked in `GOAL_PROGRESS.md`. The UI is in English.
 
 Repository: [Rhaizel02/devbench](https://github.com/Rhaizel02/devbench). The source is published on GitHub; website deployment remains outside B1.
 
@@ -36,7 +36,7 @@ npm run test:e2e
 
 - Home with category filtering, directory search, Ctrl/Cmd+K command palette, favorites and up to six recent tools.
 - Dark (initial default), light and system themes; responsive navigation and mobile drawer.
-- Quick Paste detects likely JSON/JWT/URL/SQL locally. JSON transfers only after an explicit click. Other destinations are marked **Coming later**.
+- Quick Paste suggests JSON/JWT/URL/SQL/timestamp destinations locally. Ambiguous numbers offer JSON, seconds and milliseconds separately. Only an explicit click transfers content, once, in memory; recognition does not validate content. Limit: 1 MiB UTF-8.
 - JSON Studio: strict validation; format with 2 spaces, 4 spaces or tabs; minify; CodeMirror input and read-only output; line wrapping; Code/Tree views; expand/collapse; key/value search; copy values, JSONPath or JSON Pointer; copy output; JSON download; synthetic example; reset.
 - JSON Diff: structural, type-sensitive comparison, escaped JSONPath, missing versus null, filters and progressive results.
 - JSON ↔ YAML: safe YAML 1.2 core conversion, syntax-aware editors, copy/download and direction swap.
@@ -52,7 +52,10 @@ npm run test:e2e
 - JSON ↔ CSV: maintained CSV parsing/quoting, delimiter and header options, multiline Unicode, explicit null/missing/nesting policies and formula warning.
 - JSON → Code: sample-based TypeScript interfaces/aliases and Java 17+ records, nested objects, observed optional fields and safe unique names.
 - cURL Inspector: parse-only POSIX literal subset, method/target/headers/query/body, default result redaction and explicit reveal. No commands, files or requests are executed.
-- All fifteen implemented tools have real static routes and working engines. Cron Explorer, String Toolkit and SQL IN Builder remain informational roadmap entries.
+- Cron Explorer: explicit 5-field Unix / 6-field Spring, IANA zones, next occurrences, AND/OR day rules, skipped DST gaps and both overlap instants.
+- String Toolkit: Unicode camel/Pascal/snake/kebab/upper/lower/slug outputs, individual copy, optional lossy mark stripping.
+- SQL IN Builder: multiline/CSV values, string/number/blank/NULL/deduplication policies, parameterized output by default and explicitly selected dialect literals.
+- All eighteen tools have real static routes and working engines. The directory, categories, command palette and availability counts use one registry.
 
 ## Privacy
 
@@ -94,5 +97,7 @@ Text Diff caps each side at 128 KiB / 2,000 lines, with a 300 ms / 1,000-edit bu
 CSV caps input at 1 MiB, records at 5,000, columns at 200 and cells at 64 KiB. CSV imports strings; null/missing/empty JSON values export as empty cells. Nested values require explicit stringification. Headers are unique/nonempty, missing-width rows fail, headerless data gets column1/column2 names. Formula-like cells are preserved with a warning, not executed or silently changed. Inferred types are samples, not validators: Java uses boxed/reference types, Object fallbacks and informational field mapping comments; TypeScript uses unknown for empty arrays. Code inference caps at 128 KiB, 20,000 nodes, 32 levels and 200 fields per object.
 
 cURL accepts one HTTP(S) target and a documented literal subset of -X/-H/-d/--data-raw/--data-binary/-G/--url with POSIX quoting. Unsupported flags, file references, shell expansions/operators/redirects and multiple targets fail explicitly. It is not PowerShell or a full curl emulator. Results hide credentials, sensitive header/query names, fragments and all bodies until explicit reveal; original input remains visible, and arbitrary secrets in paths/custom names cannot be detected. Limits: 128 KiB, 1,000 arguments, 200 headers and 64 KiB body.
+
+Cron supports numbers/names/lists/ranges/positive steps; Spring ? is an entire day wildcard and Sunday is 0/7. L/W/#, +, year fields and macros are explicitly unsupported. Enumeration uses Croner with field matching and fixed-offset correction around real timezone transitions; descriptions use cronstrue. Limits: 512-byte expression, 20 occurrences, five-year horizon, start year 1970–9990 and 64 rejected candidates. Browser timezone data governs results, not a real scheduler's execution policy. String transforms cap input at 64 KiB, retain non-Latin text and use NFC; optional mark stripping is lossy across scripts. SQL IN caps at 128 KiB, 2,000 values and 8 KiB/value; numbers require safe JS precision. Bind parameters through your driver; IN(NULL) does not match SQL null rows. Literal MySQL strings use UTF-8 hex conversion to avoid backslash-mode ambiguity.
 
 See `VALIDATION.md` for B1 history and `GOAL_PROGRESS.md` for milestone evidence and remaining work. The supplied goal package notes are preserved in `docs/goal-pack/`.

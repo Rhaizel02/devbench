@@ -35,7 +35,7 @@
 	const output = $derived(current?.output ?? '');
 	const stale = $derived(processedInput !== null && processedInput !== input);
 	onMount(() => {
-		input = app.consumePaste() ?? '';
+		input = app.consumePaste('DATA-01')?.text ?? '';
 		return () => {
 			input = '';
 			result = { status: 'empty' };

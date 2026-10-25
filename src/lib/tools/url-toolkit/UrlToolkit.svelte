@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { onMount } from 'svelte';
+	import { useAppState } from '#lib/state/app.svelte.js';
 	import CodeEditor from '#lib/components/CodeEditor.svelte';
 	import TextWorkspace from '#lib/components/TextWorkspace.svelte';
 	import OutputActions from '#lib/components/OutputActions.svelte';
@@ -12,6 +14,10 @@
 	import { errorMessage } from '../tool-errors';
 	let operation = $state<'inspect' | 'encode' | 'decode'>('inspect');
 	let input = $state('');
+	const app = useAppState();
+	onMount(() => {
+		input = app.consumePaste('ENC-02')?.text ?? '';
+	});
 	let parsed = $state<UrlInspection | null>(null);
 	let parsedInput = $state('');
 	let reveal = $state(false);

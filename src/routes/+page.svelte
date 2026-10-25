@@ -20,14 +20,15 @@
 		searchTools,
 		type Tool
 	} from '#lib/tools/tool-registry.js';
-	import { detectPaste } from '#lib/tools/quick-paste.js';
+	import { suggestPaste, pasteTooLarge, type PasteSuggestion } from '#lib/tools/quick-paste.js';
 	import Icon from '#lib/components/Icon.svelte';
 	const app = useAppState();
 	let query = $state('');
 	let category = $state('All categories');
 	let paste = $state('');
 	let pasteError = $state('');
-	const detected = $derived(detectPaste(paste));
+	const suggestions = $derived(suggestPaste(paste));
+	const oversized = $derived(pasteTooLarge(paste));
 	const filtered = $derived(
 		searchTools(query).filter((tool) => category === 'All categories' || tool.category === category)
 	);
@@ -39,14 +40,17 @@
 			.map((item) => listedTools.find((tool) => tool.id === item.toolId)!)
 			.filter(Boolean)
 	);
-	async function sendPaste() {
-		app.pendingPaste = paste;
-		paste = '';
+	async function sendPaste(suggestion: PasteSuggestion) {
+		if (!suggestions.some((item) => item.id === suggestion.id) || oversized) return;
+		const snapshot = paste;
+		app.pendingPaste = { toolId: suggestion.toolId, text: snapshot, mode: suggestion.mode };
 		try {
-			await goto(resolve('tools/json-studio/'));
+			await goto(resolve(`tools/${suggestion.slug}/`));
+			paste = '';
 		} catch {
 			app.pendingPaste = null;
-			pasteError = 'Could not open JSON Studio. Please try again.';
+			paste = snapshot;
+			pasteError = 'Could not open the tool. Your input is preserved; please try again.';
 		}
 	}
 	async function readClipboard() {
@@ -88,20 +92,24 @@
 		<label for="quick-paste" class="sr-only">Quick Paste input</label><textarea
 			id="quick-paste"
 			bind:value={paste}
-			placeholder="Paste JSON, a JWT, a URL or SQL. We'll suggest where to start."
+			placeholder="Paste JSON, a JWT, a URL, SQL or a timestamp. Choose a destination explicitly."
 			spellcheck="false"></textarea>
 		<div class="quick-bottom">
 			<div class="quick-suggestion">
-				{#if detected}<span class="detected">Looks like {detected}</span
-					>{#if detected === 'JSON'}<button class="button primary compact" onclick={sendPaste}
-							>Open in JSON Studio<ArrowUpRight size={14} /></button
-						>{:else}<span class="muted"
-							>Direct transfer coming later — {detected === 'JWT'
-								? 'JWT Inspector'
-								: detected === 'URL'
-									? 'URL Toolkit'
-									: 'SQL Formatter'}</span
-						>{/if}{:else}<span class="muted">Your next step starts with a paste.</span>{/if}
+				{#if oversized}<span class="error-message"
+						>Quick Paste exceeds the 1 MiB limit. Reduce the input.</span
+					>
+				{:else if suggestions.length}<span class="detected"
+						>Possible destinations · appearance only</span
+					>
+					{#each suggestions as suggestion (suggestion.id)}<button
+							class="button primary compact"
+							onclick={() => sendPaste(suggestion)}
+							>Open in {suggestion.name}<ArrowUpRight size={14} /></button
+						>{/each}
+				{:else}<span class="muted"
+						>No suggestion yet. Recognition is local and does not validate content.</span
+					>{/if}
 			</div>
 			<span class="privacy-caption"><ShieldCheck size={13} />Processed in your browser</span>
 		</div>

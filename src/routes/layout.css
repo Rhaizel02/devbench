@@ -454,12 +454,25 @@ kbd {
 	align-items: center;
 	padding: 10px 15px;
 	gap: 12px;
+	flex-wrap: wrap;
 }
 .quick-suggestion {
 	display: flex;
 	align-items: center;
 	gap: 12px;
 	font-size: 11px;
+	flex-wrap: wrap;
+	flex: 1 1 600px;
+	min-width: 0;
+	max-width: 100%;
+}
+.quick-suggestion .button {
+	white-space: normal;
+	max-width: 100%;
+	text-align: left;
+}
+.quick-suggestion .button svg {
+	flex-shrink: 0;
 }
 .detected {
 	color: var(--color-accent);
@@ -1766,6 +1779,56 @@ dialog::backdrop {
 	margin: 0 0 16px;
 	color: var(--color-text);
 	background: var(--color-panel);
+}
+.schedule-description {
+	padding: 16px;
+	font-size: 16px;
+	line-height: 1.6;
+}
+.result-section > .tool-help {
+	padding: 0 16px;
+}
+.occurrence-row {
+	display: flex;
+	align-items: center;
+	gap: 16px;
+	padding: 14px 16px;
+	border-bottom: 1px solid var(--color-border);
+}
+.occurrence-row > div {
+	flex: 1;
+	min-width: 0;
+	overflow-wrap: anywhere;
+}
+.occurrence-row span {
+	display: block;
+	color: var(--color-muted);
+	font-size: 12px;
+	margin-top: 4px;
+}
+.string-result pre {
+	flex: 1;
+	min-width: 0;
+	white-space: pre-wrap;
+	overflow-wrap: anywhere;
+	font-size: 12px;
+}
+.string-result > strong {
+	width: 100px;
+	font-size: 12px;
+}
+.tool-options .field-input[type='number'] {
+	width: 90px;
+}
+@media (max-width: 767px) {
+	.string-result {
+		flex-wrap: wrap;
+		gap: 8px;
+	}
+	.string-result > strong {
+		width: 100%;
+		max-width: 100%;
+	}
 }
 .field-input {
 	border: 1px solid var(--color-border);

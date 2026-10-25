@@ -1,10 +1,20 @@
 <script lang="ts">
+	import { onMount } from 'svelte';
+	import { useAppState } from '#lib/state/app.svelte.js';
 	import OutputActions from '#lib/components/OutputActions.svelte';
 	import CopyButton from '#lib/components/CopyButton.svelte';
 	import { convertTimestamp, type TimestampMode, type TimestampResult } from './timestamp-engine';
 	import { errorMessage } from '../tool-errors';
 	let input = $state('');
 	let mode = $state<TimestampMode>('seconds');
+	const app = useAppState();
+	onMount(() => {
+		const paste = app.consumePaste('UTIL-02');
+		if (paste) {
+			input = paste.text;
+			mode = paste.mode ?? 'seconds';
+		}
+	});
 	let timeZone = $state('UTC');
 	let result = $state<TimestampResult | null>(null);
 	let resultKey = $state('');
