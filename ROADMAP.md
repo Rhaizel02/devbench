@@ -30,7 +30,7 @@ Las limitaciones de CSV, inferencia, cron avanzado, fechas, SQL literal y privac
 | B | HTTP Request Builder, HTTP Headers Inspector | Publicado; regresión de relevancia de paleta corregida y verificada en C |
 | C | Log & Stack Trace Inspector, Environment Comparator | Publicado y CI verde |
 | D | Handoffs explícitos en memoria y Pipeline Builder | Publicado y CI verde |
-| E | 25 rutas, instalación limpia, privacidad, temas/tamaños, Node/Cloudflare y cierre | Aceptación local completa; publicación/CI final en GOAL_PROGRESS_V12.md |
+| E | 25 rutas, instalación limpia, privacidad, temas/tamaños, Node/Cloudflare y cierre | Publicado y CI verde; evidencia en GOAL_PROGRESS_V12.md |
 
 Fuera de V1.2: auditoría exhaustiva contra Cloudflare público (Goal posterior), PWA/offline, OpenAPI, EXPLAIN, backend/usuarios y recetas persistentes. El pipeline actual es lineal, local y acotado, sin scripts, ramas o requests. No se accede a la cuenta Cloudflare ni se afirma verificación de producción.
 
