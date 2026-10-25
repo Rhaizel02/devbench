@@ -1,0 +1,57 @@
+# B1 validation report
+
+Validated locally on 2026-10-25. Runtime: Node 24.22.1; npm 10.9.2. No global runtime changes.
+
+## Results
+
+| Check              | Result                                                          |
+| ------------------ | --------------------------------------------------------------- |
+| `npm ci`           | Passed; lockfile installation, 0 audit vulnerabilities reported |
+| `npm run check`    | Passed; 0 errors and 0 warnings                                 |
+| `npm run lint`     | Passed; Prettier and ESLint                                     |
+| `npm run test`     | Passed; 30 tests in 3 files                                     |
+| `npm run build`    | Passed; adapter-static output in `build/`                       |
+| `npm run test:e2e` | Passed; all 3 Chromium smoke scenarios                          |
+| `npm run capture`  | Passed; 8 browser screenshots plus measured checks              |
+
+The GitHub Actions workflow is configured but has not run on a remote service. No remote repository or deployment was created.
+
+## Functionality exercised
+
+- Strict invalid JSON `{"a":1,}`: error, preserved input, no valid badge and copy disabled. Valid `{"a":1,"b":[true,null]}`: formatting, tree expansion, path copying, clipboard contents and downloaded JSON contents verified. Root `null` succeeds.
+- Format indentation 2/4/tab, minification, Unicode, scalar roots, contextual errors, UTF-8 byte limits, 10,000-element arrays and deep nesting covered by engine tests.
+- Tree path escaping, search, collapse/expand, rendered-node limits and depth limits covered by tests. Strings and literals use theme-aware syntax colors after visual review.
+- Quick Paste transfers only on explicit action and is consumed once. Leaving JSON Studio through client navigation clears the input before reopening.
+- Storage contains only the permitted preference key and sanitized metadata. Synthetic payload markers are absent from storage, URLs, requests and browser logs.
+- Favorites, light theme, keyboard command palette, drawer Escape/focus return and mobile panel tabs exercised in Chromium.
+- System preference responds to light/dark media changes. All twelve tool deep links return 200 on the static server; an unknown slug returns 404.
+- Browser capture sessions recorded no runtime exceptions or external resource requests.
+
+## Visual review
+
+Compared actual Home and JSON Studio against references 01–06. Retained shared branding, teal tokens, 248px desktop sidebar, editor split and mobile tabs. Initial favorites/recent sections are honest empty states rather than mockup data. Mockup validation and telemetry claims were removed.
+
+Actual captures in `screenshots/actual/`:
+
+- `01-home-dark-desktop.png`, `02-home-light-desktop.png` — 1440px.
+- `03-home-mobile.png` — 390px.
+- `04-json-dark-desktop.png`, `05-json-light-desktop.png` — 1440px.
+- `06-json-mobile.png` — 390px.
+- `07-home-tablet.png`, `08-json-tablet.png` — 768px.
+
+Measured document width equals viewport width in all eight scenes. `checks.json` records the measurements. Only synthetic data is used in screenshots.
+
+## Priorities and limits
+
+- **P0/P1:** no known open blockers after the checks above. This is selective browser coverage, not an exhaustive accessibility certification.
+- **P2:** an already saved light/system theme may briefly show the initial dark palette before hydration. Mobile toolbars wrap to preserve readable controls. Further density/pixel alignment tuning can follow in a later block.
+- Tree intentionally limits rendering to 500–5,000 nodes, scanning to 50,000 nodes and depth to 128. The complete output remains available in Code view and download.
+- JSON uses native JavaScript number precision and duplicate-key behavior; this is documented in README.
+- Clipboard and browser-initiated downloads depend on browser permissions/settings; failures are not reported as success.
+- The other eleven V1 tools remain Coming later, and V1.1 remains informational.
+
+## Handoff
+
+B1 is local only. The final commit is reported in the completion message and can be inspected with `git rev-parse HEAD`. There is no configured remote, so no push or deployment is claimed.
+
+Next block: JSON Diff, JSON ↔ YAML, Base64 Toolkit and URL Toolkit, following `ROADMAP.md`.

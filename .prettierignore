@@ -1,0 +1,21 @@
+# Package Managers
+package-lock.json
+pnpm-lock.yaml
+yarn.lock
+bun.lock
+bun.lockb
+
+# Miscellaneous
+/static/
+
+# Original handoff documents
+AGENTS.md
+ARCHITECTURE.md
+CODEX_B1_PROMPT.md
+DESIGN.md
+FEATURES.md
+ROADMAP.md
+STITCH_REVIEW.md
+
+# Generated visual evidence
+screenshots/actual/

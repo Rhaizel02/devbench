@@ -1,0 +1,57 @@
+{
+  "checks": [
+    {
+      "scene": "01-home-dark-desktop",
+      "status": 200,
+      "viewport": 1440,
+      "content": 1440
+    },
+    {
+      "scene": "02-home-light-desktop",
+      "status": 200,
+      "viewport": 1440,
+      "content": 1440
+    },
+    {
+      "scene": "03-home-mobile",
+      "status": 200,
+      "viewport": 390,
+      "content": 390
+    },
+    {
+      "scene": "04-json-dark-desktop",
+      "status": 200,
+      "viewport": 1440,
+      "content": 1440
+    },
+    {
+      "scene": "05-json-light-desktop",
+      "status": 200,
+      "viewport": 1440,
+      "content": 1440
+    },
+    {
+      "scene": "06-json-mobile",
+      "status": 200,
+      "viewport": 390,
+      "content": 390
+    },
+    {
+      "scene": "07-home-tablet",
+      "status": 200,
+      "viewport": 768,
+      "content": 768
+    },
+    {
+      "scene": "08-json-tablet",
+      "status": 200,
+      "viewport": 768,
+      "content": 768
+    }
+  ],
+  "systemTheme": "passed",
+  "knownRoutes": 12,
+  "unknownRoute": 404,
+  "browserErrors": [],
+  "externalRequests": []
+}
