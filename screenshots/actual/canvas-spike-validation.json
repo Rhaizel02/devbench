@@ -1,0 +1,156 @@
+{
+  "recordedAt": "2026-10-25T15:26:37.828Z",
+  "baseCommit": "fa0490f5872262614ba9fe0370377295f3112fae",
+  "branch": "feature/architecture-canvas-spike",
+  "scope": "Selective local static-build validation; Chromium. Not a full V1.4 acceptance or production audit.",
+  "node": "v24.22.1",
+  "dependencies": {
+    "konva": "10.9.0",
+    "svelte-konva": "1.0.1",
+    "svelte": "5.57.2",
+    "sveltekit": "3.1.0"
+  },
+  "route": "/lab/architecture-canvas/",
+  "staticHtmlExists": true,
+  "staticPublicToolRoutes": 26,
+  "checks": {
+    "check": {
+      "result": "passed",
+      "errors": 0,
+      "warnings": 0
+    },
+    "lint": {
+      "result": "passed",
+      "controls": "Prettier and ESLint"
+    },
+    "unit": {
+      "result": "passed",
+      "files": 2,
+      "tests": 13,
+      "command": "npm run test -- src/lib/lab/architecture-canvas/model.test.ts src/lib/tools/release-v12.test.ts"
+    },
+    "build": {
+      "result": "passed",
+      "adapter": "adapter-static",
+      "builtAt": "2026-10-25T15:20:10.181Z"
+    },
+    "playwright": {
+      "command": "npx playwright test tests/architecture-canvas.spec.ts",
+      "stats": {
+        "startTime": "2026-10-25T15:22:43.745Z",
+        "duration": 8607.492,
+        "expected": 3,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      },
+      "specs": [
+        {
+          "title": "canvas pointer editing: shapes, moving, connections and freehand coexist; payloads and editor disappear on leaving",
+          "passed": true,
+          "results": [
+            {
+              "status": "passed",
+              "durationMs": 2476
+            }
+          ]
+        },
+        {
+          "title": "three hierarchy levels share direct and animated destinations and restore independent edits/cameras",
+          "passed": true,
+          "results": [
+            {
+              "status": "passed",
+              "durationMs": 3127
+            }
+          ]
+        },
+        {
+          "title": "experimental route stays outside the tool registry, themes and responsive layouts; keyboard pan and reduced motion work",
+          "passed": true,
+          "results": [
+            {
+              "status": "passed",
+              "durationMs": 1857
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "measuredEntry": {
+    "dynamic": true,
+    "javascript": {
+      "file": "_app/immutable/chunks/CLqX0l0U.js",
+      "rawBytes": 172534,
+      "gzipBytes": 53780
+    },
+    "css": [
+      {
+        "file": "_app/immutable/assets/ArchitectureEditor.C3cbNOgv.css",
+        "rawBytes": 6872,
+        "gzipBytes": 1473
+      }
+    ],
+    "sharedImportsExcluded": [
+      "_DyqLgiCU.js",
+      "_B__yVS3q.js",
+      "_SuwJuLAe.js",
+      "_C5pHFi7V.js",
+      "_6MLoR6Dn.js"
+    ],
+    "note": "Chunk plus listed CSS only; shared imports and initial shell excluded. Not total cold-load cost or an isolated Konva core benchmark."
+  },
+  "assertionsPassed": [
+    "Real pointer creation/drag/connections/freehand/deletion",
+    "Direct and animated hierarchy, Escape cancellation, reduced motion",
+    "Independent edits and cameras across three levels",
+    "Keyboard editing, keyboard/pointer pan and wheel zoom",
+    "No console warnings/errors or failed HTTP resources in tested flows",
+    "No external requests; requests were same-origin GETs",
+    "Synthetic markers absent from URLs/history/storage/cookies/requests/console",
+    "No Cache API/IndexedDB databases or cookies; only existing preference storage allowed",
+    "Unmount clears canvases and revisiting starts a fresh in-memory project"
+  ],
+  "layouts": [
+    {
+      "width": 1440,
+      "theme": "dark",
+      "overflow": false
+    },
+    {
+      "width": 1440,
+      "theme": "light",
+      "overflow": false
+    },
+    {
+      "width": 768,
+      "theme": "light",
+      "overflow": false
+    },
+    {
+      "width": 390,
+      "theme": "dark",
+      "overflow": false
+    }
+  ],
+  "screenshots": [
+    "canvas-spike-order-service-dark-1440.png",
+    "canvas-spike-orders-dark-1440.png",
+    "canvas-spike-overview-dark-1440.png",
+    "canvas-spike-overview-dark-390.png",
+    "canvas-spike-overview-light-1440.png",
+    "canvas-spike-overview-light-768.png"
+  ],
+  "openIssues": {
+    "P0": [],
+    "P1": [],
+    "P2": [
+      "Screen-reader acceptance not performed; DOM outline and keyboard are an initial bridge",
+      "Basic mobile adaptation; no advanced touch/pen interaction",
+      "Large-document FPS and long-session heap benchmarks not performed",
+      "Single selection and straight connectors; no full editor transformation/history features"
+    ]
+  },
+  "decision": "GO for human review and further Konva development; NO-GO to publish as a complete V1.4 editor"
+}
