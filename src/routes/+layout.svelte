@@ -82,7 +82,7 @@
 <svelte:head
 	><link rel="icon" href={favicon} /><meta
 		name="description"
-		content="A focused developer workbench. Format and explore JSON locally in your browser."
+		content="A local developer workbench for data, encoding, security, text and backend tools."
 	/></svelte:head
 >
 <svelte:window onkeydown={shortcut} />

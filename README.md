@@ -1,6 +1,6 @@
 # DevBench
 
-A focused, local-first developer workbench. **Milestone B: 9/18 tools implemented**, with the remaining tools tracked in `GOAL_PROGRESS.md` and `DEV_BENCH_AUTONOMOUS_GOAL.md`. The UI is in English.
+A focused, local-first developer workbench. **Milestone C: all 12 V1 tools implemented (12/18 total)**, with the remaining V1.1 tools tracked in `GOAL_PROGRESS.md` and `DEV_BENCH_AUTONOMOUS_GOAL.md`. The UI is in English.
 
 Repository: [Rhaizel02/devbench](https://github.com/Rhaizel02/devbench). The source is published on GitHub; website deployment remains outside B1.
 
@@ -46,7 +46,10 @@ npm run test:e2e
 - Hash Generator: SHA-256/384/512 on UTF-8 text with Web Crypto, including empty input.
 - SQL Formatter: PostgreSQL/MySQL/SQLite, keyword case and indentation using sql-formatter. Formats only; no validation or execution.
 - Regex Tester: ECMAScript matches, ranges, capture groups and replacement preview. Runs in a dedicated worker with real termination after 500 ms, cancel and retry.
-- All twelve V1 tools have static routes. Three remain honest **Coming later** pages. The six V1.1 tools are an informational roadmap until their implementation milestones.
+- Text Diff: unified/split line comparison with original CRLF/LF and final-newline information, optional trailing-space comparison, report copy/download.
+- ID Generator: crypto-backed UUID v4/v7 and ULID batches, individual/all copy and download.
+- Timestamp Converter: strict seconds/milliseconds/ISO conversion, negative/fractional epochs, UTC/local/IANA displays, invalid calendar rejection and copyable formats.
+- All twelve V1 tools have real static routes and working engines. The six V1.1 tools are an informational roadmap until their implementation milestones.
 
 ## Privacy
 
@@ -82,5 +85,7 @@ Home and the twelve V1 tool routes are prerendered with trailing slashes and bui
 JSON Diff caps traversal at 100,000 nodes / 128 levels and results at 1,000 changes. YAML rejects aliases, unsupported tags, duplicate/non-string keys, non-finite values and unsafe YAML integers; comments are not retained. Base64 decodes text only and rejects invalid UTF-8 and noncanonical padding bits. URL query editing supports up to 2,000 rows and follows URLSearchParams normalization, including `+` as space; credentials enter exported results only after explicit reveal.
 
 JWT caps input at 64 KiB, 10,000 decoded nodes and 64 levels; its dates describe untrusted claims at inspection time. SQL input is capped at 128 KiB, and unsupported dialect extensions produce errors without repeating the query. Regex caps pattern at 4 KiB, text at 100,000 UTF-8 bytes, replacement at 10,000 bytes, matches at 1,000 and captured/replacement text at 1 MiB. Offsets are UTF-16 indices, with an exclusive end. Zero-width Unicode matches advance by code point.
+
+Text Diff caps each side at 128 KiB / 2,000 lines, with a 300 ms / 1,000-edit budget and progressive rendering. Its export is a readable line report, not an applyable patch. Ignoring trailing spaces/tabs keeps both originals in split view and uses the left value for unchanged report rows. ID batches are clamped to 1–100; UUID v7/ULID contain generation timestamps, with no same-millisecond or clock-change monotonicity guarantee. Timestamp input caps at 1,024 bytes: decimal seconds accept up to three fractional digits, milliseconds are integers, ISO uses four-digit years and requires an explicit offset. IANA zones affect display; offset-free wall-clock times, invalid dates, leap seconds and 24:00 are rejected.
 
 See `VALIDATION.md` for B1 history and `GOAL_PROGRESS.md` for milestone evidence and remaining work. The supplied goal package notes are preserved in `docs/goal-pack/`.

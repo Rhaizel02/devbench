@@ -1767,6 +1767,90 @@ dialog::backdrop {
 	color: var(--color-text);
 	background: var(--color-panel);
 }
+.field-input {
+	border: 1px solid var(--color-border);
+	border-radius: 4px;
+	padding: 8px 10px;
+	background: var(--color-panel);
+	min-height: 36px;
+	max-width: 100%;
+}
+.field-label {
+	display: block;
+	color: var(--color-muted);
+	font-size: 13px;
+	margin: 12px 0 8px;
+}
+.wide-input {
+	width: 100%;
+	margin-bottom: 16px;
+	font-family: 'JetBrains Mono', monospace;
+}
+.value-row {
+	display: flex;
+	align-items: center;
+	gap: 16px;
+	padding: 12px 16px;
+	border-bottom: 1px solid var(--color-border);
+}
+.value-row code {
+	flex: 1;
+	min-width: 0;
+	overflow-wrap: anywhere;
+	font-size: 13px;
+}
+.value-row .text-button {
+	flex-shrink: 0;
+}
+.timestamp-row > span {
+	width: 160px;
+	color: var(--color-muted);
+	font-size: 13px;
+}
+.text-diff-row {
+	font-family: 'JetBrains Mono', monospace;
+	font-size: 12px;
+	border-bottom: 1px solid var(--color-border);
+}
+.text-diff-row > div {
+	padding: 8px 16px;
+	min-width: 0;
+}
+.text-diff-row pre {
+	white-space: pre-wrap;
+	overflow-wrap: anywhere;
+	margin: 4px 0;
+	line-height: 1.8;
+}
+.text-diff-row .line-meta {
+	color: var(--color-muted);
+	font-size: 10px;
+}
+.text-diff-row:not([data-kind='unchanged']) [data-side='left'] {
+	border-left: 2px solid var(--color-error);
+}
+.text-diff-row:not([data-kind='unchanged']) [data-side='right'] {
+	border-left: 2px solid var(--color-accent);
+}
+.split-row {
+	display: grid;
+	grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+}
+@media (max-width: 767px) {
+	.field-input {
+		min-height: 44px;
+	}
+	.timestamp-row {
+		flex-wrap: wrap;
+		gap: 8px;
+	}
+	.timestamp-row > span {
+		width: 100%;
+	}
+	.value-row .text-button {
+		min-height: 44px;
+	}
+}
 .inspector-editors {
 	margin-top: 20px;
 }

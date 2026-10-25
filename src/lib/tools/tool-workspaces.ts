@@ -8,5 +8,8 @@ export const toolWorkspaces: Record<string, () => Promise<{ default: Component }
 	'jwt-inspector': () => import('./jwt-inspector/JwtInspector.svelte'),
 	'hash-generator': () => import('./hash-generator/HashGenerator.svelte'),
 	'sql-formatter': () => import('./sql-formatter/SqlFormatter.svelte'),
-	'regex-tester': () => import('./regex-tester/RegexTester.svelte')
+	'regex-tester': () => import('./regex-tester/RegexTester.svelte'),
+	'text-diff': () => import('./text-diff/TextDiff.svelte'),
+	'id-generator': () => import('./id-generator/IdGenerator.svelte'),
+	'timestamp-converter': () => import('./timestamp-converter/TimestampConverter.svelte')
 };

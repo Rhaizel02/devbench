@@ -117,7 +117,7 @@ export const tools: Tool[] = [
 		category: 'Text',
 		description: 'Compare text and see line-by-line differences.',
 		keywords: 'compare lines',
-		status: 'planned',
+		status: 'available',
 		version: 'V1',
 		icon: 'diff'
 	},
@@ -128,7 +128,7 @@ export const tools: Tool[] = [
 		category: 'Utilities',
 		description: 'Generate UUID v4, UUID v7 and ULID identifiers.',
 		keywords: 'uuid ulid random',
-		status: 'planned',
+		status: 'available',
 		version: 'V1',
 		icon: 'fingerprint'
 	},
@@ -139,7 +139,7 @@ export const tools: Tool[] = [
 		category: 'Utilities',
 		description: 'Translate epoch timestamps, ISO dates and time zones.',
 		keywords: 'date epoch unix time',
-		status: 'planned',
+		status: 'available',
 		version: 'V1',
 		icon: 'clock'
 	},
