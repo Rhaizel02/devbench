@@ -1,5 +1,7 @@
 import type { Component } from 'svelte';
 export const toolWorkspaces: Record<string, () => Promise<{ default: Component }>> = {
+	'json-query': () => import('./json-query/JsonQuery.svelte'),
+	'json-schema': () => import('./json-schema/JsonSchema.svelte'),
 	'json-studio': () => import('./json-studio/JsonStudio.svelte'),
 	'json-diff': () => import('./json-diff/JsonDiff.svelte'),
 	'json-yaml': () => import('./json-yaml/JsonYaml.svelte'),

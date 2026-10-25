@@ -7,10 +7,32 @@ export type Tool = {
 	description: string;
 	keywords: string;
 	status: 'available' | 'planned';
-	version: 'V1' | 'V1.1';
+	version: 'V1' | 'V1.1' | 'V1.2';
 	icon: string;
 };
 export const tools: Tool[] = [
+	{
+		id: 'DATA-05',
+		slug: 'json-query',
+		name: 'JSON Query Explorer',
+		category: 'Data',
+		description: 'Query JSON with safe, bounded JSONPath.',
+		keywords: 'jsonpath extract filter pointer',
+		status: 'available',
+		version: 'V1.2',
+		icon: 'braces'
+	},
+	{
+		id: 'DATA-06',
+		slug: 'json-schema',
+		name: 'JSON Schema Lab',
+		category: 'Data',
+		description: 'Validate documents and infer editable schemas.',
+		keywords: 'draft 2020 schema validate infer',
+		status: 'available',
+		version: 'V1.2',
+		icon: 'braces'
+	},
 	{
 		id: 'DATA-01',
 		slug: 'json-studio',

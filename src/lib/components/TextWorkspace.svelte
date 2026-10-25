@@ -18,6 +18,9 @@
 		outputLanguage = 'plain',
 		options,
 		help,
+		details,
+		onReset,
+		onExample,
 		onSwap,
 		allowEmpty = false,
 		inputLimitLabel = '1 MiB limit',
@@ -35,6 +38,9 @@
 		outputLanguage?: 'plain' | 'json' | 'yaml' | 'sql' | 'typescript' | 'java';
 		options?: Snippet;
 		help?: Snippet;
+		details?: Snippet<[string]>;
+		onReset?: () => void;
+		onExample?: () => void;
 		onSwap?: () => void;
 		allowEmpty?: boolean;
 		inputLimitLabel?: string;
@@ -83,6 +89,7 @@
 		}
 	}
 	function reset() {
+		onReset?.();
 		operation++;
 		input = '';
 		result = null;
@@ -92,6 +99,7 @@
 	}
 	function example() {
 		reset();
+		onExample?.();
 		input = sample;
 	}
 	function swap() {
@@ -182,6 +190,7 @@
 				{#if current}<span class="valid-label">Current result</span>{/if}
 			</div>
 			<div class="output-body">
+				{#if current && details}{@render details(current.output)}{/if}
 				{#if current}{#key outputLanguage}<CodeEditor
 							value={current.output}
 							readonly

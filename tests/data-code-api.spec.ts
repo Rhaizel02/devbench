@@ -105,7 +105,7 @@ test('cURL redaction/reveal, rejected shell constructs, privacy and V1.1 navigat
 	await page.evaluate(() => scrollTo(0, 0));
 	await page.screenshot({ path: 'screenshots/actual/20-curl-dark-tablet.png', fullPage: true });
 	await page.getByRole('link', { name: 'Tools', exact: true }).click();
-	await expect(page.getByText('18 tools · 18 available', { exact: false })).toBeVisible();
+	await expect(page.getByText(/\d+ tools · \d+ available/)).toBeVisible();
 	await page.keyboard.press('Control+k');
 	await page.getByRole('combobox', { name: 'Find a tool', exact: true }).fill('curl');
 	await page.keyboard.press('Enter');

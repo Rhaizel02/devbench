@@ -60,6 +60,7 @@
 		"node": ">=24.0.0"
 	},
 	"dependencies": {
+		"@cfworker/json-schema": "4.1.1",
 		"@codemirror/lang-java": "^6.0.2",
 		"@codemirror/lang-javascript": "^6.2.5",
 		"@codemirror/lang-sql": "^6.10.0",

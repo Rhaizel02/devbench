@@ -1,5 +1,11 @@
 # DevBench
 
+V1.2 is being delivered in verified milestones. JSON Query Explorer and JSON Schema Lab are available alongside all 18 V1/V1.1 tools. See `GOAL_PROGRESS_V12.md` for the current release state.
+
+JSONPath supports a bounded RFC 9535 subset: properties, indices, wildcard, descendants and scalar comparison filters. It never evaluates JavaScript; unions, slices, functions and logical operators are unsupported. Queries cap input at 1 MiB, traversal at 50,000 nodes / 64 levels, 32 segments, 200,000 visits, 2,000 matches and 2 MiB output. Paths use bracket notation and RFC 6901 pointers.
+
+Schema Lab uses the interpreted `@cfworker/json-schema` 4.1.1 validator with Draft 2020-12 and locally bundled official meta-schemas. It validates keyword shapes and reports nonconformance separately from malformed JSON/schema errors. Only internal JSON Pointer references are allowed; remote references, schema IDs and dynamic references are unsupported. Library compliance has documented exceptions; this is not a full conformance certification. Each editor accepts 1 MiB, 50,000 nodes / 64 levels and 2,000 subschemas. Both tools use disposable workers with a 1.5-second deadline. Inference takes one sample, or an explicit array of 1–100 samples, with a 32-level cap; missing observed fields become optional, mixed types become unions, empty array items remain unconstrained. No formats or numeric bounds are guessed. Generated schemas can be moved into the editable schema editor.
+
 A focused, local-first developer workbench. **All 18 approved V1/V1.1 tools are implemented**; release acceptance is recorded in `GOAL_PROGRESS.md`. The UI is in English.
 
 Repository: [Rhaizel02/devbench](https://github.com/Rhaizel02/devbench). Source publication is complete; static hosting can be configured separately.

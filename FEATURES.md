@@ -1,5 +1,9 @@
 # DevBench — Alcance funcional cerrado
 
+## V1.2 delivery
+
+DATA-05 JSON Query Explorer and DATA-06 JSON Schema Lab are implemented. Exact bounded syntax, interpreted validation, internal-only references and conservative inference limits are documented in README and the workspaces. Remaining V1.2 milestones are tracked separately in GOAL_PROGRESS_V12.md; the V1/V1.1 scope below is historical and preserved.
+
 > Estado: alcance funcional aprobado para V1 + V1.1. Nombre de trabajo: **DevBench**. Producto: herramienta web personal y proyecto de portfolio. Fecha: 2026-10-25.
 
 ## 1. Objetivo del producto
