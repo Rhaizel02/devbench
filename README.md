@@ -1,6 +1,6 @@
 # DevBench
 
-**V1.4 Release Candidate — Architecture Canvas**, on `feature/architecture-canvas-v14`: **27 available entries**, preserving the previous 26 tools. Open `/tools/architecture-canvas/`; `/lab/architecture-canvas/` remains available. Main is unchanged. See [the release contract](V14_ARCHITECTURE_CANVAS_GOAL.md), [progress](GOAL_PROGRESS_V14.md) and [RC acceptance report, screenshots and limits](docs/ARCHITECTURE_CANVAS_V14.md).
+**V1.4 — Architecture Canvas base**: **27 available entries**, preserving the previous 26 tools. Open `/tools/architecture-canvas/`; `/lab/architecture-canvas/` remains available. The V1.5 goal authorizes integrating this complete RC into main before developing OpenAPI on its separate branch; exact integration/CI state is in [V1.5 progress](GOAL_PROGRESS_V15.md). OpenAPI V1.5 is not authorized to merge into main. See [the Canvas contract](V14_ARCHITECTURE_CANVAS_GOAL.md), [historical RC progress](GOAL_PROGRESS_V14.md) and [RC acceptance report, screenshots and limits](docs/ARCHITECTURE_CANVAS_V14.md).
 
 The whiteboard supports drag-created rectangles/rounded rectangles/ellipses/diamonds, direct text, pencil, free or anchored arrows/lines, colors/HEX, fill/transparency, stroke/font styles, Shift selection, move/resize, duplicate/delete/layers and undo/redo. Create and associate child diagrams, rename, navigate with breadcrumbs or a cancellable zoom portal, and recover unlinked diagrams. Keyboard shortcuts respect text inputs; mobile starts at readable 100% with pan. PNG export is transparent and excludes controls.
 

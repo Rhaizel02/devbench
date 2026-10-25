@@ -28,4 +28,8 @@ Leer V15_OPENAPI_GOAL.md, este archivo y Goal activo. El Goal referencia el text
 
 No se han ejecutado nuevas verificaciones en este Goal. No P0/P1 nuevos confirmados; todavía no hay aceptación H0 ni código OpenAPI. Conservar la RC completa y commits. Sin force push.
 
-Siguiente acción: guardar contrato/progreso, merge RC en la rama de integración, inspeccionar CI remoto y probar la integración antes de modificar main.
+Contrato ampliado: 17.850 caracteres antes de formato, commit `e2dceb8`. Merge RC íntegra en integración sin conflictos: `27d82229c2fd7207bf16db934368f1ccd5b0edd5`; 9f81acc preservado como ancestro. CI de la RC inspeccionada por API: 40217004432, completed/success, SHA exacto coincide. Se actualiza AGENTS para documentar la autorización H0 posterior; la regla de no persistir OpenAPI sigue íntegra.
+
+Siguiente acción: npm ci y controles/checks de integración (incluyendo regresiones Canvas/anteriores), registrar resultados, push/CI de integración y solo entonces merge a main. No código OpenAPI hasta aceptar main integrado.
+
+Validación local en curso: exec_command session `8111`, proceso Node `51852`, instalación limpia con cache hits/auditoría sin hallazgos. El proceso sigue vivo; no reiniciar por falta de output. El script encadena check/lint/tests/build/suite con salida en `work/v15-h0-build.log` y `work/v15-h0-browser.json`. Se inicia CI de integración en paralelo para validar el merge exacto. Main aún no se toca.
