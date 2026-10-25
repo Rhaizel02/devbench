@@ -7,7 +7,7 @@ export function handoffTargets(source: string, text: string) {
 	let ids: string[] = [];
 	if (source === 'BACK-08' && size <= 128 * 1024) ids = ['TEXT-01'];
 	if (source === 'BACK-06' && size <= 128 * 1024) ids = ['BACK-03'];
-	if (source === 'BACK-03' && size <= 128 * 1024) ids = ['BACK-06'];
+	if (['BACK-03', 'BACK-10'].includes(source) && size <= 128 * 1024) ids = ['BACK-06'];
 	if (ids.some((id) => id === 'BACK-03' || id === 'BACK-06')) {
 		try {
 			const request = importCurl(text);

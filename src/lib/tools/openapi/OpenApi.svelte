@@ -8,6 +8,7 @@
 	import { HTTP_METHODS, OPENAPI_LIMITS } from './model';
 	import OperationDetail from './OperationDetail.svelte';
 	import SchemaBrowser from './SchemaBrowser.svelte';
+	import RequestPanel from './RequestPanel.svelte';
 	let input = $state(''),
 		format = $state<InputFormat>('auto');
 	let result = $state<{ input: string; format: InputFormat; contract: Contract } | null>(null);
@@ -233,10 +234,15 @@
 						>{:else}<p>No matching operations. Schema-only contracts have no endpoints.</p>{/each}
 				</aside>
 				<div class="detail-panel">
-					{#if operation}<OperationDetail {contract} {operation} onSchema={openSchema} />{:else}<p>
+					{#if operation}<button class="button primary" onclick={() => (view = 'request')}
+							>Prepare request</button
+						><OperationDetail {contract} {operation} onSchema={openSchema} />{:else}<p>
 							Select another filter or explore component schemas.
 						</p>{/if}
 				</div>
+			</div>
+		{:else if view === 'request' && operation}<div class="detail-panel">
+				<RequestPanel {contract} {operation} />
 			</div>
 		{:else if view === 'schemas'}<div class="explorer">
 				<aside class="operation-list" aria-label="Component schemas">

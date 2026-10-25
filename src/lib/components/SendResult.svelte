@@ -31,7 +31,7 @@
 		aria-label="Open current result in another tool"
 	>
 		<span
-			>{source === 'BACK-03' || source === 'BACK-06'
+			>{['BACK-03', 'BACK-06', 'BACK-10'].includes(source)
 				? 'Open redacted result in…'
 				: 'Open result in…'}</span
 		>{#each targets as target (target.id)}<button class="button" onclick={() => send(target.id)}

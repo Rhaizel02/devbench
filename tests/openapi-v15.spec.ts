@@ -2,12 +2,65 @@ import { test, expect, type Page } from '@playwright/test';
 import { sampleContract } from '../src/lib/tools/openapi/fixtures';
 import { evidencePath } from './support/environment';
 import { mkdir } from 'node:fs/promises';
+import { readFile } from 'node:fs/promises';
 async function load(page: Page) {
 	await page.goto('/tools/openapi-explorer/');
 	await page.getByRole('button', { name: 'Synthetic example', exact: true }).click();
 	await page.getByRole('button', { name: 'Parse contract', exact: true }).click();
 	await expect(page.getByRole('heading', { name: 'Synthetic Orders API' })).toBeVisible();
 }
+test('OpenAPI editable preview, four code targets, verified copy/download and one-shot redacted HTTP handoff', async ({
+	page,
+	context
+}) => {
+	await context.grantPermissions(['clipboard-read', 'clipboard-write']);
+	await load(page);
+	await page.getByRole('button', { name: /POST.*Create an order/ }).click();
+	await page.getByRole('button', { name: 'Prepare request', exact: true }).click();
+	await page
+		.getByRole('textbox', { name: 'OpenAPI request body', exact: true })
+		.fill('{"name":"PRIVATE_BODY_876"}');
+	await page.getByRole('button', { name: 'Preview request', exact: true }).click();
+	await expect(page.getByLabel('Prepared request preview', { exact: true })).toContainText(
+		'[REDACTED body]'
+	);
+	await expect(page.getByLabel('Prepared request preview', { exact: true })).not.toContainText(
+		'PRIVATE_BODY_876'
+	);
+	for (const target of ['curl', 'fetch', 'java', 'spring']) {
+		await page.getByLabel('OpenAPI code target', { exact: true }).selectOption(target);
+		await expect(page.getByLabel('OpenAPI generated code', { exact: true })).toContainText(
+			'REDACTED'
+		);
+	}
+	await page.getByRole('button', { name: 'Copy output', exact: true }).click();
+	expect(await page.evaluate(() => navigator.clipboard.readText())).toContain('RestClient');
+	const downloadPromise = page.waitForEvent('download');
+	await page.getByRole('button', { name: 'Download', exact: true }).click();
+	const download = await downloadPromise;
+	expect(await readFile((await download.path())!, 'utf8')).toContain('RestClient');
+	await page.getByRole('textbox', { name: 'OpenAPI request body', exact: true }).fill('invalid');
+	await expect(page.getByRole('button', { name: 'HTTP Request Builder', exact: true })).toHaveCount(
+		0
+	);
+	await page.getByRole('button', { name: 'Preview request', exact: true }).click();
+	await expect(page.getByRole('alert')).toContainText('strict JSON');
+	await page
+		.getByRole('textbox', { name: 'OpenAPI request body', exact: true })
+		.fill('{"name":"PRIVATE_BODY_876"}');
+	await page.getByRole('button', { name: 'Preview request', exact: true }).click();
+	await page.screenshot({ path: evidencePath('v15-request-dark-1440.png'), fullPage: true });
+	await page.getByRole('button', { name: 'HTTP Request Builder', exact: true }).click();
+	await expect(page).toHaveURL(/\/tools\/http-request\/$/);
+	await expect(page.getByRole('textbox', { name: 'Request body', exact: true })).toHaveText(
+		'[REDACTED body]'
+	);
+	await expect(page.getByLabel('Request URL', { exact: true })).toHaveValue(
+		'https://sandbox.example.test/v1/orders'
+	);
+	await page.reload();
+	await expect(page.getByRole('textbox', { name: 'Request body', exact: true })).toBeEmpty();
+});
 test('OpenAPI import, real exploration, reference navigation, errors, invalidation and clean reload', async ({
 	page
 }) => {
