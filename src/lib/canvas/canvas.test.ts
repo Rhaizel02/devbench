@@ -79,6 +79,17 @@ describe('versioned documents and hostile imports', () => {
 		});
 		expect(parseProject(serializeProject(p))).toEqual(p);
 	});
+	it('preserves legacy Unicode IDs and child links on v1 text annotations', () => {
+		const source = createDemoProject();
+		source.id = 'legacy-示例';
+		const note = source.diagrams[0].elements.find((e) => e.kind === 'text')!;
+		note.childDiagramId = 'service-diagram';
+		const result = parseProject(JSON.stringify(source));
+		expect(result.id).toBe(source.id);
+		expect(result.diagrams[0].elements.find((e) => e.id === note.id)?.childDiagramId).toBe(
+			'service-diagram'
+		);
+	});
 	it.each([
 		'future',
 		'duplicate',

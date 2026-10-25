@@ -12,17 +12,17 @@ Leer V14_ARCHITECTURE_CANVAS_GOAL.md y este archivo, consultar Goal activo, HEAD
 
 ## Hitos
 
-| Hito                        | Estado       | Evidencia / siguiente acción                                                                                                      |
-| --------------------------- | ------------ | --------------------------------------------------------------------------------------------------------------------------------- |
-| H0 contrato                 | Aceptado     | `007fccfe6125765c7dea60fcf592bd9c9cd1626f`; contrato de 14.862 bytes, push y CI 40211787379 correctos.                            |
-| H1 dominio + almacenamiento | Implementado | `fadb2f998200d1ae03886f6b127306932dae0671`; 24 tests, check/lint/build y CI 40212165405 correctos.                                |
-| H2 pizarra                  | Implementado | Implementado: 3 Playwright pasan, 35 unitarios relevantes, check 0 diagnósticos, lint/build correctos; pendiente CI de este hito. |
-| H3 proyectos + jerarquía    | Pendiente    | Integración IndexedDB, gestión e import/export, hijos creados por usuario.                                                        |
-| H4 RC                       | Pendiente    | Entrada 27 solo al aceptar A–D, capturas, suite/CI e informe.                                                                     |
+| Hito                        | Estado       | Evidencia / siguiente acción                                                                                           |
+| --------------------------- | ------------ | ---------------------------------------------------------------------------------------------------------------------- |
+| H0 contrato                 | Aceptado     | `007fccfe6125765c7dea60fcf592bd9c9cd1626f`; contrato de 14.862 bytes, push y CI 40211787379 correctos.                 |
+| H1 dominio + almacenamiento | Implementado | `fadb2f998200d1ae03886f6b127306932dae0671`; 24 tests, check/lint/build y CI 40212165405 correctos.                     |
+| H2 pizarra                  | Implementado | `a586324ffc4ff45c9263e9d68af1d163cfbd689e`; 3 Playwright, 35 unitarios, check/lint/build y CI 40213237929 correctos.   |
+| H3 proyectos + jerarquía    | Implementado | Implementado: IndexedDB real, proyectos y rescate; 5 Playwright y 36 unitarios relevantes pasan; pendiente CI de hito. |
+| H4 RC                       | Pendiente    | Entrada 27 solo al aceptar A–D, capturas, suite/CI e informe.                                                          |
 
 ## Incidencias y aceptación
 
-H1 incorpora DTO v2, parser que reconstruye campos permitidos con límites 8 MiB/100 diagramas/500 figuras/500 conexiones/2.000 puntos por trazo/100.000 totales, migración v1 y roundtrip, anclajes, transformaciones y jerarquía independientes del renderer. Historial de 30 estados y presupuesto de 20 MiB. Almacenamiento exclusivo `devbench.canvas.v2`, transacciones confirmadas, autosave serial y debounce, reintento tras error. La UI aún no usa este motor: A–E no aceptados por esta evidencia aislada.
+H1 incorpora DTO v2, parser que reconstruye campos permitidos con límites 8 MiB/100 diagramas/500 figuras/500 conexiones/2.000 puntos por trazo/100.000 totales, migración v1 y roundtrip, anclajes, transformaciones y jerarquía independientes del renderer. Historial de 30 estados y presupuesto de 20 MiB. Almacenamiento exclusivo `devbench.canvas.v2`, transacciones confirmadas, autosave serial y debounce, reintento tras error. En H1 la UI aún no usaba este motor: A–E no aceptados por esta evidencia aislada.
 
 Vitest: 24/24 en `src/lib/canvas/canvas.test.ts` (migración, importación hostil, geometría, ciclos, historial, autosave lento/debounce/cuota/bloqueo). `check` 0 errores/avisos; `lint` y `build` completos pasan. Rutas públicas siguen en 26 y lab conserva el spike mientras se construye la pizarra.
 
@@ -36,6 +36,16 @@ BoardSurface y CanvasEditor nuevos usan DTO v2 en lab, con import cliente diferi
 
 Evidencia: 35 unitarios relevantes pasan; check 0 errores/avisos, lint/build correctos; Playwright 3/3 pasa en 13,4 s. Siete capturas reales revisadas (6 tamaños/temas y edición coloreada); viewport móvil legible al 100%, sin overflow. IDs, cámara y estilo se inspeccionan además en JSON descargado. Se corrigieron doble clic de puntero y nombre accesible con indicador de hijo; el test de duplicado ahora vuelve a seleccionar tras undo/redo, cuyo contrato limpia selección.
 
-H2 aún usa sesión en memoria en UI; no afirmar autoguardado integrado hasta H3. Los hijos ya se crean/asocian/renombran y rechazan ciclos desde UI; H3 debe verificar recarga, huérfanos, gestión/importaciones y fallos de almacenamiento. Decisión sketch propia y límites en docs/ARCHITECTURE_CANVAS_V14.md.
+En H2 la UI aún usaba sesión en memoria; no afirmar autoguardado integrado hasta H3. Los hijos ya se crean/asocian/renombran y rechazan ciclos desde UI; H3 debe verificar recarga, huérfanos, gestión/importaciones y fallos de almacenamiento. Decisión sketch propia y límites en docs/ARCHITECTURE_CANVAS_V14.md.
 
 Próxima acción: CI H2 y componente CanvasProjects para abrir/listar/crear/renombrar/borrar, autosave/estado/reintento, JSON importado como proyecto nuevo y pruebas de recarga/errores.
+
+## H3 — persistencia y proyectos integrados
+
+CanvasProjects integra `devbench.canvas.v2`, 600 ms de debounce y transacciones ordenadas con estados Loading/Unsaved/Saving/Saved/Error. Los cambios pendientes se guardan antes de navegar/cambiar de proyecto; un fallo conserva memoria y permite reintento/export de rescate. Import v1/v2 crea nuevo proyecto y no sobrescribe el abierto; errores de archivo se distinguen de los de almacenamiento. Se crean/listan/abren/renombran/borran proyectos con confirmación; máximo 20. JSON y PNG reales del diagrama, sin seleccionar controles en PNG. Excepción Canvas documentada en normas/README.
+
+Playwright 5/5 en 30,9 s sobre build estático: además de H2, tres niveles desde proyecto nuevo/vacío, recarga de cámara/ediciones, recuperación de huérfanos asociando una figura nueva, ciclos; IndexedDB real con marcador autorizado únicamente allí, import inválido preservando JSON exacto, roundtrip nuevo ID, nombre/borrado confirmado; cuota simulada, export de rescate válido y reintento Saved tras retirar fallo. Capturas reales manual-level-two/three y seis tamaños/temas actualizadas.
+
+36 unitarios relevantes pasan; check 0 errores/avisos y build correctos. Lint detectó la navegación a una URL ya resuelta por SvelteKit; se añadió una excepción local explicada, sin volver a prefijar rutas. Reejecución completa de lint terminada con éxito.
+
+Pendiente para H4: registrar entrada 27 después de consolidar H3, deep link/prerender, favoritos/paleta, táctil básico y medición representativa. Suite completa/CI final e informe GO/NO-GO aún no ejecutados. No marcar Goal completo hasta probar A–E. Main intacta, no merge.

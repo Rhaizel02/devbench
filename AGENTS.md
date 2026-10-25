@@ -2,6 +2,8 @@
 
 Antes de trabajar, leer `ARCHITECTURE.md`, `FEATURES.md` y `DESIGN.md` según la tarea. `CODEX_B1_PROMPT.md` describe el Bloque 1. Los PNG son **únicamente referencia visual**, no de lógica.
 
+**Excepción V1.4 autorizada por el usuario:** Architecture Canvas guarda sus proyectos únicamente en su base IndexedDB `devbench.canvas.v2`, con controles de proyectos/import/export y feedback de autosave. Las reglas históricas de payload solo en memoria siguen aplicando a todas las demás herramientas. Tampoco Canvas puede poner payloads en localStorage, URL, logs, cookies o tráfico. Leer `V14_ARCHITECTURE_CANVAS_GOAL.md` y `GOAL_PROGRESS_V14.md` al continuar esta rama; no fusionar main.
+
 - Stack fijo: Svelte 5 + SvelteKit 3 + TypeScript strict + Vite + `adapter-static`, Tailwind CSS 4 y CodeMirror 6 cuando se necesite. Sin backend/autenticación/DB salvo autorización expresa.
 - Mantener motores de transformación en **TypeScript puro**, UI en Svelte. Nada de stores globales, DI/pipelines genéricos o dependencias anticipadas sin justificación.
 - Privacidad crítica: no cargar ni persistir payloads de usuario fuera de memoria de interfaz. Solo IDs de favoritos/recientes y tema en localStorage. Ningún payload en URL, logs, requests, storage o módulo singleton compartido por SSR.

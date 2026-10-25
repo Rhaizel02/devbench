@@ -1,5 +1,11 @@
 # DevBench — Alcance funcional cerrado
 
+## V1.4 en desarrollo — Architecture Canvas
+
+Rama aislada `feature/architecture-canvas-v14`, ruta lab `/lab/architecture-canvas/`. El catálogo continúa con 26 entradas hasta la puerta RC. Pizarra con formas, dibujo libre, texto directo, estilos, selección múltiple, resize, duplicado, capas, undo/redo y conexiones libres/ancladas. Jerarquía creada/asociada por el usuario, breadcrumb y portal de zoom al mismo hijo, conservando cámaras; ciclos rechazados y diagramas sin enlace recuperables.
+
+Excepción de privacidad explícita: **solo Canvas** guarda contenido de proyectos en IndexedDB `devbench.canvas.v2`. El resto de herramientas sigue en memoria. Proyectos locales con autosave de 600 ms, errores/reintento, gestión confirmada e import/export JSON v1/v2; import siempre como proyecto nuevo. PNG transparente del diagrama sin controles, hasta 4.096 px por eje y 12 MP. Límites de JSON 8 MiB, 100 diagramas, 500 figuras/conexiones por diagrama, 2.000 puntos/trazo y 100.000 totales. No backend, URLs con datos, telemetría ni APIs externas. Aceptación pendiente en `GOAL_PROGRESS_V14.md` e informe `docs/ARCHITECTURE_CANVAS_V14.md`.
+
 ## V1.3 — Text & Test Data Utilities
 
 26 entradas disponibles: las 25 anteriores y UTIL-03 **Test Data Generator**, categoría Utilities, ruta estática `/tools/test-data-generator/`, carga diferida y registro común para Home/búsqueda/favoritos/recientes/paleta. Sin rediseños ni funciones V1.4.

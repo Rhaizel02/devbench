@@ -4,6 +4,7 @@ import { evidencePath, targetOrigin } from './support/environment';
 async function ready(page: Page) {
 	expect((await page.goto('/lab/architecture-canvas/'))?.status()).toBe(200);
 	await expect(page.locator('.konvajs-content canvas').first()).toBeVisible();
+	await expect(page.locator('[data-save-state]')).toHaveAttribute('data-save-state', 'saved');
 }
 async function drag(page: Page, tool: string, x: number, y: number, dx = 180, dy = 110) {
 	await page.getByRole('button', { name: tool, exact: true }).click();
@@ -35,7 +36,14 @@ async function point(page: Page, id: string, corner = false) {
 }
 async function outline(page: Page) {
 	const details = page.locator('details.outline');
-	if (!(await details.getAttribute('open'))) await details.locator('summary').click();
+	if ((await details.getAttribute('open')) === null) await details.locator('summary').click();
+}
+async function createProject(page: Page, title: string) {
+	await page.getByRole('button', { name: 'Projects', exact: true }).click();
+	await page.getByLabel('New board name').fill(title);
+	await page.getByRole('button', { name: 'Create project', exact: true }).click();
+	await expect(page.getByRole('dialog')).not.toBeVisible();
+	await expect(page.locator('[data-save-state]')).toHaveAttribute('data-save-state', 'saved');
 }
 async function jsonDownload(page: Page) {
 	const download = page.waitForEvent('download');
@@ -180,6 +188,7 @@ test('manual hierarchy: create three levels, same direct/zoom destination, camer
 }) => {
 	await page.setViewportSize({ width: 1440, height: 1000 });
 	await ready(page);
+	await createProject(page, 'Manual hierarchy');
 	await drag(page, 'Rectangle', 400, 200);
 	await page.getByRole('button', { name: 'Toggle properties' }).click();
 	await page.getByLabel('Selected element label').fill('Manual parent');
@@ -202,13 +211,13 @@ test('manual hierarchy: create three levels, same direct/zoom destination, camer
 	await page.getByRole('button', { name: 'Zoom out', exact: true }).click();
 	const zoom = await camera.getAttribute('data-zoom'),
 		crumb = page.getByRole('navigation', { name: 'Diagram breadcrumb' });
-	await crumb.getByRole('button', { name: 'E-commerce', exact: true }).click();
+	await crumb.getByRole('button', { name: 'Overview', exact: true }).click();
 	await page.getByRole('button', { name: 'Manual parent', exact: true }).click();
 	await page.getByRole('button', { name: 'Toggle properties' }).click();
 	await page.getByRole('button', { name: 'Zoom into child', exact: true }).click();
 	await expect(page.getByRole('application')).toHaveAttribute('aria-busy', 'true');
 	await page.keyboard.press('Escape');
-	await expect(crumb.getByRole('button', { name: 'E-commerce' })).toHaveAttribute(
+	await expect(crumb.getByRole('button', { name: 'Overview' })).toHaveAttribute(
 		'aria-current',
 		'page'
 	);
@@ -225,8 +234,31 @@ test('manual hierarchy: create three levels, same direct/zoom destination, camer
 	);
 	await expect(camera).toHaveAttribute('data-zoom', zoom!);
 	await page.getByRole('button', { name: 'ellipse', exact: true }).click();
-	await page.getByLabel('Associate child diagram').selectOption('commerce');
+	await page.getByLabel('Associate child diagram').selectOption({ label: 'Overview' });
 	await expect(page.getByRole('status')).toContainText('cycle');
+	await page.screenshot({
+		path: evidencePath('canvas-v14-manual-level-three.png'),
+		fullPage: true
+	});
+	await expect(page.locator('[data-save-state]')).toHaveAttribute('data-save-state', 'saved');
+	await page.reload();
+	await ready(page);
+	await outline(page);
+	await page.getByRole('button', { name: 'Open Manual parent child', exact: true }).click();
+	await page.screenshot({ path: evidencePath('canvas-v14-manual-level-two.png'), fullPage: true });
+	await page.getByRole('button', { name: 'Open Manual service child', exact: true }).click();
+	await expect(page.locator('[data-kind="ellipse"]')).toHaveCount(1);
+	await expect(camera).toHaveAttribute('data-zoom', zoom!);
+	await crumb.getByRole('button', { name: 'Overview', exact: true }).click();
+	await page.getByRole('button', { name: 'Manual parent', exact: true }).click();
+	await page.getByRole('application').focus();
+	await page.keyboard.press('Delete');
+	await expect(page.getByRole('button', { name: 'Delete diagram', exact: true })).toBeVisible();
+	await drag(page, 'Rectangle', 300, 200);
+	await page.getByRole('button', { name: 'Toggle properties' }).click();
+	await page.getByLabel('Associate child diagram').selectOption({ label: 'Manual parent' });
+	await page.getByRole('button', { name: 'Open child diagram', exact: true }).click();
+	await expect(page.getByRole('button', { name: 'Manual service', exact: true })).toBeVisible();
 });
 
 test('readable responsive themes, keyboard/pointer pan and clean unmount', async ({ page }) => {
@@ -269,4 +301,108 @@ test('readable responsive themes, keyboard/pointer pan and clean unmount', async
 	await clean('synthetic-v14-unused-marker');
 	await page.getByRole('link', { name: 'Tools', exact: true }).click();
 	await expect(page.locator('canvas')).toHaveCount(0);
+});
+
+test('local projects survive reload; import is a new roundtrip copy, invalid imports preserve current data, deletion is confirmed', async ({
+	page
+}) => {
+	const clean = observe(page);
+	await page.setViewportSize({ width: 1440, height: 1000 });
+	await ready(page);
+	await createProject(page, 'Browser roundtrip');
+	await drag(page, 'Text', 340, 180, 280, 80);
+	const marker = 'synthetic-private-persisted-canvas-992';
+	await page.getByLabel('Edit text on canvas').fill(marker);
+	await page.keyboard.press('Control+Enter');
+	await expect(page.locator('[data-save-state]')).toHaveAttribute('data-save-state', 'saved');
+	const original = await jsonDownload(page);
+	await page.reload();
+	await ready(page);
+	await expect(page.locator('[data-element-id] > button').first()).toHaveText(marker);
+	const persisted = await page.evaluate(async () => {
+		const names = (await indexedDB.databases()).map((d) => d.name);
+		return {
+			names,
+			rows: await new Promise<unknown[]>((resolve, reject) => {
+				const request = indexedDB.open('devbench.canvas.v2');
+				request.onsuccess = () => {
+					const db = request.result,
+						read = db.transaction('projects').objectStore('projects').getAll();
+					read.onsuccess = () => {
+						db.close();
+						resolve(read.result);
+					};
+					read.onerror = () => reject(new Error('read failed'));
+				};
+			})
+		};
+	});
+	expect(persisted.names).toEqual(['devbench.canvas.v2']);
+	expect(JSON.stringify(persisted.rows)).toContain(marker);
+	await page.getByRole('button', { name: 'Projects', exact: true }).click();
+	await page.getByLabel('Import project JSON').setInputFiles({
+		name: 'future.json',
+		mimeType: 'application/json',
+		buffer: Buffer.from('{"schemaVersion":999}')
+	});
+	await expect(
+		page.getByRole('dialog').getByText('Unsupported project schema version.', { exact: true })
+	).toBeVisible();
+	await expect(page.getByRole('heading', { name: 'Browser roundtrip', exact: true })).toBeVisible();
+	await page.getByRole('button', { name: 'Close projects', exact: true }).click();
+	expect(await jsonDownload(page)).toEqual(original);
+	await page.getByRole('button', { name: 'Projects', exact: true }).click();
+	await page.getByLabel('Import project JSON').setInputFiles({
+		name: 'roundtrip.json',
+		mimeType: 'application/json',
+		buffer: Buffer.from(JSON.stringify(original))
+	});
+	await expect(page.getByRole('dialog')).not.toBeVisible();
+	await expect(page.locator('[data-save-state]')).toHaveAttribute('data-save-state', 'saved');
+	const copy = await jsonDownload(page);
+	expect(copy.id).not.toBe(original.id);
+	expect(copy.diagrams).toEqual(original.diagrams);
+	await page.getByRole('button', { name: 'Projects', exact: true }).click();
+	await page.getByLabel('Project name', { exact: true }).fill('Imported copy');
+	await page.getByLabel('Project name', { exact: true }).press('Tab');
+	await expect(page.locator('[data-save-state]')).toHaveAttribute('data-save-state', 'saved');
+	page.once('dialog', (dialog) => dialog.accept());
+	await page.getByRole('button', { name: 'Delete project Imported copy', exact: true }).click();
+	await expect(
+		page.getByRole('button', { name: 'Delete project Imported copy', exact: true })
+	).toHaveCount(0);
+	await expect(
+		page.getByRole('button', { name: 'Delete project Browser roundtrip', exact: true })
+	).toBeVisible();
+	await page.getByRole('button', { name: 'Close projects', exact: true }).click();
+	await clean(marker);
+});
+
+test('failed autosave keeps the board editable, exports rescue JSON and recovers on retry', async ({
+	page
+}) => {
+	await page.addInitScript(() => {
+		const original = IDBObjectStore.prototype.put;
+		(window as unknown as { canvasTestFail: boolean }).canvasTestFail = true;
+		IDBObjectStore.prototype.put = function (value: unknown, key?: IDBValidKey) {
+			if ((window as unknown as { canvasTestFail: boolean }).canvasTestFail)
+				throw new DOMException('Injected quota failure', 'QuotaExceededError');
+			return key === undefined ? original.call(this, value) : original.call(this, value, key);
+		};
+	});
+	await page.setViewportSize({ width: 1440, height: 1000 });
+	await page.goto('/lab/architecture-canvas/');
+	await expect(page.locator('[data-save-state]')).toHaveAttribute('data-save-state', 'error');
+	await drag(page, 'Text', 350, 200, 280, 80);
+	const marker = 'synthetic-rescue-board-382';
+	await page.getByLabel('Edit text on canvas').fill(marker);
+	await page.keyboard.press('Control+Enter');
+	await expect(page.locator('[data-save-state]')).toHaveAttribute('data-save-state', 'error');
+	const rescued = await jsonDownload(page);
+	expect(JSON.stringify(rescued)).toContain(marker);
+	await page.evaluate(() => {
+		(window as unknown as { canvasTestFail: boolean }).canvasTestFail = false;
+	});
+	await page.getByRole('button', { name: 'Retry storage', exact: true }).click();
+	await expect(page.locator('[data-save-state]')).toHaveAttribute('data-save-state', 'saved');
 });

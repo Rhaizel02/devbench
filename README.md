@@ -1,5 +1,7 @@
 # DevBench
 
+Architecture Canvas V1.4 is being developed on `feature/architecture-canvas-v14`, at `/lab/architecture-canvas/`. The catalog remains at 26 entries until RC acceptance. See [the release contract](V14_ARCHITECTURE_CANVAS_GOAL.md), [progress](GOAL_PROGRESS_V14.md) and [implementation report](docs/ARCHITECTURE_CANVAS_V14.md). **Canvas alone autosaves project documents to IndexedDB in this browser**; all other tools keep payloads in memory. Export JSON for backup/rescue. Nothing is uploaded, added to URLs, logged or stored as document content in localStorage. Browser clearing/private browsing can remove local projects. The sections below describe the previous release.
+
 DevBench **V1.3 — Text & Test Data Utilities** has **26 available entries**: 25 individual tools plus Pipeline Builder. It extends String Toolkit and adds **Test Data Generator** at `/tools/test-data-generator/` under Utilities. The existing registry supplies Home, search, palette, favorites and recent tools. All V1.2 slugs remain; no navigation redesign, new dependencies, backend or V1.4 functions.
 
 ### Text statistics

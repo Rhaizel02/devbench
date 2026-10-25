@@ -27,7 +27,7 @@ function text(value: unknown, max = LIMITS.label): string {
 }
 function id(value: unknown): string {
 	const result = text(value, 120);
-	if (!result || !/^[\w.-]+$/.test(result)) fail('Invalid ID.');
+	if (!result.trim()) fail('Invalid ID.');
 	return result;
 }
 function number(value: unknown, min = -1e6, max = 1e6): number {
@@ -141,7 +141,7 @@ function parseV2(root: Obj): Project {
 				style: style(e.style)
 			};
 			if (e.childDiagramId !== undefined) {
-				if (['stroke', 'text'].includes(result.kind)) fail('Only figures may contain diagrams.');
+				if (result.kind === 'stroke') fail('Strokes cannot contain diagrams.');
 				result.childDiagramId = id(e.childDiagramId);
 			}
 			if (e.points !== undefined) {

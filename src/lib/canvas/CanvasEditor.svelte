@@ -25,6 +25,7 @@
 		Download
 	} from '@lucide/svelte';
 	import BoardSurface, { type Mode } from './BoardSurface.svelte';
+	import CanvasProjects from './CanvasProjects.svelte';
 	import { createDemoProject } from '../lab/architecture-canvas/seed';
 	import {
 		DEFAULT_STYLE,
@@ -49,7 +50,10 @@
 	} from './model';
 	import { parseProject, serializeProject, color } from './serialization';
 	import { History } from './history';
-	const initialProject = parseProject(JSON.stringify(createDemoProject()));
+	const initialProject = {
+		...parseProject(JSON.stringify(createDemoProject())),
+		id: newId('project')
+	};
 	let project = $state.raw<Project>(initialProject);
 	let path = $state([initialProject.rootDiagramId]),
 		selection = $state<string[]>([]),
@@ -59,6 +63,7 @@
 		error = $state(''),
 		status = $state('Drag a shape. Double-click to write.');
 	let busy = $state(false),
+		loading = $state(true),
 		preview = $state<Viewport | null>(null),
 		size = $state({ width: 900, height: 600 });
 	let editorRoot: HTMLDivElement, canvasHost: HTMLDivElement;
@@ -122,7 +127,7 @@
 		if (!busy) project = replaceDiagram(project, { ...diagram, viewport: next });
 	}
 	function choose(next: Mode) {
-		if (busy) return;
+		if (busy || loading) return;
 		surface?.cancel();
 		mode = next;
 		status =
@@ -151,6 +156,10 @@
 					)
 				});
 		});
+	}
+	function inputColor(key: 'stroke' | 'fill', value: string, final = false) {
+		const valid = /^#[0-9a-f]{6}$/i.test(value) || (key === 'fill' && value === 'transparent');
+		if ((!final && valid) || (final && !valid)) updateStyle(key, value);
 	}
 	function remove() {
 		if (!selection.length || busy) return;
@@ -188,9 +197,20 @@
 		selection = [];
 	}
 	function fit() {
+		if (loading) return;
 		setViewport(fitViewport(diagram, size.width, size.height));
 		if (diagram.viewport.zoom < 0.7)
 			status = 'Fit shows the whole board. Use 100% for readable labels and pan to explore.';
+	}
+	function openProject(next: Project) {
+		cancel();
+		project = next;
+		path = [next.rootDiagramId];
+		selection = [];
+		history.clear();
+		historyVersion++;
+		mode = 'select';
+		status = 'Canvas projects autosave in this browser. Export JSON for a backup.';
 	}
 	function zoom(factor: number) {
 		setViewport(zoomAt(diagram.viewport, factor, { x: size.width / 2, y: size.height / 2 }));
@@ -412,6 +432,12 @@
 			><a class="button" href={resolve('/')}>Tools</a>
 		</div>
 	</header>
+	<CanvasProjects
+		{project}
+		onOpen={openProject}
+		onRename={(title) => action(() => changed({ ...project, title }))}
+		onReady={() => (loading = false)}
+	/>
 	<nav class="breadcrumbs" aria-label="Diagram breadcrumb">
 		{#each path as id, i (id)}{#if i > 0}<ChevronRight size={14} />{/if}<button
 				aria-current={i === path.length - 1 ? 'page' : undefined}
@@ -458,7 +484,7 @@
 					{mode}
 					style={creationStyle}
 					{selection}
-					{busy}
+					busy={busy || loading}
 					onSelect={setSelection}
 					onCommit={commit}
 					onViewport={setViewport}
@@ -482,7 +508,7 @@
 						style:height={`${Math.max(70, e.height * view.zoom)}px`}
 						style:font-family={FONT_FAMILIES[e.style.font]}
 						style:font-size={`${e.style.fontSize * view.zoom}px`}
-						style:color={e.style.stroke}
+						style:color={e.kind === 'text' ? e.style.stroke : 'var(--color-text)'}
 						onblur={finishText}
 						onkeydown={(event) => {
 							if (event.key === 'Escape') {
@@ -534,7 +560,8 @@
 						>Stroke HEX<input
 							aria-label="Stroke HEX"
 							value={currentStyle.stroke}
-							onchange={(event) => updateStyle('stroke', event.currentTarget.value)}
+							oninput={(event) => inputColor('stroke', event.currentTarget.value)}
+							onchange={(event) => inputColor('stroke', event.currentTarget.value, true)}
 						/></label
 					>
 				</fieldset>
@@ -556,7 +583,8 @@
 						>Fill HEX<input
 							aria-label="Fill HEX"
 							value={currentStyle.fill}
-							onchange={(event) => updateStyle('fill', event.currentTarget.value)}
+							oninput={(event) => inputColor('fill', event.currentTarget.value)}
+							onchange={(event) => inputColor('fill', event.currentTarget.value, true)}
 						/></label
 					>
 				</fieldset>
@@ -676,7 +704,11 @@
 							>Associate child<select
 								aria-label="Associate child diagram"
 								value={selected.childDiagramId ?? ''}
-								onchange={(event) => assignChild(event.currentTarget.value)}
+								onchange={(event) => {
+									const control = event.currentTarget;
+									assignChild(control.value);
+									control.value = selected.childDiagramId ?? '';
+								}}
 								><option value="">None</option>{#each project.diagrams as d (d.id)}<option
 										value={d.id}>{d.title}</option
 									>{/each}</select
@@ -696,7 +728,7 @@
 	</footer>
 	<p class="help" id="canvas-help">
 		V select · H pan · R rectangle · P pencil · Shift adds selection · Ctrl/⌘ Z undo · Enter
-		edit/open · Shift Enter zoom into child. Session only during lab development.
+		edit/open · Shift Enter zoom into child. Canvas only: local autosave. Export JSON for a backup.
 	</p>
 	<details class="outline">
 		<summary><Layers size={15} />Outline & diagrams</summary><label

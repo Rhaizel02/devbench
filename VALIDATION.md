@@ -1,5 +1,11 @@
 # B1 validation report
 
+## V1.4 branch — milestones, RC acceptance pending
+
+Architecture Canvas remains on `/lab/architecture-canvas/` until the RC gate. H1/H2 CI passed on `fadb2f998200d1ae03886f6b127306932dae0671` / `a586324ffc4ff45c9263e9d68af1d163cfbd689e`. H3 selective validation: 36 relevant unit tests (25 new Canvas + 11 spike), check without diagnostics, static build and five real Chromium flows. These cover drag/text/styles/ink/connectors/resize/history/JSON+PNG, a manually built three-level hierarchy, camera persistence/reload/orphans/cycle rejection, six responsive themes, local project roundtrip/import/deletion and injected quota failure with rescue export/retry. Quality/CI outcomes and final acceptance are tracked in [GOAL_PROGRESS_V14.md](GOAL_PROGRESS_V14.md); no full RC GO is claimed yet.
+
+Canvas-only exception: its own projects persist in IndexedDB `devbench.canvas.v2`. Browser tests find the synthetic marker there as intended and reject it in URLs/history/localStorage/sessionStorage/cookies/requests/console; requests are same-origin static GETs. Other tools retain the previous memory-only policy. See [implementation and limits](docs/ARCHITECTURE_CANVAS_V14.md). The following reports preserve historical releases, including their old entry counts.
+
 ## V1.3 — Text & Test Data Utilities acceptance (2026-10-25)
 
 Started from clean `main` / `origin/main` **`c2f0e9954e13f61af44badd74de6b7b376b92d40`**, after reading AGENTS, ARCHITECTURE, FEATURES, DESIGN and ROADMAP. The existing Svelte 5 / SvelteKit 3 / strict TypeScript / adapter-static / Tailwind 4 stack and dependencies are unchanged. **26 available entries**, all 25 previous slugs retained, with lazy `/tools/test-data-generator/` (UTIL-03, Utilities). No Home/navigation redesign or V1.4 functionality.

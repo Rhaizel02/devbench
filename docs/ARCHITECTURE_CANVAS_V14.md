@@ -20,10 +20,16 @@ HEX usa seis dígitos, relleno acepta transparente; presets, grosor, trazo disco
 
 DTO schema v2 puro en `src/lib/canvas/model.ts`; `serialization.ts` reconstruye campos permitidos desde unknown y migra el spike v1 antes de aceptar datos. IDs y diagramas sin enlace se conservan. Se rechazan JSON hostil, versiones futuras, ciclos, IDs repetidos, anclajes rotos y datos fuera de límites. El historial mantiene como máximo 30 estados y aproximadamente 20 MiB de snapshots; se descarta redo al editar después de undo.
 
-`persistence.ts` contiene almacenamiento Canvas separado y autosave ordenado con debounce. Su integración de UI, recarga e importación aún debe aceptarse en H3; no afirmar guardado del editor a partir de sus tests unitarios aislados.
+`persistence.ts` contiene almacenamiento Canvas separado y autosave ordenado con debounce. `CanvasProjects.svelte` integra IndexedDB real: abrir/listar/crear/renombrar/borrar con confirmación, reintentar tras fallo y esperar un guardado pendiente antes de cambiar de proyecto. La navegación intenta vaciar el debounce; ante fallo ofrece cancelar o salir expresamente. El cierre abrupto antes de Saved puede perder la última edición. El límite de interfaz es de 20 proyectos locales.
+
+Importación v1/v2 desde archivo, con parser antes de cambiar el documento. Siempre crea otro ID de proyecto y mantiene los IDs internos. Una importación inválida conserva el proyecto abierto y no transforma un error de archivo en un supuesto fallo de disco. Cuota/almacenamiento no disponible conservan el contenido en memoria y permiten export JSON de rescate. PNG usa una copia temporal del Stage, sin controles ni cambiar la cámara, fondo transparente y límites 4.096 px/eje, 12 MP.
+
+Canvas es la excepción explícita de privacidad, documentada en AGENTS/ARCHITECTURE/DESIGN/FEATURES/README: solo su base `devbench.canvas.v2` guarda documentos. Los otros 26 workspaces mantienen sus contratos de memoria. Nada de contenido en localStorage, sessionStorage, cookies, URLs, consola o requests. Browser clearing/private browsing pueden eliminar IndexedDB; no hay sincronización remota.
 
 ## Evidencia por hito
 
 H1: 24 pruebas unitarias, check sin diagnósticos, lint/build y CI completos. H2: tres flujos Playwright selectivos sobre build estático pasan: estilos/texto/creación/resize/undo/duplicado/selección múltiple/tinta/conectores y descargas reales JSON/PNG; tres niveles creados manualmente, cámara conservada, zoom directo/animado y ciclos; seis vistas 1440/768/390 en oscuro/claro con 100%, sin overflow, pan por teclado/puntero y desmontaje sin canvas restante. Los flujos inspeccionan consola, solicitudes y canales de privacidad; no son una auditoría remota.
 
-Capturas H2 en `screenshots/actual/canvas-v14-*`: son evidencia del estado del hito, se actualizarán con la RC integrada. La aceptación completa A–E y decisión final GO/NO-GO siguen pendientes.
+H3 amplía a cinco flujos reales: jerarquía construida desde proyecto nuevo/vacío, recarga de cámaras y etiquetas, huérfano recuperado mediante otra figura, IndexedDB inspeccionado y único, gestión/renombrado/borrado confirmado, importación inválida sin cambios, roundtrip como proyecto nuevo y fallo de cuota inyectado con rescate/reintento exitoso. 25 tests de dominio nuevos y 11 del spike relevantes. El dominio también preserva IDs Unicode y enlaces válidos en anotaciones v1.
+
+Capturas en `screenshots/actual/canvas-v14-*`: seis tamaños/temas, edición coloreada y niveles segundo/tercero creados manualmente. Se actualizarán en la puerta RC. La aceptación completa E, rendimiento representativo, táctil, catálogo 27 y decisión final GO/NO-GO siguen pendientes.
