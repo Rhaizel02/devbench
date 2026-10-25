@@ -186,10 +186,12 @@
 				manual review.
 			</p>
 			{#if outputs.error}<p role="alert">{outputs.error}</p>{/if}{#if outputs.request}<pre
-					aria-label="Prepared request preview">{outputs.request.method} {outputs.request
-						.url}&#10;{outputs.request.headers
-						.map((h) => h.name + ': ' + h.value)
-						.join('\n')}&#10;&#10;{outputs.request.body ?? '(no body)'}</pre>{/if}
+					aria-label="Prepared request preview">{[
+						outputs.request.method + ' ' + outputs.request.url,
+						...outputs.request.headers.map((h) => h.name + ': ' + h.value),
+						'',
+						outputs.request.body ?? '(no body)'
+					].join('\n')}</pre>{/if}
 			<label
 				>Code target <select aria-label="OpenAPI code target" bind:value={target}
 					><option value="curl">cURL</option><option value="fetch">JavaScript fetch</option><option

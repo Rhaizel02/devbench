@@ -6,7 +6,7 @@ Release candidate on `feature/openapi-explorer-v15`; **28 available entries**. R
 
 Canvas V1.4 was merged intact into main at **666dc73207ba0a2a9f26c686e1ad2e2a796f670f**, preserving the RC history/DTO/migrations/IndexedDB/export code. Integration CI [40233336583](https://github.com/Rhaizel02/devbench/actions/runs/40233336583) and main CI [40233753793](https://github.com/Rhaizel02/devbench/actions/runs/40233753793) succeeded. Before main: 256 unit tests and 36 Chromium flows passed; two explicitly remote historical audits were skipped.
 
-V1.5 starts from that main, in its own branch. Checkpoints: H1 `1be1c21` (types/budgets), H2 `8dea18f` (parser), H3 `1bea08e` (explorer), H4 `2670712` (HTTP), H5 `6c080af` (diff). The first four have verified successful CI; final H6 records the exact release SHA and CI. No force push or history rewrite.
+V1.5 starts from that main, in its own branch. Checkpoints: H1 `1be1c21` (types/budgets), H2 `8dea18f` (parser), H3 `1bea08e` (explorer), H4 `2670712` (HTTP), H5 `6c080af` (diff). H1–H5 have verified successful CI (H5: 40236155232); H6 code/evidence checkpoint is 0fb03867f6810fc3f79a91f7bbdd5755be99d18c, workflow 40237058370. The delivery message supplies the final closure SHA and its exact CI outcome. No force push or history rewrite.
 
 ## Implemented workflow
 
@@ -47,7 +47,7 @@ The analyzer bounds 50,000 schema-pair visits, depth 128 and 2,000 changes. Repo
 
 ## Evidence
 
-Selective acceptance: 54 OpenAPI units (parser/references/hostile YAML/JSON/limits, worker termination, serialization/redaction/sampling, directional diff/cycles/exports), plus five real Chromium flows. Full regression/clean-install outcomes are recorded after completion in VALIDATION and progress.
+Selective acceptance: 54 OpenAPI units (parser/references/hostile YAML/JSON/limits, worker termination, serialization/redaction/sampling, directional diff/cycles/exports), plus five real Chromium flows. Clean npm ci completed with zero vulnerabilities; check/lint/build pass, 310 units in 20 files pass, and the complete Chromium suite passes 41 flows (2 explicitly remote historical audits skipped, no flaky/unexpected tests). Five relevant OpenAPI flows pass again after final guards/preview layout. See VALIDATION and progress.
 
 - [Explorer dark desktop](../screenshots/actual/v15-explorer-dark-1440.png), [light desktop](../screenshots/actual/v15-explorer-light-1440.png)
 - [Tablet dark](../screenshots/actual/v15-explorer-dark-768.png), [tablet light](../screenshots/actual/v15-explorer-light-768.png)
@@ -60,4 +60,6 @@ Request, schema and diff layout measurements cover all six viewport/theme combin
 
 No open P0/P1 from selective acceptance. During implementation, branching schema samples were bounded with a shared visit budget; redaction was corrected to preserve nonsensitive query encoding; dot-segment generation is blocked because URL normalization would change routes. Regression tests protect the first two fixes. P2: dedicated screen-reader/Firefox/WebKit coverage, additional OAS dialect/serialization cases explicitly blocked above, richer semantic compatibility analysis and callback/webhook exploration. These do not imply unsupported cases were silently accepted.
 
-Final GO/NO-GO is recorded after full suite and exact-SHA CI. Cloudflare publication and successful browser validation are separate claims. Historical certificate failures must never be bypassed or presented as a passed HTTPS audit. No manual deploy/secrets are needed; V1.5 stays unmerged until user acceptance.
+**GO for RC review**: required workflows implemented, 28 entries and full local checks pass, with no open P0/P1. Final exact-SHA CI is checked before delivery; its final SHA/status is provided with the handoff. This is not a production browser certification. V1.5 stays unmerged until user acceptance.
+
+Cloudflare published H6 code checkpoint 0fb0386 at [immutable preview](https://ec293ed4.devbench-aw3.pages.dev); [branch preview](https://feature-openapi-explorer-v15.devbench-aw3.pages.dev) follows the release branch. Normal Playwright navigation to the immutable HTTPS deployment failed before rendering with **ERR_CERT_AUTHORITY_INVALID**, without TLS bypass. Evidence: screenshots/actual/v15-preview-check.json. This is an environment limitation with no unverified attribution; publication is verified, remote behavior is not claimed. No manual deploy or secrets were requested.

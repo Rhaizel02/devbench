@@ -1,0 +1,7 @@
+{
+  "url": "https://ec293ed4.devbench-aw3.pages.dev",
+  "sha": "0fb03867f6810fc3f79a91f7bbdd5755be99d18c",
+  "tlsBypass": false,
+  "passed": false,
+  "error": "page.goto: net::ERR_CERT_AUTHORITY_INVALID at https://ec293ed4.devbench-aw3.pages.dev/tools/openapi-explorer/"
+}

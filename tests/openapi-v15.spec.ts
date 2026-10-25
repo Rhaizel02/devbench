@@ -72,7 +72,6 @@ test('OpenAPI comparison performs directional analysis, filters, exports and inv
 	const download = await downloadPromise;
 	expect(download.suggestedFilename()).toBe('openapi-diff.md');
 	expect(await readFile((await download.path())!, 'utf8')).not.toContain('Synthetic notebook');
-	await page.screenshot({ path: evidencePath('v15-diff-dark-1440.png'), fullPage: true });
 	await page
 		.getByRole('textbox', { name: 'After OpenAPI source', exact: true })
 		.fill('invalid: true');
@@ -134,7 +133,6 @@ test('OpenAPI editable preview, four code targets, verified copy/download and on
 		.getByRole('textbox', { name: 'OpenAPI request body', exact: true })
 		.fill('{"name":"PRIVATE_BODY_876"}');
 	await page.getByRole('button', { name: 'Preview request', exact: true }).click();
-	await page.screenshot({ path: evidencePath('v15-request-dark-1440.png'), fullPage: true });
 	await page.getByRole('button', { name: 'HTTP Request Builder', exact: true }).click();
 	await expect(page).toHaveURL(/\/tools\/http-request\/$/);
 	await expect(page.getByRole('textbox', { name: 'Request body', exact: true })).toHaveText(
@@ -209,6 +207,13 @@ test('OpenAPI responsive themes and local-only payload lifecycle', async ({ page
 		.fill(JSON.stringify(payload));
 	await page.getByRole('button', { name: 'Parse contract', exact: true }).click();
 	await expect(page.getByText('PRIVATE_OPENAPI_7539', { exact: true })).toBeVisible();
+	await page.getByRole('button', { name: 'Schemas', exact: true }).click();
+	await page.getByRole('button', { name: 'Hostile', exact: true }).click();
+	await expect(
+		page.getByText('<img src="https://never.example.test/image">', { exact: true })
+	).toBeVisible();
+	await expect(page.locator('img[src*="never.example.test"]')).toHaveCount(0);
+	await page.getByRole('button', { name: 'Explore', exact: true }).click();
 	await mkdir(evidencePath('.'), { recursive: true });
 	for (const width of [390, 768, 1440]) {
 		await page.setViewportSize({ width, height: 1000 });

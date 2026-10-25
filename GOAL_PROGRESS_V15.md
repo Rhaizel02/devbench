@@ -1,6 +1,6 @@
 # Progreso DevBench V1.5 — OpenAPI Contract Workbench
 
-**Estado actual:** H0–H5 completos; H6 local verificado: npm ci sin vulnerabilidades, check 0 errores/avisos, lint, 310 tests/20 archivos, build 28 herramientas, 41 Playwright completos + 2 auditorías remotas omitidas. Tras ajustes finales de seguridad: unidad/check/lint/build y cinco flujos OpenAPI repetidos correctamente. Preparando commit/push H6 y CI exacta. V1.5 NO fusionada a main.
+**Estado actual:** H0–H6 implementados y verificados localmente; código/evidencia RC subidos en 0fb03867f6810fc3f79a91f7bbdd5755be99d18c. 28 entradas, 310 unidades/20 archivos, 41 flows/2 externos omitidos. H5 CI 40236155232 success; CI H6 40237058370 superó instalación/check/lint/test/build y ejecuta navegador. Último cierre de informe/preview pendiente de su CI exacta antes de finalizar Goal. NO fusionar V1.5 a main.
 
 ## Reanudar
 
@@ -16,15 +16,15 @@ Leer V15_OPENAPI_GOAL.md, este archivo y Goal activo. El Goal referencia el text
 
 ## Hitos
 
-| Hito          | Estado                             | Evidencia                                                                                             |
-| ------------- | ---------------------------------- | ----------------------------------------------------------------------------------------------------- |
-| H0 Canvas     | Aceptado                           | Main 666dc732; CI 40233753793 success.                                                                |
-| H1 rama       | Completo                           | 1be1c21; CI 40234461470 success.                                                                      |
-| H2 parser     | Completo                           | 8dea18f; CI 40235203199 success.                                                                      |
-| H3 explorador | Completo                           | 1bea08e; CI 40235471677 success.                                                                      |
-| H4 HTTP       | Completo                           | 2670712; CI 40235751268 success.                                                                      |
-| H5 diff       | Implementado/verificado local      | 6c080afdacbd06fdd3a0ec420b1cf44f7875af53; CI 40236155232 instalada/pruebas en curso al último sondeo. |
-| H6 RC         | Local aceptado, CI final pendiente | 28 entradas, 310 unidades, 41 flows; evidencia v15-h6-validation.json.                                |
+| Hito          | Estado                             | Evidencia                                                                   |
+| ------------- | ---------------------------------- | --------------------------------------------------------------------------- |
+| H0 Canvas     | Aceptado                           | Main 666dc732; CI 40233753793 success.                                      |
+| H1 rama       | Completo                           | 1be1c21; CI 40234461470 success.                                            |
+| H2 parser     | Completo                           | 8dea18f; CI 40235203199 success.                                            |
+| H3 explorador | Completo                           | 1bea08e; CI 40235471677 success.                                            |
+| H4 HTTP       | Completo                           | 2670712; CI 40235751268 success.                                            |
+| H5 diff       | Aceptado                           | 6c080afdacbd06fdd3a0ec420b1cf44f7875af53; CI 40236155232 completed/success. |
+| H6 RC         | Local aceptado, CI final pendiente | 28 entradas, 310 unidades, 41 flows; evidencia v15-h6-validation.json.      |
 
 ## Histórico de checkpoints e incidencias
 
@@ -73,3 +73,11 @@ H4 SHA 2670712e50c2843935f3968d1a254f1350f6bfed, CI 40235751268 success; H3 CI 4
 Session 27266 terminó exit 0: npm ci 253 paquetes/0 vulnerabilidades, check/lint, 309 tests antes del último test de seguridad, build y 41 flujos Chromium correctos/2 externos omitidos (1,8 min, cero flaky). Session 97630 terminó exit 0 con los ajustes finales: 310 tests/20 archivos, check 0 errores/avisos, lint, build y los cinco flows nuevos correctos. No repetir instalación ni la suite local completa sin una nueva causa; CI exacta repetirá todo.
 
 Se bloquearon variables/path con credenciales y Path Item refs con siblings ambiguos; defaults no arrastran credenciales. Capturas reales de explorer 6 combinaciones y vistas schema/request/diff, layout 6 combinaciones por vista; revisadas desktop oscuro y móvil claro, más schema. Se restauran únicamente capturas históricas regeneradas por la suite. Motores Canvas intactos. P0/P1 abiertos: ninguno. Pendiente: CI exacta/publicación y verificación HTTPS sin bypass; registrar SHAs y cerrar contrato.
+
+### Cierre RC — evidencia remota y entrega
+
+H6 código/evidencia: **0fb03867f6810fc3f79a91f7bbdd5755be99d18c**, push correcto. CI 40237058370 en fase e2e al último sondeo, pasos previos correctos. H5 CI 40236155232 completed/success inspeccionada con respuesta fresca; la caché API anterior mostraba estado antiguo, no era un bloqueo real.
+
+Cloudflare confirmó ese SHA publicado en https://ec293ed4.devbench-aw3.pages.dev y preview de rama https://feature-openapi-explorer-v15.devbench-aw3.pages.dev. Playwright HTTPS normal intentado contra URL inmutable: ERR_CERT_AUTHORITY_INVALID antes de cargar página, sin bypass. Evidencia screenshots/actual/v15-preview-check.json. Publicación no equivale a auditoría remota pasada. Limitación del entorno documentada; no se atribuye la causa a Cloudflare.
+
+GO para revisión de RC por funcionalidades/controles locales; comprobar la CI del SHA final antes del mensaje de cierre. No quedan tareas de producto: solo confirmar CI/push final y publicar SHA/preview al usuario. No reiniciar instalación/suites ni ampliar P2. Último ajuste de preview conserva saltos de línea reales y las capturas usan scroll inicial; check/lint/build y cinco flujos volvieron a pasar (session 83665 exit 0).

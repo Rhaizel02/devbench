@@ -163,3 +163,7 @@ Published F implementation: `c0b1676cc9030f07d1cd956d680f8cc07504695c`. Its comp
 ### V1.5 final local gate
 
 Clean npm ci: 253 packages, zero audit vulnerabilities. Full suite: 41 Chromium flows pass, 2 explicitly remote historical audits skipped, zero flaky/unexpected tests (109.6 s). After the final credential/reference guard: check 0 errors/warnings, lint, **310 units / 20 files**, static build **28 tool directories**, and five relevant OpenAPI flows pass again. Final exact-SHA CI still must be verified before delivery. Evidence: screenshots/actual/v15-h6-validation.json; full detailed local runner JSON is in ignored work/v15-h6-browser.json. No open P0/P1; declared unsupported cases and dedicated assistive/cross-browser coverage are P2.
+
+### V1.5 RC decision and preview
+
+GO for RC review, no open P0/P1; final delivery waits for exact-SHA CI. H5 CI 40236155232 completed/success. H6 code checkpoint 0fb03867f6810fc3f79a91f7bbdd5755be99d18c published by Cloudflare (immutable ec293ed4.devbench-aw3.pages.dev, branch feature-openapi-explorer-v15.devbench-aw3.pages.dev). Normal Playwright HTTPS navigation failed before rendering with ERR_CERT_AUTHORITY_INVALID; no TLS bypass and no remote test pass claimed. Evidence v15-preview-check.json records URL/SHA/error. The final commit SHA and CI status are supplied in the delivery response. No V1.5 merge to main.
