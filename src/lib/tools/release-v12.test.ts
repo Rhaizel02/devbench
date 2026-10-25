@@ -1,13 +1,14 @@
 import { it, expect } from 'vitest';
 import { tools, categories, searchTools } from './tool-registry';
 import { toolWorkspaces } from './tool-workspaces';
-it('registers 24 individual tools plus one pipeline with unique lazy routes', () => {
-	expect(tools).toHaveLength(25);
+it('retains the V1.2 routes alongside the V1.3 extension with unique lazy routes', () => {
+	expect(tools).toHaveLength(26);
 	expect(tools.filter((tool) => tool.version === 'V1')).toHaveLength(12);
 	expect(tools.filter((tool) => tool.version === 'V1.1')).toHaveLength(6);
 	expect(tools.filter((tool) => tool.version === 'V1.2')).toHaveLength(7);
-	expect(new Set(tools.map((tool) => tool.slug)).size).toBe(25);
-	expect(new Set(tools.map((tool) => tool.id)).size).toBe(25);
+	expect(tools.filter((tool) => tool.version === 'V1.3')).toHaveLength(1);
+	expect(new Set(tools.map((tool) => tool.slug)).size).toBe(26);
+	expect(new Set(tools.map((tool) => tool.id)).size).toBe(26);
 	expect(Object.keys(toolWorkspaces).sort()).toEqual(tools.map((tool) => tool.slug).sort());
 	expect(
 		tools.every((tool) => tool.status === 'available' && categories.includes(tool.category))

@@ -157,7 +157,7 @@ test('release matrix: all 18 static tools operate, copy, reset, reload and handl
 			invalid: ''
 		}
 	];
-	expect(tools.filter((tool) => tool.version !== 'V1.2')).toHaveLength(18);
+	expect(tools.filter((tool) => tool.version === 'V1' || tool.version === 'V1.1')).toHaveLength(18);
 	expect(tools.every((tool) => tool.status === 'available')).toBe(true);
 	const matrix: Record<string, unknown>[] = [];
 	for (const item of cases) {

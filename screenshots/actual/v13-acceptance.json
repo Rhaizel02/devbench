@@ -1,0 +1,362 @@
+{
+  "checkedAt": "2026-10-25T13:26:40.196Z",
+  "scope": "local adapter-static build on Chromium; not a production audit",
+  "baseCommit": "c2f0e9954e13f61af44badd74de6b7b376b92d40",
+  "node": "v24.22.1",
+  "tools": 26,
+  "staticRoutes": [
+    "base64-toolkit",
+    "cron-explorer",
+    "curl-inspector",
+    "environment-comparator",
+    "hash-generator",
+    "http-headers",
+    "http-request",
+    "id-generator",
+    "json-code",
+    "json-csv",
+    "json-diff",
+    "json-query",
+    "json-schema",
+    "json-studio",
+    "json-yaml",
+    "jwt-inspector",
+    "log-inspector",
+    "pipeline-builder",
+    "regex-tester",
+    "sql-formatter",
+    "sql-in-builder",
+    "string-toolkit",
+    "test-data-generator",
+    "text-diff",
+    "timestamp-converter",
+    "url-toolkit"
+  ],
+  "unitTests": 220,
+  "unitFiles": 14,
+  "quality": {
+    "check": "passed: zero errors/warnings",
+    "lint": "passed",
+    "test": "passed",
+    "build": "passed"
+  },
+  "browser": {
+    "passed": 29,
+    "skippedProductionOnly": 2,
+    "cases": [
+      {
+        "file": "data-code-api.spec.ts",
+        "title": "CSV quoting/download and TypeScript/Java inference use real outputs",
+        "status": "passed",
+        "durationMs": 1846
+      },
+      {
+        "file": "data-code-api.spec.ts",
+        "title": "cURL redaction/reveal, rejected shell constructs, privacy and V1.1 navigation",
+        "status": "passed",
+        "durationMs": 1215
+      },
+      {
+        "file": "data-encoding.spec.ts",
+        "title": "structural comparison and safe YAML conversion have real, current outputs",
+        "status": "passed",
+        "durationMs": 1118
+      },
+      {
+        "file": "data-encoding.spec.ts",
+        "title": "Base64 Unicode, URL parameter editing, mobile layout and memory cleanup",
+        "status": "passed",
+        "durationMs": 1888
+      },
+      {
+        "file": "production.spec.ts",
+        "title": "production provenance matches the reference deployment and distinguishes old V1.1",
+        "status": "skipped",
+        "durationMs": 0
+      },
+      {
+        "file": "production.spec.ts",
+        "title": "production privacy and cross-browser smoke: one-shot paste, workers, recipes and keyboard",
+        "status": "skipped",
+        "durationMs": 0
+      },
+      {
+        "file": "release.spec.ts",
+        "title": "release matrix: all 18 static tools operate, copy, reset, reload and handle invalid/empty input privately",
+        "status": "passed",
+        "durationMs": 14942
+      },
+      {
+        "file": "release.spec.ts",
+        "title": "large diff/CSV inputs reject before processing and the interface stays usable",
+        "status": "passed",
+        "durationMs": 1097
+      },
+      {
+        "file": "release.spec.ts",
+        "title": "blocked preferences and clipboard report real failures while transformation still works",
+        "status": "passed",
+        "durationMs": 617
+      },
+      {
+        "file": "schedules-strings-sql.spec.ts",
+        "title": "cron DST, Unicode transforms and parameter-first SQL lists work in the browser",
+        "status": "passed",
+        "durationMs": 1548
+      },
+      {
+        "file": "schedules-strings-sql.spec.ts",
+        "title": "Quick Paste transfers once to explicit destinations and never stores or sends payloads",
+        "status": "passed",
+        "durationMs": 2156
+      },
+      {
+        "file": "security-backend.spec.ts",
+        "title": "JWT is decoded without verification, hashes and dialect formatting are real",
+        "status": "passed",
+        "durationMs": 1494
+      },
+      {
+        "file": "security-backend.spec.ts",
+        "title": "catastrophic regex terminates its worker, keeps UI responsive and permits retry",
+        "status": "passed",
+        "durationMs": 1681
+      },
+      {
+        "file": "smoke.spec.ts",
+        "title": "strict JSON, real output, tree paths, clipboard and download",
+        "status": "passed",
+        "durationMs": 1190
+      },
+      {
+        "file": "smoke.spec.ts",
+        "title": "navigation, themes, palette, favorites, responsive drawer and tabs",
+        "status": "passed",
+        "durationMs": 868
+      },
+      {
+        "file": "smoke.spec.ts",
+        "title": "one-shot Quick Paste and payload-free storage, URLs, requests and logs",
+        "status": "passed",
+        "durationMs": 726
+      },
+      {
+        "file": "text-ids-time.spec.ts",
+        "title": "text diff, secure IDs and strict timestamp UI work with current outputs",
+        "status": "passed",
+        "durationMs": 1545
+      },
+      {
+        "file": "text-ids-time.spec.ts",
+        "title": "all twelve V1 tools have real deep routes, palette navigation and payload cleanup",
+        "status": "passed",
+        "durationMs": 2355
+      },
+      {
+        "file": "v12-connected.spec.ts",
+        "title": "three recipes execute, intermediate preview is explicit, reordering fails at the right step and reset clears everything",
+        "status": "passed",
+        "durationMs": 1435
+      },
+      {
+        "file": "v12-connected.spec.ts",
+        "title": "JSON handoffs consume once, invalidate stale results and never persist payloads",
+        "status": "passed",
+        "durationMs": 2708
+      },
+      {
+        "file": "v12-connected.spec.ts",
+        "title": "HTTP handoffs are explicitly redacted; logs transfer as plain text",
+        "status": "passed",
+        "durationMs": 1049
+      },
+      {
+        "file": "v12-data.spec.ts",
+        "title": "JSONPath real paths, values, clipboard/download, invalidation and direct routes",
+        "status": "passed",
+        "durationMs": 1370
+      },
+      {
+        "file": "v12-data.spec.ts",
+        "title": "Schema validation, inference and hostile pattern termination stay local",
+        "status": "passed",
+        "durationMs": 2878
+      },
+      {
+        "file": "v12-diagnostics.spec.ts",
+        "title": "logs group entries, retain exceptions, filter explicitly and copy selected entry",
+        "status": "passed",
+        "durationMs": 779
+      },
+      {
+        "file": "v12-diagnostics.spec.ts",
+        "title": "environment inputs are hidden and no secret enters exports, storage, URL, network or errors",
+        "status": "passed",
+        "durationMs": 1028
+      },
+      {
+        "file": "v12-http.spec.ts",
+        "title": "request code stays local, redacts secrets, imports cURL and produces real language outputs",
+        "status": "passed",
+        "durationMs": 1540
+      },
+      {
+        "file": "v12-http.spec.ts",
+        "title": "header categories and contextual warnings are real and raw exports remain redacted",
+        "status": "passed",
+        "durationMs": 860
+      },
+      {
+        "file": "v12-release.spec.ts",
+        "title": "all seven V1.2 routes operate, reset, reload and keep payloads out of persistence and network",
+        "status": "passed",
+        "durationMs": 4978
+      },
+      {
+        "file": "v13-text-test-data.spec.ts",
+        "title": "V1.3 live Unicode counter preserves transforms, handles limits without truncating, resets and stays private",
+        "status": "passed",
+        "durationMs": 3036
+      },
+      {
+        "file": "v13-text-test-data.spec.ts",
+        "title": "V1.3 text generator joins navigation, produces verified lengths and real downloads, invalidates and reloads empty",
+        "status": "passed",
+        "durationMs": 2380
+      },
+      {
+        "file": "v13-text-test-data.spec.ts",
+        "title": "V1.3 GTIN batch and manual validation preserve zeroes, validate checksums, export and reject exhaustion privately",
+        "status": "passed",
+        "durationMs": 2600
+      }
+    ]
+  },
+  "newWorkspaces": {
+    "privacy": "passed: URL/history/storage/cookies/cache/IndexedDB/network/console",
+    "failedResources": 0,
+    "pageErrors": 0,
+    "measurements": [
+      {
+        "scene": "string-counter",
+        "width": 390,
+        "theme": "dark",
+        "documentWidth": 390
+      },
+      {
+        "scene": "string-counter",
+        "width": 390,
+        "theme": "light",
+        "documentWidth": 390
+      },
+      {
+        "scene": "string-counter",
+        "width": 768,
+        "theme": "dark",
+        "documentWidth": 768
+      },
+      {
+        "scene": "string-counter",
+        "width": 768,
+        "theme": "light",
+        "documentWidth": 768
+      },
+      {
+        "scene": "string-counter",
+        "width": 1440,
+        "theme": "dark",
+        "documentWidth": 1440
+      },
+      {
+        "scene": "string-counter",
+        "width": 1440,
+        "theme": "light",
+        "documentWidth": 1440
+      },
+      {
+        "scene": "test-text",
+        "width": 390,
+        "theme": "dark",
+        "documentWidth": 390
+      },
+      {
+        "scene": "test-text",
+        "width": 390,
+        "theme": "light",
+        "documentWidth": 390
+      },
+      {
+        "scene": "test-text",
+        "width": 768,
+        "theme": "dark",
+        "documentWidth": 768
+      },
+      {
+        "scene": "test-text",
+        "width": 768,
+        "theme": "light",
+        "documentWidth": 768
+      },
+      {
+        "scene": "test-text",
+        "width": 1440,
+        "theme": "dark",
+        "documentWidth": 1440
+      },
+      {
+        "scene": "test-text",
+        "width": 1440,
+        "theme": "light",
+        "documentWidth": 1440
+      },
+      {
+        "scene": "gtin",
+        "width": 390,
+        "theme": "dark",
+        "documentWidth": 390
+      },
+      {
+        "scene": "gtin",
+        "width": 390,
+        "theme": "light",
+        "documentWidth": 390
+      },
+      {
+        "scene": "gtin",
+        "width": 768,
+        "theme": "dark",
+        "documentWidth": 768
+      },
+      {
+        "scene": "gtin",
+        "width": 768,
+        "theme": "light",
+        "documentWidth": 768
+      },
+      {
+        "scene": "gtin",
+        "width": 1440,
+        "theme": "dark",
+        "documentWidth": 1440
+      },
+      {
+        "scene": "gtin",
+        "width": 1440,
+        "theme": "light",
+        "documentWidth": 1440
+      }
+    ],
+    "captures": 6
+  },
+  "issues": {
+    "P0": [],
+    "P1": [],
+    "P2": [
+      "Broader browser and screen-reader coverage remains outside this block."
+    ]
+  },
+  "notes": [
+    "Windows clipboard normalizes LF to CRLF; tests split numeric batches on either line ending without changing identifiers.",
+    "A first visual check found an over-constrained GTIN output height; the panel was corrected before final acceptance."
+  ]
+}

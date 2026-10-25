@@ -1,5 +1,29 @@
 # B1 validation report
 
+## V1.3 — Text & Test Data Utilities acceptance (2026-10-25)
+
+Started from clean `main` / `origin/main` **`c2f0e9954e13f61af44badd74de6b7b376b92d40`**, after reading AGENTS, ARCHITECTURE, FEATURES, DESIGN and ROADMAP. The existing Svelte 5 / SvelteKit 3 / strict TypeScript / adapter-static / Tailwind 4 stack and dependencies are unchanged. **26 available entries**, all 25 previous slugs retained, with lazy `/tools/test-data-generator/` (UTIL-03, Utilities). No Home/navigation redesign or V1.4 functionality.
+
+String Toolkit keeps its seven transformations. Live counts run in a debounced, cancellable worker (120 ms / 1.5 s / 64 KiB), with a character budget that never truncates input. Graphemes, Unicode whitespace, word/line rules, UTF-8/UTF-16 and the labeled code-point fallback are specified in UI/README. Unit tests cover composed/combined accents, joined emoji, flags, skin tones, CRLF/trailing/empty lines, apostrophes/CJK, fallback, byte limits and conversion regressions.
+
+Text generation uses local ASCII Lorem Ipsum/readable corpora; exact/max visual lengths are actually checked with the shared counter. Zero/tiny limits, trailing-period replacement, whole-word maximum mode, word counts, all paragraph separators, regeneration and bounds pass. GTIN tests cover known EAN-13/GTIN-14 checksums, strict ASCII/length/whitespace rejection, leading zeros, invalid checksums, actual Web Crypto, 1,000-item uniqueness and full/exhausted suffix spaces. No commercial assignment is inferred; the required testing-only warning is visible. No barcode images or network services.
+
+On bundled **Node 24.22.1**: check **0 errors/warnings**, lint, **220 unit tests / 14 files**, and static build pass. Build output contains **26** tool `index.html` files. The complete local Chromium suite passes **29 flows** (the 26 original flows plus three new ones); the two explicitly external V1.2 production checks are skipped. The original 18-tool and seven-tool V1.2 operation/copy/reset/reload/privacy matrices pass, including all recipes and handoffs. No exhaustive production audit was repeated.
+
+The three new flows verify real clipboard text, actual TXT/CSV downloads read back from disk, numeric batch checksums/leading zeros, individual copy, exact/max lengths, invalidation, reset, errors and reload without payloads. Navigation includes Home count, palette entry, pinning and returning to Home. Synthetic marker/GTIN/text payloads are absent from URLs/history/local/session storage, cookies, Cache API, IndexedDB, requests and console. Only sanitized preference metadata persists; no page/console errors or failed resource responses were observed in the new flows. On Windows, clipboard LF becomes CRLF; the batch test recognizes either separator without modifying identifiers.
+
+**18** layout checks pass: String counter, generated text and GTIN × dark/light × **390/768/1440 px**. Six actual synthetic captures were visually inspected. A constrained output panel discovered during that review was enlarged so the GTIN editor and export actions remain usable on mobile; result counts also remain visible on mobile. Evidence: [v13-acceptance.json](screenshots/actual/v13-acceptance.json), [counter measurements](screenshots/actual/v13-string-counter-checks.json), [text measurements](screenshots/actual/v13-test-text-checks.json), [GTIN measurements](screenshots/actual/v13-gtin-checks.json).
+
+| View                   | Dark desktop                                                   | Light mobile                                                  |
+| ---------------------- | -------------------------------------------------------------- | ------------------------------------------------------------- |
+| String Toolkit counter | [1440 px](screenshots/actual/v13-string-counter-dark-1440.png) | [390 px](screenshots/actual/v13-string-counter-light-390.png) |
+| Generated text         | [1440 px](screenshots/actual/v13-test-text-dark-1440.png)      | [390 px](screenshots/actual/v13-test-text-light-390.png)      |
+| EAN-13 / GTIN-14       | [1440 px](screenshots/actual/v13-gtin-dark-1440.png)           | [390 px](screenshots/actual/v13-gtin-light-390.png)           |
+
+**P0/P1: none open.** P2: broader cross-browser/physical-device/screen-reader coverage remains for later blocks; this is not accessibility certification. Code-point fallback, ASCII corpora, bounded generation, regeneration overlap and CSV text-column import are intentional documented limits. No separate P2 polishing round. README, FEATURES and ROADMAP describe implemented V1.3 behavior. Commit/push and the exact final CI result are checked at delivery; Actions repeats the same installation/quality/browser gates. To reproduce: `npm run check`, `npm run lint`, `npm run test`, `npm run build`, `npm run test:e2e`; focused V1.3 UI: `npx playwright test tests/v13-text-test-data.spec.ts` after building.
+
+The following sections preserve the completed V1.2 and earlier acceptance. Their production evidence is point-in-time and is not relabeled as V1.3 evidence.
+
 The published V1.2 deployment was separately audited on 2026-10-25 against HTTPS Cloudflare Pages. See [PRODUCTION_VALIDATION.md](PRODUCTION_VALIDATION.md) for the actual version, 25-route operation matrix, privacy/network evidence, browser limitations and acceptance decision. The local results below remain historical.
 
 ## V1.2 final local acceptance — 2026-10-25

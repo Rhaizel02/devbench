@@ -4,6 +4,7 @@
 	import OutputActions from '#lib/components/OutputActions.svelte';
 	import { transformStrings } from './string-engine';
 	import { errorMessage } from '../tool-errors';
+	import TextStatistics from './TextStatistics.svelte';
 	let input = $state('');
 	let stripMarks = $state(false);
 	let result = $state<ReturnType<typeof transformStrings> | null>(null);
@@ -57,6 +58,7 @@
 	</div>
 	<CodeEditor bind:value={input} label="String input" language="plain" />
 </div>
+<TextStatistics {input} />
 {#if error && errorKey === key}<div class="parse-error" role="alert">{error}</div>{/if}
 <section class="result-section" aria-label="String transformations">
 	<div class="section-bar"><h2>Case and separator transforms</h2></div>

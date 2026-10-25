@@ -1,5 +1,15 @@
 # DevBench — Roadmap
 
+## V1.3 — Text & Test Data Utilities
+
+26 entradas disponibles. TEXT-02 añade contador Unicode en vivo y límite informativo sin alterar conversiones. UTIL-03 Test Data Generator incorpora corpus locales exactos/máximos/por palabras/párrafos y generación/validación numérica EAN-13 / GTIN-14 con checksum, lotes únicos Web Crypto y exportación. UI/README documentan límites de entrada, fallback, corte de palabras, espacios finales y ausencia de asignación GS1. Motores puros y carga diferida; memoria por instancia y metadatos únicamente en persistencia. Aceptación y capturas en VALIDATION.md.
+
+P0/P1 se corrigen antes del cierre. P2 para próximos bloques: ampliación de pruebas de lector de pantalla/navegadores y ajustes menores de densidad. El fallback de puntos de código y los límites explícitos son comportamiento documentado. V1.4 y Architecture Canvas permanecen fuera de esta entrega.
+
+La auditoría pública V1.2 ya está completada en [PRODUCTION_VALIDATION.md](PRODUCTION_VALIDATION.md). Los bloques siguientes conservan su estado histórico; no atribuir ese informe de producción a V1.3.
+
+## Histórico hasta V1.2
+
 Las 12 herramientas V1, 6 V1.1 y 6 individuales V1.2 más Pipeline Builder están implementadas: 25 entradas utilizables. Los estados `available` dependen de motores y pantallas reales. `GOAL_PROGRESS_V12.md` y `screenshots/actual/v12-checks.json` documentan V1.2; la matriz `release-matrix.json` y la tabla siguiente conservan V1/V1.1. `VALIDATION.md` conserva evidencia histórica y por hito.
 
 | Bloque / hito | Contenido | Estado |

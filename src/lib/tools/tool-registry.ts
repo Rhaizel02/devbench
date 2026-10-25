@@ -7,10 +7,22 @@ export type Tool = {
 	description: string;
 	keywords: string;
 	status: 'available' | 'planned';
-	version: 'V1' | 'V1.1' | 'V1.2';
+	version: 'V1' | 'V1.1' | 'V1.2' | 'V1.3';
 	icon: string;
 };
 export const tools: Tool[] = [
+	{
+		id: 'UTIL-03',
+		slug: 'test-data-generator',
+		name: 'Test Data Generator',
+		category: 'Utilities',
+		description: 'Generate local test text and numeric EAN-13 / GTIN-14 fixtures.',
+		keywords:
+			'lorem ipsum synthetic text exact maximum characters words paragraphs ean gtin checksum gs1 test data',
+		status: 'available',
+		version: 'V1.3',
+		icon: 'fingerprint'
+	},
 	{
 		id: 'FLOW-01',
 		slug: 'pipeline-builder',
@@ -269,8 +281,8 @@ export const tools: Tool[] = [
 		slug: 'string-toolkit',
 		name: 'String Toolkit',
 		category: 'Text',
-		description: 'Transform casing and separators.',
-		keywords: 'case slug',
+		description: 'Transform casing and separators; count Unicode text live.',
+		keywords: 'case slug counter count words lines bytes characters length unicode text statistics',
 		status: 'available',
 		version: 'V1.1',
 		icon: 'text'

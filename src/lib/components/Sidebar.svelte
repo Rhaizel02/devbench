@@ -13,11 +13,13 @@
 	<a class="brand" href={resolve('/')} onclick={close}
 		><span class="brand-symbol"><Icon name="terminal" size={18} /></span>DevBench<span
 			class="version"
-			>{listedTools.some((tool) => tool.version === 'V1.2')
-				? 'V1.2'
-				: listedTools.some((tool) => tool.version === 'V1.1')
-					? 'V1.1'
-					: 'V1'}</span
+			>{listedTools.some((tool) => tool.version === 'V1.3')
+				? 'V1.3'
+				: listedTools.some((tool) => tool.version === 'V1.2')
+					? 'V1.2'
+					: listedTools.some((tool) => tool.version === 'V1.1')
+						? 'V1.1'
+						: 'V1'}</span
 		></a
 	>
 	{#if close}<button class="drawer-close icon-button" onclick={close} aria-label="Close navigation"

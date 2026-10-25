@@ -1,5 +1,6 @@
 import type { Component } from 'svelte';
 export const toolWorkspaces: Record<string, () => Promise<{ default: Component }>> = {
+	'test-data-generator': () => import('./test-data/TestData.svelte'),
 	'pipeline-builder': () => import('./pipeline/Pipeline.svelte'),
 	'log-inspector': () => import('./log-inspector/LogInspector.svelte'),
 	'environment-comparator': () => import('./environment/Environment.svelte'),

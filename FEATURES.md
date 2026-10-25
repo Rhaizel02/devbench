@@ -1,5 +1,17 @@
 # DevBench — Alcance funcional cerrado
 
+## V1.3 — Text & Test Data Utilities
+
+26 entradas disponibles: las 25 anteriores y UTIL-03 **Test Data Generator**, categoría Utilities, ruta estática `/tools/test-data-generator/`, carga diferida y registro común para Home/búsqueda/favoritos/recientes/paleta. Sin rediseños ni funciones V1.4.
+
+TEXT-02 conserva las siete conversiones y añade estadísticas en vivo: grafemas (`Intl.Segmenter`; fallback etiquetado como puntos de código), sin whitespace, palabras, líneas, UTF-8 y UTF-16. Límite informativo 0–1.000.000 con utilizados/restantes/excedidos sin truncar. Worker cancelable tras 120 ms, plazo 1,5 s y límite original 64 KiB. Reglas precisas de Unicode, espacios, apóstrofes, CJK y líneas vacías en UI/README; no se promete segmentación lingüística.
+
+UTIL-03 ofrece corpus locales Lorem Ipsum/texto sintético legible, longitud visual exacta/máxima, palabras o párrafos de tres frases. Límites: 32.768 caracteres/bytes, 2.000 palabras o 50 párrafos. Exacto puede cortar palabras y sustituye whitespace final por puntos; máximo conserva palabras completas y puede quedar vacío. Separación por línea en blanco, salto o espacio. Copia/descarga, regeneración y reset reales; sin IA ni APIs.
+
+También genera/valida EAN-13 y GTIN-14 numéricos y completa GS1 módulo 10 desde 12/13 dígitos. Web Crypto, lotes únicos de 1–1.000, ceros iniciales conservados y prefijo opcional con error por espacio insuficiente. Copia individual (20 primeros), lote completo y TXT/CSV. Únicamente estructura/checksum: no asignación GS1, disponibilidad comercial, servicios externos o imágenes de barras. Advertencia visible: “Structurally valid GTINs for testing only. Valid checksum does not imply GS1 assignment or identification of a real product.”
+
+Inputs/resultados por instancia en memoria; las opciones editadas invalidan resultados. Cambiar utilidad o abandonar elimina datos. Solo se guardan IDs/fechas/tema saneados. README y VALIDATION registran límites y aceptación; las secciones siguientes conservan el histórico.
+
 ## V1.2 delivery
 
 FLOW-01 Pipeline Builder and compatible explicit Send to Tool handoffs are implemented. Nine fixed operations reuse existing engines in a bounded, interruptible linear worker. No custom scripts, network, persisted recipes or automatic secret transfers.
