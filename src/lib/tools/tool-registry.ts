@@ -7,10 +7,21 @@ export type Tool = {
 	description: string;
 	keywords: string;
 	status: 'available' | 'planned';
-	version: 'V1' | 'V1.1' | 'V1.2' | 'V1.3';
+	version: 'V1' | 'V1.1' | 'V1.2' | 'V1.3' | 'V1.4';
 	icon: string;
 };
 export const tools: Tool[] = [
+	{
+		id: 'DRAW-01',
+		slug: 'architecture-canvas',
+		name: 'Architecture Canvas',
+		category: 'Utilities',
+		description: 'Sketch systems, nest diagrams and autosave local projects.',
+		keywords: 'whiteboard architecture diagram canvas sketch drawing hierarchy local project',
+		status: 'available',
+		version: 'V1.4',
+		icon: 'layers'
+	},
 	{
 		id: 'UTIL-03',
 		slug: 'test-data-generator',

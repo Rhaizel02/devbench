@@ -1,5 +1,19 @@
 # B1 validation report
 
+## V1.4 — Architecture Canvas Release Candidate
+
+RC on `feature/architecture-canvas-v14`, **27 entries**, lazy/prerendered `/tools/architecture-canvas/` and retained lab. `main` remains V1.3. Check: 0 errors/warnings. Lint and build pass. **256 unit tests / 16 files** pass, including full v1 migration (Unicode IDs, text child links and anchored text connections), v2 roundtrip/hostile imports/cycles/history/autosave failures. **36 local Chromium flows pass**, with the two historical explicitly remote production-audit flows skipped. After the final migration extension, all units and the seven Canvas flows pass again; final CI repeats the complete suite on the pushed commit.
+
+Seven Canvas flows cover drawing/styles/direct text/resize/undo/multiselect/ink/adjustable anchored and free connectors/downloaded JSON+PNG; manual three-level creation, portal/direct/reduced motion/Escape/camera reload/cycles/orphans; six themes/layouts, real CDP touch gestures, keyboard and teardown; actual IDB projects, invalid import preservation/roundtrip/new IDs/confirmation; quota rescue+retry; catalog/pinning/deep reload/404 and representative workload; two-tab stale-write rejection preserving both the newer disk record and a rescue copy of the stale edit.
+
+Representative workload: **300 figures, 20 strokes (400 points), 200 arrows**. Latest measured wall-clock import-to-ready ~1.08 s (includes autosave debounce), move ~652 ms, wheel zoom ~101 ms. These are automated interaction durations, not FPS or a scale guarantee. Exact evidence, nine actual screenshots, all static slugs and lazy-chunk bytes: [canvas-v14-validation.json](screenshots/actual/canvas-v14-validation.json), [performance](screenshots/actual/canvas-v14-performance.json), [RC report](docs/ARCHITECTURE_CANVAS_V14.md). P0/P1 open: none in the verified scope. P2/limitations are explicit in the report; CI/Cloudflare are checked by exact SHA after push, with no production-audit claim.
+
+### Milestone history
+
+Architecture Canvas remains on `/lab/architecture-canvas/` until the RC gate. H1/H2 CI passed on `fadb2f998200d1ae03886f6b127306932dae0671` / `a586324ffc4ff45c9263e9d68af1d163cfbd689e`. H3 selective validation: 36 relevant unit tests (25 new Canvas + 11 spike), check without diagnostics, static build and five real Chromium flows. These cover drag/text/styles/ink/connectors/resize/history/JSON+PNG, a manually built three-level hierarchy, camera persistence/reload/orphans/cycle rejection, six responsive themes, local project roundtrip/import/deletion and injected quota failure with rescue export/retry. Quality/CI outcomes and final acceptance are tracked in [GOAL_PROGRESS_V14.md](GOAL_PROGRESS_V14.md); no full RC GO is claimed yet.
+
+Canvas-only exception: its own projects persist in IndexedDB `devbench.canvas.v2`. Browser tests find the synthetic marker there as intended and reject it in URLs/history/localStorage/sessionStorage/cookies/requests/console; requests are same-origin static GETs. Other tools retain the previous memory-only policy. See [implementation and limits](docs/ARCHITECTURE_CANVAS_V14.md). The following reports preserve historical releases, including their old entry counts.
+
 ## V1.3 — Text & Test Data Utilities acceptance (2026-10-25)
 
 Started from clean `main` / `origin/main` **`c2f0e9954e13f61af44badd74de6b7b376b92d40`**, after reading AGENTS, ARCHITECTURE, FEATURES, DESIGN and ROADMAP. The existing Svelte 5 / SvelteKit 3 / strict TypeScript / adapter-static / Tailwind 4 stack and dependencies are unchanged. **26 available entries**, all 25 previous slugs retained, with lazy `/tools/test-data-generator/` (UTIL-03, Utilities). No Home/navigation redesign or V1.4 functionality.

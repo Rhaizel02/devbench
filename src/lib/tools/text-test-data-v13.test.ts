@@ -227,8 +227,8 @@ describe('GS1 modulo 10 numeric fixtures', () => {
 	});
 });
 
-it('exposes exactly 26 available entries and finds the new utilities by their real functions', () => {
-	expect(tools.filter((tool) => tool.status === 'available')).toHaveLength(26);
+it('exposes exactly 27 available entries and finds the new utilities by their real functions', () => {
+	expect(tools.filter((tool) => tool.status === 'available')).toHaveLength(27);
 	for (const term of ['lorem', 'ean', 'gtin', 'test data'])
 		expect(searchTools(term).some((tool) => tool.slug === 'test-data-generator')).toBe(true);
 	expect(searchTools('counter').some((tool) => tool.slug === 'string-toolkit')).toBe(true);

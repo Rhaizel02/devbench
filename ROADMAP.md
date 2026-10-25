@@ -1,5 +1,11 @@
 # DevBench — Roadmap
 
+## V1.4 — Architecture Canvas RC, rama aislada
+
+DRAW-01 es la entrada 27: pizarra de formas/tinta/texto, estilos, transformaciones e historial; jerarquía creada por usuario con apertura directa/portal y huérfanos; proyectos locales IndexedDB con autosave, importación migrada v1/v2, rescate JSON y PNG. Lab sigue disponible. Se conserva main V1.3 y sus 26 slugs, sin merge ni force push. Contrato/evidencia/aceptación en `V14_ARCHITECTURE_CANVAS_GOAL.md`, `GOAL_PROGRESS_V14.md` y `docs/ARCHITECTURE_CANVAS_V14.md`.
+
+P2: validación asistiva dedicada y paridad Firefox/WebKit, interacción avanzada con lápiz/multitáctil y mediciones de documentos mayores/largas sesiones. Routing CAD, colaboración, presión, imágenes, rotación y agrupación avanzada no forman parte de esta RC. La transición visual no es zoom semántico infinito. Los apartados siguientes conservan el histórico V1.3/V1.2.
+
 ## V1.3 — Text & Test Data Utilities
 
 26 entradas disponibles. TEXT-02 añade contador Unicode en vivo y límite informativo sin alterar conversiones. UTIL-03 Test Data Generator incorpora corpus locales exactos/máximos/por palabras/párrafos y generación/validación numérica EAN-13 / GTIN-14 con checksum, lotes únicos Web Crypto y exportación. UI/README documentan límites de entrada, fallback, corte de palabras, espacios finales y ausencia de asignación GS1. Motores puros y carga diferida; memoria por instancia y metadatos únicamente en persistencia. Aceptación y capturas en VALIDATION.md.

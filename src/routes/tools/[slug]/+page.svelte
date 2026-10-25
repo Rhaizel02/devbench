@@ -33,25 +33,38 @@
 </script>
 
 <svelte:head><title>{data.tool.name} — DevBench</title></svelte:head>
-<div class="workspace-page">
-	<div class="breadcrumb">
-		<a href={resolve('/')}>Tools</a><span>/</span><span>{data.tool.category}</span><span>/</span
-		><span>{data.tool.name}</span>
-	</div>
-	<div class="workspace-heading">
-		<div>
-			<h1>{data.tool.name}</h1>
-			<p>{data.tool.description}</p>
+<div class="workspace-page" class:canvas-workspace={data.tool.slug === 'architecture-canvas'}>
+	{#if data.tool.slug === 'architecture-canvas'}
+		<div class="canvas-meta">
+			<span>Architecture Canvas · Release candidate</span><button
+				class="button"
+				aria-pressed={app.preferences.favorites.includes(data.tool.id)}
+				onclick={() => app.toggleFavorite(data.tool.id)}
+				><Star size={14} />{app.preferences.favorites.includes(data.tool.id)
+					? 'Pinned'
+					: 'Pin tool'}</button
+			>
 		</div>
-		<button
-			class="button favorite-workspace"
-			aria-pressed={app.preferences.favorites.includes(data.tool.id)}
-			onclick={() => app.toggleFavorite(data.tool.id)}
-			><Star size={15} />{app.preferences.favorites.includes(data.tool.id)
-				? 'Pinned'
-				: 'Pin tool'}</button
-		>
-	</div>
+	{:else}
+		<div class="breadcrumb">
+			<a href={resolve('/')}>Tools</a><span>/</span><span>{data.tool.category}</span><span>/</span
+			><span>{data.tool.name}</span>
+		</div>
+		<div class="workspace-heading">
+			<div>
+				<h1>{data.tool.name}</h1>
+				<p>{data.tool.description}</p>
+			</div>
+			<button
+				class="button favorite-workspace"
+				aria-pressed={app.preferences.favorites.includes(data.tool.id)}
+				onclick={() => app.toggleFavorite(data.tool.id)}
+				><Star size={15} />{app.preferences.favorites.includes(data.tool.id)
+					? 'Pinned'
+					: 'Pin tool'}</button
+			>
+		</div>
+	{/if}
 	{#if data.tool.status === 'available'}
 		{#if Workspace && loadedSlug === data.tool.slug}{#key data.tool.id}<Workspace
 				/>{/key}{:else if loadError}<div class="notice error-message" role="alert">
@@ -69,3 +82,32 @@
 			>
 		</section>{/if}
 </div>
+
+<style>
+	.canvas-workspace {
+		padding: 0;
+		max-width: none;
+	}
+	.canvas-meta {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 12px;
+		padding: 12px 24px 0;
+		font-size: 10px;
+		color: var(--color-muted);
+	}
+	.canvas-meta .button {
+		font-size: 11px;
+		min-height: 32px;
+		padding: 5px 8px;
+	}
+	@media (max-width: 800px) {
+		.canvas-meta {
+			padding: 10px 16px 0;
+		}
+		.canvas-meta .button {
+			min-height: 40px;
+		}
+	}
+</style>

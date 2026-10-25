@@ -13,10 +13,12 @@
 		Clock,
 		Terminal,
 		Text,
-		ArrowUpRight
+		ArrowUpRight,
+		Layers
 	} from '@lucide/svelte';
 	let { name, size = 18 }: { name: string; size?: number } = $props();
 	const icons = {
+		layers: Layers,
 		braces: Braces,
 		diff: GitCompareArrows,
 		swap: ArrowLeftRight,
