@@ -31,3 +31,9 @@ Physical IndexedDB remains `devbench.canvas.v2`, version 1, store `projects`. Op
 | Final visual/performance/privacy/full regression                 | real Chromium and exact final CI         | Pending                                                 |
 
 Open P0/P1: none confirmed; unimplemented core milestones mean **NO-GO for RC acceptance** until verified. P2: historical remote TLS trust block, intermittent H0 test loading race, physical touch and dedicated assistive-technology testing not performed.
+
+## Interaction checkpoint
+
+Canvas geometry/interaction now runs on Konva with Rough.js4.6.6 MIT deterministic paths. Rough paths depend on size/style/seed, not camera/selection/position; analytical transparent hit shapes retain stable selection. Ink remains smoothed, bounded point data with one history record per stroke. Groups are flat, uniform group resize prevents shear, rotation uses center pivots, and anchors rotate in local coordinates. Curves use quadratic control points; elbows recompute as world-orthogonal segments. Control handles, arrow-head options and dashed styles are implemented. Marquee uses full world bounds containment (stroke widths/arrow heads excluded), Shift XOR, group units, Escape cancellation with no document history. Wheel pans; Ctrl/Cmd-wheel zooms; hand/middle/Space pan. Two-touch pinch preserves the world point under the initial midpoint; no physical-device claim.
+
+UI flows passed: marquee/group/move/resize/visible rotation handle, numeric rotation, duplication/ungroup/delete/undo, curve/both heads, freehand, exact reload, independent three-level DAG clone with descendant edit and unchanged source, explicit linked clone, six responsive theme sizes and CDP pinch/privacy. New screenshots are real browser output; final curated architecture scenes/performance/matrix are pending. Historical seven Canvas flows remain useful; wheel test now matches the intentionally changed gesture.

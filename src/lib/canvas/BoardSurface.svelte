@@ -1,21 +1,22 @@
 <script lang="ts">
-	import { Stage, Layer, Group, Rect, Ellipse, Line, Arrow, Text, Circle } from 'svelte-konva';
+	import { Stage, Layer, Rect, Line, Circle } from 'svelte-konva';
 	import type { Stage as KonvaStage } from 'konva/lib/Stage';
 	import type { KonvaEventObject } from 'konva/lib/Node';
 	import { onMount, untrack } from 'svelte';
+	import CanvasFigure from './CanvasFigure.svelte';
+	import CanvasConnection from './CanvasConnection.svelte';
 	import {
-		FONT_FAMILIES,
-		labelInk,
 		LIMITS,
 		anchorAt,
 		endpoint,
+		expandGroups,
+		localToWorld,
 		moveSelection,
 		resizeElement,
 		screenToWorld,
+		worldToLocal,
 		zoomAt,
 		strokeElement,
-		sketchPath,
-		bounds,
 		newId,
 		type Diagram,
 		type Point,
@@ -24,7 +25,17 @@
 		type Element,
 		type Connection
 	} from './model';
-	export type Mode = 'select' | 'pan' | Element['kind'] | 'line' | 'arrow';
+	import {
+		connectorControl,
+		documentBounds,
+		marqueeSelection,
+		rectangle,
+		rotateSelection,
+		scaleSelection,
+		selectionBounds,
+		type Box
+	} from './operations';
+	export type Mode = 'select' | 'pan' | Exclude<Element['kind'], 'image'> | 'line' | 'arrow';
 	let {
 		diagram,
 		view,
@@ -32,6 +43,7 @@
 		style,
 		selection,
 		busy = false,
+		sharedChildren = [],
 		onSelect,
 		onCommit,
 		onViewport,
@@ -39,7 +51,8 @@
 		onChild,
 		onMeasure,
 		onStatus,
-		onFocus
+		onFocus,
+		onCreated = () => {}
 	}: {
 		diagram: Diagram;
 		view: Viewport;
@@ -47,143 +60,262 @@
 		style: Style;
 		selection: string[];
 		busy?: boolean;
+		sharedChildren?: string[];
 		onSelect: (ids: string[]) => void;
-		onCommit: (d: Diagram) => void;
-		onViewport: (v: Viewport) => void;
+		onCommit: (diagram: Diagram) => void;
+		onViewport: (view: Viewport) => void;
 		onText: (id: string) => void;
 		onChild: (id: string) => void;
-		onMeasure: (w: number, h: number) => void;
+		onMeasure: (width: number, height: number) => void;
 		onStatus: (message: string) => void;
 		onFocus: () => void;
+		onCreated?: () => void;
 	} = $props();
 	let width = $state(0),
 		height = $state(0),
 		stage = $state<{ node: KonvaStage }>(),
-		draft = $state.raw<Diagram | null>(null);
+		host: HTMLDivElement;
+	let draft = $state.raw<Diagram | null>(null),
+		marquee = $state<Box | null>(null),
+		labelColor = $state('#ededf0');
 	type Gesture = {
-		kind: 'create' | 'move' | 'resize' | 'endpoint' | 'pan';
+		kind: 'create' | 'move' | 'resize' | 'rotate' | 'endpoint' | 'control' | 'pan' | 'marquee';
 		start: Point;
 		screen: Point;
 		original: Diagram;
 		ids: string[];
 		view: Viewport;
-		end?: 'start' | 'end';
 		id?: string;
+		end?: 'start' | 'end';
+		shift: boolean;
+		pointerId: number;
 	};
-	let gesture: Gesture | null = null;
-	let points: Point[] = [];
-	let labelColor = $state('#ededf0');
-	onMount(() => {
-		const update = () => {
-			labelColor = getComputedStyle(document.documentElement)
-				.getPropertyValue('--color-text')
-				.trim();
-		};
-		update();
-		const observer = new MutationObserver(update);
-		observer.observe(document.documentElement, {
-			attributes: true,
-			attributeFilter: ['data-theme']
-		});
-		return () => observer.disconnect();
-	});
+	let gesture: Gesture | null = null,
+		points: Point[] = [];
+	let space = $state(false);
+	// eslint-disable-next-line svelte/prefer-svelte-reactivity -- Pointer bookkeeping must not trigger a render per sample.
+	const pointers = new Map<number, Point>();
+	let pinch: { view: Viewport; mid: Point; distance: number; world: Point } | null = null;
 	const shown = $derived(draft ?? diagram);
 	const entities = $derived(
 		[
-			...shown.elements.map((e) => ({ type: 'element' as const, value: e })),
-			...shown.connections.map((c) => ({ type: 'connection' as const, value: c }))
+			...shown.elements.map((value) => ({ type: 'element' as const, value })),
+			...shown.connections.map((value) => ({ type: 'connection' as const, value }))
 		].sort((a, b) => a.value.z - b.value.z)
+	);
+	const validSelection = $derived(
+		selection.filter(
+			(id) => shown.elements.some((e) => e.id === id) || shown.connections.some((c) => c.id === id)
+		)
+	);
+	const selectedBox = $derived(
+		validSelection.length ? selectionBounds(shown, validSelection) : null
 	);
 	$effect(() => {
 		const w = width,
 			h = height;
 		if (w && h) untrack(() => onMeasure(w, h));
 	});
-	const pointer = () => stage?.node.getPointerPosition() ?? null;
+	onMount(() => {
+		const update = () =>
+			(labelColor = getComputedStyle(document.documentElement)
+				.getPropertyValue('--color-text')
+				.trim());
+		update();
+		const observer = new MutationObserver(update);
+		observer.observe(document.documentElement, {
+			attributes: true,
+			attributeFilter: ['data-theme']
+		});
+		return () => {
+			observer.disconnect();
+			pointers.clear();
+		};
+	});
+	function screen(event: PointerEvent): Point {
+		const b = host.getBoundingClientRect();
+		return { x: event.clientX - b.x, y: event.clientY - b.y };
+	}
 	const z = () =>
-		Math.max(0, ...diagram.elements.map((e) => e.z), ...diagram.connections.map((c) => c.z)) + 1;
+		Math.max(0, ...diagram.elements.map((e) => e.z), ...diagram.connections.map((e) => e.z)) + 1;
+	function capture(e: PointerEvent) {
+		try {
+			(e.target as HTMLElement).setPointerCapture(e.pointerId);
+		} catch {
+			/* Some synthetic events have no active capture. */
+		}
+	}
+	function release(e: PointerEvent) {
+		try {
+			(e.target as HTMLElement).releasePointerCapture(e.pointerId);
+		} catch {
+			/* Already cancelled or released. */
+		}
+	}
 	function down(event: KonvaEventObject<PointerEvent>) {
-		if (busy || event.evt.isPrimary === false || event.evt.button > 1) return;
-		event.evt.preventDefault();
+		const e = event.evt;
+		if (busy || e.button > 1) return;
+		e.preventDefault();
 		onFocus();
-		const screen = pointer();
-		if (!screen) return;
-		const world = screenToWorld(screen, view);
-		const group = event.target.findAncestor('.entity', true),
-			id = group?.id();
-		const handle = event.target.name();
+		const p = screen(e);
+		pointers.set(e.pointerId, p);
+		capture(e);
+		if (pointers.size >= 2) {
+			gesture = null;
+			draft = null;
+			marquee = null;
+			points = [];
+			const [a, b] = [...pointers.values()],
+				mid = { x: (a.x + b.x) / 2, y: (a.y + b.y) / 2 };
+			pinch = {
+				view: { ...view },
+				mid,
+				distance: Math.max(1, Math.hypot(b.x - a.x, b.y - a.y)),
+				world: screenToWorld(mid, view)
+			};
+			return;
+		}
+		const world = screenToWorld(p, view),
+			id = event.target.findAncestor('.entity', true)?.id(),
+			handle = event.target.name();
 		let kind: Gesture['kind'] = 'create',
 			ids = selection;
-		if (mode === 'pan' || event.evt.button === 1) kind = 'pan';
-		else if (handle.startsWith('resize-')) {
-			kind = 'resize';
-			ids = [handle.slice(7)];
+		if (mode === 'pan' || space || e.button === 1) kind = 'pan';
+		else if (handle === 'resize-selection') kind = 'resize';
+		else if (handle === 'rotate-selection') kind = 'rotate';
+		else if (handle.startsWith('control-')) {
+			kind = 'control';
+			ids = [handle.slice(8)];
 		} else if (handle.startsWith('start-') || handle.startsWith('end-')) {
 			kind = 'endpoint';
 			ids = [handle.slice(handle.indexOf('-') + 1)];
 		} else if (mode === 'select') {
 			if (!id) {
-				onSelect([]);
-				return;
+				kind = e.pointerType === 'touch' ? 'pan' : 'marquee';
+				if (!e.shiftKey) onSelect([]);
+			} else {
+				const unit = expandGroups(diagram, [id]);
+				ids = e.shiftKey
+					? unit.every((id) => selection.includes(id))
+						? selection.filter((id) => !unit.includes(id))
+						: [...new Set([...selection, ...unit])]
+					: selection.includes(id)
+						? selection
+						: unit;
+				onSelect(ids);
+				if (!ids.includes(id)) {
+					release(e);
+					pointers.delete(e.pointerId);
+					return;
+				}
+				kind = 'move';
 			}
-			ids = event.evt.shiftKey
-				? selection.includes(id)
-					? selection.filter((x) => x !== id)
-					: [...selection, id]
-				: selection.includes(id)
-					? selection
-					: [id];
-			onSelect(ids);
-			if (!ids.includes(id)) return;
-			kind = 'move';
 		}
 		gesture = {
 			kind,
 			start: world,
-			screen,
+			screen: p,
 			original: diagram,
 			ids: [...ids],
 			view: { ...view },
 			id: kind === 'create' ? newId('item') : ids[0],
-			end: handle.startsWith('start-') ? 'start' : 'end'
+			end: handle.startsWith('start-') ? 'start' : 'end',
+			shift: e.shiftKey,
+			pointerId: e.pointerId
 		};
 		points = [world];
 		if (kind === 'create') onSelect([]);
 	}
-	function move() {
-		if (!gesture || busy) return;
-		const screen = pointer();
-		if (!screen) return;
-		const g = gesture,
-			world = screenToWorld(screen, g.view),
+	function move(event: KonvaEventObject<PointerEvent>) {
+		const e = event.evt,
+			p = screen(e);
+		if (pointers.has(e.pointerId)) pointers.set(e.pointerId, p);
+		if (pinch && pointers.size >= 2) {
+			e.preventDefault();
+			const [a, b] = [...pointers.values()],
+				mid = { x: (a.x + b.x) / 2, y: (a.y + b.y) / 2 },
+				zoom = Math.max(
+					0.2,
+					Math.min(4, (pinch.view.zoom * Math.hypot(b.x - a.x, b.y - a.y)) / pinch.distance)
+				);
+			onViewport({ zoom, x: mid.x - pinch.world.x * zoom, y: mid.y - pinch.world.y * zoom });
+			return;
+		}
+		const g = gesture;
+		if (!g || busy || g.pointerId !== e.pointerId) return;
+		e.preventDefault();
+		const world = screenToWorld(p, g.view),
 			dx = world.x - g.start.x,
 			dy = world.y - g.start.y;
+		if (Math.hypot(p.x - g.screen.x, p.y - g.screen.y) < 2 && !draft && !marquee) return;
 		if (g.kind === 'pan') {
-			onViewport({
-				...g.view,
-				x: g.view.x + screen.x - g.screen.x,
-				y: g.view.y + screen.y - g.screen.y
-			});
+			onViewport({ ...g.view, x: g.view.x + p.x - g.screen.x, y: g.view.y + p.y - g.screen.y });
+			return;
+		}
+		if (g.kind === 'marquee') {
+			marquee = rectangle(g.start, world);
+			onSelect(marqueeSelection(g.original, marquee, g.ids, g.shift));
 			return;
 		}
 		if (g.kind === 'move') {
 			draft = moveSelection(g.original, g.ids, { x: dx, y: dy });
 			return;
 		}
-		if (g.kind === 'resize') {
-			draft = {
-				...g.original,
-				elements: g.original.elements.map((e) =>
-					e.id === g.id ? resizeElement(e, world.x - e.x, world.y - e.y) : e
-				)
-			};
+		if (g.kind === 'rotate') {
+			const b = selectionBounds(g.original, g.ids),
+				center = { x: b.x + b.width / 2, y: b.y + b.height / 2 };
+			let angle =
+				((Math.atan2(world.y - center.y, world.x - center.x) -
+					Math.atan2(g.start.y - center.y, g.start.x - center.x)) *
+					180) /
+				Math.PI;
+			if (e.shiftKey) angle = Math.round(angle / 15) * 15;
+			draft = rotateSelection(g.original, g.ids, angle, center);
 			return;
 		}
-		if (g.kind === 'endpoint') {
+		if (g.kind === 'resize') {
+			if (g.ids.length === 1) {
+				const element = g.original.elements.find((e) => e.id === g.id);
+				if (element) {
+					const p = worldToLocal(element, world),
+						resized = resizeElement(element, p.x, p.y),
+						theta = ((element.rotation ?? 0) * Math.PI) / 180;
+					// Keep the opposite rotated corner fixed while changing the center.
+					const dw = (resized.width - element.width) / 2,
+						dh = (resized.height - element.height) / 2;
+					const next = {
+						...resized,
+						x: element.x + dw * Math.cos(theta) - dh * Math.sin(theta) - dw,
+						y: element.y + dw * Math.sin(theta) + dh * Math.cos(theta) - dh
+					};
+					draft = {
+						...g.original,
+						elements: g.original.elements.map((e) => (e.id === g.id ? next : e))
+					};
+					return;
+				}
+			}
+			const b = selectionBounds(g.original, g.ids),
+				factor = Math.max(
+					0.01,
+					Math.max((world.x - b.x) / Math.max(1, b.width), (world.y - b.y) / Math.max(1, b.height))
+				);
+			try {
+				draft = scaleSelection(g.original, g.ids, factor);
+			} catch {
+				onStatus('Resize exceeds figure limits.');
+			}
+			return;
+		}
+		if (g.kind === 'endpoint' || g.kind === 'control') {
 			draft = {
 				...g.original,
 				connections: g.original.connections.map((c) =>
-					c.id === g.id ? { ...c, [g.end!]: anchorAt(g.original, world) } : c
+					c.id === g.id
+						? g.kind === 'control'
+							? { ...c, control: world }
+							: { ...c, [g.end!]: anchorAt(g.original, world) }
+						: c
 				)
 			};
 			return;
@@ -196,15 +328,14 @@
 			if (Math.hypot(world.x - points.at(-1)!.x, world.y - points.at(-1)!.y) * view.zoom < 2)
 				return;
 			points.push(world);
-			if (points.length > 1)
-				draft = {
-					...g.original,
-					elements: [...g.original.elements, strokeElement(g.id!, points, style, z())]
-				};
+			draft = {
+				...g.original,
+				elements: [...g.original.elements, strokeElement(g.id!, points, style, z())]
+			};
 			return;
 		}
 		if (mode === 'line' || mode === 'arrow') {
-			const connection: Connection = {
+			const c: Connection = {
 				id: g.id!,
 				kind: mode,
 				start: anchorAt(g.original, g.start),
@@ -212,28 +343,43 @@
 				style: { ...style },
 				z: z()
 			};
-			draft = { ...g.original, connections: [...g.original.connections, connection] };
+			draft = { ...g.original, connections: [...g.original.connections, c] };
 			return;
 		}
 		if (mode === 'select' || mode === 'pan') return;
-		const element: Element = {
-			id: g.id!,
-			kind: mode,
-			label: '',
-			x: Math.min(g.start.x, world.x),
-			y: Math.min(g.start.y, world.y),
-			width: Math.max(1, Math.abs(dx)),
-			height: Math.max(1, Math.abs(dy)),
-			style: { ...style },
-			z: z()
+		draft = {
+			...g.original,
+			elements: [
+				...g.original.elements,
+				{
+					id: g.id!,
+					kind: mode,
+					label: '',
+					...rectangle(g.start, world),
+					width: Math.max(1, Math.abs(dx)),
+					height: Math.max(1, Math.abs(dy)),
+					style: { ...style },
+					z: z()
+				}
+			]
 		};
-		draft = { ...g.original, elements: [...g.original.elements, element] };
 	}
-	function finish() {
+	function finish(event: KonvaEventObject<PointerEvent>) {
+		const e = event.evt;
+		pointers.delete(e.pointerId);
+		release(e);
+		if (pinch) {
+			if (pointers.size < 2) {
+				pinch = null;
+				gesture = null;
+				draft = null;
+			}
+			return;
+		}
 		const g = gesture;
-		if (!g) return;
+		if (!g || g.pointerId !== e.pointerId) return;
 		let next = draft;
-		if (g.kind === 'create' && mode === 'text' && !next) {
+		if (g.kind === 'create' && mode === 'text' && !next)
 			next = {
 				...g.original,
 				elements: [
@@ -251,32 +397,39 @@
 					}
 				]
 			};
-		}
 		if (next) {
 			if (next.elements.length > LIMITS.elements || next.connections.length > LIMITS.connections)
 				onStatus('Diagram limit: 500 figures and 500 connectors.');
 			else {
 				onCommit(next);
 				onSelect(g.kind === 'create' ? [g.id!] : g.ids);
-				if (g.kind === 'create' && mode === 'text') onText(g.id!);
+				if (g.kind === 'create') {
+					if (mode === 'text') onText(g.id!);
+					if (mode !== 'stroke') onCreated();
+				}
 			}
 		}
 		gesture = null;
 		draft = null;
+		marquee = null;
 		points = [];
 	}
 	export function cancel() {
+		if (gesture?.kind === 'marquee') onSelect(gesture.ids);
 		gesture = null;
 		draft = null;
+		marquee = null;
 		points = [];
+		pinch = null;
+		pointers.clear();
 	}
 	export function exportPNG(): string {
-		if (!stage) throw new Error('Canvas is not ready.');
-		const b = bounds(diagram),
+		if (!stage) throw Error('Canvas is not ready.');
+		const b = documentBounds(diagram),
 			w = Math.ceil(b.width + 64),
 			h = Math.ceil(b.height + 64);
 		if (w > 4096 || h > 4096 || w * h > 12_000_000)
-			throw new Error('PNG exceeds 4,096 px or 12 megapixels. Export project JSON instead.');
+			throw Error('PNG exceeds 4,096 px or 12 megapixels. Export project JSON instead.');
 		const copy = stage.node.clone({
 			container: document.createElement('div'),
 			width: w,
@@ -287,23 +440,45 @@
 			scaleY: 1
 		}) as KonvaStage;
 		try {
-			copy.find('.selection').forEach((node) => node.destroy());
+			copy.find('.selection').forEach((n) => n.destroy());
 			copy.draw();
 			return copy.toDataURL({ pixelRatio: 1 });
 		} finally {
 			copy.destroy();
 		}
 	}
+	function spaceKey(event: KeyboardEvent, pressed: boolean) {
+		const target = event.target as HTMLElement;
+		if (target.matches('input,textarea,select') || target.isContentEditable) return;
+		if (
+			event.code === 'Space' &&
+			(host.contains(document.activeElement) || document.activeElement?.closest('.canvas-host'))
+		) {
+			event.preventDefault();
+			space = pressed;
+		}
+	}
 </script>
 
+<svelte:window
+	onkeydown={(e) => spaceKey(e, true)}
+	onkeyup={(e) => {
+		if (e.code === 'Space') space = false;
+	}}
+	onblur={() => {
+		space = false;
+		cancel();
+	}}
+/>
 <div
 	class="surface"
 	data-testid="board-surface"
+	bind:this={host}
 	bind:clientWidth={width}
 	bind:clientHeight={height}
 	style:cursor={busy
 		? 'wait'
-		: mode === 'pan'
+		: mode === 'pan' || space
 			? 'grab'
 			: mode === 'select'
 				? 'default'
@@ -322,167 +497,96 @@
 			onpointerdown={down}
 			onpointermove={move}
 			onpointerup={finish}
-			onpointerleave={finish}
 			onpointercancel={cancel}
 			onwheel={(event) => {
 				event.evt.preventDefault();
-				if (!busy && !gesture) {
-					const p = pointer();
-					if (p) onViewport(zoomAt(view, event.evt.deltaY > 0 ? 1 / 1.12 : 1.12, p));
-				}
+				if (busy || gesture) return;
+				const p = stage?.node.getPointerPosition();
+				if (!p) return;
+				if (event.evt.ctrlKey || event.evt.metaKey)
+					onViewport(zoomAt(view, Math.exp(-event.evt.deltaY * 0.005), p));
+				else onViewport({ ...view, x: view.x - event.evt.deltaX, y: view.y - event.evt.deltaY });
 			}}
 			onpointerdblclick={(event) => {
-				const id = event.target.findAncestor('.entity', true)?.id();
-				const e = diagram.elements.find((e) => e.id === id);
+				const id = event.target.findAncestor('.entity', true)?.id(),
+					e = diagram.elements.find((e) => e.id === id);
 				if (mode === 'select' && e) {
 					if (e.childDiagramId) onChild(e.id);
 					else onText(e.id);
 				}
 			}}
 		>
-			<Layer>
-				{#each entities as item (item.value.id)}
-					{#if item.type === 'element'}{@const e = item.value}
-						<Group id={e.id} name="entity" x={e.x} y={e.y}>
-							{#if e.kind === 'stroke'}<Line
-									points={e.points?.flatMap((p) => [p.x, p.y]) ?? []}
-									stroke={e.style.stroke}
-									strokeWidth={e.style.width}
-									dash={e.style.dashed ? [9, 6] : []}
-									lineCap="round"
-									lineJoin="round"
-									tension={0.3}
-									hitStrokeWidth={18 / view.zoom}
-								/>
-							{:else}
-								{#if e.kind === 'ellipse'}<Ellipse
-										x={e.width / 2}
-										y={e.height / 2}
-										radiusX={e.width / 2}
-										radiusY={e.height / 2}
-										fill={e.style.fill}
-										stroke={e.style.stroke}
-										strokeWidth={e.style.width}
-										dash={e.style.dashed ? [9, 6] : []}
-									/>
-									{#if e.style.sketch}<Ellipse
-											x={e.width / 2 + 1}
-											y={e.height / 2 + 1}
-											radiusX={Math.max(1, e.width / 2 - 1.5)}
-											radiusY={Math.max(1, e.height / 2 - 1)}
-											stroke={e.style.stroke}
-											strokeWidth={0.6}
-											opacity={0.5}
-											listening={false}
-										/>{/if}
-								{:else if e.kind === 'diamond'}<Line
-										points={[
-											e.width / 2,
-											0,
-											e.width,
-											e.height / 2,
-											e.width / 2,
-											e.height,
-											0,
-											e.height / 2
-										]}
-										closed
-										fill={e.style.fill}
-										stroke={e.style.stroke}
-										strokeWidth={e.style.width}
-										dash={e.style.dashed ? [9, 6] : []}
-									/>
-								{:else}<Rect
-										width={e.width}
-										height={e.height}
-										fill={e.kind === 'text' ? 'rgba(0,0,0,0.001)' : e.style.fill}
-										stroke={e.kind === 'text' ? undefined : e.style.stroke}
-										strokeWidth={e.style.width}
-										dash={e.style.dashed ? [9, 6] : []}
-										cornerRadius={e.kind === 'rounded' ? Math.min(18, e.height / 4) : 2}
-									/>{/if}
-								{#if e.style.sketch && ['rectangle', 'diamond'].includes(e.kind)}<Line
-										points={sketchPath(e.kind, e.width, e.height)}
-										closed
-										stroke={e.style.stroke}
-										strokeWidth={0.6}
-										opacity={0.5}
-										listening={false}
-									/>{/if}
-								<Text
-									x={e.kind === 'text' ? 0 : 12}
-									y={e.kind === 'text' ? 0 : Math.max(12, (e.height - e.style.fontSize * 1.3) / 2)}
-									width={Math.max(1, e.width - (e.kind === 'text' ? 0 : 24))}
-									height={Math.max(1, e.height - 8)}
-									text={e.label || (e.childDiagramId ? 'Diagram' : '')}
-									fontFamily={FONT_FAMILIES[e.style.font]}
-									fontSize={e.style.fontSize}
-									fill={e.kind === 'text' ? e.style.stroke : labelInk(e.style.fill, labelColor)}
-									lineHeight={1.3}
-									align={e.kind === 'text' ? 'left' : 'center'}
-									listening={false}
-								/>
-								{#if e.childDiagramId}<Text
-										x={e.width - 26}
-										y={8}
-										text="↳"
-										fill={e.style.stroke}
-										fontSize={18}
-										listening={false}
-									/>{/if}
-							{/if}
-						</Group>
-					{:else}{@const c = item.value}{@const a = endpoint(shown, c.start)}{@const b = endpoint(
-							shown,
-							c.end
-						)}
-						<Group id={c.id} name="entity">
-							{#if c.kind === 'arrow'}<Arrow
-									points={[a.x, a.y, b.x, b.y]}
-									stroke={c.style.stroke}
-									fill={c.style.stroke}
-									strokeWidth={c.style.width}
-									dash={c.style.dashed ? [9, 6] : []}
-									pointerLength={12}
-									pointerWidth={10}
-									lineCap="round"
-									hitStrokeWidth={18 / view.zoom}
-								/>
-							{:else}<Line
-									points={[a.x, a.y, b.x, b.y]}
-									stroke={c.style.stroke}
-									strokeWidth={c.style.width}
-									dash={c.style.dashed ? [9, 6] : []}
-									lineCap="round"
-									hitStrokeWidth={18 / view.zoom}
-								/>{/if}
-						</Group>
-					{/if}
-				{/each}
-			</Layer>
+			<Layer
+				>{#each entities as item (item.value.id)}{#if item.type === 'element'}<CanvasFigure
+							element={item.value}
+							zoom={view.zoom}
+							{labelColor}
+							shared={sharedChildren.includes(item.value.childDiagramId ?? '')}
+						/>{:else}<CanvasConnection
+							connection={item.value}
+							diagram={shown}
+							zoom={view.zoom}
+						/>{/if}{/each}</Layer
+			>
 			<Layer name="selection">
-				{#each shown.elements.filter((e) => selection.includes(e.id)) as e (e.id)}
-					<Rect
-						x={e.x - 5 / view.zoom}
-						y={e.y - 5 / view.zoom}
-						width={e.width + 10 / view.zoom}
-						height={e.height + 10 / view.zoom}
+				{#if marquee}<Rect
+						{...marquee}
+						fill="rgba(32,191,169,0.08)"
 						stroke="#20bfa9"
 						strokeWidth={1 / view.zoom}
-						dash={[4 / view.zoom, 4 / view.zoom]}
+						listening={false}
+					/>{/if}
+				{#if selectedBox}{@const b = selectedBox}
+					<Rect
+						x={b.x - 5 / view.zoom}
+						y={b.y - 5 / view.zoom}
+						width={b.width + 10 / view.zoom}
+						height={b.height + 10 / view.zoom}
+						stroke="#20bfa9"
+						strokeWidth={1 / view.zoom}
+						dash={selection.length > 1 ? [] : [4 / view.zoom, 4 / view.zoom]}
 						listening={false}
 					/>
-					{#if selection.length === 1 && mode === 'select'}<Rect
-							name={'resize-' + e.id}
-							x={e.x + e.width - 6 / view.zoom}
-							y={e.y + e.height - 6 / view.zoom}
-							width={12 / view.zoom}
-							height={12 / view.zoom}
+					{#if mode === 'select' && shown.elements.some((e) => selection.includes(e.id))}
+						{@const single =
+							selection.length === 1
+								? shown.elements.find((e) => e.id === selection[0])
+								: undefined}
+						{@const corner = single
+							? localToWorld(single, { x: single.width, y: single.height })
+							: { x: b.x + b.width, y: b.y + b.height }}
+						<Rect
+							name="resize-selection"
+							x={corner.x - 7 / view.zoom}
+							y={corner.y - 7 / view.zoom}
+							width={14 / view.zoom}
+							height={14 / view.zoom}
 							fill="#20bfa9"
 							stroke="#ffffff"
 							strokeWidth={1 / view.zoom}
-						/>{/if}
-				{/each}
+						/>
+						<Line
+							points={[
+								b.x + b.width / 2,
+								b.y - 5 / view.zoom,
+								b.x + b.width / 2,
+								b.y - 28 / view.zoom
+							]}
+							stroke="#20bfa9"
+							strokeWidth={1 / view.zoom}
+							listening={false}
+						/>
+						<Circle
+							name="rotate-selection"
+							x={b.x + b.width / 2}
+							y={b.y - 32 / view.zoom}
+							radius={7 / view.zoom}
+							fill="#20bfa9"
+							stroke="#ffffff"
+							strokeWidth={1 / view.zoom}
+						/>
+					{/if}
+				{/if}
 				{#each shown.connections.filter((c) => selection.includes(c.id)) as c (c.id)}{@const a =
 						endpoint(shown, c.start)}{@const b = endpoint(shown, c.end)}
 					<Circle
@@ -503,6 +607,18 @@
 						stroke="#ffffff"
 						strokeWidth={1 / view.zoom}
 					/>
+					{#if c.geometry === 'curve' || c.geometry === 'elbow'}{@const p = connectorControl(
+							shown,
+							c
+						)}<Circle
+							name={'control-' + c.id}
+							x={p.x}
+							y={c.geometry === 'elbow' ? (a.y + b.y) / 2 : p.y}
+							radius={7 / view.zoom}
+							fill="#ffffff"
+							stroke="#20bfa9"
+							strokeWidth={2 / view.zoom}
+						/>{/if}
 				{/each}
 			</Layer>
 		</Stage>{/if}
