@@ -1,0 +1,26 @@
+{
+  "sourceMain": "fa0490f5872262614ba9fe0370377295f3112fae",
+  "canvasRC": "9f81acc46164e1167906ff529af557465aa755ed",
+  "integrationMerge": "27d82229c2fd7207bf16db934368f1ccd5b0edd5",
+  "validatedIntegration": "605b6b38f2d688dbec9002997deb1529287eb24c",
+  "integrationCI": "https://github.com/Rhaizel02/devbench/actions/runs/40233336583",
+  "ci": "success",
+  "node": "24.22.1",
+  "npmCi": "passed, 0 vulnerabilities",
+  "check": "0 errors / 0 warnings",
+  "lint": "passed",
+  "unitTests": 256,
+  "unitFiles": 16,
+  "build": "passed",
+  "staticToolRoutes": 27,
+  "browserStats": {
+    "startTime": "2026-10-25T21:00:02.531Z",
+    "duration": 101265.74399999999,
+    "expected": 36,
+    "skipped": 2,
+    "unexpected": 0,
+    "flaky": 0
+  },
+  "canvasProductCodeChangesFromRC": [],
+  "tls": "No bypass; prior HTTPS audit remains blocked by certificate, not claimed passed"
+}

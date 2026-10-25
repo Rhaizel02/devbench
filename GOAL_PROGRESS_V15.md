@@ -33,3 +33,9 @@ Contrato ampliado: 17.850 caracteres antes de formato, commit `e2dceb8`. Merge R
 Siguiente acción: npm ci y controles/checks de integración (incluyendo regresiones Canvas/anteriores), registrar resultados, push/CI de integración y solo entonces merge a main. No código OpenAPI hasta aceptar main integrado.
 
 Validación local en curso: exec_command session `8111`, proceso Node `51852`, instalación limpia con cache hits/auditoría sin hallazgos. El proceso sigue vivo; no reiniciar por falta de output. El script encadena check/lint/tests/build/suite con salida en `work/v15-h0-build.log` y `work/v15-h0-browser.json`. Se inicia CI de integración en paralelo para validar el merge exacto. Main aún no se toca.
+
+### H0 — integración aceptada antes de main
+
+`605b6b38f2d688dbec9002997deb1529287eb24c`: CI 40233336583 completed/success, inspeccionada por job/steps. Instalación local npm ci termina con cero vulnerabilidades; check 0 errores/avisos, lint, 256 unitarios/16 archivos, build estático 27 rutas y 36 Playwright correctos (dos auditorías remotas históricas omitidas). Session 8111 terminó exit 0, ya no está activa. Evidencia: screenshots/actual/v15-h0-validation.json, logs de build/reporte detallado en work. Se restauran solo capturas regeneradas por la suite para conservar archivos históricos de la RC.
+
+No hay cambios de código de producto respecto a 9f81acc: motores/DTO/migraciones/persistencia/Canvas y 27 herramientas íntegros, conservando commits. P0/P1 nuevos: ninguno. Se procede al merge autorizado a main preservando historial; verificar su CI exacta y registrar su SHA en H1. No escribir OpenAPI todavía.
