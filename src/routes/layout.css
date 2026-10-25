@@ -1760,6 +1760,32 @@ dialog::backdrop {
 		padding: 24px;
 	}
 }
+.security-notice {
+	border: 1px solid var(--color-accent);
+	padding: 12px 16px;
+	margin: 0 0 16px;
+	color: var(--color-text);
+	background: var(--color-panel);
+}
+.inspector-editors {
+	margin-top: 20px;
+}
+.regex-options input:not([type='checkbox']) {
+	border: 1px solid var(--color-border);
+	padding: 8px;
+	border-radius: 4px;
+	background: var(--color-panel);
+	min-height: 36px;
+}
+.regex-options label:first-child {
+	flex: 1 1 300px;
+}
+.regex-options label:first-child input {
+	flex: 1;
+}
+.regex-options input[aria-label='Regex flags'] {
+	width: 90px;
+}
 .tool-options {
 	display: flex;
 	flex-wrap: wrap;

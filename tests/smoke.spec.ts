@@ -63,9 +63,7 @@ test('navigation, themes, palette, favorites, responsive drawer and tabs', async
 	await expect(page.getByRole('tab', { name: 'Input', exact: true })).toBeFocused();
 	expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
 	await page.goto('/tools/sql-formatter/');
-	await expect(
-		page.getByText('SQL Formatter is planned for a future block.', { exact: false })
-	).toBeVisible();
+	await expect(page.getByRole('button', { name: 'Format SQL', exact: true })).toBeVisible();
 });
 test('one-shot Quick Paste and payload-free storage, URLs, requests and logs', async ({ page }) => {
 	const marker = 'synthetic-private-marker';

@@ -1,6 +1,6 @@
 # DevBench
 
-A focused, local-first developer workbench. **Milestone A: 5/18 tools implemented**, with the remaining tools tracked in `GOAL_PROGRESS.md` and `DEV_BENCH_AUTONOMOUS_GOAL.md`. The UI is in English.
+A focused, local-first developer workbench. **Milestone B: 9/18 tools implemented**, with the remaining tools tracked in `GOAL_PROGRESS.md` and `DEV_BENCH_AUTONOMOUS_GOAL.md`. The UI is in English.
 
 Repository: [Rhaizel02/devbench](https://github.com/Rhaizel02/devbench). The source is published on GitHub; website deployment remains outside B1.
 
@@ -42,7 +42,11 @@ npm run test:e2e
 - JSON ↔ YAML: safe YAML 1.2 core conversion, syntax-aware editors, copy/download and direction swap.
 - Base64 Toolkit: strict UTF-8 encoding/decoding, standard and URL-safe alphabets, explicit padding/whitespace policies.
 - URL Toolkit: separate component encoding/decoding and absolute URL inspection, repeated query editing, credential redaction and reconstruction. Pasted URLs are never fetched.
-- All twelve V1 tools have static routes. Seven remain honest **Coming later** pages. The six V1.1 tools are an informational roadmap until their implementation milestones.
+- JWT Inspector: strict compact decoding, header/payload, unverified claim types and timestamps, permanent signature-not-verified notice.
+- Hash Generator: SHA-256/384/512 on UTF-8 text with Web Crypto, including empty input.
+- SQL Formatter: PostgreSQL/MySQL/SQLite, keyword case and indentation using sql-formatter. Formats only; no validation or execution.
+- Regex Tester: ECMAScript matches, ranges, capture groups and replacement preview. Runs in a dedicated worker with real termination after 500 ms, cancel and retry.
+- All twelve V1 tools have static routes. Three remain honest **Coming later** pages. The six V1.1 tools are an informational roadmap until their implementation milestones.
 
 ## Privacy
 
@@ -76,5 +80,7 @@ Home and the twelve V1 tool routes are prerendered with trailing slashes and bui
 `screenshots/01–08` are preserved design references, not claims of application behavior. Actual browser captures are saved in `screenshots/actual/` after QA. GitHub Actions runs check, lint, unit tests, static build and three browser smoke scenarios.
 
 JSON Diff caps traversal at 100,000 nodes / 128 levels and results at 1,000 changes. YAML rejects aliases, unsupported tags, duplicate/non-string keys, non-finite values and unsafe YAML integers; comments are not retained. Base64 decodes text only and rejects invalid UTF-8 and noncanonical padding bits. URL query editing supports up to 2,000 rows and follows URLSearchParams normalization, including `+` as space; credentials enter exported results only after explicit reveal.
+
+JWT caps input at 64 KiB, 10,000 decoded nodes and 64 levels; its dates describe untrusted claims at inspection time. SQL input is capped at 128 KiB, and unsupported dialect extensions produce errors without repeating the query. Regex caps pattern at 4 KiB, text at 100,000 UTF-8 bytes, replacement at 10,000 bytes, matches at 1,000 and captured/replacement text at 1 MiB. Offsets are UTF-16 indices, with an exclusive end. Zero-width Unicode matches advance by code point.
 
 See `VALIDATION.md` for B1 history and `GOAL_PROGRESS.md` for milestone evidence and remaining work. The supplied goal package notes are preserved in `docs/goal-pack/`.

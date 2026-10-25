@@ -59,3 +59,7 @@ Next block: JSON Diff, JSON ↔ YAML, Base64 Toolkit and URL Toolkit, following 
 ## Milestone A — 2026-10-25
 
 JSON Diff, JSON ↔ YAML, Base64 Toolkit and URL Toolkit are implemented. Node 24 checks: check (0 errors/warnings), lint, 70 unit tests, static build and all 5 browser flows pass. Browser flows verify clipboard/download contents, Unicode roundtrip, missing versus null, current-output invalidation, URL credentials redaction/query editing, memory cleanup and synthetic payload privacy. Width checks pass at 390/768/1440 px. Real captures 09–12 cover new dual-input and URL workspaces in dark/light and mobile/desktop; reviewed against existing tokens and shell geometry. Original B1 evidence above remains historical.
+
+## Milestone B — 2026-10-25
+
+JWT Inspector, Hash Generator, SQL Formatter and Regex Tester bring the working total to 9/18. Node 24 check has zero errors/warnings; 95 unit tests and all 7 browser flows pass; static build succeeds. Tests cover strict compact JWT/Base64url/UTF-8/claim types and times, independent hash vectors for all SHA variants, three SQL dialects/comments/quotes/placeholders/indentation, zero-width Unicode regex matching and native-compatible replacement previews. A real browser test runs `(a+)+$` against a failing synthetic input, observes the worker terminate after its 500 ms budget, confirms main-thread heartbeat/theme responsiveness and successfully retries. Inspector screenshots 13–14 cover dark desktop/light mobile; no overflow at 390/768/1440. No known P0/P1.

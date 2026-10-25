@@ -73,7 +73,7 @@ export const tools: Tool[] = [
 		category: 'Security',
 		description: 'Decode token headers and claims. Signature not verified.',
 		keywords: 'token decode claims',
-		status: 'planned',
+		status: 'available',
 		version: 'V1',
 		icon: 'shield'
 	},
@@ -84,7 +84,7 @@ export const tools: Tool[] = [
 		category: 'Security',
 		description: 'Calculate SHA-256, SHA-384 and SHA-512 hashes.',
 		keywords: 'sha digest crypto',
-		status: 'planned',
+		status: 'available',
 		version: 'V1',
 		icon: 'hash'
 	},
@@ -95,7 +95,7 @@ export const tools: Tool[] = [
 		category: 'Backend',
 		description: 'Format PostgreSQL, MySQL and SQLite queries.',
 		keywords: 'database query postgres mysql sqlite',
-		status: 'planned',
+		status: 'available',
 		version: 'V1',
 		icon: 'database'
 	},
@@ -106,7 +106,7 @@ export const tools: Tool[] = [
 		category: 'Backend',
 		description: 'Explore matches, ranges and captured groups.',
 		keywords: 'regular expression pattern',
-		status: 'planned',
+		status: 'available',
 		version: 'V1',
 		icon: 'regex'
 	},

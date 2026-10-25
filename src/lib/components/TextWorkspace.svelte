@@ -18,7 +18,8 @@
 		options,
 		help,
 		onSwap,
-		allowEmpty = false
+		allowEmpty = false,
+		inputLimitLabel = '1 MiB limit'
 	}: {
 		input?: string;
 		transform: (input: string) => string | Promise<string>;
@@ -28,12 +29,13 @@
 		inputLabel?: string;
 		outputLabel?: string;
 		filename?: string;
-		inputLanguage?: 'plain' | 'json' | 'yaml';
-		outputLanguage?: 'plain' | 'json' | 'yaml';
+		inputLanguage?: 'plain' | 'json' | 'yaml' | 'sql';
+		outputLanguage?: 'plain' | 'json' | 'yaml' | 'sql';
 		options?: Snippet;
 		help?: Snippet;
 		onSwap?: () => void;
 		allowEmpty?: boolean;
+		inputLimitLabel?: string;
 	} = $props();
 	const id = $props.id();
 	let result = $state<{ input: string; revision: string; output: string } | null>(null);
@@ -153,7 +155,7 @@
 		>
 			<div class="editor-panel-header">
 				<h2>{inputLabel}</h2>
-				<span class="subtle-tag">1 MiB limit</span>
+				<span class="subtle-tag">{inputLimitLabel}</span>
 			</div>
 			{#key inputLanguage}<CodeEditor
 					bind:value={input}
