@@ -216,6 +216,8 @@ test('V2.2 bend a straight anchored arrow on its visible midpoint, move nodes an
 	]);
 	await click(page, 430, 370);
 	await page.getByRole('button', { name: 'Toggle properties', exact: true }).click();
+	await expect(page.getByLabel('Fill HEX')).toHaveCount(0);
+	await expect(page.getByLabel('Font family')).toHaveCount(0);
 	await page.getByLabel('Connector geometry').selectOption('curve');
 	await page.getByLabel('Arrow heads').selectOption('both');
 	await page.getByLabel('Stroke width').selectOption('5');

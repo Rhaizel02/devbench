@@ -114,6 +114,17 @@
 	const selectedEdge = $derived(diagram.connections.find((c) => selection.includes(c.id)));
 	const currentStyle = $derived(selected?.style ?? selectedEdge?.style ?? creationStyle);
 
+	const selectedFigures = $derived(diagram.elements.filter((e) => selection.includes(e.id)));
+	const strokeControls = $derived(
+		!selection.length || selectedFigures.some((e) => e.kind !== 'image') || !!selectedEdge
+	);
+	const fillControls = $derived(
+		!selection.length || selectedFigures.some((e) => !['stroke', 'image', 'text'].includes(e.kind))
+	);
+	const fontControls = $derived(
+		!selection.length || selectedFigures.some((e) => !['stroke', 'image'].includes(e.kind))
+	);
+	const sketchControls = $derived(fillControls || !!selectedEdge);
 	const selectedStyles = $derived(
 		[...diagram.elements, ...diagram.connections]
 			.filter((e) => selection.includes(e.id))
@@ -827,131 +838,133 @@
 						onclick={() => (properties = false)}>×</button
 					>
 				</div>
-				<fieldset>
-					<legend>Stroke{mixed('stroke') ? ' · Mixed' : ''}</legend>
-					<div class="swatches">
-						{#each colors as hex (hex)}<button
-								style:background={hex}
-								aria-label={'Stroke ' + hex}
-								aria-pressed={!mixed('stroke') && currentStyle.stroke === hex}
-								onclick={() => updateStyle('stroke', hex)}
-							></button>{/each}
+				{#if strokeControls}<fieldset>
+						<legend>Stroke{mixed('stroke') ? ' · Mixed' : ''}</legend>
+						<div class="swatches">
+							{#each colors as hex (hex)}<button
+									style:background={hex}
+									aria-label={'Stroke ' + hex}
+									aria-pressed={!mixed('stroke') && currentStyle.stroke === hex}
+									onclick={() => updateStyle('stroke', hex)}
+								></button>{/each}
+						</div>
+						<label
+							>Stroke HEX<input
+								aria-label="Stroke HEX"
+								value={property('stroke')}
+								placeholder={mixed('stroke') ? 'Mixed' : '#000000'}
+								onchange={(event) => inputColor('stroke', event.currentTarget.value, true)}
+							/></label
+						>
+					</fieldset>
+				{/if}{#if fillControls}<fieldset>
+						<legend>Fill{mixed('fill') ? ' · Mixed' : ''}</legend>
+						<div class="swatches">
+							<button
+								class="transparent"
+								aria-label="Transparent fill"
+								onclick={() => updateStyle('fill', 'transparent')}>∅</button
+							>{#each ['#d6f5ed', '#efe2fa', '#fff0d4', '#f9dce4', '#dcecf9'] as hex (hex)}<button
+									style:background={hex}
+									aria-label={'Fill ' + hex}
+									aria-pressed={!mixed('fill') && currentStyle.fill === hex}
+									onclick={() => updateStyle('fill', hex)}
+								></button>{/each}
+						</div>
+						<label
+							>Fill HEX<input
+								aria-label="Fill HEX"
+								value={property('fill')}
+								placeholder={mixed('fill') ? 'Mixed' : 'transparent'}
+								onchange={(event) => inputColor('fill', event.currentTarget.value, true)}
+							/></label
+						>
+					</fieldset>
+				{/if}{#if strokeControls}<div class="property-row">
+						<label
+							>Width<select
+								aria-label="Stroke width"
+								value={property('width')}
+								onchange={(event) => updateStyle('width', Number(event.currentTarget.value))}
+								>{#if mixedKeys.length}<option value="" disabled>Mixed</option
+									>{/if}{#each [1, 2, 3, 5, 8] as value (value)}<option {value}>{value} px</option
+									>{/each}</select
+							></label
+						><label
+							>Line<select
+								aria-label="Line style"
+								value={mixed('dashed') ? '' : currentStyle.dashed ? 'dashed' : 'solid'}
+								onchange={(event) => updateStyle('dashed', event.currentTarget.value === 'dashed')}
+								>{#if mixedKeys.length}<option value="" disabled>Mixed</option>{/if}<option
+									value="solid">Solid</option
+								><option value="dashed">Dashed</option></select
+							></label
+						>
 					</div>
-					<label
-						>Stroke HEX<input
-							aria-label="Stroke HEX"
-							value={property('stroke')}
-							placeholder={mixed('stroke') ? 'Mixed' : '#000000'}
-							onchange={(event) => inputColor('stroke', event.currentTarget.value, true)}
-						/></label
-					>
-				</fieldset>
-				<fieldset>
-					<legend>Fill{mixed('fill') ? ' · Mixed' : ''}</legend>
-					<div class="swatches">
-						<button
-							class="transparent"
-							aria-label="Transparent fill"
-							onclick={() => updateStyle('fill', 'transparent')}>∅</button
-						>{#each ['#d6f5ed', '#efe2fa', '#fff0d4', '#f9dce4', '#dcecf9'] as hex (hex)}<button
-								style:background={hex}
-								aria-label={'Fill ' + hex}
-								aria-pressed={!mixed('fill') && currentStyle.fill === hex}
-								onclick={() => updateStyle('fill', hex)}
-							></button>{/each}
+				{/if}{#if fontControls}<div class="property-row">
+						<label
+							>Font<select
+								aria-label="Font family"
+								value={property('font')}
+								onchange={(event) =>
+									updateStyle('font', event.currentTarget.value as Style['font'])}
+								>{#if mixedKeys.length}<option value="" disabled>Mixed</option>{/if}<option
+									value="sans">Sans</option
+								><option value="mono">Mono</option><option value="serif">Serif</option></select
+							></label
+						><label
+							>Size<select
+								aria-label="Font size"
+								value={property('fontSize')}
+								onchange={(event) => updateStyle('fontSize', Number(event.currentTarget.value))}
+								>{#if mixedKeys.length}<option value="" disabled>Mixed</option
+									>{/if}{#each [14, 16, 20, 24, 32, 48, 64] as value (value)}<option {value}
+										>{value}</option
+									>{/each}</select
+							></label
+						>
 					</div>
-					<label
-						>Fill HEX<input
-							aria-label="Fill HEX"
-							value={property('fill')}
-							placeholder={mixed('fill') ? 'Mixed' : 'transparent'}
-							onchange={(event) => inputColor('fill', event.currentTarget.value, true)}
-						/></label
-					>
-				</fieldset>
-				<div class="property-row">
-					<label
-						>Width<select
-							aria-label="Stroke width"
-							value={property('width')}
-							onchange={(event) => updateStyle('width', Number(event.currentTarget.value))}
-							>{#if mixedKeys.length}<option value="" disabled>Mixed</option
-								>{/if}{#each [1, 2, 3, 5, 8] as value (value)}<option {value}>{value} px</option
-								>{/each}</select
-						></label
-					><label
-						>Line<select
-							aria-label="Line style"
-							value={mixed('dashed') ? '' : currentStyle.dashed ? 'dashed' : 'solid'}
-							onchange={(event) => updateStyle('dashed', event.currentTarget.value === 'dashed')}
-							>{#if mixedKeys.length}<option value="" disabled>Mixed</option>{/if}<option
-								value="solid">Solid</option
-							><option value="dashed">Dashed</option></select
-						></label
-					>
-				</div>
-				<div class="property-row">
-					<label
-						>Font<select
-							aria-label="Font family"
-							value={property('font')}
-							onchange={(event) => updateStyle('font', event.currentTarget.value as Style['font'])}
-							>{#if mixedKeys.length}<option value="" disabled>Mixed</option>{/if}<option
-								value="sans">Sans</option
-							><option value="mono">Mono</option><option value="serif">Serif</option></select
-						></label
-					><label
-						>Size<select
-							aria-label="Font size"
-							value={property('fontSize')}
-							onchange={(event) => updateStyle('fontSize', Number(event.currentTarget.value))}
-							>{#if mixedKeys.length}<option value="" disabled>Mixed</option
-								>{/if}{#each [14, 16, 20, 24, 32, 48, 64] as value (value)}<option {value}
-									>{value}</option
-								>{/each}</select
-						></label
-					>
-				</div>
-				<label class="check"
+				{/if}<label class="check"
 					><input type="checkbox" bind:checked={locked} />Keep drawing tool active</label
 				>
-				<label
-					>Sketch intensity<select
-						aria-label="Sketch intensity"
-						value={mixed('sketch') || mixed('roughness')
-							? ''
-							: currentStyle.sketch
-								? (currentStyle.roughness ?? 0.8)
-								: 0}
-						onchange={(event) => {
-							const value = Number(event.currentTarget.value);
-							applyStyles({ sketch: value > 0, roughness: value });
-						}}
-						>{#if mixedKeys.length}<option value="" disabled>Mixed</option>{/if}<option value="0"
-							>Clean</option
-						><option value={0.8}>Soft sketch</option><option value={1.5}>Expressive</option></select
-					></label
-				>
-				<label
-					>Fill style<select
-						aria-label="Fill pattern"
-						value={mixed('fillPattern') ? '' : (currentStyle.fillPattern ?? 'solid')}
-						onchange={(event) =>
-							updateStyle('fillPattern', event.currentTarget.value as Style['fillPattern'])}
-						>{#if mixedKeys.length}<option value="" disabled>Mixed</option>{/if}<option
-							value="solid">Solid</option
-						><option value="hachure">Hachure</option></select
-					></label
-				>
-				<label class="check"
-					><input
-						type="checkbox"
-						checked={currentStyle.sketch}
-						indeterminate={mixed('sketch')}
-						onchange={(event) => updateStyle('sketch', event.currentTarget.checked)}
-					/>Soft sketch</label
-				>
-				{#if selectedEdge}<label
+				{#if sketchControls}<label
+						>Sketch intensity<select
+							aria-label="Sketch intensity"
+							value={mixed('sketch') || mixed('roughness')
+								? ''
+								: currentStyle.sketch
+									? (currentStyle.roughness ?? 0.8)
+									: 0}
+							onchange={(event) => {
+								const value = Number(event.currentTarget.value);
+								applyStyles({ sketch: value > 0, roughness: value });
+							}}
+							>{#if mixedKeys.length}<option value="" disabled>Mixed</option>{/if}<option value="0"
+								>Clean</option
+							><option value={0.8}>Soft sketch</option><option value={1.5}>Expressive</option
+							></select
+						></label
+					>
+				{/if}{#if fillControls}<label
+						>Fill style<select
+							aria-label="Fill pattern"
+							value={mixed('fillPattern') ? '' : (currentStyle.fillPattern ?? 'solid')}
+							onchange={(event) =>
+								updateStyle('fillPattern', event.currentTarget.value as Style['fillPattern'])}
+							>{#if mixedKeys.length}<option value="" disabled>Mixed</option>{/if}<option
+								value="solid">Solid</option
+							><option value="hachure">Hachure</option></select
+						></label
+					>
+				{/if}{#if sketchControls}<label class="check"
+						><input
+							type="checkbox"
+							checked={currentStyle.sketch}
+							indeterminate={mixed('sketch')}
+							onchange={(event) => updateStyle('sketch', event.currentTarget.checked)}
+						/>Soft sketch</label
+					>
+				{/if}{#if selectedEdge}<label
 						>Connector<select
 							aria-label="Connector geometry"
 							value={selectedEdge.geometry ?? 'straight'}
@@ -1010,7 +1023,10 @@
 									)
 								})}
 						/></label
-					><button class="button" onclick={() => editText(selected.id)}>Edit on canvas</button>
+					>{#if !['stroke', 'image'].includes(selected.kind)}<button
+							class="button"
+							onclick={() => editText(selected.id)}>Edit on canvas</button
+						>{/if}
 					<div class="property-row">
 						<label
 							>Width<input

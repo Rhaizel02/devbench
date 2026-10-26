@@ -195,3 +195,5 @@ Clean npm ci: 253 packages, zero audit vulnerabilities. Full suite: 41 Chromium 
 ### V1.5 RC decision and preview
 
 GO for RC review, no open P0/P1; final delivery waits for exact-SHA CI. H5 CI 40236155232 completed/success. H6 code checkpoint 0fb03867f6810fc3f79a91f7bbdd5755be99d18c published by Cloudflare (immutable ec293ed4.devbench-aw3.pages.dev, branch feature-openapi-explorer-v15.devbench-aw3.pages.dev). Normal Playwright HTTPS navigation failed before rendering with ERR_CERT_AUTHORITY_INVALID; no TLS bypass and no remote test pass claimed. Evidence v15-preview-check.json records URL/SHA/error. The final commit SHA and CI status are supplied in the delivery response. No V1.5 merge to main.
+
+V2.2 source CI: de8db484b16c4cd808778d021dd37ba65827e6e9 / [run40417819594](https://github.com/Rhaizel02/devbench/actions/runs/40417819594),479units and59Chromium passes/2historical skips. Normal HTTPS source preview verified with real Canvas/Pipeline/dataset operations and exact build metadata; final branch HEAD receives its own required CI and HTTPS verification before delivery. Detailed recorded evidence is in the V2.2 acceptance report.

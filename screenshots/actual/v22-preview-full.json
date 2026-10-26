@@ -1,0 +1,24 @@
+{
+  "url": "https://f034d0ac.devbench-aw3.pages.dev",
+  "sha": "de8db484b16c4cd808778d021dd37ba65827e6e9",
+  "mode": "full",
+  "tls": "normal browser verification; no override",
+  "screenshots": [
+    "screenshots/actual/v22-preview-full-canvas.png",
+    "screenshots/actual/v22-preview-full-pipeline.png",
+    "screenshots/actual/v22-preview-full-datasets.png"
+  ],
+  "results": {
+    "catalog": "30 available; app V2.2 RC; exact build SHA",
+    "canvas": "real partial marquee/group/recolor/focus/direct bend, v3 JSON and reload",
+    "pipeline": "text recipe executes and exact download; intermediate preview",
+    "datasets": "real related data generated; exact JSON/FKs/download/reset",
+    "privacy": "marker absent from requests/URLs/console/storage/cookies/history/IndexedDB; Canvas data is the explicit exception",
+    "unknownRoute": 404,
+    "console": "no page errors",
+    "failedResources": []
+  },
+  "status": "pass",
+  "requestCount": 229,
+  "networkNote": "Count includes navigation and resource requests. No zero-network claim; synthetic marker absent from observed URLs and request bodies."
+}

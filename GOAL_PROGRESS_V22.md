@@ -5,25 +5,25 @@ Starting Data Diagnostics SHA: c180ad5e703c24560035a32ded6f17c8a6b5cbfc
 Canvas merge source: a289fcfd9f54e35e0cd60b8c6a3123cbe88457d2
 Main (must not change): c3cd929a5aea231991973abd5744def9d13cf740
 
-| Milestone                     | State                        | Evidence                            |
-| ----------------------------- | ---------------------------- | ----------------------------------- |
-| H0 contract/integration       | Complete                     | cf916ab, CI40412271206 green        |
-| H1 UX reproduction            | Implemented/verified locally | Checkpoints below; final CI pending |
-| H2 marquee                    | Implemented/verified locally | Checkpoints below; final CI pending |
-| H3 visual layers              | Implemented/verified locally | Checkpoints below; final CI pending |
-| H4 direct connector bending   | Implemented/verified locally | Checkpoints below; final CI pending |
-| H5 immersive mode             | Implemented/verified locally | Checkpoints below; final CI pending |
-| H6 contextual/mixed inspector | Implemented/verified locally | Checkpoints below; final CI pending |
-| H7 provenance                 | Implemented/verified locally | Checkpoints below; final CI pending |
-| H8 UX audit                   | Local pass                   |                                     |
-| H9 backup compatibility       | Implemented/verified locally | Checkpoints below; final CI pending |
-| H10 Pipeline V2               | Implemented/verified locally | Checkpoints below; final CI pending |
-| H11 structured Test Data      | Implemented/verified locally | Checkpoints below; final CI pending |
-| H12 joint visual review       | Local pass                   |                                     |
-| H13 complete quality          | Local pass                   |                                     |
-| H14 privacy/security          | Local pass                   |                                     |
-| H15 published evidence        | Pending                      |                                     |
-| H16 final acceptance          | Pending                      |                                     |
+| Milestone                     | State                        | Evidence                                |
+| ----------------------------- | ---------------------------- | --------------------------------------- |
+| H0 contract/integration       | Complete                     | cf916ab, CI40412271206 green            |
+| H1 UX reproduction            | Implemented/verified locally | Local + source CI pass; final HEAD gate |
+| H2 marquee                    | Implemented/verified locally | Local + source CI pass; final HEAD gate |
+| H3 visual layers              | Implemented/verified locally | Local + source CI pass; final HEAD gate |
+| H4 direct connector bending   | Implemented/verified locally | Local + source CI pass; final HEAD gate |
+| H5 immersive mode             | Implemented/verified locally | Local + source CI pass; final HEAD gate |
+| H6 contextual/mixed inspector | Implemented/verified locally | Local + source CI pass; final HEAD gate |
+| H7 provenance                 | Implemented/verified locally | Local + source CI pass; final HEAD gate |
+| H8 UX audit                   | Local pass                   |                                         |
+| H9 backup compatibility       | Implemented/verified locally | Local + source CI pass; final HEAD gate |
+| H10 Pipeline V2               | Implemented/verified locally | Local + source CI pass; final HEAD gate |
+| H11 structured Test Data      | Implemented/verified locally | Local + source CI pass; final HEAD gate |
+| H12 joint visual review       | Local pass                   |                                         |
+| H13 complete quality          | Local pass                   |                                         |
+| H14 privacy/security          | Local pass                   |                                         |
+| H15 published evidence        | RC ready; final HEAD check   | External gate below                     |
+| H16 final acceptance          | RC ready; final HEAD check   | External gate below                     |
 
 First authoritative audit: clean tree on c180ad5; remote heads match supplied references; no V2.2 branch existed. Full attached contract read and preserved literally. No product tests claimed yet.
 
@@ -96,3 +96,11 @@ Next exact action: publish the RC source/evidence checkpoint after relevant Pipe
 Relevant final review completed: check0/0, full lint, static rebuild and2/2 Pipeline browser flows passed, including actual native drag/drop, accessible reorder, recipe bytes and cancellation. The complete suite immediately preceding that small UI/test refinement passed59/59 with2 historical remote audits skipped; exact published CI will rebuild and repeat everything against this final source. Application source is now frozen for remote acceptance.
 
 Next: push this RC, record its exact CI/Cloudflare checks, run real HTTPS source validation, then commit only the observed remote evidence and wait for final artifact-commit CI. This is the ordinary verification/evidence checkpoint, not additional product scope.
+
+## External source acceptance and final delivery gate
+
+Published source de8db484b16c4cd808778d021dd37ba65827e6e9: CI40417819594/job121904425519 success,479unit/31files,59Chromium passes/2historical remote-audit skips. Normal HTTPS immutable Cloudflare https://f034d0ac.devbench-aw3.pages.dev matches its exact build SHA. Real three-area smoke passed: Canvas partial marquee/group/style/Focus/bend/v3JSON/reload, Pipeline new text recipe/intermediate/exact download, related data JSON/FKs/reset,30catalog,404, no page errors/failed resources and no synthetic dataset marker in requests/URLs/console/storage/cookies/history/IndexedDB. Raw JSON and3real public screenshots are committed with this gate. Static/navigation requests are legitimate; no zero-network assertion.
+
+Public visual review found P2 UX-06 (inactive paint/font options for connectors). Final narrow visibility refinement preserves all document fields and shows only applicable families; no domain/persistence/schema change. Check0/0, build and4/4Canvas acceptance passed after refinement, including assertions for hidden irrelevant controls. This final commit contains that small refinement and observed acceptance evidence; it must run its own complete CI.
+
+Functional milestones H0–H14 and required artifacts H15 are implemented and verified locally, with full source CI/HTTPS evidence. H16 delivery rule: exact final Git HEAD CI must be green and its HTTPS build verified before the assistant declares the goal complete. Final SHA is the containing commit/branch HEAD (self-referential SHA is supplied in the delivery message); source CI above is never claimed as that final check. Next exact action: push final refinement/evidence, wait for exact HEAD CI, verify Cloudflare final build over normal TLS, confirm protected heads/clean tree, then deliver GO for human RC review. No main merge.
