@@ -169,9 +169,11 @@ test('OpenAPI import, real exploration, reference navigation, errors, invalidati
 	await page.getByRole('button', { name: 'properties.parent' }).click();
 	await expect(page.getByText('Recursive edge', { exact: false })).toBeVisible();
 	await page.getByRole('button', { name: 'Input', exact: true }).click();
-	await page
-		.getByRole('textbox', { name: 'OpenAPI source', exact: true })
-		.fill('{"openapi":"3.2.0"}');
+	// Input remounts the lazily initialized editor. Target its final editable node, not the transient fallback.
+	const sourceEditor = page.locator('.cm-content[aria-label="OpenAPI source"]');
+	await expect(sourceEditor).toBeVisible();
+	await sourceEditor.fill('{"openapi":"3.2.0"}');
+	await expect(sourceEditor).toHaveText('{"openapi":"3.2.0"}');
 	await expect(page.getByRole('button', { name: 'Explore', exact: true })).toBeDisabled();
 	await page.getByRole('button', { name: 'Parse contract', exact: true }).click();
 	await expect(page.getByRole('alert')).toContainText('unsupported');

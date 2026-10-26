@@ -1,0 +1,6 @@
+{
+  "case": "Delayed CodeMirror dependency; real fallback textarea edit → CodeMirror → parse unsupported",
+  "result": "pass",
+  "sourcePreserved": true,
+  "productFilesChanged": false
+}
