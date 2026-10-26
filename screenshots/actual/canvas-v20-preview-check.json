@@ -1,0 +1,17 @@
+{
+  "expectedSha": "9a4a02846c23fb45f6d352dbb701db1ecceb4364",
+  "provenance": "SHA from GitHub Cloudflare deployment check; normal-HTTPS DOM smoke recorded separately",
+  "tlsVerification": "default; no bypass",
+  "results": [
+    {
+      "url": "https://97e7ed95.devbench-aw3.pages.dev/tools/architecture-canvas/",
+      "status": 200,
+      "applicationVisible": true
+    },
+    {
+      "url": "https://feature-architecture-canvas-39dc.devbench-aw3.pages.dev/tools/architecture-canvas/",
+      "status": 200,
+      "applicationVisible": true
+    }
+  ]
+}

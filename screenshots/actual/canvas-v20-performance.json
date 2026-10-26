@@ -7,11 +7,11 @@
     "diagrams": 1,
     "rotated": true,
     "curves": false,
-    "importReadyMs": 118.99309999999991,
-    "dragDriverMs": 276.2403999999997,
-    "saveIncludingDebounceMs": 839.3619999999996,
-    "panDriverMs": 102.42270000000008,
-    "zoomDriverMs": 100.16869999999972,
+    "importReadyMs": 127.25350000000003,
+    "dragDriverMs": 282.22249999999985,
+    "saveIncludingDebounceMs": 840.6354000000001,
+    "panDriverMs": 85.4354000000003,
+    "zoomDriverMs": 84.08929999999964,
     "measurement": "Playwright end-to-end driver/DOM latency; save includes 600ms debounce; not FPS/render-only"
   },
   {
@@ -22,11 +22,11 @@
     "diagrams": 1,
     "rotated": true,
     "curves": true,
-    "importReadyMs": 170.51249999999982,
-    "dragDriverMs": 370.9897000000001,
-    "saveIncludingDebounceMs": 852.2779,
-    "panDriverMs": 104.59859999999935,
-    "zoomDriverMs": 100.79389999999967,
+    "importReadyMs": 189.933,
+    "dragDriverMs": 400.5032000000001,
+    "saveIncludingDebounceMs": 850.8101999999999,
+    "panDriverMs": 106.76839999999993,
+    "zoomDriverMs": 116.03340000000026,
     "measurement": "Playwright end-to-end driver/DOM latency; save includes 600ms debounce; not FPS/render-only"
   },
   {
@@ -37,11 +37,11 @@
     "diagrams": 1,
     "rotated": true,
     "curves": true,
-    "importReadyMs": 240.85690000000068,
-    "dragDriverMs": 615.7140000000009,
-    "saveIncludingDebounceMs": 839.9250000000011,
-    "panDriverMs": 146.8197,
-    "zoomDriverMs": 113.99319999999898,
+    "importReadyMs": 258.60939999999937,
+    "dragDriverMs": 566.7646999999997,
+    "saveIncludingDebounceMs": 847.6402999999991,
+    "panDriverMs": 150.03960000000006,
+    "zoomDriverMs": 116.1882000000005,
     "measurement": "Playwright end-to-end driver/DOM latency; save includes 600ms debounce; not FPS/render-only"
   },
   {
@@ -52,11 +52,11 @@
     "diagrams": 3,
     "rotated": true,
     "curves": true,
-    "importReadyMs": 130.2564999999995,
-    "dragDriverMs": 271.2975999999999,
-    "saveIncludingDebounceMs": 842.5172000000002,
-    "panDriverMs": 84.34020000000055,
-    "zoomDriverMs": 98.39900000000125,
+    "importReadyMs": 100.6887999999999,
+    "dragDriverMs": 265.9469000000008,
+    "saveIncludingDebounceMs": 848.4525000000012,
+    "panDriverMs": 76.63669999999911,
+    "zoomDriverMs": 84.20849999999882,
     "measurement": "Playwright end-to-end driver/DOM latency; save includes 600ms debounce; not FPS/render-only"
   }
 ]

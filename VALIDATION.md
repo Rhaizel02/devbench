@@ -1,6 +1,12 @@
 # B1 validation report
 
-## V1.5 OpenAPI RC — current acceptance
+## V2.0 — puerta de aceptación actual
+
+OpenAPI V1.5 integrado en main `c3cd929a5aea231991973abd5744def9d13cf740`: instalación limpia/check/lint/310unitarios/build/41Chromium passed, dos auditorías remotas históricas omitidas; CI integración40240617689 success y CI main40241056802 success (attempt2, con fallo intermitente de editor documentado). Canvas2 permanece aislado y conserva28 entradas. Checkpoints `f3b48bb` CI40242343863 y `65d9d01` CI40243308896 success; H8 a172b4b tuvo un fallo de formato en una prueba, corregido; código final9a4a02846c23fb45f6d352dbb701db1ecceb4364 pasó CI40259451245 completa(348unitarios,47browser/2históricos remotos skipped).
+
+Pruebas nuevas cubren fixtures v1/v2 completos/roundtrip, grupos inválidos/IDs/ciclos/anchors/undo, copia independiente DAG con descendiente editable e imagen compartida inmutable, CAS/futuro con misma revisión, originales legacy, rollback/import/reload, raster real/encodings/límites/codec/timeouts/cierre de caché, cuota/rescate y píxel PNG exacto. Chromium verifica marquee/Shift/Escape/group/move/resize/handle+numeric rotation, curvas/elbows/head styles, direct/zoom hierarchy y cámaras, cuatro escenas representativas, seis layouts de temas, pinch CDP, privacidad y desmontaje. Puerta final: npmci258paquetes/0vulnerabilidades, check0/0, lint, build estático28rutas+lab,348unitarios/24archivos y CI exacta con47browser passed/2skipped históricos. Local full browser148.6s sin unexpected/flaky; ajustes finales recibieron unitarios/build/flows relevantes y luego CI completa. Informe/matriz: [Canvas2](docs/ARCHITECTURE_CANVAS_V20.md); capturas y métricas `screenshots/actual/canvas-v20-*`. Sin certificación WCAG/FPS ni auditoría exhaustiva de producción: hubo intentos anteriores ERR_CERT_AUTHORITY_INVALID, pero el smoke final normal HTTPS del código9a4a028 pasó creación/edición/grupos/export/reload/privacy/unmount sin bypass.
+
+## V1.5 OpenAPI — historical acceptance
 
 Canvas H0 integration is complete: main `666dc73207ba0a2a9f26c686e1ad2e2a796f670f`, exact CI 40233753793 success, preserving the complete RC history. OpenAPI stays on `feature/openapi-explorer-v15`; **28 entries**, existing 27 retained. H2/H3/H4 CIs 40235203199 / 40235471677 / 40235751268 succeeded. H5 and final exact-SHA CI are tracked in GOAL_PROGRESS_V15.md.
 

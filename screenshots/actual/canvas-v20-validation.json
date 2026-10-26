@@ -1,0 +1,93 @@
+{
+  "codeCheckpoint": "9a4a02846c23fb45f6d352dbb701db1ecceb4364",
+  "phase": "RC code accepted; closing documentation commit has identical implementation; final publication SHA and CI checked at delivery",
+  "node": "v24.22.1",
+  "cleanInstall": {
+    "packages": 258,
+    "auditFindings": 0,
+    "environment": "local Windows Node24.22.1"
+  },
+  "check": {
+    "errors": 0,
+    "warnings": 0
+  },
+  "unitLatest": {
+    "files": 24,
+    "passed": 348
+  },
+  "fullBrowserBeforeFinalGeometryGuards": {
+    "startTime": "2026-10-26T02:09:23.613Z",
+    "duration": 148610.653,
+    "expected": 47,
+    "skipped": 2,
+    "unexpected": 0,
+    "flaky": 0
+  },
+  "staticToolEntries": 28,
+  "slugs": [
+    "architecture-canvas",
+    "base64-toolkit",
+    "cron-explorer",
+    "curl-inspector",
+    "environment-comparator",
+    "hash-generator",
+    "http-headers",
+    "http-request",
+    "id-generator",
+    "json-code",
+    "json-csv",
+    "json-diff",
+    "json-query",
+    "json-schema",
+    "json-studio",
+    "json-yaml",
+    "jwt-inspector",
+    "log-inspector",
+    "openapi-explorer",
+    "pipeline-builder",
+    "regex-tester",
+    "sql-formatter",
+    "sql-in-builder",
+    "string-toolkit",
+    "test-data-generator",
+    "text-diff",
+    "timestamp-converter",
+    "url-toolkit"
+  ],
+  "labAlias": true,
+  "rough": {
+    "version": "4.6.6",
+    "license": "MIT",
+    "publishedEsmBytes": 27748,
+    "publishedEsmGzipBytes": 8931,
+    "note": "Published library artifact, not isolated application bundle delta"
+  },
+  "privacy": "Only Canvas IndexedDB persists documents; local metadata/requests/history/console checked by real flows",
+  "postGeometryBrowser": {
+    "passed": 5,
+    "durationSeconds": 41.5,
+    "failed": 0,
+    "scope": "Canvas V2 + representative budget scenes"
+  },
+  "preview": {
+    "normalHttps": true,
+    "remoteSmoke": "passed; creation/edit/duplicate/group/JSON/reload/privacy/unmount",
+    "sha": "9a4a02846c23fb45f6d352dbb701db1ecceb4364",
+    "url": "https://97e7ed95.devbench-aw3.pages.dev/tools/architecture-canvas/"
+  },
+  "codeCI": {
+    "sha": "9a4a02846c23fb45f6d352dbb701db1ecceb4364",
+    "runId": 40259451245,
+    "jobId": 121368429824,
+    "status": "completed",
+    "conclusion": "success",
+    "allStepsInspected": true,
+    "unitPassed": 348,
+    "browserPassed": 47,
+    "browserSkipped": 2
+  },
+  "hatchBudgetBrowser": {
+    "passed": 1,
+    "durationSeconds": 19.4
+  }
+}

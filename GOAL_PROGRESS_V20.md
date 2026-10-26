@@ -1,6 +1,6 @@
 # Progreso DevBench V2.0
 
-**Estado actual: H0 aceptado; H1–H8 implementados en feature/architecture-canvas-v20; H9 en curso.** Main c3cd929a5aea231991973abd5744def9d13cf740 permanece separado. Checkpoints Canvas f3b48bb (CI40242343863 success) y 65d9d01 (CI40243308896 success). Próxima acción: publicar H8, instalación limpia y controles/suite completa, revisar capturas finales y cerrar matriz/docs/CI exacta. NO declarar RC aceptada hasta esa puerta.
+**Estado actual: H0–H9 aceptados para revisión RC sobre código 9a4a02846c23fb45f6d352dbb701db1ecceb4364.** CI exacta40259451245 completed/success (348unitarios/47browser passed/2auditorías remotas históricas skipped); main c3cd929a permanece separado. HTTPS normal200 y smoke de edición/export/reload/privacy/unmount pasaron en preview97e7ed95. No queda implementación. Próxima acción de producto: revisión humana de la RC. El commit documental de cierre no cambia producto; su SHA/CI exactos se confirman en la entrega. No fusionar Canvas2 a main.
 
 ## Recuperación
 
@@ -8,18 +8,18 @@ Leer V20_ARCHITECTURE_CANVAS_GOAL.md completo y este archivo, inspeccionar HEAD/
 
 ## Hitos
 
-| Hito              | Estado       | Evidencia / siguiente acción                                                                                                                           |
-| ----------------- | ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| H0 OpenAPI main   | Aceptado     | integración desde main, RC c51c73b, CI RC 40237359833 success ya inspeccionada en planificación; volver a confirmar.                                   |
-| H1 visual/base    | Implementado | inspección previa Chromium: desktop superficie 1142x608, móvil 356x472, sin errores; capturas v14 inspeccionadas. Documentar/implementar solo tras H0. |
-| H2 modelo/datos   | Implementado | v3, lectores v1/v2, backups congelados, protección CAS/original y tests antes de UI.                                                                   |
-| H3 selección      | Implementado | marquee/Shift/Escape/outline/bounds.                                                                                                                   |
-| H4 grupos         | Implementado | grupos planos, resize proporcional, capas/alineación/distribución.                                                                                     |
-| H5 sketch         | Implementado | Rough.js 4.6.6 MIT, cache determinista, tinta.                                                                                                         |
-| H6 geometría      | Implementado | rotación/anchors, curvas/elbow/puntas.                                                                                                                 |
-| H7 jerarquía      | Implementado | independiente por defecto vs linked explícito, copiar DAG completo y probar tres niveles.                                                              |
-| H8 imágenes/touch | Implementado | raster acotado/portable si seguro, pointer capture/pinch.                                                                                              |
-| H9 release        | En curso     | matriz, capturas reales, mediciones, docs, instalación limpia/suite/CI exacta/push.                                                                    |
+| Hito              | Estado      | Evidencia                                                                                                                                                |
+| ----------------- | ----------- | -------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| H0 OpenAPI main   | Aceptado    | main c3cd929a; fast-forward preserva c51c73b; CI40240617689 + main40241056802 success.                                                                   |
+| H1 visual/base    | Aceptado RC | 1440/768/390 dark/light reales, empty/context/group/children/images/errors; inspección visual; P2 modal documentado.                                     |
+| H2 modelo/datos   | Aceptado    | schema3, fixtures v1/v2, igualdad DTO/roundtrip, CAS/original/raw rescue/future-schema/rollback, sin cambio destructivo DB.                              |
+| H3 selección      | Aceptado    | marquee/Shift XOR/Escape, grupos/outline, bounds rotados e ink real, Ctrl+A/Delete.                                                                      |
+| H4 grupos         | Aceptado    | planos, move/resize uniforme/rotate/duplicate/delete/layers/align/distribute/history.                                                                    |
+| H5 sketch         | Aceptado    | Rough.js4.6.6 MIT determinista; clean/soft/expressive/hachure acotado; tinta persistente y PNG.                                                          |
+| H6 geometría      | Aceptado    | handles y rotación numérica; anchors rotados; curvas/elbows/control/heads/dash; tangentes degeneradas seguras.                                           |
+| H7 jerarquía      | Aceptado    | directo/zoom/cámaras/huérfanos; DAG clone independiente predeterminado y linked explícito; tres niveles editados sin cambiar origen.                     |
+| H8 imágenes/touch | Aceptado    | PNG/JPEG/WebP portables, preflight+decode/budgets/cache lifecycle/quota/rescue/píxel PNG; pan/pinch CDP y controles390.                                  |
+| H9 release        | Aceptado RC | instalación limpia/0vulnerabilidades, check0/0, lint,348units,28static+lab,47browser/2historicalskip,CI40259451245,HTTPS smoke,matriz/capturas/métricas. |
 
 ## Inspección y decisiones ya tomadas
 
@@ -58,3 +58,7 @@ Instalación limpia Node24.22.1:258 paquetes/0 vulnerabilidades; check0 errores/
 CI código7cfcf04c90170c3785205062654e50e335e9b6ea: run40258385898 completed/success, todos los pasos. Smoke normal HTTPS de su preview38ba1740 pasó200/render/crear/editar/duplicar/agrupar/exportJSON/reload exacto/privacy/staticGET/0errores/unmount0canvas; bloqueosTLSanteriores ya no se reproducen en esta comprobación, sin bypass.
 
 Última guarda de presupuesto H5/H9: prueba roja demostró361930 caracteres de paths para un hachure20000x20000 válido. Ahora gap adaptativo max(12,span/80) acota densidad sin cambiar documentos ni figuras normales; regresión pasó. Tras esta guarda348unitarios/24archivos, check0/0, build y escenario browser20/100/300/multinivel passed. Próximo: CI de este checkpoint y cierre documental/evidencia; no más producto salvo P0/P1 reproducible. Reportar P2 observado del diálogo Projects(edgealignment/accenterror), no abrir ronda para resolverlo.
+
+## Cierre de aceptación del código
+
+9a4a02846c23fb45f6d352dbb701db1ecceb4364: CI40259451245 y job121368429824 completed/success, todos los pasos y logs inspeccionados:348passed/24archivos;47browser passed/2skipped(2.9m). Preview97e7ed95 + aliasfeature-architecture-canvas-39dc publicadas por pipeline habitual; HTTPS200 sin TLSbypass, smoke funcional/privacy/unmount pasó. P0/P1 abiertos:ninguno confirmado. P2: diálogo Projects top-left/accenterror observado, physicaltouch/stylus/presión, lasso/nestedgroups/assistive-crossbrowser y presupuesto agregado20proyectos; no rondas adicionales. GO para revisión RC, no merge. Documentación y evidencia final corresponden al mismo código; comprobar CI del commit documental final antes de emitir la respuesta con SHA. No más implementación salvo fallo P0/P1 en esa puerta.

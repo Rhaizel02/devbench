@@ -559,3 +559,7 @@ Las imágenes locales se implementan, no se dejan implícitas: raster PNG/JPEG/W
 H9 conserva también la geometría visible de tinta legacy cuyo conjunto de puntos exceda su caja declarada y orienta cabezas mediante el segmento no degenerado más cercano. Tests específicos demostraron ambos casos; no se recortan datos ni se migran dimensiones implícitamente. La puerta limpia local fue ejecutada y el siguiente paso es CI del código final/documentación de aceptación; ver progreso para resultados exactos, sin atribuirlos a builds distintos.
 
 El presupuesto de H5 incluye densidad de tramado adaptativa al tamaño de figura: la separación nunca baja de12unidades y aumenta con span/80. Una prueba de regresión con figura20000x20000 mantiene los paths bajo100000caracteres, evitando multiplicar una densidad fija sobre escenas grandes. No cambia DTOs ni requiere migración, no altera figuras normales. Esta guarda se valida antes de cerrar H9.
+
+## Aceptación de implementación H0–H9
+
+Código Canvas2 final9a4a02846c23fb45f6d352dbb701db1ecceb4364 aceptado por CI40259451245(348unitarios,47browser,2auditorías remotas históricas skipped), instalación limpia/check/lint/build y smoke real HTTPS con privacidad/recarga/unmount. Main de integraciónOpenAPI es c3cd929a5aea231991973abd5744def9d13cf740,28entradas. No merge Canvas2. Informe/matriz/capturas/P2 en docs/ARCHITECTURE_CANVAS_V20.md y progreso. El cierre documental no cambia implementación; SHA/CI del commit publicado final se verifican para entrega. Próximo paso de producto es revisión humana, no más funcionalidades.
