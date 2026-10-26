@@ -46,7 +46,7 @@ describe('versioned documents and hostile imports', () => {
 			kind: 'line'
 		});
 		const result = parseProject(JSON.stringify(source));
-		expect(result.schemaVersion).toBe(2);
+		expect(result.schemaVersion).toBe(3);
 		expect(result.id).toBe(source.id);
 		expect(result.rootDiagramId).toBe(source.rootDiagramId);
 		for (const d of source.diagrams) {
@@ -114,7 +114,7 @@ describe('versioned documents and hostile imports', () => {
 		const current = project(),
 			before = serializeProject(current),
 			bad = structuredClone(current);
-		if (kind === 'future') (bad as unknown as { schemaVersion: number }).schemaVersion = 3;
+		if (kind === 'future') (bad as unknown as { schemaVersion: number }).schemaVersion = 99;
 		if (kind === 'duplicate') bad.diagrams[0].elements.push(figure());
 		if (kind === 'missing-child') bad.diagrams[0].elements[0].childDiagramId = 'absent';
 		if (kind === 'cycle') bad.diagrams[0].elements[0].childDiagramId = 'root';
@@ -242,6 +242,29 @@ describe('editing, hierarchy and history', () => {
 	});
 });
 describe('ordered autosave and storage failures', () => {
+	it('never overwrites a future schema even if an external writer kept the revision number', async () => {
+		const p = project(),
+			read = {} as IDBRequest,
+			put = vi.fn();
+		const tx = {
+			objectStore: () => ({ get: () => read, put }),
+			abort: () => tx.onabort?.(new Event('abort')),
+			onabort: null as ((event: Event) => void) | null,
+			onerror: null,
+			oncomplete: null
+		};
+		const store = new CanvasStorage(
+			{ transaction: () => tx } as unknown as IDBDatabase,
+			new Map([[p.id, 1]])
+		);
+		const saving = store.save(p);
+		Object.defineProperty(read, 'result', {
+			value: { id: p.id, revision: 1, json: JSON.stringify({ ...p, schemaVersion: 99 }) }
+		});
+		read.onsuccess?.(new Event('success'));
+		await expect(saving).rejects.toThrow('another tab');
+		expect(put).not.toHaveBeenCalled();
+	});
 	it('debounces edits and writes the most recent version once', async () => {
 		vi.useFakeTimers();
 		const write = vi.fn(async () => {}),

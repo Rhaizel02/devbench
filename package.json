@@ -72,6 +72,7 @@
 		"diff": "^9.0.0",
 		"konva": "10.9.0",
 		"papaparse": "^5.7.0",
+		"roughjs": "4.6.6",
 		"sql-formatter": "^15.9.0",
 		"svelte-konva": "1.0.1",
 		"xpath": "0.0.35",

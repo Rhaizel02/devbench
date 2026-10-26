@@ -1,6 +1,6 @@
 # Progreso DevBench V2.0
 
-**Estado actual: H0 en preparación.** Contrato completo guardado antes de modificar producto. Rama integration/openapi-v15 creada desde origin/main 666dc732. RC OpenAPI c51c73b; árbol inicial limpio. Próxima acción: incorporar RC por fast-forward, actualizar autorización AGENTS y ejecutar/verificar integración antes de promover main. No código Canvas2 hasta CI main aceptada.
+**Estado actual: H0–H9 aceptados para revisión RC sobre código 9a4a02846c23fb45f6d352dbb701db1ecceb4364.** CI exacta40259451245 completed/success (348unitarios/47browser passed/2auditorías remotas históricas skipped); main c3cd929a permanece separado. HTTPS normal200 y smoke de edición/export/reload/privacy/unmount pasaron en preview97e7ed95. No queda implementación. Próxima acción de producto: revisión humana de la RC. El commit documental de cierre no cambia producto; su SHA/CI exactos se confirman en la entrega. No fusionar Canvas2 a main.
 
 ## Recuperación
 
@@ -8,18 +8,18 @@ Leer V20_ARCHITECTURE_CANVAS_GOAL.md completo y este archivo, inspeccionar HEAD/
 
 ## Hitos
 
-| Hito              | Estado    | Evidencia / siguiente acción                                                                                                                           |
-| ----------------- | --------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| H0 OpenAPI main   | En curso  | integración desde main, RC c51c73b, CI RC 40237359833 success ya inspeccionada en planificación; volver a confirmar.                                   |
-| H1 visual/base    | Pendiente | inspección previa Chromium: desktop superficie 1142x608, móvil 356x472, sin errores; capturas v14 inspeccionadas. Documentar/implementar solo tras H0. |
-| H2 modelo/datos   | Pendiente | v3, lectores v1/v2, backups congelados, protección CAS/original y tests antes de UI.                                                                   |
-| H3 selección      | Pendiente | marquee/Shift/Escape/outline/bounds.                                                                                                                   |
-| H4 grupos         | Pendiente | grupos planos, resize proporcional, capas/alineación/distribución.                                                                                     |
-| H5 sketch         | Pendiente | Rough.js 4.6.6 MIT, cache determinista, tinta.                                                                                                         |
-| H6 geometría      | Pendiente | rotación/anchors, curvas/elbow/puntas.                                                                                                                 |
-| H7 jerarquía      | Pendiente | independiente por defecto vs linked explícito, copiar DAG completo y probar tres niveles.                                                              |
-| H8 imágenes/touch | Pendiente | raster acotado/portable si seguro, pointer capture/pinch.                                                                                              |
-| H9 release        | Pendiente | matriz, capturas reales, mediciones, docs, instalación limpia/suite/CI exacta/push.                                                                    |
+| Hito              | Estado      | Evidencia                                                                                                                                                |
+| ----------------- | ----------- | -------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| H0 OpenAPI main   | Aceptado    | main c3cd929a; fast-forward preserva c51c73b; CI40240617689 + main40241056802 success.                                                                   |
+| H1 visual/base    | Aceptado RC | 1440/768/390 dark/light reales, empty/context/group/children/images/errors; inspección visual; P2 modal documentado.                                     |
+| H2 modelo/datos   | Aceptado    | schema3, fixtures v1/v2, igualdad DTO/roundtrip, CAS/original/raw rescue/future-schema/rollback, sin cambio destructivo DB.                              |
+| H3 selección      | Aceptado    | marquee/Shift XOR/Escape, grupos/outline, bounds rotados e ink real, Ctrl+A/Delete.                                                                      |
+| H4 grupos         | Aceptado    | planos, move/resize uniforme/rotate/duplicate/delete/layers/align/distribute/history.                                                                    |
+| H5 sketch         | Aceptado    | Rough.js4.6.6 MIT determinista; clean/soft/expressive/hachure acotado; tinta persistente y PNG.                                                          |
+| H6 geometría      | Aceptado    | handles y rotación numérica; anchors rotados; curvas/elbows/control/heads/dash; tangentes degeneradas seguras.                                           |
+| H7 jerarquía      | Aceptado    | directo/zoom/cámaras/huérfanos; DAG clone independiente predeterminado y linked explícito; tres niveles editados sin cambiar origen.                     |
+| H8 imágenes/touch | Aceptado    | PNG/JPEG/WebP portables, preflight+decode/budgets/cache lifecycle/quota/rescue/píxel PNG; pan/pinch CDP y controles390.                                  |
+| H9 release        | Aceptado RC | instalación limpia/0vulnerabilidades, check0/0, lint,348units,28static+lab,47browser/2historicalskip,CI40259451245,HTTPS smoke,matriz/capturas/métricas. |
 
 ## Inspección y decisiones ya tomadas
 
@@ -34,3 +34,31 @@ P0/P1 abiertos: ninguno confirmado al inicio. Riesgos que deben probarse: pérdi
 ## Checkpoints
 
 Inicial: main 666dc73207ba0a2a9f26c686e1ad2e2a796f670f; RC c51c73b089e7a8fb578eb74b3a3557e1d1dae433. Fetch confirmado sin cambios remotos. El Goal activo es implementar H0–H9 completos, no el plan anterior. Aún no se han ejecutado nuevos controles de integración ni modificado producto.
+
+## Checkpoint H0 aceptado y H1/H2 en curso
+
+Main c3cd929a5aea231991973abd5744def9d13cf740 con 28 herramientas: npm ci 0 vulnerabilidades; check 0/0; lint; 310 unitarios; build estático; 41 Playwright passed / 2 históricos remotos skipped. Integración CI 40240617689 success. Main CI 40241056802 attempt1 falló aserción Explore-disabled después de montar editor; diez repeticiones locales aisladas passed sin cambios; attempt2 success exacto mismo SHA. Registrar P2 race de carga/test a vigilar, no afirmar fix ni ocultar intento1. Cloudflare check success; HTTPS Chromium estable bloqueado ERR_CERT_AUTHORITY_INVALID, sin bypass.
+
+Rama Canvas creada desde main aceptado. Capturas reales base1440/390 guardadas; dirección visual e informe incremental en docs/ARCHITECTURE_CANVAS_V20.md. Backups v1/v2 congelados antes de cambiar lector. Modelo schema3 con lector legacy independiente/presupuestos anteriores, campos opcionales nuevos, grupos planos validados, migración pura sin efectos. Persistencia conserva base física, CAS y backup original inmutable en primer guardado migrado; abrir no debe reescribir. Descarga raw/original para recuperación de schema futuro. Historial limita ambas pilas y no serializa datos raster repetidamente. 37 unitarios Canvas passed; check0/0 antes del último ajuste; build/browser selectivos en ejecución (no aceptados todavía). Imágenes son DTO preparatorio, no funcionalidad terminada. Sin P0/P1 confirmado; NO-GO de RC hasta completar hitos centrales.
+
+Checkpoint de base H1/H2: 47 pruebas Canvas (25 anteriores + 12 migración + 10 operaciones) passed; check 0/0; eslint selectivo passed. Build estático passed. Siete flujos Canvas anteriores passed; nuevo flujo IndexedDB passed tras ajustar selector ambiguo (ningún fallo de datos). Migración v1/v2→v3, raw/original rescue, copia DAG independiente/linked, geometría rotada y motores de grupos/alineación/selection implementados. Motores todavía NO conectados a UI; H3–H7 no se consideran completados. Siguiente: renderer/gestos y UI de pizarra, pruebas visuales reales. CI del checkpoint pendiente tras push.
+
+Checkpoint renderer H1/H3–H7 en aceptación: f3b48bb799296946f1d2488537eb7dd2394d1797 CI 40242343863 success. Konva + Rough.js4.6.6 MIT, sin React. Contornos/path deterministas por semilla, clean/soft/expressive/hachure, hit-testing geométrico separado. Marquee cuatro cuadrantes/Shift XOR/Escape; grupos planos, movimiento/resize uniforme/rotación handle y numérica/capas/alineación; curvas/elbows/puntas/control; copia independiente DAG por defecto y linked explícita con indicador compartido. Pointer capture, pan rueda, Ctrl/Cmd-wheel zoom, Space/middle pan, touch pan/pinch probados CDP. Toolbar390 siete acciones con menú More, contexto/propiedades bajo demanda. UI conectada, 48 unitarios Canvas y check0/0 passed. Browser legado7/8 inicial: único fallo esperaba wheel zoom sin Ctrl (contrato cambiado), test adaptado al gesto aprobado; volvió a pasar. Tres flujos nuevos passed con grupos/resize/handle-rotation/copia tres niveles/reload/themes390-768-1440/pinch/privacy. Ajuste de prueba: verificar mensaje linked antes de exportJSON porque export cambia status. Capturas reales generadas e inspeccionadas desktop/group/mobile; reducción encabezado tras revisión móvil. Build passed. Próximo: checkpoint UI/CI, H8 raster seguro y H9 mediciones/escenarios/evidencia final; aún NO-GO RC final.
+
+## Checkpoint H8 raster seguro y evidencia H9
+
+65d9d01917a1ee80eba0022daa03882d78cc8506 CI40243308896 success. Soporte real PNG/JPEG/WebP local: MIME/firma/dimensiones/chunks/base64 canónico y decodificación real antes de aceptar; rechazo SVG/animación/URLs; 1MiB/4MP por imagen, 4MiB/8MP por proyecto. Backup v3 autocontenido, duplicados comparten recurso inmutable, bitmap cache por editor con timeout/cierre/reutilización/cancelación, ningún ObjectURL de imagen ni fetch. Borrado de último uso elimina ese recurso con undo, sin limpiar recursos ajenos silenciosamente. Proyectos inválidos no sustituyen abierto; PNG no exporta placeholders. Test real pasó cuota/retry/rescate, píxel PNG exacto, PNG/JPEG/WebP, duplicado/grupo, reload/import y rollback de PNG con header válido pero datos ausentes. 61 unitarios Canvas passed (incluidos CAS schema futuro con misma revisión y clones con imágenes), cinco browser selectivos + mediciones passed; check/lint selectivos finales en ejecución antes de checkpoint.
+
+Mediciones reales iniciales, latencia de driver/DOM (NO FPS): Small20 import119ms/drag276ms, Medium100+80 import171ms/drag371ms, Large300+200+20ink import241ms/drag616ms, 3 niveles import130ms/drag271ms; pan84–147ms/zoom98–114ms; save840–852ms incluye debounce600ms. Archivo canvas-v20-performance.json. Capturas finales curatoriales mediante importer real; evitar que la prueba de privacidad las sobrescriba (su captura móvil lleva nombre propio). Capturas de quota/import corrupto añadidas para próxima suite. Ningún P0/P1 abierto confirmado. H9 pendiente instalación limpia + suite completa + revisión visual final + matriz/documentos + push/CI exacta/previewTLS. No fusionar a main.
+
+## H9 puerta local y guardas finales
+
+Instalación limpia Node24.22.1:258 paquetes/0 vulnerabilidades; check0 errores/0avisos; 346unitarios y suite completa 47passed/2auditorías remotas históricas skipped,0unexpected/0flaky(148610ms). Las dos guardas finales de geometría añaden bounds de tinta legacy por puntos reales y tangente de cabezas que ignora segmentos elbow degenerados; tras ellas347unitarios/24archivos passed, check0/0, build y los5flujos selectivos de Canvas2 passed(incluye arrastre real de control de curva,41.5s). 28directorios estáticos/aliaslab verificados. Falla CI H8 40257496525 exclusivamente formato tests/canvas-v20-budget.spec.ts; corregido y check de formato pasó, sin cambiar lógica de prueba. Siguiente: publicar checkpoint código final, comprobar CIexacta, terminar informe/matriz/evidencia/preview y commit documental de aceptación. No declarar CI verde hasta verla.
+
+CI código7cfcf04c90170c3785205062654e50e335e9b6ea: run40258385898 completed/success, todos los pasos. Smoke normal HTTPS de su preview38ba1740 pasó200/render/crear/editar/duplicar/agrupar/exportJSON/reload exacto/privacy/staticGET/0errores/unmount0canvas; bloqueosTLSanteriores ya no se reproducen en esta comprobación, sin bypass.
+
+Última guarda de presupuesto H5/H9: prueba roja demostró361930 caracteres de paths para un hachure20000x20000 válido. Ahora gap adaptativo max(12,span/80) acota densidad sin cambiar documentos ni figuras normales; regresión pasó. Tras esta guarda348unitarios/24archivos, check0/0, build y escenario browser20/100/300/multinivel passed. Próximo: CI de este checkpoint y cierre documental/evidencia; no más producto salvo P0/P1 reproducible. Reportar P2 observado del diálogo Projects(edgealignment/accenterror), no abrir ronda para resolverlo.
+
+## Cierre de aceptación del código
+
+9a4a02846c23fb45f6d352dbb701db1ecceb4364: CI40259451245 y job121368429824 completed/success, todos los pasos y logs inspeccionados:348passed/24archivos;47browser passed/2skipped(2.9m). Preview97e7ed95 + aliasfeature-architecture-canvas-39dc publicadas por pipeline habitual; HTTPS200 sin TLSbypass, smoke funcional/privacy/unmount pasó. P0/P1 abiertos:ninguno confirmado. P2: diálogo Projects top-left/accenterror observado, physicaltouch/stylus/presión, lasso/nestedgroups/assistive-crossbrowser y presupuesto agregado20proyectos; no rondas adicionales. GO para revisión RC, no merge. Documentación y evidencia final corresponden al mismo código; comprobar CI del commit documental final antes de emitir la respuesta con SHA. No más implementación salvo fallo P0/P1 en esa puerta.

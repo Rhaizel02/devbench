@@ -1,5 +1,9 @@
 # B1 validation report
 
+## V2.2 integration baseline — in verification
+
+The new feature/canvas-workflow-v22 branch combines Data Diagnostics V2.1 and Canvas 2.0, keeping thirty registry entries. Current integration/UX/workflow acceptance is tracked in GOAL_PROGRESS_V22.md. Main and original RC branches are not changed; no V2.2 functionality is claimed by the historical sections below.
+
 ## V2.1 Data Diagnostics RC
 
 Branch `feature/data-diagnostics-v21` from main `c3cd929a5aea231991973abd5744def9d13cf740`; 30 entries, two new lazy/static routes, previous 28 retained. First functional checkpoint `04a8509a9c849ae1d3f566a72d70f77ea511f55d`: check 0 errors/warnings, lint, 376 unit tests; static build and four V2.1 browser flows verified locally after that checkpoint. Final clean-install/full-suite/CI gate is recorded in [GOAL_PROGRESS_V21.md](GOAL_PROGRESS_V21.md), not inferred from implementation.
@@ -10,7 +14,13 @@ Final clean-install gate: check 0 errors/warnings, lint, **396 unit tests / 23 f
 
 Observed local Playwright driver file-import + worker + UI assertion latencies: SQL small/medium/near-limit 185/197/315 ms (438 / 85,931 / 1,808,598 bytes); XML 195/185/351 ms (29 / 33,007 / 1,800,124 bytes). These are wall times from automation, not parser-only benchmarks or FPS. Medium outlines initially render 200 rows and expand to 400. A deliberately costly XPath terminates its worker after the 1.5-second budget while main-thread heartbeat continues (191 ticks), then valid retry/cancel/reset work. [Raw measurements](screenshots/actual/v21-performance.json), [responsive/privacy](screenshots/actual/v21-responsive-privacy.json), [SQL limits](docs/SQL_EXPLAIN_V21.md), [XML limits](docs/XML_TOOLKIT_V21.md). Later historical sections retain old entry counts and branch states.
 
-## V1.5 OpenAPI RC — current acceptance
+## V2.0 — puerta de aceptación actual
+
+OpenAPI V1.5 integrado en main `c3cd929a5aea231991973abd5744def9d13cf740`: instalación limpia/check/lint/310unitarios/build/41Chromium passed, dos auditorías remotas históricas omitidas; CI integración40240617689 success y CI main40241056802 success (attempt2, con fallo intermitente de editor documentado). Canvas2 permanece aislado y conserva28 entradas. Checkpoints `f3b48bb` CI40242343863 y `65d9d01` CI40243308896 success; H8 a172b4b tuvo un fallo de formato en una prueba, corregido; código final9a4a02846c23fb45f6d352dbb701db1ecceb4364 pasó CI40259451245 completa(348unitarios,47browser/2históricos remotos skipped).
+
+Pruebas nuevas cubren fixtures v1/v2 completos/roundtrip, grupos inválidos/IDs/ciclos/anchors/undo, copia independiente DAG con descendiente editable e imagen compartida inmutable, CAS/futuro con misma revisión, originales legacy, rollback/import/reload, raster real/encodings/límites/codec/timeouts/cierre de caché, cuota/rescate y píxel PNG exacto. Chromium verifica marquee/Shift/Escape/group/move/resize/handle+numeric rotation, curvas/elbows/head styles, direct/zoom hierarchy y cámaras, cuatro escenas representativas, seis layouts de temas, pinch CDP, privacidad y desmontaje. Puerta final: npmci258paquetes/0vulnerabilidades, check0/0, lint, build estático28rutas+lab,348unitarios/24archivos y CI exacta con47browser passed/2skipped históricos. Local full browser148.6s sin unexpected/flaky; ajustes finales recibieron unitarios/build/flows relevantes y luego CI completa. Informe/matriz: [Canvas2](docs/ARCHITECTURE_CANVAS_V20.md); capturas y métricas `screenshots/actual/canvas-v20-*`. Sin certificación WCAG/FPS ni auditoría exhaustiva de producción: hubo intentos anteriores ERR_CERT_AUTHORITY_INVALID, pero el smoke final normal HTTPS del código9a4a028 pasó creación/edición/grupos/export/reload/privacy/unmount sin bypass.
+
+## V1.5 OpenAPI — historical acceptance
 
 Canvas H0 integration is complete: main `666dc73207ba0a2a9f26c686e1ad2e2a796f670f`, exact CI 40233753793 success, preserving the complete RC history. OpenAPI stays on `feature/openapi-explorer-v15`; **28 entries**, existing 27 retained. H2/H3/H4 CIs 40235203199 / 40235471677 / 40235751268 succeeded. H5 and final exact-SHA CI are tracked in GOAL_PROGRESS_V15.md.
 

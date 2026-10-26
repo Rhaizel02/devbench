@@ -1,0 +1,62 @@
+[
+  {
+    "name": "Small20",
+    "figures": 20,
+    "ink": 0,
+    "connections": 0,
+    "diagrams": 1,
+    "rotated": true,
+    "curves": false,
+    "importReadyMs": 127.25350000000003,
+    "dragDriverMs": 282.22249999999985,
+    "saveIncludingDebounceMs": 840.6354000000001,
+    "panDriverMs": 85.4354000000003,
+    "zoomDriverMs": 84.08929999999964,
+    "measurement": "Playwright end-to-end driver/DOM latency; save includes 600ms debounce; not FPS/render-only"
+  },
+  {
+    "name": "Medium100",
+    "figures": 100,
+    "ink": 0,
+    "connections": 80,
+    "diagrams": 1,
+    "rotated": true,
+    "curves": true,
+    "importReadyMs": 189.933,
+    "dragDriverMs": 400.5032000000001,
+    "saveIncludingDebounceMs": 850.8101999999999,
+    "panDriverMs": 106.76839999999993,
+    "zoomDriverMs": 116.03340000000026,
+    "measurement": "Playwright end-to-end driver/DOM latency; save includes 600ms debounce; not FPS/render-only"
+  },
+  {
+    "name": "Large300",
+    "figures": 300,
+    "ink": 20,
+    "connections": 200,
+    "diagrams": 1,
+    "rotated": true,
+    "curves": true,
+    "importReadyMs": 258.60939999999937,
+    "dragDriverMs": 566.7646999999997,
+    "saveIncludingDebounceMs": 847.6402999999991,
+    "panDriverMs": 150.03960000000006,
+    "zoomDriverMs": 116.1882000000005,
+    "measurement": "Playwright end-to-end driver/DOM latency; save includes 600ms debounce; not FPS/render-only"
+  },
+  {
+    "name": "Multilevel",
+    "figures": 24,
+    "ink": 0,
+    "connections": 12,
+    "diagrams": 3,
+    "rotated": true,
+    "curves": true,
+    "importReadyMs": 100.6887999999999,
+    "dragDriverMs": 265.9469000000008,
+    "saveIncludingDebounceMs": 848.4525000000012,
+    "panDriverMs": 76.63669999999911,
+    "zoomDriverMs": 84.20849999999882,
+    "measurement": "Playwright end-to-end driver/DOM latency; save includes 600ms debounce; not FPS/render-only"
+  }
+]

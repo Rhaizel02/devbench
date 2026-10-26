@@ -7,6 +7,8 @@ export type StoredProject = {
 	updatedAt: number;
 	json: string;
 	revision?: number;
+	/** Immutable rescue copy, captured atomically on the first real legacy edit. */
+	originalJson?: string;
 };
 export class CanvasConflictError extends Error {
 	constructor() {
@@ -127,6 +129,11 @@ export class CanvasStorage {
 						const current = read.result as StoredProject | undefined,
 							known = this.versions.get(project.id),
 							actual = current?.revision ?? 0;
+						if (current && ![1, 2, 3].includes(JSON.parse(current.json).schemaVersion)) {
+							conflict = true;
+							tx.abort();
+							return;
+						}
 						if (current?.json === row.json) {
 							next = actual;
 							return;
@@ -137,7 +144,10 @@ export class CanvasStorage {
 							return;
 						}
 						next = actual + 1;
-						store.put({ ...row, revision: next });
+						const originalJson =
+							current?.originalJson ??
+							(current && JSON.parse(current.json).schemaVersion < 3 ? current.json : undefined);
+						store.put({ ...row, revision: next, ...(originalJson ? { originalJson } : {}) });
 					} catch {
 						tx.abort();
 					}

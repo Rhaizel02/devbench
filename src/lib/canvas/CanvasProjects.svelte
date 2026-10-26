@@ -4,6 +4,7 @@
 	import { FolderOpen, Plus, Upload, RefreshCw } from '@lucide/svelte';
 	import { emptyProject, newId, LIMITS, type Project } from './model';
 	import { parseProject } from './serialization';
+	import { verifyProjectImages } from './images';
 	import {
 		CanvasStorage,
 		openCanvasDatabase,
@@ -23,6 +24,7 @@
 		onReady: () => void;
 	} = $props();
 	let store: CanvasStorage | undefined,
+		loaded: Project | undefined,
 		disposed = false,
 		skipNext = false,
 		navigating = false;
@@ -56,7 +58,7 @@
 	);
 	$effect(() => {
 		const value = project;
-		if (ready) saver.schedule(value);
+		if (ready && store && value !== loaded) saver.schedule(value);
 	});
 	async function initialize(first = true) {
 		working = true;
@@ -73,7 +75,8 @@
 			rows = await store.list();
 			if (first && rows.length) {
 				const loaded = await store.load(rows[0].id);
-				if (!disposed) onOpen(loaded);
+				await verifyProjectImages(loaded);
+				if (!disposed) acceptLoaded(loaded);
 			}
 			if (!disposed) {
 				ready = true;
@@ -121,12 +124,22 @@
 			working = false;
 		}
 	}
-	async function safeSwitch(next: Project) {
+	function acceptLoaded(next: Project) {
+		loaded = next;
+		onOpen(next);
+		saveState = 'saved';
+		message = 'Saved in this browser';
+	}
+	async function safeSwitch(next: Project, existing = false) {
 		if (!(await saver.flush()))
 			throw new Error(
 				'Current changes are not saved. Retry or export a rescue JSON before switching projects.'
 			);
-		onOpen(next);
+		if (existing) acceptLoaded(next);
+		else {
+			loaded = undefined;
+			onOpen(next);
+		}
 		close();
 	}
 	async function create() {
@@ -146,7 +159,8 @@
 		await run(async () => {
 			if (!store) throw new Error('Storage unavailable. Retry or use rescue export.');
 			const next = await store.load(id);
-			await safeSwitch(next);
+			await verifyProjectImages(next);
+			await safeSwitch(next, true);
 		});
 	}
 	async function remove(id: string) {
@@ -166,7 +180,12 @@
 				const next = rows.length
 					? await store.load(rows[0].id)
 					: emptyProject(newId('project'), newId('diagram'));
-				onOpen(next);
+				await verifyProjectImages(next);
+				if (rows.length) acceptLoaded(next);
+				else {
+					loaded = undefined;
+					onOpen(next);
+				}
 			}
 		});
 	}
@@ -175,13 +194,25 @@
 			file = input.files?.[0];
 		if (!file) return;
 		await run(async () => {
-			if (file.size > LIMITS.bytes) throw new Error('Import limit: 8 MiB.');
+			if (file.size > LIMITS.bytes) throw new Error('Import limit: 16 MiB (legacy v1/v2: 8 MiB).');
 			if (rows.length >= 20) throw new Error('Local project limit: 20.');
 			const imported = parseProject(await file.text());
+			await verifyProjectImages(imported);
 			const next = { ...imported, id: newId('project') };
 			await safeSwitch(next);
 		});
 		input.value = '';
+	}
+	function rescue(row: StoredProject, original = false) {
+		const url = URL.createObjectURL(
+			new Blob([original ? (row.originalJson ?? row.json) : row.json], { type: 'application/json' })
+		);
+		const link = document.createElement('a');
+		link.href = url;
+		link.download = original ? 'canvas-original-backup.json' : 'canvas-saved-backup.json';
+		link.click();
+		setTimeout(() => URL.revokeObjectURL(url), 1000);
+		actionMessage = 'Saved backup download requested.';
 	}
 	beforeNavigate((navigation) => {
 		if (skipNext) {
@@ -278,7 +309,7 @@
 		>
 	</div>
 	<label class="import"
-		><Upload size={15} />Import project JSON (v1/v2, ≤8 MiB)<input
+		><Upload size={15} />Import project JSON (v1/v2/v3, ≤16 MiB)<input
 			aria-label="Import project JSON"
 			type="file"
 			accept=".json,application/json"
@@ -296,6 +327,13 @@
 					>{row.title || 'Untitled board'}<span>{new Date(row.updatedAt).toLocaleString()}</span
 					></button
 				><button
+					class="button"
+					aria-label={'Download saved backup ' + row.title}
+					onclick={() => rescue(row)}>Backup</button
+				>
+				{#if row.originalJson}<button class="button" onclick={() => rescue(row, true)}
+						>Original</button
+					>{/if}<button
 					class="button"
 					aria-label={'Delete project ' + row.title}
 					disabled={working}

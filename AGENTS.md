@@ -1,5 +1,8 @@
 # AGENTS.md — reglas de Codex para DevBench
 
+**Autorización V2.2 vigente:** V22_CANVAS_WORKFLOW_GOAL.md y GOAL_PROGRESS_V22.md gobiernan la rama feature/canvas-workflow-v22. El usuario autoriza integrar allí las RC V2.1 y Canvas 2.0 mediante merge normal, conservando historia y treinta herramientas. No modificar main ni las ramas RC originales, no force push. Canvas conserva lectura v1/v2/v3 e IndexedDB no destructivo. Pipeline y Test Data siguen exclusivamente en memoria; export/import de configuraciones es explícito.
+
+
 **Autorización V2.0 posterior:** V20_ARCHITECTURE_CANVAS_GOAL.md y GOAL_PROGRESS_V20.md gobiernan el trabajo actual. H0 autoriza integrar OpenAPI V1.5 en main después de validar integración/CI, superando solo para ello la antigua prohibición V1.5. Canvas 2.0 se desarrolla después en feature/architecture-canvas-v20 y NO se fusiona a main sin revisión posterior. Mantener base IndexedDB/proyectos/backups v1/v2; únicamente Canvas persiste documentos. Todo lo demás conserva privacidad en memoria.
 
 Antes de trabajar, leer `ARCHITECTURE.md`, `FEATURES.md` y `DESIGN.md` según la tarea. `CODEX_B1_PROMPT.md` describe el Bloque 1. Los PNG son **únicamente referencia visual**, no de lógica.

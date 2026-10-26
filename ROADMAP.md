@@ -1,14 +1,26 @@
 # DevBench — Roadmap
 
+## V2.2 integration baseline — in verification
+
+The new feature/canvas-workflow-v22 branch combines Data Diagnostics V2.1 and Canvas 2.0, keeping thirty registry entries. Current integration/UX/workflow acceptance is tracked in GOAL_PROGRESS_V22.md. Main and original RC branches are not changed; no V2.2 functionality is claimed by the historical sections below.
+
+
 ## V2.1 Data Diagnostics RC
 
 Implemented on `feature/data-diagnostics-v21` from OpenAPI-integrated main: BACK-11 PostgreSQL EXPLAIN Analyzer and DATA-07 XML Toolkit, 30 available entries. Local plan evidence/comparison and safe XML/XPath/ordered conversion, with bounded workers and memory-only handoffs. [SQL](docs/SQL_EXPLAIN_V21.md), [XML](docs/XML_TOOLKIT_V21.md), [acceptance gates](GOAL_PROGRESS_V21.md). No main merge without acceptance. Canvas 2.0 remains separately pending; none of its code/data schema enters this branch.
 
 P2: broader PostgreSQL/text/XML conformance corpora, alternate XML encodings/1.1 and dedicated cross-browser/assistive-technology QA. No promises of XSD/XSLT, remote query execution, automatic indexing advice or unbounded XPath. The following sections retain historical release states.
 
-## Current V1.5 release candidate
 
-Canvas V1.4 integrated intact into main at `666dc73207ba0a2a9f26c686e1ad2e2a796f670f`, verified by CI. OpenAPI Contract Workbench adds the 28th entry on `feature/openapi-explorer-v15`: bounded local parsing/exploration, request preview/handoff and contract diff. No V1.5 merge to main is authorized. [Contract](V15_OPENAPI_GOAL.md), [progress](GOAL_PROGRESS_V15.md), [implementation/limits](docs/OPENAPI_V15.md) and VALIDATION contain acceptance evidence.
+## V2.0 — estado actual
+
+H0 integrado y aceptado: OpenAPI V1.5 en main `c3cd929a5aea231991973abd5744def9d13cf740`, 28 entradas y CI exacta. Canvas2 se desarrolla en `feature/architecture-canvas-v20` y queda como RC para revisión humana; **no se fusiona a main**. H1–H8 implementados: pizarra canvas-first, schema3 compatible v1/v2, selección rectangular, grupos/alineación, Rough.js, rotación/curvas/elbows, duplicación independiente de subárboles y raster local/touch. H9 aceptado sobre código9a4a028: instalación limpia,348unitarios,47flujos/2remotos históricos omitidos, capturas, métricas, privacidad y CI40259451245 verde; smoke HTTPS real pasó. Estado verificable: [progreso V2](GOAL_PROGRESS_V20.md), [matriz y evidencia](docs/ARCHITECTURE_CANVAS_V20.md).
+
+P2 posteriores: lasso opcional/presión y dispositivos físicos, aceptación asistiva y Firefox/WebKit dedicada, grupos anidados solo con modelo/pruebas adecuados, controles de curvas más ricos y routing con obstáculos. Evaluar metadatos en la lista de proyectos cerca del presupuesto máximo, sin introducir una nueva arquitectura de persistencia preventiva. Los bloqueos TLS anteriores quedan documentados; el smoke final HTTPS pasó sin bypass. Pulir centrado/color de errores del diálogo Projects (P2 observado). Sin colaboración/backend/CRDT/IA ni import `.excalidraw` en esta RC. Los estados de ramas anteriores son historia.
+
+## V1.5 integration history
+
+Canvas V1.4 integrated intact into main at `666dc73207ba0a2a9f26c686e1ad2e2a796f670f`, verified by CI. OpenAPI Contract Workbench adds the 28th entry on `feature/openapi-explorer-v15`: bounded local parsing/exploration, request preview/handoff and contract diff. The later V2 authorization integrated V1.5 into main c3cd929a after validation. [Contract](V15_OPENAPI_GOAL.md), [progress](GOAL_PROGRESS_V15.md), [implementation/limits](docs/OPENAPI_V15.md) and VALIDATION contain acceptance evidence.
 
 P2: dedicated assistive/cross-browser coverage; additional explicitly unsupported OpenAPI serialization/dialects, richer compatibility semantics and webhook/callback navigation. Do not broaden this RC or treat zero reported breaks as guaranteed compatibility. Prior release counts and branch statements below are historical.
 
@@ -62,4 +74,3 @@ Las limitaciones de CSV, inferencia, cron avanzado, fechas, SQL literal y privac
 | E | 25 rutas, instalación limpia, privacidad, temas/tamaños, Node/Cloudflare y cierre | Publicado y CI verde; evidencia en GOAL_PROGRESS_V12.md |
 
 Fuera de V1.2: auditoría exhaustiva contra Cloudflare público (Goal posterior), PWA/offline, OpenAPI, EXPLAIN, backend/usuarios y recetas persistentes. El pipeline actual es lineal, local y acotado, sin scripts, ramas o requests. No se accede a la cuenta Cloudflare ni se afirma verificación de producción.
-

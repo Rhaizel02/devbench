@@ -2,6 +2,7 @@
 
 ## Literal user requirements
 
+```text
 /goal DEVBENCH V2.2 — CANVAS EXPERIENCE & WORKFLOW STUDIO
 
 MISIÓN: consolidar las RC existentes en una nueva rama de trabajo y entregar tres mejoras sustanciales:
@@ -850,6 +851,7 @@ Architecture Canvas debe ser cómodo para trabajar durante una sesión larga. Pi
 Utiliza criterio profesional para encontrar y corregir inconsistencias que el usuario no haya identificado, pero evita refactorizaciones ajenas y hardening preventivo sin evidencia.
 
 EMPIEZA AHORA: lee el contrato completo, persístelo en Markdown, crea la rama integrada, verifica la baseline y ejecuta H1–H16 hasta entregar la Release Candidate.
+```
 
 ## Implementation architecture and acceptance elaboration
 

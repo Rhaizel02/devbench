@@ -1,16 +1,34 @@
 # DevBench — Alcance funcional cerrado
 
+## V2.2 integration baseline — in verification
+
+The new feature/canvas-workflow-v22 branch combines Data Diagnostics V2.1 and Canvas 2.0, keeping thirty registry entries. Current integration/UX/workflow acceptance is tracked in GOAL_PROGRESS_V22.md. Main and original RC branches are not changed; no V2.2 functionality is claimed by the historical sections below.
+
+
 ## V2.1 RC — Data Diagnostics
 
 30 available entries, preserving all 28 preceding slugs. BACK-11 / Backend / `/tools/sql-explain-analyzer/`: structured PostgreSQL EXPLAIN parser, bounded text subset, original versus derived metrics, progressive tree/detail/search/filter, conservative findings and before/after comparison with structured export. Unknown node types remain inspectable; missing timing/buffers do not become zero. SQL is never executed.
 
 DATA-07 / Data / `/tools/xml-toolkit/`: XML1.0/UTF-8 well-formedness, DTD/entities blocked before parser, conservative format/minify, mixed content/xml:space preservation, namespace-aware tree, worker XPath1.0 with typed results, ordered XML/JSON roundtrip, explicit lossy XML→data JSON and validated one-shot Studio/Query/Diff transfers. No XSD, XSLT, remote entities or active imported markup. Both tools use memory only; Canvas domain/persistence/backups stay unchanged. Details/evidence: [SQL](docs/SQL_EXPLAIN_V21.md), [XML](docs/XML_TOOLKIT_V21.md), [RC progress](GOAL_PROGRESS_V21.md). V2.1 remains isolated pending acceptance.
 
-## V1.5 RC — OpenAPI Contract Workbench
+
+## V2.0 RC — Architecture Canvas 2.0 (28 entradas, sin nueva ruta)
+
+OpenAPI V1.5 está integrado en main `c3cd929a5aea231991973abd5744def9d13cf740`; Canvas2 vive únicamente en `feature/architecture-canvas-v20`, sin merge. DRAW-01 conserva `/tools/architecture-canvas/` y el alias lab, lazy/prerender y las 28 entradas existentes.
+
+Selección rectangular por contención completa en coordenadas del documento, Shift XOR, Escape/Ctrl+A y outline; grupos planos, duplicación/capas/resize uniforme/rotación y seis alineaciones/distribución H/V. Rough.js4.6.6 sobre Konva, semilla estable, clean/soft/expressive, sólido/transparente/hachure; tinta acotada/suavizada y un historial por gesto. Conectores rectos, curva cuadrática, elbow ortogonal, control editable, puntas ninguna/final/ambas, estilos y anchors locales rotados. Duplicación de grupos remapea conexiones internas; externas quedan válidas y la geometría de elbows sigue ejes del lienzo.
+
+Jerarquía mantiene apertura directa/zoom/breadcrumb/cámaras/huérfanos/ciclos/reduced-motion. **Duplicate copia independientemente el subárbol DAG por defecto**, conservando compartición dentro de la copia sin duplicar dos veces un origen; la acción linked comparte explícitamente el hijo, muestra ⇉ y aviso. IDs nuevos, límite/validación antes de aceptar y undo/redo atómicos.
+
+Schema3 lee v1/v2 con fixtures congelados, IndexedDB físico sin migración destructiva, ningún rewrite al abrir y original legacy inmutable en primer save real. CAS evita conflictos y también protege schemas futuros con revisiones externas equivocadas. Import como proyecto nuevo; backup raw/original recuperable. Solo Canvas persiste documentos; OpenAPI y las otras herramientas no heredan esa excepción.
+
+Raster PNG/JPEG/WebP local y estático, validación firma/MIME/chunks/base64/dimensiones+decode antes de reemplazar estado, 1MiB/4MP por archivo y 4MiB/8MP por proyecto, JSON autocontenido16MiB (legacy8MiB), PNG4096px/12MP. Sin SVG/URLs/animación/fetch. Movimiento/resize/rotación/grupos/capas/undo, recursos inmutables compartidos, cierre de bitmaps y rescate/retry de cuota. Controles móviles siete+More, pan/zoom centrado con mouse/trackpad/touch y pointer capture. Pruebas/capturas/límites reales: [informe V2](docs/ARCHITECTURE_CANVAS_V20.md). No grupos anidados, lasso, presión ni CAD routing. Las secciones siguientes son históricas y no sustituyen este contrato.
+
+## V1.5 — OpenAPI Contract Workbench (histórico integrado)
 
 BACK-10 / Backend / `/tools/openapi-explorer/` is available as entry **28**, lazy and prerendered from the same registry used by Home/search/palette/favorites/recents. All 27 preceding tools remain. JSON/YAML paste/local-file import, OAS 3.0.x/3.1.x structural parser, contextual errors, bounded cancellable workers and internal-reference graph. Unsupported 3.2/Swagger 2, remote refs/URI scopes and complex encodings are explicit; no fetch or conformance guarantee.
 
-Explorer includes real metadata/servers/tags/security, searchable/filterable operation details and progressive schema navigation. HTTP preparation includes server precedence/variables, supported parameter serialization, editable samples/body/overrides, explicit preview, four reused generators and always-redacted one-shot Builder handoff. Diff compares two local contracts, explains directional changes with four cautious severity classes and exports safe metadata-only JSON/Markdown reports. Inputs/results stay in memory; reset/reload/teardown clear them. Canvas alone keeps its documented IndexedDB exception. Full support and limits: [OpenAPI report](docs/OPENAPI_V15.md). The following release sections are historical; V1.4 is now integrated in main and V1.5 is isolated awaiting acceptance.
+Explorer includes real metadata/servers/tags/security, searchable/filterable operation details and progressive schema navigation. HTTP preparation includes server precedence/variables, supported parameter serialization, editable samples/body/overrides, explicit preview, four reused generators and always-redacted one-shot Builder handoff. Diff compares two local contracts, explains directional changes with four cautious severity classes and exports safe metadata-only JSON/Markdown reports. Inputs/results stay in memory; reset/reload/teardown clear them. Canvas alone keeps its documented IndexedDB exception. Full support and limits: [OpenAPI report](docs/OPENAPI_V15.md). The following release sections are historical; V1.4 is now integrated in main and V1.5 was subsequently integrated into main under the V2 authorization.
 
 
 ## V1.4 Release Candidate — Architecture Canvas

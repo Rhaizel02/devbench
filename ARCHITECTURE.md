@@ -1,5 +1,13 @@
 # DevBench — Arquitectura y decisiones (ADR-001)
 
+## Canvas 2.0 — evolución acotada (rama RC)
+
+OpenAPI V1.5 ya integrado en main c3cd929a; catálogo28 sin cambios. Canvas2 conserva Konva/svelte-konva y separa DTO/migración (`model`, `legacy-serialization`, `serialization`), transformaciones puras (`operations`), historial, persistencia CAS y render/gestos. Schema3 añade grupos planos por IDs, rotación local con pivote central, geometría de conexión y recursos raster inmutables autocontenidos. Lector legacy v1/v2 aislado, fixtures congelados, ningún cambio destructivo en IndexedDB físico. Abrir migra solo en memoria; primer guardado real conserva original JSON y rechaza concurrentes/schemas futuros. Import/codec se validan antes de sustituir el proyecto abierto.
+
+Rough.js4.6.6 genera paths deterministas con seed por elemento; Konva conserva hit-testing geométrico y PNG. Firma visual excluye posición/selección/cámara para evitar regeneración al mover. Drafts de gestos permanecen locales y se validan/historizan una vez al terminar; autosave serial600ms no serializa por muestra de puntero. Historial limita pasado+futuro y cuenta datos raster inmutables una sola vez. Copia jerárquica independiente remapea un DAG completo con memoización por diagrama; linked es acción explícita.
+
+Imágenes PNG/JPEG/WebP estáticas: validación antes de reservar bitmap y decode antes de aceptar import/load. Presupuesto1MiB/4MP por archivo y4MiB/8MP por proyecto, backup JSON16MiB (legacy8MiB). Caché por editor, cancelación/cierre de bitmaps y ningún ObjectURL de imagen/fetch. Canvas sigue siendo la única excepción a payload solo en memoria. Todo el detalle, mediciones y límites está en `docs/ARCHITECTURE_CANVAS_V20.md`; Canvas2 no se fusiona a main sin revisión humana.
+
 ## Excepción acotada V1.4 en la rama de Canvas
 
 El contrato autorizado de `V14_ARCHITECTURE_CANVAS_GOAL.md` amplía las reglas históricas: **Architecture Canvas puede persistir sus propios documentos** en IndexedDB `devbench.canvas.v2`; ninguna otra herramienta obtiene esta excepción. No localStorage de documentos, cookies, URL/history, logs ni tráfico de contenido. No se añade backend.

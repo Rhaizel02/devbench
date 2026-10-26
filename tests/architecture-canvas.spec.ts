@@ -539,7 +539,10 @@ test('RC catalog, static deep link and representative board interaction budget',
 	await expect(first).toHaveAttribute('data-x', '110');
 	const moveMs = Date.now() - moveStarted,
 		zoomStarted = Date.now();
+	// V2 trackpad contract: ordinary wheel pans; Ctrl/Cmd+wheel zooms at the pointer.
+	await page.keyboard.down('Control');
 	await page.mouse.wheel(0, -100);
+	await page.keyboard.up('Control');
 	await expect
 		.poll(async () =>
 			Number(await page.getByLabel('Camera zoom', { exact: true }).getAttribute('data-zoom'))

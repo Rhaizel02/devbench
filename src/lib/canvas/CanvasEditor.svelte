@@ -22,7 +22,8 @@
 		Settings2,
 		Layers,
 		ChevronRight,
-		Download
+		Download,
+		ImagePlus
 	} from '@lucide/svelte';
 	import BoardSurface, { type Mode } from './BoardSurface.svelte';
 	import CanvasProjects from './CanvasProjects.svelte';
@@ -35,7 +36,6 @@
 		getDiagram,
 		replaceDiagram,
 		deleteSelection,
-		duplicateSelection,
 		moveSelection,
 		resizeElement,
 		zoomAt,
@@ -43,6 +43,8 @@
 		associateChild,
 		orphanDiagrams,
 		deleteDiagram,
+		expandGroups,
+		screenToWorld,
 		type Project,
 		type Diagram,
 		type Viewport,
@@ -50,6 +52,16 @@
 	} from './model';
 	import { parseProject, serializeProject, color } from './serialization';
 	import { History } from './history';
+	import { LocalImageCache, readLocalImage } from './images';
+	import {
+		alignSelection,
+		duplicateBranch,
+		groupSelection,
+		reorder,
+		rotateSelection,
+		ungroupSelection,
+		type Alignment
+	} from './operations';
 	const initialProject = {
 		...parseProject(JSON.stringify(createDemoProject())),
 		id: newId('project')
@@ -62,6 +74,8 @@
 		properties = $state(false),
 		error = $state(''),
 		status = $state('Drag a shape. Double-click to write.');
+	let locked = $state(false),
+		moreTools = $state(false);
 	let busy = $state(false),
 		loading = $state(true),
 		preview = $state<Viewport | null>(null),
@@ -74,10 +88,38 @@
 		frame = 0,
 		disposed = false;
 	const history = new History();
+	const imageCache = new LocalImageCache();
+	// Replace completed immutable cache snapshots atomically; never mutate this map.
+	let bitmaps = $state.raw<Map<string, ImageBitmap>>(new Map());
+	$effect(() => {
+		const assets = project.assets ?? [];
+		void imageCache
+			.update(assets)
+			.then((next) => {
+				if (next && !disposed) bitmaps = next;
+			})
+			.catch(() => {
+				if (!disposed)
+					error =
+						'A local image could not be rendered. Export a rescue JSON; image data remains in your project.';
+			});
+	});
 	const diagram = $derived(getDiagram(project, path.at(-1)!));
 	const selected = $derived(diagram.elements.find((e) => selection.includes(e.id)));
 	const selectedEdge = $derived(diagram.connections.find((c) => selection.includes(c.id)));
 	const currentStyle = $derived(selected?.style ?? selectedEdge?.style ?? creationStyle);
+	const selectedGroups = $derived(
+		(diagram.groups ?? []).filter((g) => g.memberIds.some((id) => selection.includes(id)))
+	);
+	const sharedChildren = $derived.by(() => {
+		const counts: Record<string, number> = Object.create(null);
+		for (const d of project.diagrams)
+			for (const e of d.elements)
+				if (e.childDiagramId) counts[e.childDiagramId] = (counts[e.childDiagramId] ?? 0) + 1;
+		return Object.entries(counts)
+			.filter(([, count]) => count > 1)
+			.map(([id]) => id);
+	});
 	const view = $derived(preview ?? diagram.viewport);
 	const canUndo = $derived.by(() => {
 		void historyVersion;
@@ -141,21 +183,37 @@
 					: 'Drag on the board to create. Escape cancels.';
 	}
 	function setSelection(ids: string[]) {
-		selection = ids;
+		selection = expandGroups(diagram, ids).filter(
+			(id) =>
+				diagram.elements.some((e) => e.id === id) || diagram.connections.some((c) => c.id === id)
+		);
+	}
+	function selectEntity(id: string, toggle: boolean) {
+		const unit = expandGroups(diagram, [id]);
+		setSelection(
+			toggle
+				? unit.every((id) => selection.includes(id))
+					? selection.filter((id) => !unit.includes(id))
+					: [...new Set([...selection, ...unit])]
+				: unit
+		);
 	}
 	function updateStyle(key: keyof Style, value: Style[keyof Style]) {
+		applyStyles({ [key]: value });
+	}
+	function applyStyles(patch: Partial<Style>) {
 		action(() => {
-			if ((key === 'stroke' || key === 'fill') && typeof value === 'string')
-				value = color(value, key === 'fill');
-			creationStyle = { ...creationStyle, [key]: value };
+			if (patch.stroke !== undefined) patch.stroke = color(patch.stroke);
+			if (patch.fill !== undefined) patch.fill = color(patch.fill, true);
+			creationStyle = { ...creationStyle, ...patch };
 			if (selection.length)
 				commit({
 					...diagram,
 					elements: diagram.elements.map((e) =>
-						selection.includes(e.id) ? { ...e, style: { ...e.style, [key]: value } } : e
+						selection.includes(e.id) ? { ...e, style: { ...e.style, ...patch } } : e
 					),
 					connections: diagram.connections.map((c) =>
-						selection.includes(c.id) ? { ...c, style: { ...c.style, [key]: value } } : c
+						selection.includes(c.id) ? { ...c, style: { ...c.style, ...patch } } : c
 					)
 				});
 		});
@@ -166,28 +224,102 @@
 	}
 	function remove() {
 		if (!selection.length || busy) return;
-		commit(deleteSelection(diagram, selection));
+		action(() => {
+			const removedAssets = new Set(
+				diagram.elements.filter((e) => selection.includes(e.id) && e.assetId).map((e) => e.assetId!)
+			);
+			const next = replaceDiagram(project, deleteSelection(diagram, selection));
+			const used = new Set(
+				next.diagrams.flatMap((d) => d.elements.flatMap((e) => (e.assetId ? [e.assetId] : [])))
+			);
+			if (next.assets)
+				next.assets = next.assets.filter((a) => !removedAssets.has(a.id) || used.has(a.id));
+			changed(next);
+		});
 		selection = [];
 		focusCanvas();
 	}
-	function duplicate() {
+	function duplicate(independent = true) {
 		action(() => {
-			const result = duplicateSelection(diagram, selection, () => newId());
-			commit(result.diagram);
+			const result = duplicateBranch(project, diagram.id, selection, () => newId(), independent);
+			changed(result.project);
 			selection = result.ids;
+			status = independent
+				? 'Independent copy created, including child diagrams.'
+				: 'Linked copy created. Child diagrams are shared.';
 			focusCanvas();
 		});
 	}
+	async function insertImage(event: Event) {
+		const input = event.currentTarget as HTMLInputElement,
+			file = input.files?.[0];
+		if (!file || busy) return;
+		const original = project,
+			diagramId = diagram.id;
+		busy = true;
+		error = '';
+		status = 'Checking local raster image…';
+		try {
+			const asset = await readLocalImage(file, newId('asset'));
+			if (disposed || project !== original)
+				throw Error('The project changed while reading the image. Select the file again.');
+			const width = Math.min(480, asset.width),
+				height = (asset.height * width) / asset.width;
+			const center = screenToWorld({ x: size.width / 2, y: size.height / 2 }, diagram.viewport),
+				id = newId('item');
+			const e = {
+				id,
+				kind: 'image' as const,
+				assetId: asset.id,
+				label: 'Local image',
+				x: center.x - width / 2,
+				y: center.y - height / 2,
+				width,
+				height,
+				style: { ...creationStyle },
+				z:
+					Math.max(0, ...diagram.elements.map((e) => e.z), ...diagram.connections.map((e) => e.z)) +
+					1
+			};
+			const next = replaceDiagram(project, {
+				...getDiagram(project, diagramId),
+				elements: [...diagram.elements, e]
+			});
+			next.assets = [...(project.assets ?? []), asset];
+			changed(next);
+			selection = [id];
+			mode = 'select';
+			status = 'Local image inserted. Raster data is included in JSON backups.';
+		} catch (reason) {
+			if (!disposed)
+				error = reason instanceof Error ? reason.message : 'The local image was not inserted.';
+		} finally {
+			input.value = '';
+			if (!disposed) busy = false;
+		}
+	}
 	function layer(front: boolean) {
-		const all = [...diagram.elements, ...diagram.connections].sort((a, b) => a.z - b.z),
-			chosen = all.filter((e) => selection.includes(e.id)),
-			others = all.filter((e) => !selection.includes(e.id));
-		const ordered = front ? [...others, ...chosen] : [...chosen, ...others],
-			index = new Map(ordered.map((e, i) => [e.id, i]));
+		commit(reorder(diagram, selection, front));
+	}
+	function group(ungroup = false) {
+		action(() =>
+			commit(
+				ungroup
+					? ungroupSelection(diagram, selection)
+					: groupSelection(diagram, selection, newId('group'))
+			)
+		);
+		focusCanvas();
+	}
+	function align(value: Alignment) {
+		action(() => commit(alignSelection(diagram, selection, value)));
+	}
+	function edgeOption(key: 'geometry' | 'heads', value: string) {
 		commit({
 			...diagram,
-			elements: diagram.elements.map((e) => ({ ...e, z: index.get(e.id)! })),
-			connections: diagram.connections.map((e) => ({ ...e, z: index.get(e.id)! }))
+			connections: diagram.connections.map((c) =>
+				selection.includes(c.id) ? { ...c, [key]: value } : c
+			)
 		});
 	}
 	function undo(redo = false) {
@@ -229,6 +361,11 @@
 	async function editText(id: string) {
 		const e = diagram.elements.find((e) => e.id === id);
 		if (!e || busy || e.kind === 'stroke') return;
+		if (e.kind === 'image') {
+			selection = [id];
+			properties = true;
+			return;
+		}
 		selection = [id];
 		editing = { id, value: e.label };
 		mode = 'select';
@@ -385,6 +522,9 @@
 			} else if (event.key.toLowerCase() === 'a') {
 				event.preventDefault();
 				selection = [...diagram.elements, ...diagram.connections].map((e) => e.id);
+			} else if (event.key.toLowerCase() === 'g') {
+				event.preventDefault();
+				group(event.shiftKey);
 			}
 			return;
 		}
@@ -418,6 +558,7 @@
 	}
 	onDestroy(() => {
 		disposed = true;
+		imageCache.close();
 		cancelAnimationFrame(frame);
 	});
 </script>
@@ -426,8 +567,14 @@
 <div class="board-editor" bind:this={editorRoot}>
 	<header class="board-heading">
 		<div>
-			<div class="eyebrow">ARCHITECTURE CANVAS · V1.4 RC</div>
+			<div class="eyebrow">ARCHITECTURE CANVAS · 2.0 RC</div>
 			<h1>{project.title}</h1>
+			<CanvasProjects
+				{project}
+				onOpen={openProject}
+				onRename={(title) => action(() => changed({ ...project, title }))}
+				onReady={() => (loading = false)}
+			/>
 		</div>
 		<div class="heading-actions">
 			<button class="button" onclick={exportJSON}><Download size={15} />JSON</button><button
@@ -436,12 +583,6 @@
 			><a class="button" href={resolve('/')}>Tools</a>
 		</div>
 	</header>
-	<CanvasProjects
-		{project}
-		onOpen={openProject}
-		onRename={(title) => action(() => changed({ ...project, title }))}
-		onReady={() => (loading = false)}
-	/>
 	<nav class="breadcrumbs" aria-label="Diagram breadcrumb">
 		{#each path as id, i (id)}{#if i > 0}<ChevronRight size={14} />{/if}<button
 				aria-current={i === path.length - 1 ? 'page' : undefined}
@@ -452,6 +593,8 @@
 	<div class="board-workspace">
 		<div class="floating-toolbar" role="toolbar" aria-label="Drawing tools">
 			{#each tools as tool (tool.id)}<button
+					class:extra-tool={['rounded', 'ellipse', 'diamond', 'line'].includes(tool.id)}
+					class:show-extra={moreTools}
 					class:chosen={mode === tool.id}
 					aria-label={tool.label}
 					aria-pressed={mode === tool.id}
@@ -459,13 +602,33 @@
 					disabled={busy}
 					onclick={() => choose(tool.id)}
 					><tool.icon size={19} /><span class="key-hint">{tool.key}</span></button
-				>{/each}<span class="toolbar-separator"></span><button
+				>{/each}<label
+				class="image-upload extra-tool"
+				class:show-extra={moreTools}
+				title="Insert local image"
+				><ImagePlus size={19} /><input
+					type="file"
+					aria-label="Insert local image"
+					accept="image/png,image/jpeg,image/webp"
+					onchange={insertImage}
+					disabled={busy}
+				/></label
+			><button
+				class="more-tools"
+				aria-label="More drawing tools"
+				aria-expanded={moreTools}
+				onclick={() => (moreTools = !moreTools)}>•••</button
+			><span class="toolbar-separator"></span><button
 				aria-label="Undo"
+				class="history-tool"
+				class:show-extra={moreTools}
 				title="Undo (Ctrl/⌘ Z)"
 				disabled={!canUndo || busy}
 				onclick={() => undo()}><Undo2 size={18} /></button
 			><button
 				aria-label="Redo"
+				class="history-tool"
+				class:show-extra={moreTools}
 				title="Redo (Ctrl/⌘ Shift Z)"
 				disabled={!canRedo || busy}
 				onclick={() => undo(true)}><Redo2 size={18} /></button
@@ -488,6 +651,8 @@
 					{mode}
 					style={creationStyle}
 					{selection}
+					{sharedChildren}
+					{bitmaps}
 					busy={busy || loading}
 					onSelect={setSelection}
 					onCommit={commit}
@@ -499,6 +664,9 @@
 					}}
 					onStatus={(message) => (status = message)}
 					onFocus={focusCanvas}
+					onCreated={() => {
+						if (!locked) mode = 'select';
+					}}
 				/>{/key}
 			{#if editing}{@const e = diagram.elements.find((e) => e.id === editing?.id)}{#if e}<textarea
 						class="direct-text"
@@ -513,6 +681,8 @@
 						style:font-family={FONT_FAMILIES[e.style.font]}
 						style:font-size={`${e.style.fontSize * view.zoom}px`}
 						style:color={e.kind === 'text' ? e.style.stroke : 'var(--color-text)'}
+						style:transform={`rotate(${e.rotation ?? 0}deg)`}
+						style:transform-origin={`${(e.width * view.zoom) / 2}px ${(e.height * view.zoom) / 2}px`}
 						onblur={finishText}
 						onkeydown={(event) => {
 							if (event.key === 'Escape') {
@@ -543,6 +713,27 @@
 				onclick={() => (properties = !properties)}><Settings2 size={17} /></button
 			>
 		</div>
+		{#if selection.length}<div
+				class="context-actions"
+				role="toolbar"
+				aria-label="Selection actions"
+			>
+				<span>{selection.length} selected{selectedGroups.length ? ' · Group' : ''}</span>
+				<button aria-label="Edit selection properties" onclick={() => (properties = !properties)}
+					><Settings2 size={16} /></button
+				>
+				<button
+					aria-label="Duplicate selection independently"
+					title="Duplicate independently (Ctrl/⌘ D)"
+					onclick={() => duplicate()}><Copy size={16} /></button
+				>
+				{#if selection.length > 1}<button
+						aria-label={selectedGroups.length ? 'Ungroup selection' : 'Group selection'}
+						onclick={() => group(!!selectedGroups.length)}
+						>{selectedGroups.length ? 'Ungroup' : 'Group'}</button
+					>{/if}
+				<button aria-label="Delete selected elements" onclick={remove}><Trash2 size={16} /></button>
+			</div>{/if}
 		{#if properties}<aside class="properties" aria-label="Drawing properties">
 				<div class="panel-title">
 					<strong>{selection.length ? selection.length + ' selected' : 'Next shape'}</strong><button
@@ -631,12 +822,80 @@
 					>
 				</div>
 				<label class="check"
+					><input type="checkbox" bind:checked={locked} />Keep drawing tool active</label
+				>
+				<label
+					>Sketch intensity<select
+						aria-label="Sketch intensity"
+						value={currentStyle.sketch ? (currentStyle.roughness ?? 0.8) : 0}
+						onchange={(event) => {
+							const value = Number(event.currentTarget.value);
+							applyStyles({ sketch: value > 0, roughness: value });
+						}}
+						><option value="0">Clean</option><option value="0.8">Soft sketch</option><option
+							value="1.5">Expressive</option
+						></select
+					></label
+				>
+				<label
+					>Fill style<select
+						aria-label="Fill pattern"
+						value={currentStyle.fillPattern ?? 'solid'}
+						onchange={(event) =>
+							updateStyle('fillPattern', event.currentTarget.value as Style['fillPattern'])}
+						><option value="solid">Solid</option><option value="hachure">Hachure</option></select
+					></label
+				>
+				<label class="check"
 					><input
 						type="checkbox"
 						checked={currentStyle.sketch}
 						onchange={(event) => updateStyle('sketch', event.currentTarget.checked)}
 					/>Soft sketch</label
 				>
+				{#if selectedEdge}<label
+						>Connector<select
+							aria-label="Connector geometry"
+							value={selectedEdge.geometry ?? 'straight'}
+							onchange={(event) => edgeOption('geometry', event.currentTarget.value)}
+							><option value="straight">Straight</option><option value="curve">Curve</option><option
+								value="elbow">Elbow</option
+							></select
+						></label
+					>
+					<label
+						>Arrow heads<select
+							aria-label="Arrow heads"
+							value={selectedEdge.heads ?? (selectedEdge.kind === 'arrow' ? 'end' : 'none')}
+							onchange={(event) => edgeOption('heads', event.currentTarget.value)}
+							><option value="none">None</option><option value="end">End</option><option
+								value="both">Both</option
+							></select
+						></label
+					>
+					<p class="help">
+						Drag the middle handle to shape the path. Elbows stay orthogonal to the canvas.
+					</p>{/if}
+				{#if selection.length}<label
+						>Rotate selection<input
+							aria-label="Selection rotation"
+							type="number"
+							min="-360"
+							max="360"
+							value={selection.length === 1 ? (selected?.rotation ?? 0) : 0}
+							onchange={(event) =>
+								action(() =>
+									commit(
+										rotateSelection(
+											diagram,
+											selection,
+											Number(event.currentTarget.value) -
+												(selection.length === 1 ? (selected?.rotation ?? 0) : 0)
+										)
+									)
+								)}
+						/></label
+					>{/if}
 				{#if selected}<label
 						>Label<input
 							aria-label="Selected element label"
@@ -689,22 +948,62 @@
 						>
 					</div>{/if}
 				{#if selection.length}<div class="property-row">
-						<button class="button" aria-label="Duplicate selection" onclick={duplicate}
+						<button class="button" aria-label="Duplicate selection" onclick={() => duplicate()}
 							><Copy size={15} />Duplicate</button
 						><button class="button" aria-label="Delete selection" onclick={remove}
 							><Trash2 size={15} /></button
 						>
 					</div>
+					{#if diagram.elements.some((e) => selection.includes(e.id) && e.childDiagramId)}<p
+							class="help"
+						>
+							Duplicate makes an independent copy of all child diagrams.
+						</p>
+						<button class="button" onclick={() => duplicate(false)}
+							>Duplicate with shared child</button
+						>{/if}
+					{#if selection.length > 1}<div class="property-row">
+							<button class="button" onclick={() => group()}>Group</button><button
+								class="button"
+								disabled={!selectedGroups.length}
+								onclick={() => group(true)}>Ungroup</button
+							>
+						</div>
+						<label
+							>Align / distribute<select
+								aria-label="Align selection"
+								value=""
+								onchange={(event) => {
+									align(event.currentTarget.value as Alignment);
+									event.currentTarget.value = '';
+								}}
+								><option value="" disabled>Choose alignment</option
+								>{#each ['left', 'center', 'right', 'top', 'middle', 'bottom', 'horizontal', 'vertical'] as value (value)}<option
+										{value}>{value}</option
+									>{/each}</select
+							></label
+						>{/if}
 					<div class="property-row">
 						<button class="button" onclick={() => layer(true)}>To front</button><button
 							class="button"
 							onclick={() => layer(false)}>To back</button
 						>
 					</div>{/if}
-				{#if selected && !['stroke', 'text'].includes(selected.kind)}<div class="child-properties">
-						<strong>Nested diagram</strong><button class="button" onclick={createChild}
-							>Create child diagram</button
-						><label
+				<p class="help">
+					Local PNG/JPEG/WebP only: 1 MiB and 4 MP per image; 4 MiB / 8 MP per project. Images are
+					embedded in portable JSON backups. No URLs or SVG.
+				</p>
+				{#if selected && !['stroke', 'text', 'image'].includes(selected.kind)}<div
+						class="child-properties"
+					>
+						<strong>Nested diagram</strong>
+						{#if selected.childDiagramId && sharedChildren.includes(selected.childDiagramId)}<p
+								class="help"
+							>
+								Shared child: editing this diagram affects every linked figure. Use Duplicate for an
+								independent subtree.
+							</p>{/if}
+						<button class="button" onclick={createChild}>Create child diagram</button><label
 							>Associate child<select
 								aria-label="Associate child diagram"
 								value={selected.childDiagramId ?? ''}
@@ -752,13 +1051,18 @@
 					data-y={e.y}
 					data-width={e.width}
 					data-height={e.height}
+					data-rotation={e.rotation ?? 0}
+					data-image-ready={e.assetId ? bitmaps.has(e.assetId) : undefined}
 				>
 					<button
 						aria-label={e.label || e.kind}
 						aria-pressed={selection.includes(e.id)}
-						onclick={(event) =>
-							setSelection(event.shiftKey ? [...new Set([...selection, e.id])] : [e.id])}
-						>{e.label || e.kind}{e.childDiagramId ? ' ↳' : ''}</button
+						onclick={(event) => selectEntity(e.id, event.shiftKey)}
+						>{e.label || e.kind}{e.childDiagramId
+							? sharedChildren.includes(e.childDiagramId)
+								? ' ⇉ shared'
+								: ' ↳'
+							: ''}</button
 					><button aria-label={'Edit ' + (e.label || e.kind)} onclick={() => editText(e.id)}
 						>Edit</button
 					>{#if e.childDiagramId}<button
@@ -800,12 +1104,12 @@
 
 <style>
 	.board-editor {
-		padding: 24px;
+		padding: 12px 16px;
 		min-width: 0;
 		max-width: 100%;
 		display: flex;
 		flex-direction: column;
-		gap: 10px;
+		gap: 6px;
 	}
 	.board-heading {
 		display: flex;
@@ -814,7 +1118,7 @@
 		gap: 12px;
 	}
 	.board-heading h1 {
-		font-size: 20px;
+		font-size: 17px;
 		line-height: 1.4;
 		margin: 3px 0;
 	}
@@ -848,13 +1152,65 @@
 		border: 1px solid var(--color-border);
 		border-radius: 10px;
 		overflow: hidden;
-		height: calc(100dvh - 390px);
+		height: calc(100dvh - 280px);
 		min-height: 400px;
 	}
 	.canvas-host {
 		height: 100%;
 		outline-offset: -3px;
 		position: relative;
+	}
+	.more-tools {
+		display: none !important;
+	}
+	.image-upload {
+		position: relative;
+		display: grid;
+		place-items: center;
+		min-width: 39px;
+		height: 42px;
+		border-radius: 6px;
+		cursor: pointer;
+	}
+	.image-upload input {
+		position: absolute;
+		inset: 0;
+		opacity: 0;
+		width: 100%;
+		height: 100%;
+		cursor: pointer;
+	}
+	.image-upload:focus-within {
+		outline: 2px solid var(--color-accent);
+		outline-offset: -2px;
+	}
+	.context-actions {
+		position: absolute;
+		right: 12px;
+		bottom: 12px;
+		display: flex;
+		align-items: center;
+		gap: 4px;
+		z-index: 3;
+		padding: 4px;
+		background: var(--color-panel);
+		border: 1px solid var(--color-border);
+		border-radius: 8px;
+		max-width: calc(100% - 24px);
+	}
+	.context-actions span {
+		font-size: 11px;
+		color: var(--color-muted);
+		padding: 0 6px;
+	}
+	.context-actions button {
+		min-width: 36px;
+		min-height: 36px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		padding: 0 8px;
+		font-size: 12px;
 	}
 	.floating-toolbar {
 		position: absolute;
@@ -1092,10 +1448,10 @@
 	}
 	@media (max-width: 800px) {
 		.board-editor {
-			padding: 16px;
+			padding: 8px;
 		}
 		.board-workspace {
-			height: calc(100dvh - 370px);
+			height: calc(100dvh - 310px);
 			min-height: 400px;
 		}
 		.key-hint {
@@ -1104,7 +1460,8 @@
 		.floating-toolbar {
 			left: 8px;
 			right: 8px;
-			top: 8px;
+			top: auto;
+			bottom: 8px;
 			transform: none;
 			max-width: none;
 			flex-wrap: wrap;
@@ -1115,11 +1472,62 @@
 			height: 42px;
 		}
 		.properties {
-			top: 112px;
-			max-height: calc(100% - 174px);
+			top: auto;
+			bottom: 64px;
+			left: 8px;
+			right: 8px;
+			width: auto;
+			max-height: min(65%, 440px);
+		}
+		.context-actions {
+			bottom: 64px;
+			left: 8px;
+			right: auto;
+		}
+		.context-actions button {
+			min-height: 44px;
+			min-width: 44px;
+		}
+		.context-actions span {
+			display: none;
+		}
+		.viewport-tools {
+			bottom: auto;
+			top: 8px;
+			left: 8px;
+		}
+		.floating-toolbar .extra-tool {
+			display: none;
+		}
+		.floating-toolbar .history-tool {
+			display: none;
+		}
+		.image-upload {
+			min-width: 44px;
+			min-height: 44px;
+		}
+		.floating-toolbar .history-tool.show-extra {
+			display: grid;
+		}
+		.floating-toolbar .extra-tool.show-extra {
+			display: grid;
+		}
+		.floating-toolbar .more-tools {
+			display: grid !important;
+		}
+		.floating-toolbar .toolbar-separator {
+			display: none;
 		}
 		.board-heading {
 			align-items: start;
+		}
+		.board-heading > div:first-child {
+			min-width: 0;
+		}
+		.properties label,
+		.properties input,
+		.properties select {
+			font-size: 14px;
 		}
 		.board-heading h1 {
 			font-size: 18px;
@@ -1162,14 +1570,20 @@
 		}
 		.properties {
 			left: 8px;
-			width: 208px;
+			width: auto;
 		}
 		.swatches button {
 			width: 44px;
 			height: 44px;
 		}
 		.board-heading {
-			flex-wrap: wrap;
+			flex-wrap: nowrap;
+		}
+		.board-heading h1 {
+			font-size: 16px;
+		}
+		.board-heading .eyebrow {
+			letter-spacing: 0.03em;
 		}
 		.board-workspace {
 			min-height: 420px;
