@@ -91,7 +91,11 @@
 			text={e.label || (e.childDiagramId ? 'Diagram' : '')}
 			fontFamily={FONT_FAMILIES[e.style.font]}
 			fontSize={e.style.fontSize}
-			fill={e.kind === 'text' ? e.style.stroke : labelInk(e.style.fill, labelColor)}
+			fill={e.kind === 'text'
+				? e.style.stroke
+				: e.style.fillPattern === 'hachure'
+					? labelColor
+					: labelInk(e.style.fill, labelColor)}
 			lineHeight={1.3}
 			align={e.kind === 'text' ? 'left' : 'center'}
 			listening={false}

@@ -73,7 +73,9 @@ describe('world geometry and rectangular selection', () => {
 			]
 		});
 		expect(entityBounds(d, 'legacy-ink')).toEqual({ x: -20, y: 0, width: 140, height: 40 });
-		expect(marqueeSelection(d, { x: 0, y: 0, width: 10, height: 10 })).not.toContain('legacy-ink');
+		expect(
+			marqueeSelection(d, { x: 0, y: 0, width: 10, height: 10 }, [], false, true)
+		).not.toContain('legacy-ink');
 		expect(
 			headTangent([
 				{ x: 0, y: 0 },
@@ -89,7 +91,7 @@ describe('world geometry and rectangular selection', () => {
 			])
 		).toBeUndefined();
 	});
-	it('contains full geometry inclusively in every drag quadrant and Shift toggles', () => {
+	it('supports explicit strict containment in every drag quadrant and additive Shift', () => {
 		const d = scene().diagrams[0],
 			corners = [
 				{ x: -1, y: -1 },
@@ -108,9 +110,13 @@ describe('world geometry and rectangular selection', () => {
 			]
 		])
 			expect(marqueeSelection(d, rectangle(a, b)).sort()).toEqual(['a', 'ab', 'b']);
-		expect(marqueeSelection(d, { x: 50, y: 0, width: 20, height: 20 })).toEqual([]);
+		expect(marqueeSelection(d, { x: 50, y: 0, width: 20, height: 20 }, [], false, true)).toEqual(
+			[]
+		);
 		expect(marqueeSelection(d, { x: 0, y: 0, width: 100, height: 60 }, ['a', 'b'], true)).toEqual([
-			'b'
+			'a',
+			'b',
+			'ab'
 		]);
 	});
 	it('uses rotated corners for bounds and local rotated anchors after move/resize', () => {
@@ -147,7 +153,9 @@ describe('flat groups, transforms and integrity', () => {
 	it('groups as units, uniform resize, rotation, ungroup and deletion preserve valid references', () => {
 		let d = groupSelection(scene().diagrams[0], ['a', 'b', 'ab'], 'g');
 		expect(expandGroups(d, ['a']).sort()).toEqual(['a', 'ab', 'b']);
-		expect(marqueeSelection(d, { x: 0, y: 0, width: 100, height: 60 })).toEqual([]);
+		expect(marqueeSelection(d, { x: 0, y: 0, width: 100, height: 60 }, [], false, true)).toEqual(
+			[]
+		);
 		const moved = moveSelection(d, ['a'], { x: 40, y: 20 });
 		expect(moved.elements[1].x).toBe(240);
 		expect(moved.connections[0].control).toEqual({ x: 180, y: 20 });

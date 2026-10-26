@@ -1,9 +1,14 @@
+import { execFileSync } from 'node:child_process';
 import tailwindcss from '@tailwindcss/vite';
 import { defineConfig } from 'vitest/config';
 import adapter from '@sveltejs/adapter-static';
 import { sveltekit } from '@sveltejs/kit/vite';
 
+const buildSha =
+	process.env.CF_PAGES_COMMIT_SHA ||
+	execFileSync('git', ['rev-parse', 'HEAD'], { encoding: 'utf8' }).trim();
 export default defineConfig({
+	define: { __BUILD_SHA__: JSON.stringify(buildSha) },
 	plugins: [
 		tailwindcss(),
 		sveltekit({

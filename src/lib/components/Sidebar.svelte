@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { release } from '#lib/release.js';
 	import { resolve } from '$app/paths';
 	import { page } from '$app/state';
 	import { House, Star, PanelLeftClose } from '@lucide/svelte';
@@ -13,17 +14,7 @@
 	<a class="brand" href={resolve('/')} onclick={close}
 		><span class="brand-symbol"><Icon name="terminal" size={18} /></span>DevBench<span
 			class="version"
-			>{listedTools.some((tool) => tool.version === 'V2.1')
-				? 'V2.1 RC'
-				: listedTools.some((tool) => tool.version === 'V1.5')
-					? 'V1.5 RC'
-					: listedTools.some((tool) => tool.version === 'V1.3')
-						? 'V1.3'
-						: listedTools.some((tool) => tool.version === 'V1.2')
-							? 'V1.2'
-							: listedTools.some((tool) => tool.version === 'V1.1')
-								? 'V1.1'
-								: 'V1'}</span
+			title={'Build ' + release.sha}>{release.app}</span
 		></a
 	>
 	{#if close}<button class="drawer-close icon-button" onclick={close} aria-label="Close navigation"

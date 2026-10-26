@@ -1,6 +1,7 @@
 import { test, expect, type Page } from '@playwright/test';
 import { readFile, mkdir } from 'node:fs/promises';
 import { evidencePath } from './support/environment';
+import { connectorGrip, bendConnector } from '../src/lib/canvas/operations';
 import type { Project } from '../src/lib/canvas/model';
 import rasters from '../src/lib/canvas/fixtures/local-rasters.json' with { type: 'json' };
 async function ready(page: Page) {
@@ -147,9 +148,7 @@ test('V2 real marquee, group movement/resize/rotation, copy, ungroup, connectors
 		style: { dashed: true }
 	});
 	const edge = p.diagrams[0].connections.at(-1)!,
-		a = edge.start,
-		b = edge.end,
-		control = { x: (a.x + b.x) / 2 - (b.y - a.y) * 0.25, y: (a.y + b.y) / 2 + (b.x - a.x) * 0.25 },
+		control = connectorGrip(p.diagrams[0], edge),
 		v = p.diagrams[0].viewport;
 	await drag(
 		page,
@@ -157,10 +156,10 @@ test('V2 real marquee, group movement/resize/rotation, copy, ungroup, connectors
 		{ x: v.x + control.x * v.zoom + 40, y: v.y + control.y * v.zoom - 30 }
 	);
 	p = await json(page);
-	expect(p.diagrams[0].connections.at(-1)?.control).toEqual({
-		x: control.x + 40 / v.zoom,
-		y: control.y - 30 / v.zoom
-	});
+	expect(p.diagrams[0].connections.at(-1)?.control).toEqual(
+		bendConnector(p.diagrams[0], edge, { x: control.x + 40 / v.zoom, y: control.y - 30 / v.zoom })
+			.control
+	);
 	await page.getByRole('button', { name: 'Pencil', exact: true }).click();
 	await drag(page, { x: 340, y: 540 }, { x: 620, y: 560 });
 	p = await json(page);

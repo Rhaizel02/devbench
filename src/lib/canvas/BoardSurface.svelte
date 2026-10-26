@@ -1,8 +1,9 @@
 <script lang="ts">
 	import { Stage, Layer, Rect, Line, Circle } from 'svelte-konva';
 	import type { Stage as KonvaStage } from 'konva/lib/Stage';
+	import type { Layer as KonvaLayer } from 'konva/lib/Layer';
 	import type { KonvaEventObject } from 'konva/lib/Node';
-	import { onMount, untrack } from 'svelte';
+	import { onMount, untrack, tick } from 'svelte';
 	import CanvasFigure from './CanvasFigure.svelte';
 	import CanvasConnection from './CanvasConnection.svelte';
 	import {
@@ -26,7 +27,8 @@
 		type Connection
 	} from './model';
 	import {
-		connectorControl,
+		connectorGrip,
+		bendConnector,
 		documentBounds,
 		marqueeSelection,
 		rectangle,
@@ -35,7 +37,8 @@
 		selectionBounds,
 		type Box
 	} from './operations';
-	export type Mode = 'select' | 'pan' | Exclude<Element['kind'], 'image'> | 'line' | 'arrow';
+	export type Mode =
+		'select' | 'marquee' | 'pan' | Exclude<Element['kind'], 'image'> | 'line' | 'arrow';
 	let {
 		diagram,
 		view,
@@ -76,6 +79,7 @@
 	let width = $state(0),
 		height = $state(0),
 		stage = $state<{ node: KonvaStage }>(),
+		contentLayer = $state<{ node: KonvaLayer }>(),
 		host: HTMLDivElement;
 	let draft = $state.raw<Diagram | null>(null),
 		marquee = $state<Box | null>(null),
@@ -105,6 +109,23 @@
 			...shown.connections.map((value) => ({ type: 'connection' as const, value }))
 		].sort((a, b) => a.value.z - b.value.z)
 	);
+
+	const orderKey = $derived(entities.map((item) => item.value.id).join('\0'));
+	$effect(() => {
+		const layer = contentLayer?.node,
+			order = orderKey.split('\0');
+		let active = true;
+		if (layer)
+			void tick().then(() => {
+				if (!active) return;
+				const nodes = new Map(layer.children.map((n) => [n.id(), n]));
+				order.forEach((id, i) => nodes.get(id)?.zIndex(i));
+				layer.batchDraw();
+			});
+		return () => {
+			active = false;
+		};
+	});
 	const validSelection = $derived(
 		selection.filter(
 			(id) => shown.elements.some((e) => e.id === id) || shown.connections.some((c) => c.id === id)
@@ -191,6 +212,9 @@
 		} else if (handle.startsWith('start-') || handle.startsWith('end-')) {
 			kind = 'endpoint';
 			ids = [handle.slice(handle.indexOf('-') + 1)];
+		} else if (mode === 'marquee') {
+			kind = 'marquee';
+			if (!e.shiftKey) onSelect([]);
 		} else if (mode === 'select') {
 			if (!id) {
 				kind = e.pointerType === 'touch' ? 'pan' : 'marquee';
@@ -315,7 +339,7 @@
 				connections: g.original.connections.map((c) =>
 					c.id === g.id
 						? g.kind === 'control'
-							? { ...c, control: world }
+							? bendConnector(g.original, c, world)
 							: { ...c, [g.end!]: anchorAt(g.original, world) }
 						: c
 				)
@@ -348,7 +372,7 @@
 			draft = { ...g.original, connections: [...g.original.connections, c] };
 			return;
 		}
-		if (mode === 'select' || mode === 'pan') return;
+		if (mode === 'select' || mode === 'marquee' || mode === 'pan') return;
 		draft = {
 			...g.original,
 			elements: [
@@ -417,6 +441,7 @@
 		points = [];
 	}
 	export function cancel() {
+		const active = !!(gesture || pinch);
 		if (gesture?.kind === 'marquee') onSelect(gesture.ids);
 		gesture = null;
 		draft = null;
@@ -424,6 +449,7 @@
 		points = [];
 		pinch = null;
 		pointers.clear();
+		return active;
 	}
 	export function exportPNG(): string {
 		if (!stage) throw Error('Canvas is not ready.');
@@ -522,7 +548,7 @@
 				}
 			}}
 		>
-			<Layer
+			<Layer bind:this={contentLayer}
 				>{#each entities as item (item.value.id)}{#if item.type === 'element'}<CanvasFigure
 							element={item.value}
 							zoom={view.zoom}
@@ -594,7 +620,7 @@
 						/>
 					{/if}
 				{/if}
-				{#each shown.connections.filter((c) => selection.includes(c.id)) as c (c.id)}{@const a =
+				{#each shown.connections.filter((c) => mode === 'select' && selection.includes(c.id)) as c (c.id)}{@const a =
 						endpoint(shown, c.start)}{@const b = endpoint(shown, c.end)}
 					<Circle
 						name={'start-' + c.id}
@@ -614,18 +640,15 @@
 						stroke="#ffffff"
 						strokeWidth={1 / view.zoom}
 					/>
-					{#if c.geometry === 'curve' || c.geometry === 'elbow'}{@const p = connectorControl(
-							shown,
-							c
-						)}<Circle
-							name={'control-' + c.id}
-							x={p.x}
-							y={c.geometry === 'elbow' ? (a.y + b.y) / 2 : p.y}
-							radius={7 / view.zoom}
-							fill="#ffffff"
-							stroke="#20bfa9"
-							strokeWidth={2 / view.zoom}
-						/>{/if}
+					{@const p = connectorGrip(shown, c)}<Circle
+						name={'control-' + c.id}
+						x={p.x}
+						y={p.y}
+						radius={9 / view.zoom}
+						fill="#ffffff"
+						stroke="#20bfa9"
+						strokeWidth={2 / view.zoom}
+					/>
 				{/each}
 			</Layer>
 		</Stage>{/if}

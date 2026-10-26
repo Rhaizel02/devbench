@@ -9,6 +9,7 @@ import {
 	expandGroups,
 	fail,
 	getDiagram,
+	localToWorld,
 	LIMITS,
 	moveSelection,
 	replaceDiagram,
@@ -113,25 +114,104 @@ function contains(a: Box, b: Box) {
 		b.y + b.height <= a.y + a.height + 1e-7
 	);
 }
-/** Full world-space geometric bounds containment; complete groups are selected as units. */
+/** Segment/box clipping, including border contact; independent of camera/zoom. */
+function segmentHits(a: Point, b: Point, area: Box): boolean {
+	let lo = 0,
+		hi = 1;
+	for (const axis of ['x', 'y'] as const) {
+		const delta = b[axis] - a[axis],
+			min = area[axis],
+			max = min + (axis === 'x' ? area.width : area.height);
+		if (Math.abs(delta) < 1e-9) {
+			if (a[axis] < min - 1e-7 || a[axis] > max + 1e-7) return false;
+		} else {
+			const t1 = (min - a[axis]) / delta,
+				t2 = (max - a[axis]) / delta;
+			lo = Math.max(lo, Math.min(t1, t2));
+			hi = Math.min(hi, Math.max(t1, t2));
+			if (lo > hi + 1e-7) return false;
+		}
+	}
+	return true;
+}
+function polygonContains(points: Point[], p: Point) {
+	let inside = false;
+	for (let i = 0, j = points.length - 1; i < points.length; j = i++) {
+		const a = points[i],
+			b = points[j];
+		if (a.y > p.y !== b.y > p.y && p.x < ((b.x - a.x) * (p.y - a.y)) / (b.y - a.y) + a.x)
+			inside = !inside;
+	}
+	return inside;
+}
+function entityIntersects(d: Diagram, id: string, area: Box) {
+	const e = d.elements.find((e) => e.id === id),
+		c = d.connections.find((c) => c.id === id);
+	let points: Point[] = [];
+	const closed = e && e.kind !== 'stroke';
+	if (e) {
+		if (e.kind === 'ellipse')
+			points = Array.from({ length: 48 }, (_, i) =>
+				localToWorld(e, {
+					x: (e.width / 2) * (1 + Math.cos((i * Math.PI) / 24)),
+					y: (e.height / 2) * (1 + Math.sin((i * Math.PI) / 24))
+				})
+			);
+		else if (e.kind === 'diamond')
+			points = [
+				{ x: e.width / 2, y: 0 },
+				{ x: e.width, y: e.height / 2 },
+				{ x: e.width / 2, y: e.height },
+				{ x: 0, y: e.height / 2 }
+			].map((p) => localToWorld(e, p));
+		else points = elementCorners(e);
+	} else if (c) points = connectorVertices(d, c);
+	if (points.some((p) => contains(area, { ...p, width: 0, height: 0 }))) return true;
+	for (let i = 1; i < points.length; i++)
+		if (segmentHits(points[i - 1], points[i], area)) return true;
+	return !!(
+		closed &&
+		points.length &&
+		(segmentHits(points.at(-1)!, points[0], area) || polygonContains(points, area))
+	);
+}
+/** Intersect paths/rotated outlines, not empty group bounds. Shift adds; strict is explicit containment. */
 export function marqueeSelection(
 	d: Diagram,
 	area: Box,
 	initial: string[] = [],
-	toggle = false
+	add = false,
+	strict = false
 ): string[] {
+	const hit = (id: string) =>
+		strict ? contains(area, entityBounds(d, id)) : entityIntersects(d, id, area);
 	const grouped = new Set(d.groups?.flatMap((g) => g.memberIds) ?? []),
 		hits: string[] = [];
 	for (const g of d.groups ?? [])
-		if (contains(area, selectionBounds(d, g.memberIds))) hits.push(...g.memberIds);
+		if (strict ? contains(area, selectionBounds(d, g.memberIds)) : g.memberIds.some(hit))
+			hits.push(...g.memberIds);
 	for (const e of [...d.elements, ...d.connections])
-		if (!grouped.has(e.id) && contains(area, entityBounds(d, e.id))) hits.push(e.id);
-	if (!toggle) return hits;
-	const next = new Set(initial);
-	for (const id of hits)
-		if (next.has(id)) next.delete(id);
-		else next.add(id);
-	return [...next];
+		if (!grouped.has(e.id) && hit(e.id)) hits.push(e.id);
+	return [...new Set([...(add ? initial : []), ...hits])];
+}
+/** Visible midpoint lies on the path; v3 control remains the quadratic pole for backup compatibility. */
+export function connectorGrip(d: Diagram, c: Connection): Point {
+	const a = endpoint(d, c.start),
+		b = endpoint(d, c.end),
+		p = connectorControl(d, c);
+	if (c.geometry === 'elbow') return { x: p.x, y: (a.y + b.y) / 2 };
+	if (c.geometry === 'curve') return { x: (a.x + 2 * p.x + b.x) / 4, y: (a.y + 2 * p.y + b.y) / 4 };
+	return { x: (a.x + b.x) / 2, y: (a.y + b.y) / 2 };
+}
+export function bendConnector(d: Diagram, c: Connection, grip: Point): Connection {
+	if (c.geometry === 'elbow') return { ...c, control: grip };
+	const a = endpoint(d, c.start),
+		b = endpoint(d, c.end);
+	return {
+		...c,
+		geometry: 'curve',
+		control: { x: 2 * grip.x - (a.x + b.x) / 2, y: 2 * grip.y - (a.y + b.y) / 2 }
+	};
 }
 export function groupSelection(d: Diagram, ids: string[], id: string): Diagram {
 	const members = expandGroups(d, ids);

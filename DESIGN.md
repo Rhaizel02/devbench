@@ -144,3 +144,7 @@ Microcopy permitido tras implementación/verificación: “Runs locally in your 
 - No usar estado global mutable de payload en módulo importado por SSR/prerender. Quick Paste utiliza contexto de layout instanciado por render y consumible una vez, sin persistencia.
 - No implementar la UI como una captura única o un layout pixel-perfect rígido: mantener proporciones de referencia en 390/768/1440 px con componentes reales, foco visible y tabs accesibles.
 - No adoptar Tailwind CDN ni copiar el JavaScript de Stitch.
+
+## Canvas2.1 interaction refinement (V2.2 RC)
+
+Focus mode uses the viewport with a collapsible250px left inspector on desktop; stage coordinates stay unchanged and its usable width excludes that panel. Mobile starts with the inspector closed. Box selection intersects visible geometry; mixed properties are displayed explicitly. Selected connectors expose a screen-sized midpoint grip directly on the path. Hachure labels use theme ink on the mostly transparent background. Existing zinc/teal tokens and global shell geometry remain.

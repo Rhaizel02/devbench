@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { onDestroy, tick } from 'svelte';
 	import { resolve } from '$app/paths';
+	import { release } from '#lib/release.js';
 	import {
 		MousePointer2,
 		Hand,
@@ -23,7 +24,10 @@
 		Layers,
 		ChevronRight,
 		Download,
-		ImagePlus
+		ImagePlus,
+		BoxSelect,
+		Maximize2,
+		Minimize2
 	} from '@lucide/svelte';
 	import BoardSurface, { type Mode } from './BoardSurface.svelte';
 	import CanvasProjects from './CanvasProjects.svelte';
@@ -72,6 +76,7 @@
 		mode = $state<Mode>('select');
 	let creationStyle = $state<Style>({ ...DEFAULT_STYLE }),
 		properties = $state(false),
+		immersive = $state(false),
 		error = $state(''),
 		status = $state('Drag a shape. Double-click to write.');
 	let locked = $state(false),
@@ -108,6 +113,58 @@
 	const selected = $derived(diagram.elements.find((e) => selection.includes(e.id)));
 	const selectedEdge = $derived(diagram.connections.find((c) => selection.includes(c.id)));
 	const currentStyle = $derived(selected?.style ?? selectedEdge?.style ?? creationStyle);
+
+	const selectedStyles = $derived(
+		[...diagram.elements, ...diagram.connections]
+			.filter((e) => selection.includes(e.id))
+			.map((e) => e.style)
+	);
+	function mixed<K extends keyof Style>(key: K) {
+		return (
+			selectedStyles.length > 1 && selectedStyles.some((s) => s[key] !== selectedStyles[0][key])
+		);
+	}
+	function property<K extends keyof Style>(key: K) {
+		return mixed(key) ? '' : currentStyle[key];
+	}
+	const mixedKeys = $derived(
+		(
+			[
+				'stroke',
+				'fill',
+				'width',
+				'dashed',
+				'font',
+				'fontSize',
+				'sketch',
+				'roughness',
+				'fillPattern'
+			] as const
+		).filter((key) => mixed(key))
+	);
+	$effect(() => {
+		if (!immersive) return;
+		const previous = document.body.style.overflow;
+		document.body.style.overflow = 'hidden';
+		const outside = [
+			...document.querySelectorAll<HTMLElement>(
+				'.desktop-sidebar,.app-header,.canvas-meta,.skip-link'
+			)
+		].map((node) => ({ node, inert: node.inert }));
+		outside.forEach(({ node }) => (node.inert = true));
+		return () => {
+			document.body.style.overflow = previous;
+			outside.forEach(({ node, inert }) => (node.inert = inert));
+		};
+	});
+	async function focusMode() {
+		immersive = !immersive;
+		if (immersive) properties = window.matchMedia('(min-width: 1000px)').matches;
+		await tick();
+		if (!immersive)
+			editorRoot?.querySelector<HTMLButtonElement>('.focus-mode')?.focus({ preventScroll: true });
+		else if (!editing) focusCanvas();
+	}
 	const selectedGroups = $derived(
 		(diagram.groups ?? []).filter((g) => g.memberIds.some((id) => selection.includes(id)))
 	);
@@ -131,6 +188,7 @@
 	});
 	const tools = [
 		{ id: 'select', label: 'Select', icon: MousePointer2, key: 'V' },
+		{ id: 'marquee', label: 'Box select', icon: BoxSelect, key: 'B' },
 		{ id: 'pan', label: 'Pan', icon: Hand, key: 'H' },
 		{ id: 'rectangle', label: 'Rectangle', icon: Square, key: 'R' },
 		{ id: 'rounded', label: 'Rounded rectangle', icon: RectangleHorizontal, key: 'U' },
@@ -177,10 +235,12 @@
 		mode = next;
 		status =
 			next === 'select'
-				? 'Click to select · Shift adds · Double-click to write'
-				: next === 'pan'
-					? 'Drag to pan. Wheel zooms around the pointer.'
-					: 'Drag on the board to create. Escape cancels.';
+				? 'Drag empty space to box-select · Shift adds · Double-click to write'
+				: next === 'marquee'
+					? 'Drag a box across shapes to select · Shift adds · Escape cancels'
+					: next === 'pan'
+						? 'Drag to pan. Wheel zooms around the pointer.'
+						: 'Drag on the board to create. Escape cancels.';
 	}
 	function setSelection(ids: string[]) {
 		selection = expandGroups(diagram, ids).filter(
@@ -220,7 +280,9 @@
 	}
 	function inputColor(key: 'stroke' | 'fill', value: string, final = false) {
 		const valid = /^#[0-9a-f]{6}$/i.test(value) || (key === 'fill' && value === 'transparent');
-		if ((!final && valid) || (final && !valid)) updateStyle(key, value);
+		if (final) {
+			if (!valid || value !== currentStyle[key] || mixed(key)) updateStyle(key, value);
+		}
 	}
 	function remove() {
 		if (!selection.length || busy) return;
@@ -502,12 +564,25 @@
 		if (!editorRoot?.contains(event.target as Node) || event.altKey) return;
 		const target = event.target as HTMLElement;
 		if (target.closest('dialog[open]')) return;
-		if (target.matches('input,textarea,select') || target.isContentEditable) return;
 		if (event.key === 'Escape') {
 			event.preventDefault();
-			cancel();
+			if (editing || busy) {
+				cancel();
+				return;
+			}
+			if (surface?.cancel()) return;
+			if (properties) {
+				properties = false;
+				focusCanvas();
+				return;
+			}
+			if (immersive) {
+				void focusMode();
+				return;
+			}
 			return;
 		}
+		if (target.matches('input,textarea,select') || target.isContentEditable) return;
 		if (busy) return;
 		if (event.ctrlKey || event.metaKey) {
 			if (event.key.toLowerCase() === 'z') {
@@ -564,10 +639,12 @@
 </script>
 
 <svelte:window onkeydown={key} />
-<div class="board-editor" bind:this={editorRoot}>
+<div class="board-editor" class:immersive class:has-properties={properties} bind:this={editorRoot}>
 	<header class="board-heading">
 		<div>
-			<div class="eyebrow">ARCHITECTURE CANVAS · 2.0 RC</div>
+			<div class="eyebrow" title={'DevBench ' + release.app + ' · build ' + release.sha}>
+				ARCHITECTURE CANVAS · {release.canvas}
+			</div>
 			<h1>{project.title}</h1>
 			<CanvasProjects
 				{project}
@@ -577,6 +654,15 @@
 			/>
 		</div>
 		<div class="heading-actions">
+			<button
+				class="button focus-mode"
+				aria-label={immersive ? 'Exit focus mode' : 'Focus mode'}
+				aria-pressed={immersive}
+				onclick={focusMode}
+				>{#if immersive}<Minimize2 size={16} />{:else}<Maximize2 size={16} />{/if}<span
+					>{immersive ? 'Exit' : 'Focus'}</span
+				></button
+			>
 			<button class="button" onclick={exportJSON}><Download size={15} />JSON</button><button
 				class="button"
 				onclick={exportPNG}>PNG</button
@@ -593,7 +679,7 @@
 	<div class="board-workspace">
 		<div class="floating-toolbar" role="toolbar" aria-label="Drawing tools">
 			{#each tools as tool (tool.id)}<button
-					class:extra-tool={['rounded', 'ellipse', 'diamond', 'line'].includes(tool.id)}
+					class:extra-tool={['marquee', 'rounded', 'ellipse', 'diamond', 'line'].includes(tool.id)}
 					class:show-extra={moreTools}
 					class:chosen={mode === tool.id}
 					aria-label={tool.label}
@@ -742,26 +828,26 @@
 					>
 				</div>
 				<fieldset>
-					<legend>Stroke</legend>
+					<legend>Stroke{mixed('stroke') ? ' · Mixed' : ''}</legend>
 					<div class="swatches">
 						{#each colors as hex (hex)}<button
 								style:background={hex}
 								aria-label={'Stroke ' + hex}
-								aria-pressed={currentStyle.stroke === hex}
+								aria-pressed={!mixed('stroke') && currentStyle.stroke === hex}
 								onclick={() => updateStyle('stroke', hex)}
 							></button>{/each}
 					</div>
 					<label
 						>Stroke HEX<input
 							aria-label="Stroke HEX"
-							value={currentStyle.stroke}
-							oninput={(event) => inputColor('stroke', event.currentTarget.value)}
+							value={property('stroke')}
+							placeholder={mixed('stroke') ? 'Mixed' : '#000000'}
 							onchange={(event) => inputColor('stroke', event.currentTarget.value, true)}
 						/></label
 					>
 				</fieldset>
 				<fieldset>
-					<legend>Fill</legend>
+					<legend>Fill{mixed('fill') ? ' · Mixed' : ''}</legend>
 					<div class="swatches">
 						<button
 							class="transparent"
@@ -770,15 +856,15 @@
 						>{#each ['#d6f5ed', '#efe2fa', '#fff0d4', '#f9dce4', '#dcecf9'] as hex (hex)}<button
 								style:background={hex}
 								aria-label={'Fill ' + hex}
-								aria-pressed={currentStyle.fill === hex}
+								aria-pressed={!mixed('fill') && currentStyle.fill === hex}
 								onclick={() => updateStyle('fill', hex)}
 							></button>{/each}
 					</div>
 					<label
 						>Fill HEX<input
 							aria-label="Fill HEX"
-							value={currentStyle.fill}
-							oninput={(event) => inputColor('fill', event.currentTarget.value)}
+							value={property('fill')}
+							placeholder={mixed('fill') ? 'Mixed' : 'transparent'}
 							onchange={(event) => inputColor('fill', event.currentTarget.value, true)}
 						/></label
 					>
@@ -787,17 +873,20 @@
 					<label
 						>Width<select
 							aria-label="Stroke width"
-							value={currentStyle.width}
+							value={property('width')}
 							onchange={(event) => updateStyle('width', Number(event.currentTarget.value))}
-							>{#each [1, 2, 3, 5, 8] as value (value)}<option {value}>{value} px</option
+							>{#if mixedKeys.length}<option value="" disabled>Mixed</option
+								>{/if}{#each [1, 2, 3, 5, 8] as value (value)}<option {value}>{value} px</option
 								>{/each}</select
 						></label
 					><label
 						>Line<select
 							aria-label="Line style"
-							value={currentStyle.dashed ? 'dashed' : 'solid'}
+							value={mixed('dashed') ? '' : currentStyle.dashed ? 'dashed' : 'solid'}
 							onchange={(event) => updateStyle('dashed', event.currentTarget.value === 'dashed')}
-							><option value="solid">Solid</option><option value="dashed">Dashed</option></select
+							>{#if mixedKeys.length}<option value="" disabled>Mixed</option>{/if}<option
+								value="solid">Solid</option
+							><option value="dashed">Dashed</option></select
 						></label
 					>
 				</div>
@@ -805,18 +894,20 @@
 					<label
 						>Font<select
 							aria-label="Font family"
-							value={currentStyle.font}
+							value={property('font')}
 							onchange={(event) => updateStyle('font', event.currentTarget.value as Style['font'])}
-							><option value="sans">Sans</option><option value="mono">Mono</option><option
-								value="serif">Serif</option
-							></select
+							>{#if mixedKeys.length}<option value="" disabled>Mixed</option>{/if}<option
+								value="sans">Sans</option
+							><option value="mono">Mono</option><option value="serif">Serif</option></select
 						></label
 					><label
 						>Size<select
 							aria-label="Font size"
-							value={currentStyle.fontSize}
+							value={property('fontSize')}
 							onchange={(event) => updateStyle('fontSize', Number(event.currentTarget.value))}
-							>{#each [14, 16, 20, 24, 32, 48, 64] as value (value)}<option {value}>{value}</option
+							>{#if mixedKeys.length}<option value="" disabled>Mixed</option
+								>{/if}{#each [14, 16, 20, 24, 32, 48, 64] as value (value)}<option {value}
+									>{value}</option
 								>{/each}</select
 						></label
 					>
@@ -827,29 +918,36 @@
 				<label
 					>Sketch intensity<select
 						aria-label="Sketch intensity"
-						value={currentStyle.sketch ? (currentStyle.roughness ?? 0.8) : 0}
+						value={mixed('sketch') || mixed('roughness')
+							? ''
+							: currentStyle.sketch
+								? (currentStyle.roughness ?? 0.8)
+								: 0}
 						onchange={(event) => {
 							const value = Number(event.currentTarget.value);
 							applyStyles({ sketch: value > 0, roughness: value });
 						}}
-						><option value="0">Clean</option><option value="0.8">Soft sketch</option><option
-							value="1.5">Expressive</option
-						></select
+						>{#if mixedKeys.length}<option value="" disabled>Mixed</option>{/if}<option value="0"
+							>Clean</option
+						><option value={0.8}>Soft sketch</option><option value={1.5}>Expressive</option></select
 					></label
 				>
 				<label
 					>Fill style<select
 						aria-label="Fill pattern"
-						value={currentStyle.fillPattern ?? 'solid'}
+						value={mixed('fillPattern') ? '' : (currentStyle.fillPattern ?? 'solid')}
 						onchange={(event) =>
 							updateStyle('fillPattern', event.currentTarget.value as Style['fillPattern'])}
-						><option value="solid">Solid</option><option value="hachure">Hachure</option></select
+						>{#if mixedKeys.length}<option value="" disabled>Mixed</option>{/if}<option
+							value="solid">Solid</option
+						><option value="hachure">Hachure</option></select
 					></label
 				>
 				<label class="check"
 					><input
 						type="checkbox"
 						checked={currentStyle.sketch}
+						indeterminate={mixed('sketch')}
 						onchange={(event) => updateStyle('sketch', event.currentTarget.checked)}
 					/>Soft sketch</label
 				>
@@ -876,7 +974,10 @@
 					<p class="help">
 						Drag the middle handle to shape the path. Elbows stay orthogonal to the canvas.
 					</p>{/if}
-				{#if selection.length}<label
+				{#if mixedKeys.length}<p class="help mixed-values">
+						Mixed: {mixedKeys.join(', ')}. A change applies only that property to all selected
+						elements.
+					</p>{/if}{#if selection.length}<label
 						>Rotate selection<input
 							aria-label="Selection rotation"
 							type="number"
@@ -896,7 +997,7 @@
 								)}
 						/></label
 					>{/if}
-				{#if selected}<label
+				{#if selected && selection.length === 1}<label
 						>Label<input
 							aria-label="Selected element label"
 							value={selected.label}
@@ -993,7 +1094,7 @@
 					Local PNG/JPEG/WebP only: 1 MiB and 4 MP per image; 4 MiB / 8 MP per project. Images are
 					embedded in portable JSON backups. No URLs or SVG.
 				</p>
-				{#if selected && !['stroke', 'text', 'image'].includes(selected.kind)}<div
+				{#if selected && selection.length === 1 && !['stroke', 'text', 'image'].includes(selected.kind)}<div
 						class="child-properties"
 					>
 						<strong>Nested diagram</strong>
@@ -1030,8 +1131,9 @@
 		>
 	</footer>
 	<p class="help" id="canvas-help">
-		V select · H pan · R rectangle · P pencil · Shift adds selection · Ctrl/⌘ Z undo · Enter
-		edit/open · Shift Enter zoom into child. Canvas only: local autosave. Export JSON for a backup.
+		V select / drag empty space to box-select · B box select (also touch) · H pan · R rectangle · P
+		pencil · Shift adds selection · Ctrl/⌘ Z undo · Enter edit/open · Shift Enter zoom into child.
+		Canvas only: local autosave. Export JSON for a backup.
 	</p>
 	<details class="outline">
 		<summary><Layers size={15} />Outline & diagrams</summary><label
@@ -1590,6 +1692,86 @@
 		}
 		.heading-actions {
 			margin-left: auto;
+		}
+	}
+
+	.board-editor.immersive {
+		position: fixed;
+		inset: 0;
+		z-index: 60;
+		width: 100%;
+		height: 100dvh;
+		max-width: none;
+		padding: 10px;
+		background: var(--color-bg);
+		overflow: hidden;
+	}
+	.immersive .board-workspace {
+		flex: 1;
+		min-height: 0;
+		height: auto;
+	}
+	.immersive .board-heading {
+		flex-shrink: 0;
+	}
+	.immersive #canvas-help {
+		display: none;
+	}
+	.immersive .outline {
+		max-height: 22dvh;
+		overflow: auto;
+		flex-shrink: 0;
+	}
+	.immersive .board-heading h1 {
+		max-width: 45vw;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+	}
+	@media (min-width: 1000px) {
+		.immersive.has-properties .canvas-host {
+			margin-left: 250px;
+			width: calc(100% - 250px);
+		}
+		.immersive .properties {
+			top: 0;
+			bottom: 0;
+			left: 0;
+			width: 250px;
+			max-height: none;
+			border: 0;
+			border-right: 1px solid var(--color-border);
+			border-radius: 0;
+		}
+		.immersive.has-properties .floating-toolbar {
+			left: calc(50% + 125px);
+			max-width: calc(100% - 274px);
+		}
+		.immersive.has-properties .viewport-tools {
+			left: 262px;
+		}
+	}
+	@media (max-width: 800px) {
+		.immersive .board-workspace {
+			min-height: 0;
+		}
+		.immersive .properties {
+			max-height: 65%;
+		}
+		.heading-actions {
+			flex-wrap: wrap;
+			justify-content: flex-end;
+			max-width: 45%;
+		}
+		.heading-actions .focus-mode {
+			color: var(--color-accent);
+		}
+		.immersive .eyebrow {
+			font-size: 8px;
+			letter-spacing: 0;
+		}
+		.board-heading {
+			align-items: start;
 		}
 	}
 </style>

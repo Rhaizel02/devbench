@@ -1,0 +1,37 @@
+{
+  "partialMarquee": 0,
+  "beforePixel": [
+    214,
+    245,
+    237,
+    255
+  ],
+  "afterFrontPixel": [
+    214,
+    245,
+    237,
+    255
+  ],
+  "model": [
+    {
+      "id": "item-71d57834-e1ab-44d1-bde0-c7ff2bb3a8fd",
+      "z": 1
+    },
+    {
+      "id": "item-3d00d676-44c7-4501-8984-34aabbe627b5",
+      "z": 0
+    }
+  ],
+  "hitLabel": "#d6f5ed",
+  "focusButton": 0,
+  "localTitle": "ARCHITECTURE CANVAS · 2.0 RC",
+  "konvaLayers": 2,
+  "main": {
+    "url": "https://devbench-aw3.pages.dev/tools/architecture-canvas/",
+    "title": "ARCHITECTURE CANVAS · V1.4 RC"
+  },
+  "canvas20": {
+    "url": "https://ae38b142.devbench-aw3.pages.dev/tools/architecture-canvas/",
+    "title": "ARCHITECTURE CANVAS · 2.0 RC"
+  }
+}
