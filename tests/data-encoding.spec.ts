@@ -20,6 +20,8 @@ test('structural comparison and safe YAML conversion have real, current outputs'
 	await page.getByRole('button', { name: 'Compare JSON', exact: true }).click();
 	await expect(page.getByRole('alert')).toContainText('Left:');
 	await page.goto('/tools/json-yaml/');
+	// Exercise the mounted CodeMirror editor, not the temporary loading textarea.
+	await page.locator('.cm-content[aria-label="JSON input"]').waitFor({ state: 'visible' });
 	await page
 		.getByRole('textbox', { name: 'JSON input', exact: true })
 		.fill('{"text":"café 世界","a":[true,null]}');
