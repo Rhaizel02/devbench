@@ -22,7 +22,8 @@
 		Settings2,
 		Layers,
 		ChevronRight,
-		Download
+		Download,
+		ImagePlus
 	} from '@lucide/svelte';
 	import BoardSurface, { type Mode } from './BoardSurface.svelte';
 	import CanvasProjects from './CanvasProjects.svelte';
@@ -43,6 +44,7 @@
 		orphanDiagrams,
 		deleteDiagram,
 		expandGroups,
+		screenToWorld,
 		type Project,
 		type Diagram,
 		type Viewport,
@@ -50,6 +52,7 @@
 	} from './model';
 	import { parseProject, serializeProject, color } from './serialization';
 	import { History } from './history';
+	import { LocalImageCache, readLocalImage } from './images';
 	import {
 		alignSelection,
 		duplicateBranch,
@@ -85,6 +88,22 @@
 		frame = 0,
 		disposed = false;
 	const history = new History();
+	const imageCache = new LocalImageCache();
+	// Replace completed immutable cache snapshots atomically; never mutate this map.
+	let bitmaps = $state.raw<Map<string, ImageBitmap>>(new Map());
+	$effect(() => {
+		const assets = project.assets ?? [];
+		void imageCache
+			.update(assets)
+			.then((next) => {
+				if (next && !disposed) bitmaps = next;
+			})
+			.catch(() => {
+				if (!disposed)
+					error =
+						'A local image could not be rendered. Export a rescue JSON; image data remains in your project.';
+			});
+	});
 	const diagram = $derived(getDiagram(project, path.at(-1)!));
 	const selected = $derived(diagram.elements.find((e) => selection.includes(e.id)));
 	const selectedEdge = $derived(diagram.connections.find((c) => selection.includes(c.id)));
@@ -205,7 +224,18 @@
 	}
 	function remove() {
 		if (!selection.length || busy) return;
-		commit(deleteSelection(diagram, selection));
+		action(() => {
+			const removedAssets = new Set(
+				diagram.elements.filter((e) => selection.includes(e.id) && e.assetId).map((e) => e.assetId!)
+			);
+			const next = replaceDiagram(project, deleteSelection(diagram, selection));
+			const used = new Set(
+				next.diagrams.flatMap((d) => d.elements.flatMap((e) => (e.assetId ? [e.assetId] : [])))
+			);
+			if (next.assets)
+				next.assets = next.assets.filter((a) => !removedAssets.has(a.id) || used.has(a.id));
+			changed(next);
+		});
 		selection = [];
 		focusCanvas();
 	}
@@ -219,6 +249,54 @@
 				: 'Linked copy created. Child diagrams are shared.';
 			focusCanvas();
 		});
+	}
+	async function insertImage(event: Event) {
+		const input = event.currentTarget as HTMLInputElement,
+			file = input.files?.[0];
+		if (!file || busy) return;
+		const original = project,
+			diagramId = diagram.id;
+		busy = true;
+		error = '';
+		status = 'Checking local raster image…';
+		try {
+			const asset = await readLocalImage(file, newId('asset'));
+			if (disposed || project !== original)
+				throw Error('The project changed while reading the image. Select the file again.');
+			const width = Math.min(480, asset.width),
+				height = (asset.height * width) / asset.width;
+			const center = screenToWorld({ x: size.width / 2, y: size.height / 2 }, diagram.viewport),
+				id = newId('item');
+			const e = {
+				id,
+				kind: 'image' as const,
+				assetId: asset.id,
+				label: 'Local image',
+				x: center.x - width / 2,
+				y: center.y - height / 2,
+				width,
+				height,
+				style: { ...creationStyle },
+				z:
+					Math.max(0, ...diagram.elements.map((e) => e.z), ...diagram.connections.map((e) => e.z)) +
+					1
+			};
+			const next = replaceDiagram(project, {
+				...getDiagram(project, diagramId),
+				elements: [...diagram.elements, e]
+			});
+			next.assets = [...(project.assets ?? []), asset];
+			changed(next);
+			selection = [id];
+			mode = 'select';
+			status = 'Local image inserted. Raster data is included in JSON backups.';
+		} catch (reason) {
+			if (!disposed)
+				error = reason instanceof Error ? reason.message : 'The local image was not inserted.';
+		} finally {
+			input.value = '';
+			if (!disposed) busy = false;
+		}
 	}
 	function layer(front: boolean) {
 		commit(reorder(diagram, selection, front));
@@ -283,6 +361,11 @@
 	async function editText(id: string) {
 		const e = diagram.elements.find((e) => e.id === id);
 		if (!e || busy || e.kind === 'stroke') return;
+		if (e.kind === 'image') {
+			selection = [id];
+			properties = true;
+			return;
+		}
 		selection = [id];
 		editing = { id, value: e.label };
 		mode = 'select';
@@ -475,6 +558,7 @@
 	}
 	onDestroy(() => {
 		disposed = true;
+		imageCache.close();
 		cancelAnimationFrame(frame);
 	});
 </script>
@@ -518,7 +602,18 @@
 					disabled={busy}
 					onclick={() => choose(tool.id)}
 					><tool.icon size={19} /><span class="key-hint">{tool.key}</span></button
-				>{/each}<button
+				>{/each}<label
+				class="image-upload extra-tool"
+				class:show-extra={moreTools}
+				title="Insert local image"
+				><ImagePlus size={19} /><input
+					type="file"
+					aria-label="Insert local image"
+					accept="image/png,image/jpeg,image/webp"
+					onchange={insertImage}
+					disabled={busy}
+				/></label
+			><button
 				class="more-tools"
 				aria-label="More drawing tools"
 				aria-expanded={moreTools}
@@ -557,6 +652,7 @@
 					style={creationStyle}
 					{selection}
 					{sharedChildren}
+					{bitmaps}
 					busy={busy || loading}
 					onSelect={setSelection}
 					onCommit={commit}
@@ -893,7 +989,13 @@
 							onclick={() => layer(false)}>To back</button
 						>
 					</div>{/if}
-				{#if selected && !['stroke', 'text'].includes(selected.kind)}<div class="child-properties">
+				<p class="help">
+					Local PNG/JPEG/WebP only: 1 MiB and 4 MP per image; 4 MiB / 8 MP per project. Images are
+					embedded in portable JSON backups. No URLs or SVG.
+				</p>
+				{#if selected && !['stroke', 'text', 'image'].includes(selected.kind)}<div
+						class="child-properties"
+					>
 						<strong>Nested diagram</strong>
 						{#if selected.childDiagramId && sharedChildren.includes(selected.childDiagramId)}<p
 								class="help"
@@ -949,6 +1051,8 @@
 					data-y={e.y}
 					data-width={e.width}
 					data-height={e.height}
+					data-rotation={e.rotation ?? 0}
+					data-image-ready={e.assetId ? bitmaps.has(e.assetId) : undefined}
 				>
 					<button
 						aria-label={e.label || e.kind}
@@ -1058,6 +1162,27 @@
 	}
 	.more-tools {
 		display: none !important;
+	}
+	.image-upload {
+		position: relative;
+		display: grid;
+		place-items: center;
+		min-width: 39px;
+		height: 42px;
+		border-radius: 6px;
+		cursor: pointer;
+	}
+	.image-upload input {
+		position: absolute;
+		inset: 0;
+		opacity: 0;
+		width: 100%;
+		height: 100%;
+		cursor: pointer;
+	}
+	.image-upload:focus-within {
+		outline: 2px solid var(--color-accent);
+		outline-offset: -2px;
 	}
 	.context-actions {
 		position: absolute;
@@ -1376,6 +1501,10 @@
 		}
 		.floating-toolbar .history-tool {
 			display: none;
+		}
+		.image-upload {
+			min-width: 44px;
+			min-height: 44px;
 		}
 		.floating-toolbar .history-tool.show-extra {
 			display: grid;

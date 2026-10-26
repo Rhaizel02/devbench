@@ -4,6 +4,7 @@
 	import { FolderOpen, Plus, Upload, RefreshCw } from '@lucide/svelte';
 	import { emptyProject, newId, LIMITS, type Project } from './model';
 	import { parseProject } from './serialization';
+	import { verifyProjectImages } from './images';
 	import {
 		CanvasStorage,
 		openCanvasDatabase,
@@ -74,6 +75,7 @@
 			rows = await store.list();
 			if (first && rows.length) {
 				const loaded = await store.load(rows[0].id);
+				await verifyProjectImages(loaded);
 				if (!disposed) acceptLoaded(loaded);
 			}
 			if (!disposed) {
@@ -157,6 +159,7 @@
 		await run(async () => {
 			if (!store) throw new Error('Storage unavailable. Retry or use rescue export.');
 			const next = await store.load(id);
+			await verifyProjectImages(next);
 			await safeSwitch(next, true);
 		});
 	}
@@ -177,6 +180,7 @@
 				const next = rows.length
 					? await store.load(rows[0].id)
 					: emptyProject(newId('project'), newId('diagram'));
+				await verifyProjectImages(next);
 				if (rows.length) acceptLoaded(next);
 				else {
 					loaded = undefined;
@@ -193,6 +197,7 @@
 			if (file.size > LIMITS.bytes) throw new Error('Import limit: 16 MiB (legacy v1/v2: 8 MiB).');
 			if (rows.length >= 20) throw new Error('Local project limit: 20.');
 			const imported = parseProject(await file.text());
+			await verifyProjectImages(imported);
 			const next = { ...imported, id: newId('project') };
 			await safeSwitch(next);
 		});

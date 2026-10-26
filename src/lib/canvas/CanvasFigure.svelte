@@ -1,13 +1,20 @@
 <script lang="ts">
-	import { Group, Rect, Ellipse, Line, Text, Path } from 'svelte-konva';
+	import { Group, Rect, Ellipse, Line, Text, Path, Image as KonvaImage } from 'svelte-konva';
 	import { FONT_FAMILIES, labelInk, type Element } from './model';
 	import { figurePaths, figureSignature } from './sketch';
 	let {
 		element: e,
 		zoom,
 		labelColor,
-		shared = false
-	}: { element: Element; zoom: number; labelColor: string; shared?: boolean } = $props();
+		shared = false,
+		bitmap
+	}: {
+		element: Element;
+		zoom: number;
+		labelColor: string;
+		shared?: boolean;
+		bitmap?: ImageBitmap;
+	} = $props();
 	const signature = $derived(figureSignature(e));
 	const paths = $derived(figurePaths(signature));
 </script>
@@ -32,6 +39,21 @@
 			tension={0.3}
 			hitStrokeWidth={18 / zoom}
 		/>
+	{:else if e.kind === 'image'}
+		{#if bitmap}<KonvaImage image={bitmap} width={e.width} height={e.height} />{:else}<Rect
+				width={e.width}
+				height={e.height}
+				stroke={e.style.stroke}
+				fill="rgba(128,128,128,0.1)"
+			/><Text
+				text="Loading local image…"
+				width={e.width}
+				y={e.height / 2 - 10}
+				align="center"
+				fill={labelColor}
+				fontSize={14}
+				listening={false}
+			/>{/if}
 	{:else}
 		{#if e.kind === 'ellipse'}<Ellipse
 				x={e.width / 2}

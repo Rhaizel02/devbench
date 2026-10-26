@@ -28,6 +28,8 @@ import {
 } from './operations';
 import { parseProject, serializeProject } from './serialization';
 import { History } from './history';
+import rasterFixtures from './fixtures/local-rasters.json';
+import type { Asset } from './model';
 const shape = (id: string, x = 0, y = 0): Element => ({
 	id,
 	kind: 'rectangle',
@@ -179,6 +181,27 @@ describe('flat groups, transforms and integrity', () => {
 	});
 });
 describe('independent hierarchical copy', () => {
+	it('copies image nodes in independent children while sharing immutable portable resources', () => {
+		const p = scene();
+		p.assets = [rasterFixtures[0] as Asset];
+		p.diagrams[0].elements[0].childDiagramId = 'image-child';
+		p.diagrams.push({
+			id: 'image-child',
+			title: 'Local reference',
+			viewport: { x: 12, y: 30, zoom: 0.8 },
+			connections: [],
+			elements: [{ ...shape('image-node'), kind: 'image', assetId: p.assets[0].id }]
+		});
+		let i = 0;
+		const next = duplicateBranch(p, 'root', ['a'], () => `image-copy-${++i}`).project;
+		expect(next.assets).toEqual(p.assets);
+		const child = next.diagrams.find((d) => d.id !== 'root' && d.id !== 'image-child')!;
+		expect(child.elements[0].id).not.toBe('image-node');
+		expect(child.elements[0].assetId).toBe(p.assets[0].id);
+		child.elements[0].x += 120;
+		expect(p.diagrams[1].elements[0].x).toBe(0);
+		expect(() => serializeProject(next)).not.toThrow();
+	});
 	function nested() {
 		const p = scene();
 		p.diagrams[0].elements[0].childDiagramId = 'child';

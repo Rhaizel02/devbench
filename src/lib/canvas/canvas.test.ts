@@ -242,6 +242,29 @@ describe('editing, hierarchy and history', () => {
 	});
 });
 describe('ordered autosave and storage failures', () => {
+	it('never overwrites a future schema even if an external writer kept the revision number', async () => {
+		const p = project(),
+			read = {} as IDBRequest,
+			put = vi.fn();
+		const tx = {
+			objectStore: () => ({ get: () => read, put }),
+			abort: () => tx.onabort?.(new Event('abort')),
+			onabort: null as ((event: Event) => void) | null,
+			onerror: null,
+			oncomplete: null
+		};
+		const store = new CanvasStorage(
+			{ transaction: () => tx } as unknown as IDBDatabase,
+			new Map([[p.id, 1]])
+		);
+		const saving = store.save(p);
+		Object.defineProperty(read, 'result', {
+			value: { id: p.id, revision: 1, json: JSON.stringify({ ...p, schemaVersion: 99 }) }
+		});
+		read.onsuccess?.(new Event('success'));
+		await expect(saving).rejects.toThrow('another tab');
+		expect(put).not.toHaveBeenCalled();
+	});
 	it('debounces edits and writes the most recent version once', async () => {
 		vi.useFakeTimers();
 		const write = vi.fn(async () => {}),

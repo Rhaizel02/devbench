@@ -44,6 +44,7 @@
 		selection,
 		busy = false,
 		sharedChildren = [],
+		bitmaps,
 		onSelect,
 		onCommit,
 		onViewport,
@@ -61,6 +62,7 @@
 		selection: string[];
 		busy?: boolean;
 		sharedChildren?: string[];
+		bitmaps?: Map<string, ImageBitmap>;
 		onSelect: (ids: string[]) => void;
 		onCommit: (diagram: Diagram) => void;
 		onViewport: (view: Viewport) => void;
@@ -425,6 +427,10 @@
 	}
 	export function exportPNG(): string {
 		if (!stage) throw Error('Canvas is not ready.');
+		if (diagram.elements.some((e) => e.assetId && !bitmaps?.has(e.assetId)))
+			throw Error(
+				'Local images are still loading. Wait for them before exporting PNG; JSON backup remains available.'
+			);
 		const b = documentBounds(diagram),
 			w = Math.ceil(b.width + 64),
 			h = Math.ceil(b.height + 64);
@@ -522,6 +528,7 @@
 							zoom={view.zoom}
 							{labelColor}
 							shared={sharedChildren.includes(item.value.childDiagramId ?? '')}
+							bitmap={bitmaps?.get(item.value.assetId ?? '')}
 						/>{:else}<CanvasConnection
 							connection={item.value}
 							diagram={shown}

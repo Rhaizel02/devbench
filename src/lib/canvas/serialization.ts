@@ -1,5 +1,6 @@
 import { LIMITS, fail, type Project, type Point, type Style, type Asset } from './model';
 import { parseLegacyProject, type LegacyProject } from './legacy-serialization';
+import { validateAssetEncoding } from './images';
 export { color } from './legacy-serialization';
 type Obj = Record<string, unknown>;
 const object = (value: unknown): Obj => {
@@ -117,6 +118,7 @@ export function parseProject(input: string): Project {
 		});
 		if (bytes > 4 * 1024 * 1024 || pixels > 8_000_000)
 			fail('Project image budget exceeded (4 MiB / 8 megapixels).');
+		for (const asset of parsed.assets) validateAssetEncoding(asset);
 	}
 	const assets = new Set(parsed.assets?.map((a) => a.id));
 	parsed.diagrams = parsed.diagrams.map((d, index) => {

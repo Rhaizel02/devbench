@@ -2,6 +2,7 @@ import { test, expect, type Page } from '@playwright/test';
 import { readFile, mkdir } from 'node:fs/promises';
 import { evidencePath } from './support/environment';
 import type { Project } from '../src/lib/canvas/model';
+import rasters from '../src/lib/canvas/fixtures/local-rasters.json' with { type: 'json' };
 async function ready(page: Page) {
 	await page.setViewportSize({ width: 1440, height: 1000 });
 	await page.goto('/tools/architecture-canvas/');
@@ -55,6 +56,7 @@ test('V2 real marquee, group movement/resize/rotation, copy, ungroup, connectors
 	page.on('pageerror', (e) => errors.push(e.message));
 	await ready(page);
 	await fresh(page);
+	await screenshot(page, 'canvas-v20-empty.png');
 	await shape(page, 'Rounded rectangle', 100, 160, 'API Gateway', '#dcecf9');
 	await shape(page, 'Rectangle', 360, 180, 'Order Service', '#d6f5ed');
 	await shape(page, 'Ellipse', 680, 190, 'Postgres', '#efe2fa');
@@ -136,6 +138,7 @@ test('V2 real marquee, group movement/resize/rotation, copy, ungroup, connectors
 	await page.getByLabel('Connector geometry').selectOption('curve');
 	await page.getByLabel('Arrow heads').selectOption('both');
 	await page.getByLabel('Line style').selectOption('dashed');
+	await screenshot(page, 'canvas-v20-connector-properties.png');
 	await page.getByRole('button', { name: 'Close properties', exact: true }).click();
 	p = await json(page);
 	expect(p.diagrams[0].connections.at(-1)).toMatchObject({
@@ -234,7 +237,8 @@ test('V2 dark/light responsive toolbar, real touch pinch, keyboard marquee cance
 			expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(
 				true
 			);
-			await screenshot(page, `canvas-v20-${width}-${theme}.png`);
+			if (width === 390 && theme === 'dark')
+				await screenshot(page, 'canvas-v20-mobile-controls.png');
 		}
 	await expect(page.getByRole('button', { name: 'More drawing tools', exact: true })).toBeVisible();
 	await page.getByRole('button', { name: 'More drawing tools', exact: true }).click();
@@ -287,4 +291,127 @@ test('V2 dark/light responsive toolbar, real touch pinch, keyboard marquee cance
 	expect(meta + requests.join('') + messages.join('')).not.toContain(marker);
 	expect(messages).toEqual([]);
 	expect(requests.every((url) => url.startsWith('http://127.0.0.1:4173/'))).toBe(true);
+});
+test('V2 local raster decode, quota recovery, actual PNG pixels, portable backups and corrupt-image rollback', async ({
+	page
+}) => {
+	const requests: string[] = [],
+		errors: string[] = [];
+	page.on('request', (r) => requests.push(r.url() + (r.postData() ?? '')));
+	page.on('pageerror', (e) => errors.push(e.message));
+	await ready(page);
+	await fresh(page);
+	await expect(page.locator('[data-save-state="saved"]')).toBeVisible();
+	await page.evaluate(() => {
+		(window as unknown as { denyImages: boolean }).denyImages = true;
+		const put = IDBObjectStore.prototype.put;
+		IDBObjectStore.prototype.put = function (value, ...args) {
+			if (
+				(window as unknown as { denyImages: boolean }).denyImages &&
+				value?.json?.includes('"assets"')
+			)
+				throw new DOMException('Synthetic quota', 'QuotaExceededError');
+			return put.call(this, value, ...args);
+		};
+	});
+	await page.getByLabel('Insert local image', { exact: true }).setInputFiles({
+		name: 'synthetic.png',
+		mimeType: 'image/png',
+		buffer: Buffer.from(rasters[0].data, 'base64')
+	});
+	await expect(page.locator('[data-kind="image"][data-image-ready="true"]')).toHaveCount(1);
+	await expect(page.locator('[data-save-state="error"]')).toBeVisible();
+	await screenshot(page, 'canvas-v20-quota-rescue.png');
+	let p = await json(page);
+	expect(p.assets?.[0].data).toBe(rasters[0].data);
+	await page.evaluate(() => ((window as unknown as { denyImages: boolean }).denyImages = false));
+	await page.getByRole('button', { name: 'Retry storage', exact: true }).click();
+	await expect(page.locator('[data-save-state="saved"]')).toBeVisible();
+	const png = page.waitForEvent('download');
+	await page.getByRole('button', { name: 'PNG', exact: true }).click();
+	const bytes = await readFile((await (await png).path())!);
+	const pixel = await page.evaluate(async (data) => {
+		const image = await createImageBitmap(
+				new Blob([Uint8Array.from(atob(data), (c) => c.charCodeAt(0))], { type: 'image/png' })
+			),
+			c = document.createElement('canvas');
+		c.width = image.width;
+		c.height = image.height;
+		const ctx = c.getContext('2d')!;
+		ctx.drawImage(image, 0, 0);
+		const result = [...ctx.getImageData(72, 62, 1, 1).data];
+		image.close();
+		return result;
+	}, bytes.toString('base64'));
+	expect(pixel).toEqual([251, 191, 36, 255]);
+	for (const asset of rasters.slice(1))
+		await page.getByLabel('Insert local image', { exact: true }).setInputFiles({
+			name: 'synthetic.' + (asset.mime === 'image/jpeg' ? 'jpg' : 'webp'),
+			mimeType: asset.mime,
+			buffer: Buffer.from(asset.data, 'base64')
+		});
+	await expect(page.locator('[data-kind="image"][data-image-ready="true"]')).toHaveCount(3);
+	await page.getByRole('application').focus();
+	await page.keyboard.press('Control+a');
+	await page.keyboard.press('Control+g');
+	await page.keyboard.press('Control+d');
+	p = await json(page);
+	expect(p.diagrams[0].elements).toHaveLength(6);
+	expect(p.assets).toHaveLength(3);
+	await page.getByRole('application').focus();
+	await page.keyboard.press('Delete');
+	expect((await json(page)).assets).toHaveLength(3);
+	await page.getByRole('button', { name: 'Undo', exact: true }).click();
+	await screenshot(page, 'canvas-v20-local-images.png');
+	await expect(page.locator('[data-save-state="saved"]')).toBeVisible();
+	const backup = await json(page);
+	await page.reload();
+	await expect(page.locator('[data-kind="image"][data-image-ready="true"]')).toHaveCount(6);
+	expect(await json(page)).toEqual(backup);
+	await page.getByRole('button', { name: 'Projects', exact: true }).click();
+	const broken = structuredClone(backup),
+		raw = Buffer.from(rasters[0].data, 'base64');
+	broken.assets![0].data = Buffer.concat([
+		raw.subarray(0, 33),
+		raw.subarray(raw.length - 12)
+	]).toString('base64');
+	await page.getByLabel('Import project JSON', { exact: true }).setInputFiles({
+		name: 'bad-image.json',
+		mimeType: 'application/json',
+		buffer: Buffer.from(JSON.stringify(broken))
+	});
+	await expect(page.getByRole('dialog')).toContainText('could not be decoded safely');
+	await screenshot(page, 'canvas-v20-corrupt-image-error.png');
+	await page.getByRole('button', { name: 'Close projects', exact: true }).click();
+	expect(await json(page)).toEqual(backup);
+	await page.getByRole('button', { name: 'Projects', exact: true }).click();
+	await page.getByLabel('Import project JSON', { exact: true }).setInputFiles({
+		name: 'portable.json',
+		mimeType: 'application/json',
+		buffer: Buffer.from(JSON.stringify(backup))
+	});
+	await expect(page.getByRole('dialog')).not.toBeVisible();
+	await expect(page.locator('[data-kind="image"][data-image-ready="true"]')).toHaveCount(6);
+	p = await json(page);
+	expect(p.id).not.toBe(backup.id);
+	expect(p.assets).toEqual(backup.assets);
+	expect(p.diagrams).toEqual(backup.diagrams);
+	await page.getByLabel('Insert local image', { exact: true }).setInputFiles({
+		name: 'bad.svg',
+		mimeType: 'image/svg+xml',
+		buffer: Buffer.from('<svg onload="alert(1)"></svg>')
+	});
+	await expect(page.getByRole('status')).toContainText('PNG, JPEG or WebP');
+	const meta = await page.evaluate(() =>
+		JSON.stringify({
+			local: { ...localStorage },
+			session: { ...sessionStorage },
+			url: location.href,
+			cookies: document.cookie,
+			history: history.state
+		})
+	);
+	expect(meta + requests.join('')).not.toContain(rasters[0].data);
+	expect(requests.every((url) => url.startsWith('http://127.0.0.1:4173/'))).toBe(true);
+	expect(errors).toEqual([]);
 });

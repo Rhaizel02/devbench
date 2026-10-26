@@ -129,6 +129,11 @@ export class CanvasStorage {
 						const current = read.result as StoredProject | undefined,
 							known = this.versions.get(project.id),
 							actual = current?.revision ?? 0;
+						if (current && ![1, 2, 3].includes(JSON.parse(current.json).schemaVersion)) {
+							conflict = true;
+							tx.abort();
+							return;
+						}
 						if (current?.json === row.json) {
 							next = actual;
 							return;

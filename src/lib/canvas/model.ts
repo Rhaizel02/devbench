@@ -327,7 +327,7 @@ export function associateChild(
 ): Project {
 	const diagram = getDiagram(project, diagramId),
 		element = diagram.elements.find((e) => e.id === elementId);
-	if (!element || element.kind === 'stroke' || element.kind === 'text')
+	if (!element || element.kind === 'stroke' || element.kind === 'text' || element.kind === 'image')
 		fail('Choose a figure for the child diagram.');
 	if (childId) getDiagram(project, childId);
 	const next = replaceDiagram(project, {
