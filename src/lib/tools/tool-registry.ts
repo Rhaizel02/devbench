@@ -50,8 +50,9 @@ export const tools: Tool[] = [
 		slug: 'architecture-canvas',
 		name: 'Architecture Canvas',
 		category: 'Utilities',
-		description: 'Sketch systems, nest diagrams and autosave local projects.',
-		keywords: 'whiteboard architecture diagram canvas sketch drawing hierarchy local project',
+		description: 'Sketch systems in Focus mode, group shapes and explore nested diagrams.',
+		keywords:
+			'whiteboard architecture diagram canvas sketch drawing hierarchy local project fullscreen focus marquee groups curve',
 		status: 'available',
 		version: 'V1.4',
 		icon: 'layers'
@@ -61,9 +62,9 @@ export const tools: Tool[] = [
 		slug: 'test-data-generator',
 		name: 'Test Data Generator',
 		category: 'Utilities',
-		description: 'Generate local test text and numeric EAN-13 / GTIN-14 fixtures.',
+		description: 'Generate related datasets, synthetic text and numeric GTIN fixtures.',
 		keywords:
-			'lorem ipsum synthetic text exact maximum characters words paragraphs ean gtin checksum gs1 test data',
+			'lorem ipsum synthetic text exact maximum characters words paragraphs ean gtin checksum gs1 test data dataset schema foreign keys seeded json csv fixtures',
 		status: 'available',
 		version: 'V1.3',
 		icon: 'fingerprint'
@@ -73,8 +74,8 @@ export const tools: Tool[] = [
 		slug: 'pipeline-builder',
 		name: 'Pipeline Builder',
 		category: 'Utilities',
-		description: 'Chain bounded local text transformations explicitly.',
-		keywords: 'workflow base64 url json yaml jsonpath pipeline',
+		description: 'Build local transformation recipes and inspect each step.',
+		keywords: 'workflow base64 url json yaml jsonpath pipeline recipe xml trim replace case',
 		status: 'available',
 		version: 'V1.2',
 		icon: 'swap'

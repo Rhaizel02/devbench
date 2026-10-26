@@ -64,3 +64,13 @@ Canvas checkpoint published as5d2240d4f8ed3ffa4405853171bb1aeb8fd1147a. Pipeline
 Verified15 targeted unit tests and5 browser flows (2 new Pipeline plus3 existing connected workflows); after visual layout refinement, both new flows passed again. Actual recipe copy/download bytes, payload exclusion, hostile rollback, cancellation/recovery and source invalidation passed. Latest check0/0 and scoped ESLint passed with concurrent dataset work also in the tree. docs/PIPELINE_V2.md explains exact limits. Responsive screenshots exist; final joint pass will refresh them with top-of-page focus cleared.
 
 Next: finish dataset acceptance and publish checkpointE; full suite/exact final CI/public preview follow. No Pipeline P0/P1 observed. Dataset and final provenance/evidence review remain incomplete.
+
+## Checkpoint E — structured datasets
+
+Pipeline checkpoint3e632f8f7fb24972f73078393bf6c59aa66660fb pushed. Dataset engine/UI/worker now deliver editable fields, fixed/generated/required/nullable/unique values, deterministic seeds, five presets, topologically generated required foreign keys, bounded JSON/page/related outputs and CSV with explicit formula protection. Old Lorem/GTIN utility defaults remain. No new dependencies/storage or Canvas schema edits.
+
+24 focused dataset unit tests passed. Both actual browser flows passed (related schema/FK, clipboard/download bytes, CSV header/cell formula protection, uniqueness error/reset/reload, themes390/768/1440, privacy, observed20/1000/5000-row latency and30 catalog entries). A first test used a nonexistent .tool-card selector; corrected it to the actual .directory-tool while preserving the30-count assertion. Check0/0 and scoped ESLint passed. Real captures inspected; recipe and schema inputs now use existing field styles. Desktop Pipeline places steps beside execution/results. Snapshot capture helpers now blur focus/scroll to top to avoid fixed-sidebar screenshot offsets.
+
+Canvas checkpoint5d2240d CI40414564308 stopped at Prettier for tests/canvas-v22.spec.ts (appended hierarchy test was not formatted before that commit). Formatting is corrected in this next checkpoint; no force/rewrite or relaxed tests. Final exact-SHA CI remains mandatory. Integration cf916ab CI remains green. Added explicit touch Box select returning to Select after release; verification follows in final suite.
+
+Next: complete joint acceptance/documentation/privacy review, clean install/check/lint/unit/build/fullPlaywright, fix real regressions, publish RC and verify exact CI/Cloudflare HTTPS. Main and original RC branches must stay unchanged. No known data-loss/privacy P0/P1; RC not declared complete.

@@ -194,7 +194,7 @@ test('V2.2 focus three-level navigation, theme/responsive evidence and unmount c
 	await page.getByRole('button', { name: 'Focus mode', exact: true }).click();
 	const outline = page.locator('details.outline');
 	await outline.locator('summary').click();
-	await page.getByRole('button',{name:'Open Pedidos child',exact:true}).click();
+	await page.getByRole('button', { name: 'Open Pedidos child', exact: true }).click();
 	await expect(page.getByRole('navigation', { name: 'Diagram breadcrumb' })).toContainText(
 		'Pedidos'
 	);
@@ -235,6 +235,25 @@ test('V2.2 focus three-level navigation, theme/responsive evidence and unmount c
 			await page.getByRole('button', { name: 'Exit focus mode', exact: true }).click();
 		}
 	await page.getByRole('button', { name: 'Focus mode', exact: true }).click();
+	await page.getByRole('button', { name: 'More drawing tools', exact: true }).click();
+	await page.getByRole('button', { name: 'Box select', exact: true }).click();
+	const b = (await page.getByTestId('board-surface').boundingBox())!,
+		cdp = await page.context().newCDPSession(page);
+	await cdp.send('Input.dispatchTouchEvent', {
+		type: 'touchStart',
+		touchPoints: [{ x: b.x + 20, y: b.y + 120 }]
+	});
+	await cdp.send('Input.dispatchTouchEvent', {
+		type: 'touchMove',
+		touchPoints: [{ x: b.x + 330, y: b.y + 340 }]
+	});
+	await cdp.send('Input.dispatchTouchEvent', { type: 'touchEnd', touchPoints: [] });
+	await expect(page.getByRole('toolbar', { name: 'Selection actions' })).toBeVisible();
+	await expect(page.getByRole('button', { name: 'Select', exact: true })).toHaveAttribute(
+		'aria-pressed',
+		'true'
+	);
+	await cdp.detach();
 	await page.goto('/tools/xml-toolkit/');
 	expect(await page.evaluate(() => document.body.style.overflow)).toBe('');
 	expect(await page.locator('.app-header').evaluate((e) => (e as HTMLElement).inert)).toBe(false);

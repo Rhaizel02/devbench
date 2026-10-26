@@ -435,6 +435,7 @@
 				}
 			}
 		}
+		if (g.kind === 'marquee' && mode === 'marquee') onCreated();
 		gesture = null;
 		draft = null;
 		marquee = null;
