@@ -2,7 +2,8 @@ import type { PipelineStep, PipelineResult } from './pipeline-engine';
 import { ToolError } from '../tool-errors';
 export function startPipeline(
 	input: string,
-	steps: PipelineStep[]
+	steps: PipelineStep[],
+	onProgress?: (index: number) => void
 ): { promise: Promise<PipelineResult>; cancel: () => void } {
 	const worker = new Worker(new URL('./pipeline.worker.ts', import.meta.url), { type: 'module' });
 	let cancel = () => {};
@@ -24,6 +25,10 @@ export function startPipeline(
 			reject(new ToolError('Pipeline cancelled.'));
 		};
 		worker.onmessage = (event) => {
+			if (event.data.progress !== undefined) {
+				onProgress?.(event.data.progress);
+				return;
+			}
 			finish();
 			if (event.data.error) reject(new ToolError(event.data.error));
 			else resolve(event.data.result);

@@ -56,3 +56,11 @@ Evidence: 18 targeted Canvas unit tests passed including complete frozen v1/v2/v
 Visual inspection: actual focus desktop,390dark,768light show readable hatch labels and no horizontal page overflow. Existing viewport is intentionally preserved, so large imported diagrams may extend beyond the camera. Fit/pan remain explicit. Historical screenshots regenerated during regression are restored; current evidence uses v22-* names.
 
 Next: finish PipelineV2 configuration-only recipes/operations/browser acceptance, then structured datasets, combined release acceptance and exact final CI. Pipeline/domain work underway is not part of this Canvas checkpoint. No open data-integrity P0/P1 observed; full RC gate remains pending.
+
+## Checkpoint D — Pipeline Builder V2
+
+Canvas checkpoint published as5d2240d4f8ed3ffa4405853171bb1aeb8fd1147a. Pipeline now supports step duplication, enabled/skipped states, native drag/drop plus keyboard Up/Down, configuration-only recipe import/export/copy/session duplication, strict version/options/budgets and five useful real recipes. New text trim/case/literal replace, optional JSONPath unwrap and safe XML transformations reuse engines. Worker progress, immutable snapshot and edit cancellation prevent stale final results. Desktop configuration and execution use separate columns; source/result editors are compact. No new dependencies/persistence.
+
+Verified15 targeted unit tests and5 browser flows (2 new Pipeline plus3 existing connected workflows); after visual layout refinement, both new flows passed again. Actual recipe copy/download bytes, payload exclusion, hostile rollback, cancellation/recovery and source invalidation passed. Latest check0/0 and scoped ESLint passed with concurrent dataset work also in the tree. docs/PIPELINE_V2.md explains exact limits. Responsive screenshots exist; final joint pass will refresh them with top-of-page focus cleared.
+
+Next: finish dataset acceptance and publish checkpointE; full suite/exact final CI/public preview follow. No Pipeline P0/P1 observed. Dataset and final provenance/evidence review remain incomplete.
