@@ -1,0 +1,42 @@
+{
+  "base": "c3cd929a5aea231991973abd5744def9d13cf740",
+  "branch": "feature/data-diagnostics-v21",
+  "runtime": "v24.22.1",
+  "cleanInstall": true,
+  "dependencyAuditVulnerabilities": 0,
+  "check": {
+    "errors": 0,
+    "warnings": 0
+  },
+  "lint": "passed",
+  "unitTests": 395,
+  "staticToolDirectories": 30,
+  "browser": {
+    "startTime": "2026-10-26T09:57:53.616Z",
+    "duration": 127099.002,
+    "expected": 45,
+    "skipped": 2,
+    "unexpected": 0,
+    "flaky": 0
+  },
+  "workerBundles": [
+    {
+      "name": "explain.worker-3dFCP8Y2.js",
+      "bytes": 12257,
+      "gzipBytes": 5096
+    },
+    {
+      "name": "xml.worker-COwKEr5w.js",
+      "bytes": 178859,
+      "gzipBytes": 53780
+    }
+  ],
+  "canvasDomainChanged": false,
+  "contractCharacters": 35519,
+  "privacyEvidence": "v21-responsive-privacy.json",
+  "performanceEvidence": "v21-performance.json",
+  "limitations": [
+    "Two explicitly remote historical production audits skipped; this local suite is not a production audit.",
+    "Chromium only; no WCAG or universal XML/PostgreSQL conformance claim."
+  ]
+}

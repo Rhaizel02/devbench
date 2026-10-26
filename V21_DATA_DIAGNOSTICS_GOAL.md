@@ -1,5 +1,7 @@
 # DevBench V2.1
 
+Implementation continuation note: the complete verbatim user contract and elaboration follow. Current acceptance, discovered parser tolerances and exact next action live in GOAL_PROGRESS_V21.md. Implemented XML uses strict lexical declaration/entity/namespace/character checks before a worker-local fail-on-warning DOM parser; no active DOM or remote resolution. Conversion preserves the versioned ordered AST. PostgreSQL distinguishes original, derived and heuristic observations and root-inclusive counters. See docs/DATA_DIAGNOSTICS_V21_ACCEPTANCE.md for the final requirement/evidence matrix. Canvas domain/persistence/backups remain byte-unchanged from main; only its catalog-count test follows the new total. The RC remains isolated; this contract never authorizes a V2.1 merge to main.
+
 ## Verbatim user contract
 
 DEVBENCH V2.1 — DATA DIAGNOSTICS: POSTGRESQL EXPLAIN ANALYZER + XML TOOLKIT

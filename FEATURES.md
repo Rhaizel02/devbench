@@ -1,5 +1,11 @@
 # DevBench — Alcance funcional cerrado
 
+## V2.1 RC — Data Diagnostics
+
+30 available entries, preserving all 28 preceding slugs. BACK-11 / Backend / `/tools/sql-explain-analyzer/`: structured PostgreSQL EXPLAIN parser, bounded text subset, original versus derived metrics, progressive tree/detail/search/filter, conservative findings and before/after comparison with structured export. Unknown node types remain inspectable; missing timing/buffers do not become zero. SQL is never executed.
+
+DATA-07 / Data / `/tools/xml-toolkit/`: XML1.0/UTF-8 well-formedness, DTD/entities blocked before parser, conservative format/minify, mixed content/xml:space preservation, namespace-aware tree, worker XPath1.0 with typed results, ordered XML/JSON roundtrip, explicit lossy XML→data JSON and validated one-shot Studio/Query/Diff transfers. No XSD, XSLT, remote entities or active imported markup. Both tools use memory only; Canvas domain/persistence/backups stay unchanged. Details/evidence: [SQL](docs/SQL_EXPLAIN_V21.md), [XML](docs/XML_TOOLKIT_V21.md), [RC progress](GOAL_PROGRESS_V21.md). V2.1 remains isolated pending acceptance.
+
 ## V1.5 RC — OpenAPI Contract Workbench
 
 BACK-10 / Backend / `/tools/openapi-explorer/` is available as entry **28**, lazy and prerendered from the same registry used by Home/search/palette/favorites/recents. All 27 preceding tools remain. JSON/YAML paste/local-file import, OAS 3.0.x/3.1.x structural parser, contextual errors, bounded cancellable workers and internal-reference graph. Unsupported 3.2/Swagger 2, remote refs/URI scopes and complex encodings are explicit; no fetch or conformance guarantee.

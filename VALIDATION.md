@@ -1,5 +1,15 @@
 # B1 validation report
 
+## V2.1 Data Diagnostics RC
+
+Branch `feature/data-diagnostics-v21` from main `c3cd929a5aea231991973abd5744def9d13cf740`; 30 entries, two new lazy/static routes, previous 28 retained. First functional checkpoint `04a8509a9c849ae1d3f566a72d70f77ea511f55d`: check 0 errors/warnings, lint, 376 unit tests; static build and four V2.1 browser flows verified locally after that checkpoint. Final clean-install/full-suite/CI gate is recorded in [GOAL_PROGRESS_V21.md](GOAL_PROGRESS_V21.md), not inferred from implementation.
+
+Browser evidence covers SQL local files, realistic JOIN/sort/cardinality observations, tree/derived metrics, conservative findings, comparison/download bytes, estimated-only/TIMING OFF text, XML SOAP/namespaces, format/minify, real XPath and selected-node navigation, reversible structured conversion, three one-shot JSON destinations, errors/reset/reload, twelve dark/light × 390/768/1440 scenes, keyboard and privacy. No payload marker in URLs/history/storage/cookies/requests/console; own static GETs only. PostgreSQL is never executed; XML is never active DOM. Native Chromium malformed-XML comparisons caught parser permissiveness, now blocked by preflight/character checks with regression tests.
+
+Final clean-install gate: check 0 errors/warnings, lint, **395 unit tests / 23 files**, static build with **30 tool directories**, **45 Chromium flows passed / 2 explicitly remote historical audits skipped**, zero unexpected/flaky outcomes. Canvas domain/persistence/schema files are unchanged from main. [Acceptance matrix and screenshots](docs/DATA_DIAGNOSTICS_V21_ACCEPTANCE.md), [machine summary](screenshots/actual/v21-validation.json).
+
+Observed local Playwright driver file-import + worker + UI assertion latencies: SQL small/medium/near-limit 184/191/340 ms (438 / 85,931 / 1,808,598 bytes); XML 167/210/313 ms (29 / 33,007 / 1,800,124 bytes). These are wall times from automation, not parser-only benchmarks or FPS. Medium outlines initially render 200 rows and expand to 400. A deliberately costly XPath terminates its worker after the 1.5-second budget while main-thread heartbeat continues (191 ticks), then valid retry/cancel/reset work. [Raw measurements](screenshots/actual/v21-performance.json), [responsive/privacy](screenshots/actual/v21-responsive-privacy.json), [SQL limits](docs/SQL_EXPLAIN_V21.md), [XML limits](docs/XML_TOOLKIT_V21.md). Later historical sections retain old entry counts and branch states.
+
 ## V1.5 OpenAPI RC — current acceptance
 
 Canvas H0 integration is complete: main `666dc73207ba0a2a9f26c686e1ad2e2a796f670f`, exact CI 40233753793 success, preserving the complete RC history. OpenAPI stays on `feature/openapi-explorer-v15`; **28 entries**, existing 27 retained. H2/H3/H4 CIs 40235203199 / 40235471677 / 40235751268 succeeded. H5 and final exact-SHA CI are tracked in GOAL_PROGRESS_V15.md.

@@ -11,6 +11,7 @@
 			depth: number;
 			label: string;
 			detail?: string;
+			search?: string;
 			branch: boolean;
 		}[];
 		selected?: string;
@@ -26,7 +27,11 @@
 		const byId = new Map(rows.map((r) => [r.id, r]));
 		if (query.trim())
 			for (const row of rows)
-				if (`${row.label} ${row.detail ?? ''}`.toLowerCase().includes(query.toLowerCase())) {
+				if (
+					`${row.label} ${row.detail ?? ''} ${row.search ?? ''}`
+						.toLowerCase()
+						.includes(query.toLowerCase())
+				) {
 					let r: typeof row | undefined = row;
 					while (r) {
 						wanted.add(r.id);

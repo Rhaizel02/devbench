@@ -19,6 +19,7 @@ async function screenshot(page: Page, name: string) {
 	await page.evaluate(async () => {
 		await document.fonts.ready;
 		(document.activeElement as HTMLElement)?.blur();
+		scrollTo(0, 0);
 	});
 	await page.screenshot({
 		path: evidencePath(`v21-${name}.png`),
@@ -107,6 +108,10 @@ test('XML SOAP, conservative formatting, namespace XPath, reversible bytes, hand
 	page,
 	context
 }) => {
+	const entityRequests: string[] = [];
+	page.on('request', (r) => {
+		if (new URL(r.url()).hostname === 'synthetic.invalid') entityRequests.push(r.url());
+	});
 	await context.grantPermissions(['clipboard-read', 'clipboard-write']);
 	await page.setViewportSize({ width: 1440, height: 1050 });
 	await page.goto(xml);
@@ -185,6 +190,7 @@ test('XML SOAP, conservative formatting, namespace XPath, reversible bytes, hand
 	await source(page, 'XML source', '<!DOCTYPE r SYSTEM "https://synthetic.invalid/xxe"><r/>');
 	await page.getByRole('button', { name: 'Check well-formed XML', exact: true }).click();
 	await expect(page.getByRole('alert')).toContainText('disabled');
+	expect(entityRequests).toEqual([]);
 	await screenshot(page, 'xml-dtd-error-dark-1440');
 	await page.getByRole('button', { name: 'Reset', exact: true }).click();
 	await expect(page.getByRole('textbox', { name: 'XML source', exact: true })).toBeEmpty();
@@ -255,6 +261,8 @@ test('V2.1 catalog, real responsive themes, keyboard, memory-only privacy and pa
 			})
 		);
 		expect(state).not.toContain(marker);
+		expect(await page.evaluate(() => indexedDB.databases())).toEqual([]);
+		expect(await page.evaluate(() => caches.keys())).toEqual([]);
 		expect(await context.cookies()).toEqual([]);
 		await page.reload();
 		await expect(
@@ -300,5 +308,147 @@ test('V2.1 catalog, real responsive themes, keyboard, memory-only privacy and pa
 	await writeFile(
 		evidencePath('v21-responsive-privacy.json'),
 		JSON.stringify({ measurements, leaks, errors, staticRequests: requests.length }, null, 2)
+	);
+});
+
+test('V2.1 measured input budgets, progressive outlines, honest formatting and worker timeout recovery', async ({
+	page
+}) => {
+	test.setTimeout(90000);
+	await page.setViewportSize({ width: 1440, height: 1000 });
+	const samples: {
+		tool: string;
+		size: string;
+		bytes: number;
+		fileAndAnalysisMs: number;
+		renderedRows: number;
+	}[] = [];
+	for (const tool of ['explain', 'xml']) {
+		await page.goto(tool === 'xml' ? xml : sql);
+		for (const size of ['small', 'medium', 'near-limit']) {
+			const text =
+				tool === 'explain'
+					? size === 'small'
+						? smallPlan
+						: JSON.stringify({
+								Plan: {
+									'Node Type': 'Append',
+									Plans: Array.from({ length: size === 'medium' ? 1000 : 100 }, (_, i) => ({
+										'Node Type': 'Seq Scan',
+										'Relation Name': 'synthetic_' + i,
+										'Plan Rows': 1,
+										'Total Cost': 1
+									}))
+								},
+								...(size === 'near-limit'
+									? { SyntheticMetadata: Array.from({ length: 15 }, () => 'x'.repeat(120000)) }
+									: {})
+							})
+					: size === 'small'
+						? '<r><item>synthetic</item></r>'
+						: size === 'medium'
+							? '<r>' + '<item id="synthetic">value</item>'.repeat(1000) + '</r>'
+							: '<r>' + ('<item>' + 'x'.repeat(200000) + '</item>').repeat(9) + '</r>';
+			const start = performance.now();
+			await page
+				.getByLabel(tool === 'xml' ? 'Local XML file' : 'Local plan file', { exact: true })
+				.setInputFiles({
+					name: tool === 'xml' ? 'synthetic.xml' : 'synthetic.json',
+					mimeType: 'text/plain',
+					buffer: Buffer.from(text)
+				});
+			await page
+				.getByRole('button', {
+					name: tool === 'xml' ? 'Check well-formed XML' : 'Analyze plan',
+					exact: true
+				})
+				.click();
+			await expect(
+				page.getByRole('tree', { name: tool === 'xml' ? 'XML tree' : 'Plan tree', exact: true })
+			).toBeVisible();
+			const elapsed = performance.now() - start;
+			const rendered = await page.getByRole('treeitem').count();
+			expect(rendered).toBeLessThanOrEqual(200);
+			samples.push({
+				tool,
+				size,
+				bytes: Buffer.byteLength(text),
+				fileAndAnalysisMs: Math.round(elapsed),
+				renderedRows: rendered
+			});
+			if (size === 'medium') {
+				await page.getByRole('button', { name: /^Show 200 more/ }).click();
+				expect(await page.getByRole('treeitem').count()).toBe(400);
+				const first = page.getByRole('treeitem').first();
+				await first.focus();
+				await page.keyboard.press('ArrowDown');
+				await expect(page.getByRole('treeitem').nth(1)).toBeFocused();
+			}
+		}
+	}
+	await page.getByRole('button', { name: 'Reset', exact: true }).click();
+	await source(page, 'XML source', '<r><a/><b/></r>');
+	await page.getByRole('checkbox', { name: 'Reindent element-only data', exact: true }).check();
+	await page.getByLabel('XML indentation', { exact: true }).selectOption('4');
+	await page.getByRole('button', { name: 'Format XML', exact: true }).click();
+	await expect(page.getByRole('heading', { name: 'XML result', exact: true })).toBeVisible();
+	const downloadPromise = page.waitForEvent('download');
+	await page.getByRole('button', { name: 'Download', exact: true }).click();
+	expect(await readFile((await (await downloadPromise).path())!, 'utf8')).toBe(
+		'<r>\n    <a/>\n    <b/>\n</r>'
+	);
+	await page.getByLabel('Color theme', { exact: true }).selectOption('light');
+	await screenshot(page, 'xml-format-light-1440');
+	await page.getByLabel('XML indentation', { exact: true }).selectOption('2');
+	await expect(page.getByRole('heading', { name: 'XML result', exact: true })).toHaveCount(0);
+	await page.getByRole('button', { name: 'Minify XML', exact: true }).click();
+	await expect(page.getByRole('heading', { name: 'XML result', exact: true })).toBeVisible();
+	await source(page, 'XML source', '<r>' + '<a/>'.repeat(12000) + '</r>');
+	await page.getByRole('button', { name: 'XPath', exact: true }).click();
+	await page.getByLabel('XPath expression', { exact: true }).fill('//a[count(//a)=12000]');
+	await page.evaluate(() => {
+		const state = window as unknown as { v21Heartbeat: number; v21Timer: number };
+		state.v21Heartbeat = 0;
+		state.v21Timer = window.setInterval(() => state.v21Heartbeat++, 10);
+	});
+	await page.getByRole('button', { name: 'Evaluate XPath', exact: true }).click();
+	await expect(page.getByRole('alert')).toContainText('Worker terminated');
+	const beats = await page.evaluate(() => {
+		const state = window as unknown as { v21Heartbeat: number; v21Timer: number };
+		clearInterval(state.v21Timer);
+		return state.v21Heartbeat;
+	});
+	expect(beats).toBeGreaterThan(20);
+	await page.getByLabel('Color theme', { exact: true }).selectOption('dark');
+	await screenshot(page, 'xml-worker-budget-error-dark-1440');
+	await page.getByRole('button', { name: 'Reset', exact: true }).click();
+	await page.getByRole('button', { name: 'XML example', exact: true }).click();
+	await page.getByRole('button', { name: 'XPath', exact: true }).click();
+	await page.getByRole('button', { name: 'Evaluate XPath', exact: true }).click();
+	await expect(page.getByText('2 matches', { exact: true })).toBeVisible();
+	await source(page, 'XML source', '<r>' + '<a/>'.repeat(12000) + '</r>');
+	await page.getByLabel('XPath expression', { exact: true }).fill('//a[count(//a)=12000]');
+	await page.getByRole('button', { name: 'Evaluate XPath', exact: true }).click();
+	await page.getByRole('button', { name: 'Cancel', exact: true }).click();
+	await expect(page.getByRole('status').filter({ hasText: 'Processing locally' })).toHaveCount(0);
+	await page.getByRole('button', { name: 'Reset', exact: true }).click();
+	await page.waitForTimeout(1600);
+	await expect(page.getByRole('alert')).toHaveCount(0);
+	await screenshot(page, 'xml-empty-dark-1440');
+	await page.goto(sql);
+	await screenshot(page, 'explain-empty-dark-1440');
+	await writeFile(
+		evidencePath('v21-performance.json'),
+		JSON.stringify(
+			{
+				method:
+					'Observed Chromium Playwright driver wall time: file ingestion + worker startup/parsing + serialization + UI assertion. Not pure parser time or FPS.',
+				samples,
+				timeoutHeartbeatTicks: beats,
+				workerBudgetMs: 1500
+			},
+			null,
+			2
+		)
 	);
 });

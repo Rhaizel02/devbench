@@ -145,6 +145,20 @@ describe('EXPLAIN structured parsing and semantics', () => {
 		expect(planSummary(d).executionMs).toBe(15);
 		expect(explainFindings(d)[0].kind).toBe('Parallel workers');
 	});
+	it('detects join/aggregate strategy changes and retains missing buffer comparisons', () => {
+		const a = parseExplain(
+			input({ 'Node Type': 'Hash Join', 'Join Type': 'Inner', 'Shared Read Blocks': 0 })
+		);
+		const b = parseExplain(input({ 'Node Type': 'Hash Join', 'Join Type': 'Left' }));
+		const report = comparePlans(a, b);
+		expect(report.structureChanged).toBe(true);
+		expect(report.matches[0].matched).toBe(false);
+		expect(report.metrics.find((m) => m.metric === 'sharedRead')).toMatchObject({
+			before: 0,
+			after: undefined,
+			delta: undefined
+		});
+	});
 });
 describe('documented text subset', () => {
 	it('parses indentation, decimals, buffers and timing', () => {

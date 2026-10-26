@@ -1,5 +1,11 @@
 # DevBench — Roadmap
 
+## V2.1 Data Diagnostics RC
+
+Implemented on `feature/data-diagnostics-v21` from OpenAPI-integrated main: BACK-11 PostgreSQL EXPLAIN Analyzer and DATA-07 XML Toolkit, 30 available entries. Local plan evidence/comparison and safe XML/XPath/ordered conversion, with bounded workers and memory-only handoffs. [SQL](docs/SQL_EXPLAIN_V21.md), [XML](docs/XML_TOOLKIT_V21.md), [acceptance gates](GOAL_PROGRESS_V21.md). No main merge without acceptance. Canvas 2.0 remains separately pending; none of its code/data schema enters this branch.
+
+P2: broader PostgreSQL/text/XML conformance corpora, alternate XML encodings/1.1 and dedicated cross-browser/assistive-technology QA. No promises of XSD/XSLT, remote query execution, automatic indexing advice or unbounded XPath. The following sections retain historical release states.
+
 ## Current V1.5 release candidate
 
 Canvas V1.4 integrated intact into main at `666dc73207ba0a2a9f26c686e1ad2e2a796f670f`, verified by CI. OpenAPI Contract Workbench adds the 28th entry on `feature/openapi-explorer-v15`: bounded local parsing/exploration, request preview/handoff and contract diff. No V1.5 merge to main is authorized. [Contract](V15_OPENAPI_GOAL.md), [progress](GOAL_PROGRESS_V15.md), [implementation/limits](docs/OPENAPI_V15.md) and VALIDATION contain acceptance evidence.

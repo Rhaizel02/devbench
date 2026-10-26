@@ -37,6 +37,21 @@ describe('strict inert XML', () => {
 		'<r a="<"/>',
 		'<r>&#0;</r>',
 		'<r xmlns:a="urn:x" xmlns:b="urn:x" a:x="1" b:x="2"/>',
+		'<r xmlns:a="urn&#58;x" xmlns:b="urn:x" a:x="1" b:x="2"/>',
+		'<r xmlns:a="urn\r\nx" xmlns:b="urn x" a:x="1" b:x="2"/>',
+		'<?xml?><r/>',
+		'<?xml version="1.0"?><?xml version="1.0"?><r/>',
+		' <?xml version="1.0"?><r/>',
+		'<?XML version="1.0"?><r/>',
+		'<!--bad -- comment--><r/>',
+		'<r>]]></r>',
+		'<r>raw & broken</r>',
+		'<1/>',
+		'<a:::b/>',
+		'<r xmlns:p=""/>',
+		'<r xmlns:xml="urn:wrong"/>',
+		'outside<r/>',
+		'<!--no root-->',
 		'<?xml version="1.1"?><r/>'
 	])('rejects malformed XML %s', (input) => expect(() => parseXml(input)).toThrow());
 	it.each([

@@ -1,6 +1,14 @@
 .diagnostic-workspace {
 	min-width: 0;
 }
+.diagnostic-workspace input:not([type='checkbox']):not([type='file']),
+.diagnostic-workspace select {
+	border: 1px solid var(--color-border);
+	border-radius: 4px;
+	background: var(--color-bg);
+	color: var(--color-text);
+	padding: 8px 10px;
+}
 .diagnostic-workspace .editor-panel {
 	min-width: 0;
 }

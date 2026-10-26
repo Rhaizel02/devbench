@@ -1,0 +1,45 @@
+# DevBench V2.1 — RC acceptance
+
+Branch: `feature/data-diagnostics-v21`. Base main: `c3cd929a5aea231991973abd5744def9d13cf740`. Canvas 2.0 is not merged. The first functional checkpoint is `04a8509a9c849ae1d3f566a72d70f77ea511f55d`, exact CI [40301775957](https://github.com/Rhaizel02/devbench/actions/runs/40301775957) success. The final clean-install/full-suite and published-SHA gates are recorded in GOAL_PROGRESS_V21.md; this report does not substitute an old checkpoint for the final RC.
+
+## Requirement → implementation → evidence
+
+| Contract                         | Implemented behavior                                                                              | Evidence                                                                                                        |
+| -------------------------------- | ------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------- |
+| Isolated RC; preserve Canvas     | Branch from main; unchanged Canvas domain, schemas and IndexedDB                                  | Git comparison against base; only a legacy catalog-count test assertion changes                                 |
+| 30 entries, lazy/static routes   | BACK-11 and DATA-07 plus all previous slugs, shared Home/search/palette/favorites/recents         | Registry unit gate, full browser regression, build tool-directory count                                         |
+| PostgreSQL structured plans      | Array/object, multiple roots, stable paths, unknown nodes, optional fields and inert metadata     | explain-engine.test.ts; real local-file browser import                                                          |
+| Honest metrics                   | Cost units, per-loop rows/times, inclusive buffers, no worker/wall-time sums, zero/missing policy | Unit vectors, displayed ratio 210× and aggregate 4,200 rows in synthetic orders plan                            |
+| Useful SQL analysis              | Progressive tree, filters/search/indexes, synced detail, conservative evidence findings           | Browser SQL flow; complex/findings screenshots                                                                  |
+| Text subset                      | Explicit grammar, unknown-line diagnostics, ambiguous structure rejection                         | Unit grammar cases; observed TIMING OFF text browser flow                                                       |
+| Plan comparison                  | Independent trees, structural signatures, original/root-buffer metrics, safe deltas and export    | Unit equal/changed/absent cases; download bytes with 2.1→4.2 ms observation                                     |
+| XML well-formedness and security | Inert DOM, lexical DTD/entity/namespace/character checks, fail-on-warning parser                  | Hostile/unit fixtures; native Chromium rejection comparison; DTD request never sent                             |
+| XML semantic preservation        | Conservative format/minify; opt-in 2/4-space element-only reindent; mixed/xml:space preserved     | Unit fixtures; exact downloaded 4-space output                                                                  |
+| XML outline                      | Progressive ordered nodes, counts, namespaces/attributes, content search, paths and selection     | SOAP tree; 200→400 row browser assertion; keyboard movement                                                     |
+| XPath1.0                         | Configurable namespace URIs, actual scalar/node types, paths and selection                        | SOAP predicates, default namespace, scalar/invalid/zero/limit units; real browser Evaluate                      |
+| Reversible XML/JSON              | Versioned ordered typed nodes, qualified names/URIs/attributes/text/CDATA/comments/PI             | Semantic roundtrip fixtures; actual SOAP forward/reverse UI; injection rejection                                |
+| Lossy projection honest          | Separate attributes/text/grouped children, repeated arrays; one-way warning                       | Unit dangerous-key/namespace data; visible lossy action and warning                                             |
+| Handoffs                         | Explicit one-shot Studio/Query/Diff, own destination budgets; Diff left input                     | Three real browser destinations/reload cleanup; depth/UTF-8 unit limits                                         |
+| No stale results                 | Source/option changes invalidate; reset/cancel/dispose terminate; file snapshot guards            | Browser edit/invalidation/reset/reload; worker cancel and no late error                                         |
+| Bounded responsive work          | Two MiB inputs and structural caps, worker budgets, progressive rendering                         | Unit limits; small/medium/~1.8MB measurements; real XPath timeout and main-thread heartbeat                     |
+| Privacy                          | Memory only; no active imported markup or remote processing                                       | Marker checks in URL/history/local/session/cookies/requests/console; empty IndexedDB/Cache API; own static GETs |
+| Themes and keyboard              | Scoped workbench styles, 390/768/1440 dark/light, visible tree focus/navigation                   | Twelve screenshot scenes, no page overflow, palette/pinning and tree keyboard flows                             |
+| Existing tool regression         | Previous full Chromium suite plus new V2.1 flows                                                  | Final complete run and exact-SHA CI, recorded in progress                                                       |
+
+## Real Chromium views
+
+[SQL complex tree and selected node](../screenshots/actual/v21-explain-complex-dark-1440.png) · [SQL findings](../screenshots/actual/v21-explain-findings-dark-1440.png) · [comparison](../screenshots/actual/v21-explain-comparison-dark-1440.png) · [SQL light desktop](../screenshots/actual/v21-explain-light-1440.png) · [SQL mobile](../screenshots/actual/v21-explain-light-390.png).
+
+[SOAP namespaces](../screenshots/actual/v21-xml-namespaces-tree-dark-1440.png) · [XPath result](../screenshots/actual/v21-xml-xpath-dark-1440.png) · [structured conversion](../screenshots/actual/v21-xml-reversible-dark-1440.png) · [formatting](../screenshots/actual/v21-xml-format-light-1440.png) · [XML mobile](../screenshots/actual/v21-xml-light-390.png) · [DTD rejection](../screenshots/actual/v21-xml-dtd-error-dark-1440.png) · [worker budget](../screenshots/actual/v21-xml-worker-budget-error-dark-1440.png). Other v21-* files include both tablet themes and empty states. These are screenshots from the functioning static app, not mockups.
+
+## Measurements, findings and limits
+
+Final local gate: clean install with zero audit findings; check 0 errors/warnings; lint; 395 unit tests in 23 files; 30 prerendered tool directories; complete Chromium suite 45 passed, 2 historical remote audits skipped, no flaky/unexpected tests. The final source is frozen at this gate. Exact public commit/CI/preview verification follows in progress and the delivery message.
+
+[Raw measurements](../screenshots/actual/v21-performance.json) include exact source bytes, driver wall time and rendered-row count. The measure includes file handling, worker startup, processing, serialization and a UI assertion; it is not pure parser time or FPS. The expensive XPath case proves worker termination while main-thread heartbeat advances, followed by successful retry/cancel/reset. Small fixtures are synthetic Spring/PostgreSQL orders/customer JOINs and SOAP documents, not production customer data.
+
+Fixed during this implementation: permissive dependency handling of forbidden XML characters, duplicate expanded attributes, bare entity references and CDATA terminators in ordinary text; all now have rejecting lexical checks and regressions. A visually oversized editor was corrected by scoped flex sizing. CodeMirror's virtual DOM is not used as a full-output oracle: clipboard/download bytes are verified. Windows clipboard newline normalization is distinguished from file bytes.
+
+P0/P1: no known unresolved issue in the verified scope; final release decision requires the final gates below. P2: broader PostgreSQL version/text/XML conformance corpora and dedicated Firefox/WebKit/assistive-technology QA. Text subset limitations and rejected XML1.1/alternate encodings are explicit. No universal conformance/performance, XSD, XSLT, remote query execution or production-optimization guarantee is claimed.
+
+Final decision / exact commit / CI / preview: see [GOAL_PROGRESS_V21.md](../GOAL_PROGRESS_V21.md). A successful Cloudflare deployment is reported separately from an actual normal-TLS public smoke. No main merge is authorized by this report.

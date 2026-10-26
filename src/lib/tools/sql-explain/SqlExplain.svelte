@@ -87,6 +87,7 @@
 				parent: n.parent,
 				depth: n.depth,
 				label: n.type + (n.relation ? ' · ' + n.relation : ''),
+				search: n.index ?? '',
 				branch: !!n.children.length,
 				detail:
 					mode === 'cost'
@@ -149,9 +150,11 @@
 	}
 	async function load(file: File | undefined, side = false) {
 		const current = ++fileTicket;
+		const snapshot = side ? after : input;
 		try {
 			const text = await readDiagnosticFile(file);
-			if (current !== fileTicket || text === undefined) return;
+			if (current !== fileTicket || text === undefined || snapshot !== (side ? after : input))
+				return;
 			if (side) after = text;
 			else input = text;
 		} catch (e) {
@@ -159,7 +162,12 @@
 		}
 	}
 	const value = (n: number | undefined, suffix = '') =>
-		n === undefined ? '—' : n.toLocaleString('en-US', { maximumFractionDigits: 3 }) + suffix;
+		n === undefined
+			? '—'
+			: n.toLocaleString('en-US', {
+					maximumFractionDigits: 3,
+					notation: Math.abs(n) >= 1e9 ? 'scientific' : 'standard'
+				}) + suffix;
 </script>
 
 <div class="diagnostic-workspace">
@@ -278,6 +286,26 @@
 				<dd>{value(summary.loops)}</dd>
 			</div>
 		</dl>
+		<div class="tool-options diagnostic-note" aria-label="Root buffers and worker observations">
+			<span
+				title="Original root counters include descendant activity; do not add counters from other nodes."
+				>Root inclusive blocks · shared hit/read: {value(
+					summary.rootBuffers['Shared Hit Blocks'] as number | undefined
+				)} / {value(summary.rootBuffers['Shared Read Blocks'] as number | undefined)} · temp read/write:
+				{value(summary.rootBuffers['Temp Read Blocks'] as number | undefined)} / {value(
+					summary.rootBuffers['Temp Written Blocks'] as number | undefined
+				)}</span
+			>
+			{#each summary.workers.slice(0, 4) as worker (worker.node)}<span
+					>Workers planned/launched ({worker.node}): {value(worker.planned)} / {value(
+						worker.launched
+					)}</span
+				>{/each}
+			{#if !summary.workers.length}<span>Worker counts: not collected.</span
+				>{:else if summary.workers.length > 4}<span
+					>{summary.workers.length - 4} more worker contexts; inspect nodes.</span
+				>{/if}
+		</div>
 		{#if view === 'plan'}
 			<div class="tool-options">
 				<label
@@ -436,6 +464,7 @@
 								parent: n.parent,
 								depth: n.depth,
 								label: n.type + (n.relation ? ' · ' + n.relation : ''),
+								search: n.index ?? '',
 								detail: `cost ${metric(n.raw, 'Total Cost') ?? '—'} · time ${metric(n.raw, 'Actual Total Time') ?? '—'} ms/loop`,
 								branch: !!n.children.length
 							}))}

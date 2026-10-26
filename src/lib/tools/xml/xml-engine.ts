@@ -40,6 +40,7 @@ export type XmlRow = {
 	depth: number;
 	label: string;
 	detail: string;
+	search: string;
 	branch: boolean;
 	path: string;
 	value: string;
@@ -61,6 +62,24 @@ function validCharacters(s: string) {
 			(c >= 0x10000 && c <= 0x10ffff)
 		))
 			fail('XML contains a character forbidden by XML 1.0.');
+	}
+}
+function entityEnd(text: string, start: number) {
+	const end = text.indexOf(';', start + 1);
+	if (end < 0) fail('XML entity references must end with a semicolon.');
+	const name = text.slice(start + 1, end);
+	if (['amp', 'lt', 'gt', 'apos', 'quot'].includes(name)) return end;
+	if (!/^#(?:[0-9]+|x[0-9a-fA-F]+)$/.test(name))
+		fail('Only predefined XML entities and valid character references are allowed.');
+	const code = name[1] === 'x' ? parseInt(name.slice(2), 16) : parseInt(name.slice(1), 10);
+	if (code > 0x10ffff) fail('Invalid XML character reference.');
+	validCharacters(String.fromCodePoint(code));
+	return end;
+}
+function attributeReferences(text: string) {
+	for (let i = 0; i < text.length; i++) {
+		if (text[i] === '<') fail('Literal < is forbidden in XML attributes.');
+		if (text[i] === '&') i = entityEnd(text, i);
 	}
 }
 const boundedValue = (s: string) => {
@@ -96,7 +115,9 @@ function tagNamespacePreflight(tag: string, parent: Map<string, string>) {
 		const start = i;
 		while (i < tag.length && tag[i] !== quote) i++;
 		if (i === tag.length) fail('Unterminated XML attribute.');
-		attributes.push({ name: n, value: tag.slice(start, i) });
+		const rawValue = tag.slice(start, i);
+		attributeReferences(rawValue);
+		attributes.push({ name: n, value: rawValue });
 		i++;
 	}
 	if (attributes.length > XML_LIMITS.perElement) fail('Element exceeds 256 attributes.');
@@ -157,7 +178,12 @@ export function preflightXml(input: string) {
 		tags = 0;
 	const scopes: { scope: Map<string, string>; elementName: string }[] = [];
 	for (let i = 0; i < input.length; i++) {
-		if (input[i] !== '<') continue;
+		if (input[i] !== '<') {
+			if (input[i] === '&') i = entityEnd(input, i);
+			else if (input.startsWith(']]>', i))
+				fail('The CDATA terminator is forbidden in ordinary XML text.');
+			continue;
+		}
 		if (input.startsWith('<!--', i)) {
 			const end = input.indexOf('-->', i + 4);
 			if (end < 0) fail('Unterminated XML comment.');
@@ -585,6 +611,7 @@ export function xmlRows(doc: XmlDocument): XmlRow[] {
 			parent,
 			depth,
 			label: n.kind === 'element' ? '<' + n.name + '>' : n.kind === 'pi' ? '?' + n.target : n.kind,
+			search: v,
 			detail: v.slice(0, 240) + (v.length > 240 ? '… (truncated)' : ''),
 			branch: n.kind === 'element' && !!n.children.length,
 			path: id,
@@ -696,13 +723,25 @@ export function evaluateXPath(
 		const value =
 			n.nodeType === 2
 				? (n.nodeValue ?? '')
-				: n.nodeType === 1
+				: n.nodeType === 1 || n.nodeType === 9
 					? new importSerializer().serializeToString(n)
 					: (n.nodeValue ?? '');
 		return {
 			path: p,
 			treeId: n.nodeType === 2 ? p.split('/attribute::')[0] : p,
-			kind: String(n.nodeType),
+			kind:
+				(
+					{
+						1: 'element',
+						2: 'attribute',
+						3: 'text',
+						4: 'cdata',
+						7: 'processing-instruction',
+						8: 'comment',
+						9: 'document',
+						13: 'namespace'
+					} as Record<number, string>
+				)[n.nodeType] ?? 'node',
 			value
 		};
 	});

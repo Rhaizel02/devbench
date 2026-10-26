@@ -1,0 +1,49 @@
+{
+  "method": "Observed Chromium Playwright driver wall time: file ingestion + worker startup/parsing + serialization + UI assertion. Not pure parser time or FPS.",
+  "samples": [
+    {
+      "tool": "explain",
+      "size": "small",
+      "bytes": 438,
+      "fileAndAnalysisMs": 184,
+      "renderedRows": 1
+    },
+    {
+      "tool": "explain",
+      "size": "medium",
+      "bytes": 85931,
+      "fileAndAnalysisMs": 191,
+      "renderedRows": 200
+    },
+    {
+      "tool": "explain",
+      "size": "near-limit",
+      "bytes": 1808598,
+      "fileAndAnalysisMs": 340,
+      "renderedRows": 101
+    },
+    {
+      "tool": "xml",
+      "size": "small",
+      "bytes": 29,
+      "fileAndAnalysisMs": 167,
+      "renderedRows": 3
+    },
+    {
+      "tool": "xml",
+      "size": "medium",
+      "bytes": 33007,
+      "fileAndAnalysisMs": 210,
+      "renderedRows": 200
+    },
+    {
+      "tool": "xml",
+      "size": "near-limit",
+      "bytes": 1800124,
+      "fileAndAnalysisMs": 313,
+      "renderedRows": 19
+    }
+  ],
+  "timeoutHeartbeatTicks": 191,
+  "workerBudgetMs": 1500
+}

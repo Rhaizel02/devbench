@@ -387,6 +387,7 @@ export function explainFindings(doc: PlanDocument): Finding[] {
 		if (
 			rows !== undefined &&
 			estimated !== undefined &&
+			loops !== undefined &&
 			loops !== 0 &&
 			Math.abs(rows - estimated) >= 100 &&
 			(c.ratio === undefined ? estimated === 0 && rows > 0 : c.ratio >= 10 || c.ratio <= 0.1)
@@ -525,7 +526,17 @@ export function comparePlans(before: PlanDocument, after: PlanDocument) {
 		};
 	});
 	const signature = (n: PlanNode) =>
-		JSON.stringify([n.type, n.relation ?? null, n.index ?? null, n.children.length]);
+		JSON.stringify([
+			n.type,
+			n.relation ?? null,
+			n.index ?? null,
+			n.alias ?? null,
+			n.raw['Join Type'] ?? null,
+			n.raw.Strategy ?? null,
+			n.raw['Parent Relationship'] ?? null,
+			n.raw['Subplan Name'] ?? null,
+			n.children.length
+		]);
 	const matches = before.nodes.map((n) => {
 		const other = after.nodes.find((m) => m.id === n.id && signature(m) === signature(n));
 		return { before: n.id, after: other?.id, matched: !!other };

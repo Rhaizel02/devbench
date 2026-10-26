@@ -325,6 +325,7 @@
 			{#if result?.xpath}<h2>XPath result · {result.xpath.type}</h2>
 				{#if result.xpath.type === 'nodes'}<p>{result.xpath.matches?.length ?? 0} matches</p>
 					{#each result.xpath.matches as match (match.path)}<article class="diagnostic-finding">
+							<span class="subtle-tag">{match.kind}</span>
 							<button
 								class="text-button"
 								onclick={() => {
