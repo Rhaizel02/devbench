@@ -164,6 +164,12 @@ test('XML SOAP, conservative formatting, namespace XPath, reversible bytes, hand
 		jsonText.replace(/\r\n/g, '\n')
 	);
 	await screenshot(page, 'xml-reversible-dark-1440');
+	await page.getByRole('button', { name: 'XML → data JSON (lossy)', exact: true }).click();
+	await expect(page.getByRole('heading', { name: 'JSON result', exact: true })).toBeVisible();
+	await expect(
+		page.getByRole('button', { name: 'Use JSON result as structured input', exact: true })
+	).toHaveCount(0);
+	await page.getByRole('button', { name: 'XML → structured JSON', exact: true }).click();
 	await page
 		.getByRole('button', { name: 'Use JSON result as structured input', exact: true })
 		.click();

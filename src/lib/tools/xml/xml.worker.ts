@@ -32,7 +32,7 @@ self.onmessage = (event: MessageEvent<XmlTask>) => {
 						};
 					})()
 				: t.kind === 'structured'
-					? { output: xmlToStructured(t.input), json: true }
+					? { output: xmlToStructured(t.input), json: true, reversible: true }
 					: t.kind === 'simple'
 						? { output: xmlToSimple(t.input), json: true }
 						: t.kind === 'from-json'

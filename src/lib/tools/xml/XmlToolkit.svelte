@@ -14,6 +14,7 @@
 	type Result = {
 		output?: string;
 		json?: boolean;
+		reversible?: boolean;
 		rows?: XmlRow[];
 		stats?: ReturnType<typeof xmlStats>;
 		valid?: boolean;
@@ -392,11 +393,11 @@
 					text={result.output}
 					filename={result.json ? 'xml-conversion.json' : 'xml-output.xml'}
 					mime={result.json ? 'application/json' : 'application/xml;charset=utf-8'}
-				/><button class="button" onclick={takeOutput}
-					>{result.json
-						? 'Use JSON result as structured input'
-						: 'Use XML result as source'}</button
-				>
+				/>{#if !result.json || result.reversible}<button class="button" onclick={takeOutput}
+						>{result.json
+							? 'Use JSON result as structured input'
+							: 'Use XML result as source'}</button
+					>{/if}
 			</div>
 			{#if result.json}<SendResult source="DATA-07" text={result.output} />{/if}
 		</section>{/if}

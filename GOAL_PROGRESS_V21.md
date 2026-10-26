@@ -1,5 +1,7 @@
 # V2.1 progress
 
+Current state: all H0–H9 functionality and local acceptance are complete. Final publication/CI/HTTPS closure is performed after the last checkpoint below; the exact final SHA and CI result are supplied in the delivery message. This chronological log distinguishes earlier gates from the final commit.
+
 Branch: feature/data-diagnostics-v21
 Base: c3cd929a5aea231991973abd5744def9d13cf740
 
@@ -49,3 +51,25 @@ Final observed driver file+analysis times: SQL 184/191/340 ms (438 / 85,931 / 1,
 Open P0/P1: none known in the tested scope. P2: expanded cross-browser/assistive QA and additional PostgreSQL/XML/text conformance corpora; alternate encodings/XML1.1 rejected explicitly. Core formats, semantics and privacy have tests, without claiming universal conformance. Canvas domain/schema/persistence files are byte-unchanged from main.
 
 Next exact action: publish this tested RC checkpoint, verify its exact CI and normal-TLS Cloudflare preview, record results, and publish the closing evidence checkpoint. V2.1 stays separate from main.
+
+## Published RC code and HTTPS verification
+
+Tested product SHA: `53998d0c580dd5e30cadf56d72aa38cd2daaebdd`, pushed to feature/data-diagnostics-v21. Cloudflare's check for this exact commit reports success and immutable URL **https://b31e68b6.devbench-aw3.pages.dev**; branch alias **https://feature-data-diagnostics-v21.devbench-aw3.pages.dev**.
+
+Normal-TLS Playwright smoke on that immutable deployment **passed**, without ignoreHTTPSErrors or trust changes: HTTPS Home 200/30 available; SQL deep-link and real synthetic plan analysis/tree; XML deep-link, namespaced SOAP XPath and reversible conversion; reload clears SQL; no marker in persistence/URL/history/console/requests; only own static GETs; no failed resources or page errors. Evidence: screenshots/actual/v21-preview-check.json and two actual preview PNGs. Reusable script scripts/verify-v21-preview.mjs supports an ignored evidence directory for subsequent final-commit verification without rewriting committed source evidence.
+
+Exact RC code CI run **40304335704** is being verified before the closing evidence commit. Product source remains frozen; remaining changes are reports/preview evidence and the independently exercised smoke script. Final documentation SHA and its own CI/public smoke will be checked after publication and supplied in the delivery message. Main remains c3cd929… and Canvas 2.0 remains a289fcf…; no merges.
+
+## Closing review and final source gate
+
+RC checkpoint `53998d0c580dd5e30cadf56d72aa38cd2daaebdd` exact CI [40304335704](https://github.com/Rhaizel02/devbench/actions/runs/40304335704) completed/success. Decoded job 121509604624 confirms 395 units, 45 Chromium passes / 2 skipped historical remote audits. Its browser preparation was slow; no TLS bypass, test omission or falsely green status was used.
+
+Final review then made two small, necessary corrections: the explicitly lossy XML projection no longer offers the incompatible reversible-input action; reindentation now recognizes only XML whitespace (TAB/LF/CR/SPACE), preserving NBSP/EM SPACE as significant mixed text. The latter fixes a real data-integrity edge case under opt-in layout. Added regression covers literal and character-reference NBSP. No Canvas data or schema changed. Dependency MIT notices ship as own static resources.
+
+Final local source gate after those corrections: check **0 errors / 0 warnings**, lint, **396 units / 23 files**, build, and all **four V2.1 Chromium flows pass** (20.1s). The full **45-pass / 2-skip** suite also passed after the lossy-action guard; after the pure whitespace correction, risk-specific unit/browser flows were rerun and the exact final published CI reruns the complete suite. A clean npm ci already passed with the unchanged lockfile. These distinctions avoid attributing an earlier gate to untested code.
+
+Reports and machine evidence: docs/DATA_DIAGNOSTICS_V21_ACCEPTANCE.md, docs/SQL_EXPLAIN_V21.md, docs/XML_TOOLKIT_V21.md, screenshots/actual/v21-validation.json, v21-performance.json and v21-responsive-privacy.json. Current observed times/bytes are in the raw performance file; previous numeric observations above are historical samples, not universal claims. XML worker final build: 178,887 bytes / 53,796 gzip; SQL: 12,257 / 5,096. Screenshots reviewed in both themes at desktop and mobile; tablet/no-overflow matrix passes.
+
+Open P0/P1: **none known after the fixes**. P2 remains expanded PostgreSQL/text/XML conformance and dedicated cross-browser/assistive QA; unsupported encodings/XML1.1/XSD/XSLT are explicit. All 30 entries are available. Main and Canvas 2.0 branch remain unchanged.
+
+Final operational closure: commit/push this checkpoint, verify its exact GitHub Actions result and normal-TLS immutable Cloudflare deployment, run scripts/verify-v21-preview.mjs with V21_EVIDENCE_DIR=work/v21-final-public (including downloaded Unicode whitespace bytes), confirm a clean tree and leave the RC unmerged. GO for human RC review only after those checks pass; the delivery binds the final SHA, CI and URL. No new functionality remains to implement.

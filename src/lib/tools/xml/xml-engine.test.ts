@@ -91,6 +91,11 @@ describe('strict inert XML', () => {
 		expect(formatXml(s, 4, true)).toContain('\n    <a/>');
 		expect(minifyXml('<r> <a/> </r>')).toBe('<r> <a/> </r>');
 	});
+	it('preserves non-XML Unicode whitespace as significant mixed text when reindenting', () => {
+		const s = '<r>\u00a0<a/>\u2003<b/>\u00a0</r>';
+		expect(formatXml(s, 4, true)).toBe(s);
+		expect(formatXml('<r>&#160;<a/></r>', 2, true)).toBe('<r>\u00a0<a/></r>');
+	});
 	it('preserves numeric character data and XML1.0 line rules', () => {
 		const s = '<r a="&#9;&#10;&#13;">&#13;\u0085\u2028</r>';
 		expect(equivalentXml(parseXml(s), parseXml(minifyXml(s)))).toBe(true);

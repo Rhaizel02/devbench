@@ -9,11 +9,11 @@
     "warnings": 0
   },
   "lint": "passed",
-  "unitTests": 395,
+  "unitTests": 396,
   "staticToolDirectories": 30,
   "browser": {
-    "startTime": "2026-10-26T09:57:53.616Z",
-    "duration": 127099.002,
+    "startTime": "2026-10-26T10:14:57.879Z",
+    "duration": 126254.981,
     "expected": 45,
     "skipped": 2,
     "unexpected": 0,
@@ -26,17 +26,18 @@
       "gzipBytes": 5096
     },
     {
-      "name": "xml.worker-COwKEr5w.js",
-      "bytes": 178859,
-      "gzipBytes": 53780
+      "name": "xml.worker-DFOdfCrN.js",
+      "bytes": 178887,
+      "gzipBytes": 53796
     }
   ],
   "canvasDomainChanged": false,
-  "contractCharacters": 35519,
+  "contractCharacters": 36313,
   "privacyEvidence": "v21-responsive-privacy.json",
   "performanceEvidence": "v21-performance.json",
   "limitations": [
     "Two explicitly remote historical production audits skipped; this local suite is not a production audit.",
     "Chromium only; no WCAG or universal XML/PostgreSQL conformance claim."
-  ]
+  ],
+  "finalXmlRegression": "Non-XML Unicode whitespace preserved even under explicit reindentation; all 4 V2.1 flows rerun after this pure formatter fix."
 }

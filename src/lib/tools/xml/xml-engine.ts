@@ -328,6 +328,7 @@ const textEscape = (value: string) =>
 	value.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/\r/g, '&#13;');
 const attrEscape = (value: string) =>
 	textEscape(value).replace(/"/g, '&quot;').replace(/\n/g, '&#10;').replace(/\t/g, '&#9;');
+const xmlWhitespace = (value: string) => /^[\t\n\r ]*$/.test(value);
 function writeNode(
 	n: XmlNode,
 	indent: number,
@@ -350,9 +351,9 @@ function writeNode(
 		reindent &&
 		!preserve &&
 		n.children.some((c) => c.kind === 'element') &&
-		!n.children.some((c) => c.kind === 'cdata' || (c.kind === 'text' && c.value.trim().length > 0));
+		!n.children.some((c) => c.kind === 'cdata' || (c.kind === 'text' && !xmlWhitespace(c.value)));
 	const children = layout
-		? n.children.filter((c) => c.kind !== 'text' || c.value.trim())
+		? n.children.filter((c) => c.kind !== 'text' || !xmlWhitespace(c.value))
 		: n.children;
 	const body = children.map((c) => writeNode(c, indent, reindent, depth + 1, preserve));
 	return (

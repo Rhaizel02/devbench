@@ -1,0 +1,16 @@
+{
+  "url": "https://b31e68b6.devbench-aw3.pages.dev",
+  "expectedSha": "53998d0c580dd5e30cadf56d72aa38cd2daaebdd",
+  "tlsBypass": false,
+  "passed": true,
+  "checks": [
+    "HTTPS home 200; 30 available entries",
+    "SQL deep link, real synthetic plan analysis and tree",
+    "XML deep link, namespace XPath and reversible SOAP conversion",
+    "reload clears SQL; no marker in persistence/URL/history/console/requests; own static GETs only"
+  ],
+  "errors": [],
+  "failedRequests": [],
+  "leaks": [],
+  "externalRequests": []
+}
