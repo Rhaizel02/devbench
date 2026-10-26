@@ -40,6 +40,10 @@ test('Pipeline V2 actual configuration-only import/export, reorder/disable, byte
 	expect(await readFile((await (await out).path())!, 'utf8')).toBe(
 		marker.toLowerCase() + ' dataset'
 	);
+	await page
+		.getByRole('button', { name: 'Drag step 3', exact: true })
+		.dragTo(page.locator('.pipeline-step').nth(3));
+	await expect(page.getByLabel('Step 4 operation', { exact: true })).toHaveValue('text-replace');
 	await page.locator('.recipe-configuration summary').click();
 	await page.getByLabel('Recipe name', { exact: true }).fill('Synthetic fixture recipe');
 	const dl = page.waitForEvent('download');

@@ -1,6 +1,14 @@
 # DevBench
 
-**V2.2 integration branch — in verification:** feature/canvas-workflow-v22 combines Data Diagnostics V2.1 and Canvas 2.0 with their normal merge history. The registry contains 30 entries; no new UX/workflow features are claimed until their checkpoints pass. Main and the original RC branches remain unchanged. Current contract and gates: [V2.2 progress](GOAL_PROGRESS_V22.md). The following RC snapshots preserve historical counts, scope and branch states.
+## V2.2 RC — Canvas experience and workflow studio
+
+Review branch: feature/canvas-workflow-v22. Normal merge preserves both Canvas2.0 and Data DiagnosticsV2.1 histories; **30 available tools**. Main and both source RC branches are unchanged; this RC must not be merged without acceptance.
+
+- **Canvas2.1:** intersecting box selection (B also supports touch), atomic groups/multi-style mixed states, actual native scene layering, direct midpoint bending and viewport Focus with a collapsible left desktop inspector. Schema3 and v1/v2/v3 backups remain compatible; only Canvas persists documents.
+- **PipelineV2:** ordered/duplicate/enabled steps, accessible reorder plus drag/drop, configuration-only versioned recipe import/export, five built-ins, text/literal/JSONPath/XML operations, real cancellation and bounded intermediate inspection.
+- **Test DataV2:** editable scalar schemas, seeded fixtures, five presets, related one-to-many collections with validated foreign keys, bounded JSON/page/CSV, formula-protected CSV. Lorem and standalone cryptographic GTIN functionality remain.
+
+Reports: [Canvas audit](docs/CANVAS_UX_AUDIT_V22.md), [acceptance](docs/CANVAS_UX_V22_ACCEPTANCE.md), [Pipeline](docs/PIPELINE_V2.md), [datasets](docs/TEST_DATA_V2.md), [release progress](GOAL_PROGRESS_V22.md). Screenshots use screenshots/actual/v22-*. Final controls/CI and immutable preview are recorded in progress; do not infer final approval from historical reports below.
 
 **V2.1 RC — Data Diagnostics: 30 available entries**, on `feature/data-diagnostics-v21`, based on OpenAPI-integrated main `c3cd929a5aea231991973abd5744def9d13cf740`. Canvas remains V1.4; Canvas 2.0 is not merged and its domain/IndexedDB/backups are untouched. The sections below describe historical releases and their then-current branch states.
 

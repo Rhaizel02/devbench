@@ -134,6 +134,58 @@ test('V2.2 To front/back changes real pixels, native hit-testing, history and sa
 	await page.reload();
 	await expect(page.locator('[data-save-state="saved"]')).toBeVisible();
 	await expect.poll(pixel).toEqual([220, 236, 249, 255]);
+	// Cross-type native order: a clean connector, a two-figure group and a decoded local raster.
+	await page.getByRole('button', { name: 'Line', exact: true }).click();
+	await drag(page, 120, 260, 480, 260);
+	await page.getByRole('button', { name: 'Toggle properties', exact: true }).click();
+	await page.getByLabel('Sketch intensity', { exact: true }).selectOption('0');
+	await page.getByLabel('Stroke width', { exact: true }).selectOption('8');
+	await page.getByRole('button', { name: 'Stroke #20bfa9', exact: true }).click();
+	await expect.poll(pixel).toEqual([32, 191, 169, 255]);
+	await page.getByRole('button', { name: 'To back', exact: true }).click();
+	await expect.poll(pixel).toEqual([220, 236, 249, 255]);
+	await page.getByRole('button', { name: 'To front', exact: true }).click();
+	await expect.poll(pixel).toEqual([32, 191, 169, 255]);
+	await page.getByRole('button', { name: 'Close properties', exact: true }).click();
+	await click(page, 160, 220);
+	await page.keyboard.down('Shift');
+	await click(page, 360, 300);
+	await page.keyboard.up('Shift');
+	await page.getByRole('button', { name: 'Group selection', exact: true }).click();
+	await page.getByRole('button', { name: 'Toggle properties', exact: true }).click();
+	await page.getByRole('button', { name: 'To front', exact: true }).click();
+	await expect.poll(pixel).toEqual([220, 236, 249, 255]);
+	await page.getByRole('button', { name: 'To back', exact: true }).click();
+	await expect.poll(pixel).toEqual([32, 191, 169, 255]);
+	await page.getByRole('button', { name: 'Close properties', exact: true }).click();
+	const raster = JSON.parse(
+		await readFile('src/lib/canvas/fixtures/local-rasters.json', 'utf8')
+	)[0];
+	const imageUpload = page.getByLabel('Insert local image', { exact: true });
+	await imageUpload.setInputFiles({
+		name: 'local.png',
+		mimeType: 'image/png',
+		buffer: Buffer.from(raster.data, 'base64')
+	});
+	await expect(page.locator('[data-save-state="saved"]')).toBeVisible();
+	const imageProject = await json(page),
+		d = imageProject.diagrams[0],
+		image = d.elements.find((e) => e.kind === 'image')!,
+		v = d.viewport;
+	await drag(
+		page,
+		v.x + (image.x + image.width / 2) * v.zoom,
+		v.y + (image.y + image.height / 2) * v.zoom,
+		280,
+		260
+	);
+	const imagePixel = await pixel();
+	expect(imagePixel).not.toEqual([32, 191, 169, 255]);
+	await page.getByRole('button', { name: 'Toggle properties', exact: true }).click();
+	await page.getByRole('button', { name: 'To back', exact: true }).click();
+	await expect.poll(pixel).toEqual([32, 191, 169, 255]);
+	await page.getByRole('button', { name: 'To front', exact: true }).click();
+	await expect.poll(pixel).toEqual(imagePixel);
 });
 test('V2.2 bend a straight anchored arrow on its visible midpoint, move nodes and preserve reload/export', async ({
 	page

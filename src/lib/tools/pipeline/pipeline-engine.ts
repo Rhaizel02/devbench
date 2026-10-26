@@ -48,19 +48,19 @@ export function runPipeline(
 ): PipelineResult {
 	assertTextLimit(input);
 	if (steps.length < 1 || steps.length > 8) throw new ToolError('Choose 1–8 pipeline steps.');
-	validateSteps(steps);
 	const results: StepResult[] = [];
 	let value = input;
 	let cumulative = new TextEncoder().encode(input).length;
 	for (const [index, step] of steps.entries()) {
-		if (step.enabled === false) {
-			results.push({ operation: step.operation, status: 'skipped' });
-			continue;
-		}
-		onProgress?.(index);
 		try {
 			if (!Object.hasOwn(operations, step.operation))
 				throw new ToolError('Unsupported pipeline operation.');
+			validateSteps([step]);
+			if (step.enabled === false) {
+				results.push({ operation: step.operation, status: 'skipped' });
+				continue;
+			}
+			onProgress?.(index);
 			switch (step.operation) {
 				case 'base64-encode':
 					value = encodeBase64(value, { urlSafe: step.urlSafe, padding: step.padding ?? true });

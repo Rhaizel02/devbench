@@ -1,8 +1,14 @@
 # DevBench — Roadmap
 
-## V2.2 integration baseline — in verification
+## V2.2 RC — Canvas experience and workflow studio
 
-The new feature/canvas-workflow-v22 branch combines Data Diagnostics V2.1 and Canvas 2.0, keeping thirty registry entries. Current integration/UX/workflow acceptance is tracked in GOAL_PROGRESS_V22.md. Main and original RC branches are not changed; no V2.2 functionality is claimed by the historical sections below.
+Review branch: feature/canvas-workflow-v22. Normal merge preserves both Canvas2.0 and Data DiagnosticsV2.1 histories; **30 available tools**. Main and both source RC branches are unchanged; this RC must not be merged without acceptance.
+
+- **Canvas2.1:** intersecting box selection (B also supports touch), atomic groups/multi-style mixed states, actual native scene layering, direct midpoint bending and viewport Focus with a collapsible left desktop inspector. Schema3 and v1/v2/v3 backups remain compatible; only Canvas persists documents.
+- **PipelineV2:** ordered/duplicate/enabled steps, accessible reorder plus drag/drop, configuration-only versioned recipe import/export, five built-ins, text/literal/JSONPath/XML operations, real cancellation and bounded intermediate inspection.
+- **Test DataV2:** editable scalar schemas, seeded fixtures, five presets, related one-to-many collections with validated foreign keys, bounded JSON/page/CSV, formula-protected CSV. Lorem and standalone cryptographic GTIN functionality remain.
+
+Reports: [Canvas audit](docs/CANVAS_UX_AUDIT_V22.md), [acceptance](docs/CANVAS_UX_V22_ACCEPTANCE.md), [Pipeline](docs/PIPELINE_V2.md), [datasets](docs/TEST_DATA_V2.md), [release progress](GOAL_PROGRESS_V22.md). Screenshots use screenshots/actual/v22-*. Final controls/CI and immutable preview are recorded in progress; do not infer final approval from historical reports below.
 
 
 ## V2.1 Data Diagnostics RC

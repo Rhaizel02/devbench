@@ -6,6 +6,7 @@
 		operations,
 		pipelineRecipe,
 		parseRecipe,
+		validateSteps,
 		exportRecipe,
 		type PipelineStep,
 		type PipelineResult,
@@ -136,6 +137,7 @@
 		preview = null;
 		running = true;
 		try {
+			validateSteps($state.snapshot(steps));
 			pending = startPipeline(text, $state.snapshot(steps), (index) => (activeStep = index));
 			const result = await pending.promise;
 			report = result;
@@ -311,7 +313,7 @@
 									bind:value={step.replacement}
 									maxlength="2048"
 								/></label
-							>{/if}{#if step.operation === 'json-format' || step.operation === 'xml-format'}<label
+							>{/if}{#if step.operation === 'json-format'}<label
 								>Indent <select
 									aria-label={'Step ' + (index + 1) + ' indent'}
 									bind:value={step.indent}

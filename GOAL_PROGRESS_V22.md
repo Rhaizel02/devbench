@@ -5,31 +5,31 @@ Starting Data Diagnostics SHA: c180ad5e703c24560035a32ded6f17c8a6b5cbfc
 Canvas merge source: a289fcfd9f54e35e0cd60b8c6a3123cbe88457d2
 Main (must not change): c3cd929a5aea231991973abd5744def9d13cf740
 
-| Milestone                     | State       | Evidence |
-| ----------------------------- | ----------- | -------- |
-| H0 contract/integration       | In progress |          |
-| H1 UX reproduction            | Pending     |          |
-| H2 marquee                    | Pending     |          |
-| H3 visual layers              | Pending     |          |
-| H4 direct connector bending   | Pending     |          |
-| H5 immersive mode             | Pending     |          |
-| H6 contextual/mixed inspector | Pending     |          |
-| H7 provenance                 | Pending     |          |
-| H8 UX audit                   | Pending     |          |
-| H9 backup compatibility       | Pending     |          |
-| H10 Pipeline V2               | Pending     |          |
-| H11 structured Test Data      | Pending     |          |
-| H12 joint visual review       | Pending     |          |
-| H13 complete quality          | Pending     |          |
-| H14 privacy/security          | Pending     |          |
-| H15 published evidence        | Pending     |          |
-| H16 final acceptance          | Pending     |          |
+| Milestone                     | State                        | Evidence                            |
+| ----------------------------- | ---------------------------- | ----------------------------------- |
+| H0 contract/integration       | Complete                     | cf916ab, CI40412271206 green        |
+| H1 UX reproduction            | Implemented/verified locally | Checkpoints below; final CI pending |
+| H2 marquee                    | Implemented/verified locally | Checkpoints below; final CI pending |
+| H3 visual layers              | Implemented/verified locally | Checkpoints below; final CI pending |
+| H4 direct connector bending   | Implemented/verified locally | Checkpoints below; final CI pending |
+| H5 immersive mode             | Implemented/verified locally | Checkpoints below; final CI pending |
+| H6 contextual/mixed inspector | Implemented/verified locally | Checkpoints below; final CI pending |
+| H7 provenance                 | Implemented/verified locally | Checkpoints below; final CI pending |
+| H8 UX audit                   | Local pass                   |                                     |
+| H9 backup compatibility       | Implemented/verified locally | Checkpoints below; final CI pending |
+| H10 Pipeline V2               | Implemented/verified locally | Checkpoints below; final CI pending |
+| H11 structured Test Data      | Implemented/verified locally | Checkpoints below; final CI pending |
+| H12 joint visual review       | Local pass                   |                                     |
+| H13 complete quality          | Local pass                   |                                     |
+| H14 privacy/security          | Local pass                   |                                     |
+| H15 published evidence        | Pending                      |                                     |
+| H16 final acceptance          | Pending                      |                                     |
 
 First authoritative audit: clean tree on c180ad5; remote heads match supplied references; no V2.2 branch existed. Full attached contract read and preserved literally. No product tests claimed yet.
 
-Next exact action: commit this contract checkpoint, merge origin/feature/architecture-canvas-v20 normally, inspect/resolve every conflict, read the merged architecture/design/reports and prove a 30-entry baseline before UX work. No main/original RC branch modification or force push.
+Initial next action (now completed): commit this contract checkpoint, merge origin/feature/architecture-canvas-v20 normally, inspect/resolve every conflict, read the merged architecture/design/reports and prove a 30-entry baseline before UX work. No main/original RC branch modification or force push.
 
-P0/P1: none assessed yet. P2: historical reports retained; new audit findings will be recorded with evidence.
+Initial issue state: not yet assessed. Current findings and acceptance gates are recorded in the latest checkpoint below.
 
 ## H0 merge preparation
 
@@ -74,3 +74,25 @@ Pipeline checkpoint3e632f8f7fb24972f73078393bf6c59aa66660fb pushed. Dataset engi
 Canvas checkpoint5d2240d CI40414564308 stopped at Prettier for tests/canvas-v22.spec.ts (appended hierarchy test was not formatted before that commit). Formatting is corrected in this next checkpoint; no force/rewrite or relaxed tests. Final exact-SHA CI remains mandatory. Integration cf916ab CI remains green. Added explicit touch Box select returning to Select after release; verification follows in final suite.
 
 Next: complete joint acceptance/documentation/privacy review, clean install/check/lint/unit/build/fullPlaywright, fix real regressions, publish RC and verify exact CI/Cloudflare HTTPS. Main and original RC branches must stay unchanged. No known data-loss/privacy P0/P1; RC not declared complete.
+
+## Final local release gate in progress
+
+All four V2.2 Canvas browser acceptance flows now pass, including real cross-type pixel ordering for figures, connectors, groups and decoded local image; touch Box select returns to Select after release. Hierarchy/focus cleanup passes. Dataset and Pipeline browser flows pass; original Canvas and connected workflow regressions passed selectively. Next exact action: clean install, check, full lint,479 expected unit cases, static build and full Playwright; correct any failures, finalize matrix/screenshots, publish and wait for exact final CI/HTTPS. This entry is not a completed-release claim.
+
+## Checkpoint F — complete local acceptance
+
+Dataset checkpoint1b35c22f1c826934f02d801ce88f7b4ae4932bff is published. Its CI40415824453 reached unit tests and found one real legacy contract regression: unsupported Pipeline operation threw instead of returning a failed-step report. Fixed in engine without changing/relaxing the old assertion; UI and recipe import still validate the full configuration before worker execution. Full local unit suite now479/479 (31 files). Prettier also exhibited a non-idempotent method-chain print in the Canvas test; extracted the upload locator, formatted and checked the result. No blanket retries/config relaxation.
+
+Clean npm ci260packages/261audited/zero vulnerabilities; check0errors/0warnings; full lint passed; full479units passed; static build passed; complete Chromium suite59passed/2historical production audits explicitly skipped (61 configured),3.5min. Tests cover all30 tools, OpenAPI/HTTP redaction, SQL/XML, backups v1/v2/v3, immutable originals/CAS/quota rescue, hierarchy/deep duplication, new Canvas interactions and actual exports, recipes/worker cancellation and structured datasets/privacy. Logs work/v22-final-*.log. Last small review removes an irrelevant XML indentation control (conservative text-preserving serialization) and adds an actual native HTML drag/drop assertion; relevant rebuild/check/lint/Pipeline retest is in progress and exact CI will repeat the full suite.
+
+Visual review inspected actual Canvas desktop/390dark/768light, dataset schema/390light, Pipeline1440light/390dark. Captures now clear focus/scroll offset. No major page overflow. Hatch labels, compact fields and desktop step/results layout corrected based on real images. New performance evidence: v22-canvas-performance.json and v22-dataset-performance.json, driver-inclusive only. Historical regenerated evidence restored. Domain model/serializer/persistence compare identical to original Canvas2; mainc3cd929, Canvasa289fcf and DataDiagnosticsc180ad5 were reverified by ls-remote unchanged.
+
+P0/P1 open: none observed after these corrections. P2: physical touch/stylus/assistive and expanded browsers; bounded curve/ellipse selection sampling; viewport Focus rather than native browser fullscreen; flat groups; conservative XML may retain indentation; CSV formula protection changes spreadsheet-like cell text; no automatic recipe/template persistence. Details/matrix in docs/CANVAS_UX_V22_ACCEPTANCE.md.
+
+Next exact action: publish the RC source/evidence checkpoint after relevant Pipeline drag/drop retest, wait for exact SHA CI, obtain Cloudflare immutable URL from its check and verify normal-TLS HTTPS interactions and build SHA. Only then record external acceptance and finish with clean published tree. No merge main.
+
+## RC publication checkpoint
+
+Relevant final review completed: check0/0, full lint, static rebuild and2/2 Pipeline browser flows passed, including actual native drag/drop, accessible reorder, recipe bytes and cancellation. The complete suite immediately preceding that small UI/test refinement passed59/59 with2 historical remote audits skipped; exact published CI will rebuild and repeat everything against this final source. Application source is now frozen for remote acceptance.
+
+Next: push this RC, record its exact CI/Cloudflare checks, run real HTTPS source validation, then commit only the observed remote evidence and wait for final artifact-commit CI. This is the ordinary verification/evidence checkpoint, not additional product scope.

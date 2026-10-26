@@ -10,7 +10,7 @@ Load recipe shows its actual steps and keeps the current input. Load synthetic e
 
 ## Operations and execution
 
-All previous Base64/URL/JSON/YAML/boundedJSONPath operations remain. New trim, upper/lower, literal replacement (no regex), optional single-match JSONPath unwrapping and safe XML format/conservative minify reuse existing engines. XML preserves text and rejects DTD/entities; this is not XSD validation. Replacement predicts UTF-8 output expansion before allocating it. Text options≤2048characters. No shell/JS/network/SQL.
+All previous Base64/URL/JSON/YAML/boundedJSONPath operations remain. New trim, upper/lower, literal replacement (no regex), optional single-match JSONPath unwrapping and safe XML format/conservative minify reuse existing engines. XML format/minify conservatively normalize syntax while preserving all text; they can produce identical output and do not offer a misleading indentation control. XML rejects DTD/entities; this is not XSD validation. Replacement predicts UTF-8 output expansion before allocating it. Text options≤2048characters. No shell/JS/network/SQL.
 
 One worker owns a structured-clone snapshot. A step reports active/success/failed/skipped/not-run. Disabled steps pass the preceding successful value through. First failure prevents final output and subsequent execution. Editing source/configuration cancels an active worker and invalidates results; no stale output is copyable. Explicit intermediate previews stay within the existing budgets.1MiB source and each output,4MiB cumulative,1.5second terminating deadline. Errors do not log payloads.
 
@@ -19,3 +19,5 @@ One worker owns a structured-clone snapshot. A step reports active/success/faile
 `pipeline-v2.test.ts`:15 focused cases for old/new actual recipes, disabled status, configuration allowlist, hostile import, literal Unicode, JSONPath unwrapping, XML rejection and budgets. `tests/pipeline-v2.spec.ts`:real editor input, preserved-source recipe load, duplicate/reorder/disable, exact clipboard/download bytes, recipe file roundtrip without payload, invalid import rollback, reset/reload/privacy, actual worker cancellation and error recovery. Three existing connected-workflow/handoff browser flows also passed. Current local browser checkpoint:5/5. Final responsive evidence and exact CI are tracked in GOAL_PROGRESS_V22.md.
 
 P2: linear only; no branches/loops/custom scripting, recipe auto-save or remote registry. Native HTML drag/drop supplements keyboard controls; physical touch drag/drop is not certified. Limits are intentional.
+
+The complete479-case unit suite exposed a legacy error-contract regression: an unsupported operation threw before producing a per-step report. The engine again returns a failed step with the existing error wording; recipe import and UI still prevalidate the complete configuration before running. The original regression assertion was retained and now passes.

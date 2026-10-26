@@ -1,8 +1,8 @@
 {
   "kind": "Observed Playwright click-to-enabled end-to-end latency; not pure generation/FPS",
   "milliseconds": {
-    "20": 86,
-    "1000": 160,
-    "5000": 143
+    "20": 80,
+    "1000": 142,
+    "5000": 155
   }
 }
