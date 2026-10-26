@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { onMount } from 'svelte';
+	import { useAppState } from '#lib/state/app.svelte.js';
 	import { ArrowLeftRight, RotateCcw, FlaskConical } from '@lucide/svelte';
 	import CodeEditor from '#lib/components/CodeEditor.svelte';
 	import OutputActions from '#lib/components/OutputActions.svelte';
@@ -6,6 +8,10 @@
 	import { errorMessage, previewJson } from '../tool-errors';
 	let left = $state('');
 	let right = $state('');
+	const app = useAppState();
+	onMount(() => {
+		left = app.consumePaste('DATA-02')?.text ?? left;
+	});
 	let result = $state<{ left: string; right: string; comparison: JsonDiffResult } | null>(null);
 	let error = $state('');
 	let failedLeft = $state('');

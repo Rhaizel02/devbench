@@ -8,6 +8,7 @@
 	let error = $state('');
 	let errorFor = $state<string | null>(null);
 	const targets = $derived(text === null ? [] : handoffTargets(source, text));
+	const oversized = $derived(text !== null && new TextEncoder().encode(text).length > 1024 * 1024);
 	async function send(id: string) {
 		const snapshot = text;
 		const target =
@@ -37,7 +38,5 @@
 		>{#each targets as target (target.id)}<button class="button" onclick={() => send(target.id)}
 				>{target.name}</button
 			>{/each}<span class="tool-help">One transfer, in memory only.</span>
-	</div>{:else if text !== null && text.length > 1024 * 1024}<p class="tool-help">
-		Result exceeds the 1 MiB transfer limit.
-	</p>{/if}
+	</div>{:else if oversized}<p class="tool-help">Result exceeds the 1 MiB transfer limit.</p>{/if}
 {#if errorFor === text && error}<p role="alert" class="parse-error">{error}</p>{/if}

@@ -1,0 +1,4 @@
+export const xmlSample =
+	'<?xml version="1.0" encoding="UTF-8"?>\n<orders xmlns="urn:devbench:orders"><order id="001"><customer>Zoë &amp; Co</customer><total currency="EUR">42.50</total></order><order id="002"><customer>李</customer><total currency="EUR">17.00</total></order></orders>';
+export const soapSample =
+	'<?xml version="1.0"?>\n<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" xmlns:o="urn:devbench:orders"><soap:Header><o:Request id="synthetic-001"/></soap:Header><soap:Body><o:Orders><o:Order id="001" status="paid"><o:Customer>Zoë</o:Customer><o:Note xml:space="preserve"> Keep  spacing </o:Note><o:Description>Ship <o:Emphasis>carefully</o:Emphasis> today.</o:Description><o:Raw><![CDATA[<synthetic>&literal]]></o:Raw></o:Order><o:Order id="002" status="pending"><o:Customer>李</o:Customer></o:Order></o:Orders></soap:Body></soap:Envelope>';

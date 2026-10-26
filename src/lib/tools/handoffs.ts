@@ -1,10 +1,35 @@
 import { listedTools } from './tool-registry';
 import { boundedJson } from './json-query/query-engine';
 import { importCurl, buildRequest } from './http-request/http-engine';
+import { validateJson } from './json-studio/json-engine';
 export function handoffTargets(source: string, text: string) {
 	const size = new TextEncoder().encode(text).length;
 	if (size > 1024 * 1024) return [];
 	let ids: string[] = [];
+	if (source === 'DATA-07') {
+		const parsed = validateJson(text);
+		if (parsed.status !== 'valid') return [];
+		ids = ['DATA-01'];
+		const stack = [{ value: parsed.value, depth: 0 }];
+		let count = 0,
+			diff = true;
+		while (stack.length) {
+			const item = stack.pop()!;
+			if (++count > 100000 || item.depth > 128) {
+				diff = false;
+				break;
+			}
+			if (item.value && typeof item.value === 'object')
+				for (const value of Object.values(item.value)) stack.push({ value, depth: item.depth + 1 });
+		}
+		if (diff) ids.push('DATA-02');
+		try {
+			boundedJson(text);
+			ids.push('DATA-05');
+		} catch {
+			/* Other targets have their own larger structural budgets. */
+		}
+	}
 	if (source === 'BACK-08' && size <= 128 * 1024) ids = ['TEXT-01'];
 	if (source === 'BACK-06' && size <= 128 * 1024) ids = ['BACK-03'];
 	if (['BACK-03', 'BACK-10'].includes(source) && size <= 128 * 1024) ids = ['BACK-06'];

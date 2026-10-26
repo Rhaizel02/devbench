@@ -132,9 +132,9 @@ test('V1.3 text generator joins navigation, produces verified lengths and real d
 }) => {
 	await context.grantPermissions(['clipboard-read', 'clipboard-write']);
 	const assertPrivate = observe(page);
-	expect(tools).toHaveLength(28);
+	expect(tools).toHaveLength(30);
 	await page.goto('/');
-	await expect(page.getByText('28 tools · 28 available', { exact: true })).toBeVisible();
+	await expect(page.getByText('30 tools · 30 available', { exact: true })).toBeVisible();
 	await page.keyboard.press('Control+k');
 	await page.getByRole('combobox', { name: 'Find a tool', exact: true }).fill('lorem');
 	await page.keyboard.press('Enter');

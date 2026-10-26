@@ -29,7 +29,7 @@ async function responsive(page: Page, scene: string) {
 }
 test('OpenAPI registry, keyboard palette, favorites, deep links and real 404', async ({ page }) => {
 	await page.goto('/');
-	await expect(page.getByText('28 tools · 28 available', { exact: true })).toBeVisible();
+	await expect(page.getByText('30 tools · 30 available', { exact: true })).toBeVisible();
 	await page.keyboard.press('Control+k');
 	await page.getByRole('combobox', { name: 'Find a tool', exact: true }).fill('openapi');
 	await page.keyboard.press('Enter');

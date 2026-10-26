@@ -1,0 +1,79 @@
+{
+  "measurements": [
+    {
+      "kind": "explain",
+      "width": 390,
+      "theme": "dark",
+      "scroll": 390
+    },
+    {
+      "kind": "explain",
+      "width": 390,
+      "theme": "light",
+      "scroll": 390
+    },
+    {
+      "kind": "explain",
+      "width": 768,
+      "theme": "dark",
+      "scroll": 768
+    },
+    {
+      "kind": "explain",
+      "width": 768,
+      "theme": "light",
+      "scroll": 768
+    },
+    {
+      "kind": "explain",
+      "width": 1440,
+      "theme": "dark",
+      "scroll": 1440
+    },
+    {
+      "kind": "explain",
+      "width": 1440,
+      "theme": "light",
+      "scroll": 1440
+    },
+    {
+      "kind": "xml",
+      "width": 390,
+      "theme": "dark",
+      "scroll": 390
+    },
+    {
+      "kind": "xml",
+      "width": 390,
+      "theme": "light",
+      "scroll": 390
+    },
+    {
+      "kind": "xml",
+      "width": 768,
+      "theme": "dark",
+      "scroll": 768
+    },
+    {
+      "kind": "xml",
+      "width": 768,
+      "theme": "light",
+      "scroll": 768
+    },
+    {
+      "kind": "xml",
+      "width": 1440,
+      "theme": "dark",
+      "scroll": 1440
+    },
+    {
+      "kind": "xml",
+      "width": 1440,
+      "theme": "light",
+      "scroll": 1440
+    }
+  ],
+  "leaks": [],
+  "errors": [],
+  "staticRequests": 322
+}

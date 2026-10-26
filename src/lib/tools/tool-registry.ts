@@ -7,10 +7,33 @@ export type Tool = {
 	description: string;
 	keywords: string;
 	status: 'available' | 'planned';
-	version: 'V1' | 'V1.1' | 'V1.2' | 'V1.3' | 'V1.4' | 'V1.5';
+	version: 'V1' | 'V1.1' | 'V1.2' | 'V1.3' | 'V1.4' | 'V1.5' | 'V2.1';
 	icon: string;
 };
 export const tools: Tool[] = [
+	{
+		id: 'BACK-11',
+		slug: 'sql-explain-analyzer',
+		name: 'PostgreSQL EXPLAIN Analyzer',
+		category: 'Backend',
+		description: 'Inspect PostgreSQL plans, evidence and local before/after comparisons.',
+		keywords:
+			'postgres postgresql explain analyze query planner sql performance buffers cardinality join plan diff',
+		status: 'available',
+		version: 'V2.1',
+		icon: 'database'
+	},
+	{
+		id: 'DATA-07',
+		slug: 'xml-toolkit',
+		name: 'XML Toolkit',
+		category: 'Data',
+		description: 'Inspect XML, query XPath and convert ordered XML/JSON locally.',
+		keywords: 'xml xpath soap namespace formatter minify validate json convert cdata',
+		status: 'available',
+		version: 'V2.1',
+		icon: 'braces'
+	},
 	{
 		id: 'BACK-10',
 		slug: 'openapi-explorer',

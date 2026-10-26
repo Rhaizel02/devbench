@@ -1,5 +1,7 @@
 import type { Component } from 'svelte';
 export const toolWorkspaces: Record<string, () => Promise<{ default: Component }>> = {
+	'sql-explain-analyzer': () => import('./sql-explain/SqlExplain.svelte'),
+	'xml-toolkit': () => import('./xml/XmlToolkit.svelte'),
 	'openapi-explorer': () => import('./openapi/OpenApi.svelte'),
 	'architecture-canvas': () => import('../canvas/CanvasEditor.svelte'),
 	'test-data-generator': () => import('./test-data/TestData.svelte'),
