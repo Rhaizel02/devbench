@@ -152,6 +152,7 @@ export function worldToLocal(element: Element, point: Point): Point {
 	return { x: p.x - element.x, y: p.y - element.y };
 }
 export function elementCorners(e: Element): Point[] {
+	if (e.kind === 'stroke' && e.points?.length) return e.points.map((p) => localToWorld(e, p));
 	return [
 		{ x: 0, y: 0 },
 		{ x: e.width, y: 0 },

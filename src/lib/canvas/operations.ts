@@ -54,6 +54,13 @@ export function connectorVertices(d: Diagram, c: Connection): Point[] {
 		};
 	});
 }
+/** Skip duplicate elbow vertices so a zero-length last segment cannot reverse a head. */
+export function headTangent(vertices: Point[], start = false): Point | undefined {
+	const tip = start ? vertices[0] : vertices.at(-1);
+	if (!tip) return undefined;
+	const candidates = start ? vertices.slice(1) : vertices.slice(0, -1).reverse();
+	return candidates.find((p) => Math.hypot(p.x - tip.x, p.y - tip.y) > 1e-7);
+}
 function box(points: Point[]): Box {
 	if (!points.length) return { x: 0, y: 0, width: 0, height: 0 };
 	const x = Math.min(...points.map((p) => p.x)),

@@ -66,13 +66,11 @@ function board(name: string, count: number, connections: number, multilevel = fa
 				id: 'bench-child-' + level,
 				title: 'Nested ' + level,
 				viewport: { x: 30, y: 60, zoom: 0.9 },
-				elements: d.elements
-					.slice(0, 8)
-					.map((e, i) => ({
-						...e,
-						id: `child-${level}-${i}`,
-						childDiagramId: level === 1 && i === 0 ? 'bench-child-2' : undefined
-					})),
+				elements: d.elements.slice(0, 8).map((e, i) => ({
+					...e,
+					id: `child-${level}-${i}`,
+					childDiagramId: level === 1 && i === 0 ? 'bench-child-2' : undefined
+				})),
 				connections: [],
 				groups: [
 					{ id: 'child-group-' + level, memberIds: [`child-${level}-0`, `child-${level}-1`] }
@@ -101,13 +99,11 @@ test('V2 representative scene budgets and real visual acceptance captures (drive
 		const p = board(name, count, connections, nested);
 		await page.getByRole('button', { name: 'Projects', exact: true }).click();
 		const start = performance.now();
-		await page
-			.getByLabel('Import project JSON', { exact: true })
-			.setInputFiles({
-				name: 'synthetic-budget.json',
-				mimeType: 'application/json',
-				buffer: Buffer.from(JSON.stringify(p))
-			});
+		await page.getByLabel('Import project JSON', { exact: true }).setInputFiles({
+			name: 'synthetic-budget.json',
+			mimeType: 'application/json',
+			buffer: Buffer.from(JSON.stringify(p))
+		});
 		await expect(page.getByRole('heading', { name, exact: true })).toBeVisible();
 		await settle(page);
 		const importReadyMs = performance.now() - start;
@@ -250,13 +246,11 @@ test('V2 representative scene budgets and real visual acceptance captures (drive
 		}
 	];
 	await page.getByRole('button', { name: 'Projects', exact: true }).click();
-	await page
-		.getByLabel('Import project JSON', { exact: true })
-		.setInputFiles({
-			name: 'synthetic-architecture.json',
-			mimeType: 'application/json',
-			buffer: Buffer.from(JSON.stringify(p))
-		});
+	await page.getByLabel('Import project JSON', { exact: true }).setInputFiles({
+		name: 'synthetic-architecture.json',
+		mimeType: 'application/json',
+		buffer: Buffer.from(JSON.stringify(p))
+	});
 	await expect(page.getByRole('heading', { name: p.title, exact: true })).toBeVisible();
 	for (const width of [1440, 768, 390])
 		for (const theme of ['dark', 'light']) {

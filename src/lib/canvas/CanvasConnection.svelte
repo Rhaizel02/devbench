@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { Group, Line, Path } from 'svelte-konva';
 	import { endpoint, type Connection, type Diagram, type Point } from './model';
-	import { connectorControl, connectorVertices } from './operations';
+	import { connectorControl, connectorVertices, headTangent } from './operations';
 	import { connectionPaths } from './sketch';
 	let {
 		connection: c,
@@ -52,16 +52,16 @@
 			lineCap="round"
 			lineJoin="round"
 		/>{/each}
-	{#if heads === 'end' || heads === 'both'}<Line
-			points={triangle(vertices.at(-1)!, vertices.at(-2)!)}
+	{#if (heads === 'end' || heads === 'both') && headTangent(vertices)}<Line
+			points={triangle(vertices.at(-1)!, headTangent(vertices)!)}
 			closed
 			fill={c.style.stroke}
 			stroke={c.style.stroke}
 			strokeWidth={0.5}
 			listening={false}
 		/>{/if}
-	{#if heads === 'both'}<Line
-			points={triangle(vertices[0], vertices[1])}
+	{#if heads === 'both' && headTangent(vertices, true)}<Line
+			points={triangle(vertices[0], headTangent(vertices, true)!)}
 			closed
 			fill={c.style.stroke}
 			stroke={c.style.stroke}

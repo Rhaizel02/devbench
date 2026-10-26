@@ -15,6 +15,7 @@ import {
 import {
 	alignSelection,
 	connectorVertices,
+	headTangent,
 	duplicateBranch,
 	entityBounds,
 	groupSelection,
@@ -59,6 +60,35 @@ function scene() {
 	return p;
 }
 describe('world geometry and rectangular selection', () => {
+	it('bounds actual legacy ink points and skips duplicate connector vertices for heads', () => {
+		const d = scene().diagrams[0];
+		d.elements.push({
+			...shape('legacy-ink'),
+			kind: 'stroke',
+			width: 10,
+			height: 10,
+			points: [
+				{ x: -20, y: 0 },
+				{ x: 120, y: 40 }
+			]
+		});
+		expect(entityBounds(d, 'legacy-ink')).toEqual({ x: -20, y: 0, width: 140, height: 40 });
+		expect(marqueeSelection(d, { x: 0, y: 0, width: 10, height: 10 })).not.toContain('legacy-ink');
+		expect(
+			headTangent([
+				{ x: 0, y: 0 },
+				{ x: 100, y: 0 },
+				{ x: 100, y: 60 },
+				{ x: 100, y: 60 }
+			])
+		).toEqual({ x: 100, y: 0 });
+		expect(
+			headTangent([
+				{ x: 0, y: 0 },
+				{ x: 0, y: 0 }
+			])
+		).toBeUndefined();
+	});
 	it('contains full geometry inclusively in every drag quadrant and Shift toggles', () => {
 		const d = scene().diagrams[0],
 			corners = [
