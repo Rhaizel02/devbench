@@ -1,6 +1,21 @@
 import { expect, it } from 'vitest';
 import { figurePaths, figureSignature, connectionPaths, stableSeed } from './sketch';
 import { DEFAULT_STYLE, type Element } from './model';
+it('bounds hachure path density on the maximum supported figure size', () => {
+	const e: Element = {
+		id: 'maximum-hachure',
+		kind: 'rectangle',
+		x: 0,
+		y: 0,
+		width: 20000,
+		height: 20000,
+		label: '',
+		style: { ...DEFAULT_STYLE, fill: '#d6f5ed', fillPattern: 'hachure' },
+		z: 1
+	};
+	const paths = figurePaths(figureSignature(e));
+	expect(paths.reduce((n, p) => n + p.d.length, 0)).toBeLessThan(100000);
+});
 it('generates deterministic sketch paths independent of movement and theme, with distinct seeds and clean/hachure options', () => {
 	const e: Element = {
 		id: 'synthetic',

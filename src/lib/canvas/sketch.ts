@@ -6,7 +6,7 @@ export function stableSeed(id: string): number {
 	for (const c of id) hash = Math.imul(hash ^ c.charCodeAt(0), 16777619);
 	return ((hash >>> 0) % 2147483646) + 1;
 }
-function options(style: Style, seed: number): Options {
+function options(style: Style, seed: number, span = 0): Options {
 	return {
 		seed,
 		roughness: style.sketch ? (style.roughness ?? 0.8) : 0,
@@ -15,7 +15,8 @@ function options(style: Style, seed: number): Options {
 		fill: style.fill === 'transparent' ? undefined : style.fill,
 		fillStyle: style.fillPattern ?? 'solid',
 		fillWeight: Math.max(0.5, style.width / 2),
-		hachureGap: 12,
+		// Bound hatch density even for the largest valid imported geometry.
+		hachureGap: Math.max(12, span / 80),
 		disableMultiStroke: !style.sketch,
 		disableMultiStrokeFill: true,
 		preserveVertices: true
@@ -34,7 +35,7 @@ export function figurePaths(signature: string) {
 		number
 	];
 	const g = rough.generator(),
-		o = options(style, seed);
+		o = options(style, seed, Math.max(w, h));
 	if (kind === 'text' || kind === 'stroke' || kind === 'image') return [];
 	const r = Math.min(18, h / 4, w / 4);
 	const draw =
