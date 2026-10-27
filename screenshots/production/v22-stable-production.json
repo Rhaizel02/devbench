@@ -1,0 +1,157 @@
+{
+  "url": "https://devbench-aw3.pages.dev",
+  "sha": "900a92feed61ac4ad76f257c2c1726b172292121",
+  "mode": "production",
+  "tls": "normal browser verification; no override",
+  "screenshots": [
+    "screenshots/production/v22-stable-production-home.png",
+    "screenshots/production/v22-stable-production-canvas.png",
+    "screenshots/production/v22-stable-production-pipeline.png",
+    "screenshots/production/v22-stable-production-datasets.png",
+    "screenshots/production/v22-stable-production-explain.png",
+    "screenshots/production/v22-stable-production-xml.png",
+    "screenshots/production/v22-stable-production-openapi-diff.png"
+  ],
+  "results": {
+    "catalog": "30 available; app V2.2; exact build SHA",
+    "canvas": "real partial marquee/group/recolor/focus/direct bend, v3 JSON and reload",
+    "pipeline": "text recipe executes and exact download; intermediate preview",
+    "datasets": "real related data generated; exact JSON/FKs/download/reset",
+    "explain": "real observed plan and tree; comparison exported with verified metrics; reload clears payload",
+    "xml": "SOAP namespace XPath, reversible JSON/XML and download; DTD blocked before network; reset",
+    "openapi": "real parser and request body redaction; explicit HTTP Builder handoff; Contract Diff actual operation removal",
+    "privacy": "marker absent from requests/URLs/console/storage/cookies/history/IndexedDB; Canvas data is the explicit exception",
+    "staticRoutes": [
+      {
+        "slug": "sql-explain-analyzer",
+        "status": 200
+      },
+      {
+        "slug": "xml-toolkit",
+        "status": 200
+      },
+      {
+        "slug": "openapi-explorer",
+        "status": 200
+      },
+      {
+        "slug": "architecture-canvas",
+        "status": 200
+      },
+      {
+        "slug": "test-data-generator",
+        "status": 200
+      },
+      {
+        "slug": "pipeline-builder",
+        "status": 200
+      },
+      {
+        "slug": "log-inspector",
+        "status": 200
+      },
+      {
+        "slug": "environment-comparator",
+        "status": 200
+      },
+      {
+        "slug": "http-request",
+        "status": 200
+      },
+      {
+        "slug": "http-headers",
+        "status": 200
+      },
+      {
+        "slug": "json-query",
+        "status": 200
+      },
+      {
+        "slug": "json-schema",
+        "status": 200
+      },
+      {
+        "slug": "json-studio",
+        "status": 200
+      },
+      {
+        "slug": "json-diff",
+        "status": 200
+      },
+      {
+        "slug": "json-yaml",
+        "status": 200
+      },
+      {
+        "slug": "base64-toolkit",
+        "status": 200
+      },
+      {
+        "slug": "url-toolkit",
+        "status": 200
+      },
+      {
+        "slug": "jwt-inspector",
+        "status": 200
+      },
+      {
+        "slug": "hash-generator",
+        "status": 200
+      },
+      {
+        "slug": "sql-formatter",
+        "status": 200
+      },
+      {
+        "slug": "regex-tester",
+        "status": 200
+      },
+      {
+        "slug": "text-diff",
+        "status": 200
+      },
+      {
+        "slug": "id-generator",
+        "status": 200
+      },
+      {
+        "slug": "timestamp-converter",
+        "status": 200
+      },
+      {
+        "slug": "json-csv",
+        "status": 200
+      },
+      {
+        "slug": "json-code",
+        "status": 200
+      },
+      {
+        "slug": "curl-inspector",
+        "status": 200
+      },
+      {
+        "slug": "cron-explorer",
+        "status": 200
+      },
+      {
+        "slug": "string-toolkit",
+        "status": 200
+      },
+      {
+        "slug": "sql-in-builder",
+        "status": 200
+      }
+    ],
+    "unknownRoute": 404,
+    "httpErrors": [],
+    "console": "no page errors",
+    "failedResources": []
+  },
+  "status": "pass",
+  "requestCount": 554,
+  "externalRequests": [],
+  "requestOrigins": [
+    "https://devbench-aw3.pages.dev"
+  ]
+}
