@@ -50,6 +50,10 @@ createServer(async (request, response) => {
 	}
 	const root = resolve(active === 'a' ? artifacts.aRoot : artifacts.bRoot);
 	try {
+		if (url.pathname.endsWith('.html')) {
+			response.writeHead(308, { Location: url.pathname.slice(0, -5) }).end();
+			return;
+		}
 		if (request.method !== 'GET' && request.method !== 'HEAD') {
 			response.writeHead(405).end();
 			return;

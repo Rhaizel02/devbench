@@ -1,19 +1,20 @@
 {
-  "aVersion": "c8ef84fa11da265a06b8ed08fb5ddd4c3da0c6f9",
-  "bVersion": "c8ef84fa11da265a06b8ed08fb5ddd4c3da0c6f9-update",
+  "aVersion": "d4c56f31b956c2b625d288da4f9a552e57d21959",
+  "bVersion": "d4c56f31b956c2b625d288da4f9a552e57d21959-update",
   "failedCandidatePreservedA": true,
+  "interruptedCandidatePreservedA": true,
   "oldTabReloaded": false,
   "canvasUnchanged": true,
   "snapshots": [
     {
-      "name": "devbench-static-v23-c8ef84fa11da265a06b8ed08fb5ddd4c3da0c6f9",
+      "name": "devbench-static-v23-d4c56f31b956c2b625d288da4f9a552e57d21959",
       "entries": 190,
       "bytes": 6036011
     },
     {
-      "name": "devbench-static-v23-c8ef84fa11da265a06b8ed08fb5ddd4c3da0c6f9-update",
+      "name": "devbench-static-v23-d4c56f31b956c2b625d288da4f9a552e57d21959-update",
       "entries": 190,
-      "bytes": 6036697
+      "bytes": 6036633
     }
   ]
 }

@@ -1,7 +1,11 @@
-import { readdir, readFile, writeFile } from 'node:fs/promises';
+import { readdir, readFile, writeFile, mkdir, copyFile } from 'node:fs/promises';
 import { join, relative } from 'node:path';
 import { createHash } from 'node:crypto';
 const root = 'build';
+// Pages canonicalizes root .html requests with a redirect. Precache a directory-index copy
+// of the generated 404 instead, preserving the original host error page and strict redirect rejection.
+await mkdir(join(root, 'offline-not-found'), { recursive: true });
+await copyFile(join(root, '404.html'), join(root, 'offline-not-found/index.html'));
 /** @type {import('../src/lib/pwa/policy').StaticEntry[]} */
 const entries = [];
 /** @param {string} directory */
@@ -13,7 +17,11 @@ async function walk(directory) {
 			continue;
 		}
 		const path = relative(root, file).replaceAll('\\', '/');
-		if (['service-worker.js', 'offline-build.json', '_headers', '_redirects'].includes(path))
+		if (
+			['service-worker.js', 'offline-build.json', '_headers', '_redirects', '404.html'].includes(
+				path
+			)
+		)
 			continue;
 		const ext = path.split('.').pop() ?? '';
 		const kind =
@@ -33,6 +41,8 @@ async function walk(directory) {
 										? 'text'
 										: undefined;
 		if (!kind) throw new Error('Unreviewed public asset extension: ' + ext);
+		if (kind === 'html' && path !== 'index.html' && !path.endsWith('/index.html'))
+			throw new Error('Precached HTML must use a portable directory-index URL: ' + path);
 		const body = await readFile(file);
 		const url = '/' + (path.endsWith('index.html') ? path.slice(0, -10) : path);
 		entries.push({

@@ -80,6 +80,7 @@ test('PWA real preparation, manifest, static-byte cache integrity and responsive
 	expect(
 		inventory.entries.filter((entry) => entry.path.startsWith('/tools/') && entry.kind === 'html')
 	).toHaveLength(30);
+	expect(inventory.entries.some((entry) => entry.path.endsWith('.html'))).toBe(false);
 	await verifyStaticCache(context, inventory, baseURL!);
 	await page.getByRole('button', { name: 'Offline and install', exact: true }).click();
 	const installButtonOffered = await page

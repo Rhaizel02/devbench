@@ -1,53 +1,53 @@
 {
-  "version": "c8ef84fa11da265a06b8ed08fb5ddd4c3da0c6f9",
+  "version": "d4c56f31b956c2b625d288da4f9a552e57d21959",
   "timings": [
     {
       "slug": "sql-explain-analyzer",
-      "driverNavigationMs": 202
+      "driverNavigationMs": 219
     },
     {
       "slug": "xml-toolkit",
-      "driverNavigationMs": 150
-    },
-    {
-      "slug": "openapi-explorer",
-      "driverNavigationMs": 167
-    },
-    {
-      "slug": "architecture-canvas",
-      "driverNavigationMs": 1039
-    },
-    {
-      "slug": "test-data-generator",
-      "driverNavigationMs": 217
-    },
-    {
-      "slug": "pipeline-builder",
-      "driverNavigationMs": 176
-    },
-    {
-      "slug": "log-inspector",
-      "driverNavigationMs": 171
-    },
-    {
-      "slug": "environment-comparator",
-      "driverNavigationMs": 137
-    },
-    {
-      "slug": "http-request",
-      "driverNavigationMs": 173
-    },
-    {
-      "slug": "http-headers",
       "driverNavigationMs": 153
     },
     {
+      "slug": "openapi-explorer",
+      "driverNavigationMs": 157
+    },
+    {
+      "slug": "architecture-canvas",
+      "driverNavigationMs": 1040
+    },
+    {
+      "slug": "test-data-generator",
+      "driverNavigationMs": 136
+    },
+    {
+      "slug": "pipeline-builder",
+      "driverNavigationMs": 173
+    },
+    {
+      "slug": "log-inspector",
+      "driverNavigationMs": 172
+    },
+    {
+      "slug": "environment-comparator",
+      "driverNavigationMs": 142
+    },
+    {
+      "slug": "http-request",
+      "driverNavigationMs": 176
+    },
+    {
+      "slug": "http-headers",
+      "driverNavigationMs": 148
+    },
+    {
       "slug": "json-query",
-      "driverNavigationMs": 152
+      "driverNavigationMs": 162
     },
     {
       "slug": "json-schema",
-      "driverNavigationMs": 184
+      "driverNavigationMs": 195
     },
     {
       "slug": "json-studio",
@@ -55,27 +55,27 @@
     },
     {
       "slug": "json-diff",
-      "driverNavigationMs": 160
+      "driverNavigationMs": 158
     },
     {
       "slug": "json-yaml",
-      "driverNavigationMs": 170
+      "driverNavigationMs": 159
     },
     {
       "slug": "base64-toolkit",
-      "driverNavigationMs": 164
+      "driverNavigationMs": 159
     },
     {
       "slug": "url-toolkit",
-      "driverNavigationMs": 200
+      "driverNavigationMs": 190
     },
     {
       "slug": "jwt-inspector",
-      "driverNavigationMs": 151
+      "driverNavigationMs": 141
     },
     {
       "slug": "hash-generator",
-      "driverNavigationMs": 176
+      "driverNavigationMs": 162
     },
     {
       "slug": "sql-formatter",
@@ -83,43 +83,43 @@
     },
     {
       "slug": "regex-tester",
-      "driverNavigationMs": 156
+      "driverNavigationMs": 184
     },
     {
       "slug": "text-diff",
-      "driverNavigationMs": 167
+      "driverNavigationMs": 155
     },
     {
       "slug": "id-generator",
-      "driverNavigationMs": 147
+      "driverNavigationMs": 134
     },
     {
       "slug": "timestamp-converter",
-      "driverNavigationMs": 147
+      "driverNavigationMs": 118
     },
     {
       "slug": "json-csv",
-      "driverNavigationMs": 170
+      "driverNavigationMs": 145
     },
     {
       "slug": "json-code",
-      "driverNavigationMs": 170
+      "driverNavigationMs": 188
     },
     {
       "slug": "curl-inspector",
-      "driverNavigationMs": 181
+      "driverNavigationMs": 205
     },
     {
       "slug": "cron-explorer",
-      "driverNavigationMs": 144
+      "driverNavigationMs": 126
     },
     {
       "slug": "string-toolkit",
-      "driverNavigationMs": 162
+      "driverNavigationMs": 149
     },
     {
       "slug": "sql-in-builder",
-      "driverNavigationMs": 167
+      "driverNavigationMs": 149
     }
   ],
   "errors": [],

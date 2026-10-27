@@ -10,7 +10,9 @@
   Cache-Control: public, max-age=0, must-revalidate
 /404.html
   Cache-Control: public, max-age=0, must-revalidate
-/offline-unavailable.html
+/offline-unavailable/*
+  Cache-Control: public, max-age=0, must-revalidate
+/offline-not-found/*
   Cache-Control: public, max-age=0, must-revalidate
 /_app/version.json
   Cache-Control: public, max-age=0, must-revalidate

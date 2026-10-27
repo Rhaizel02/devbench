@@ -1,9 +1,9 @@
 {
-  "version": "c8ef84fa11da265a06b8ed08fb5ddd4c3da0c6f9",
+  "version": "d4c56f31b956c2b625d288da4f9a552e57d21959",
   "resources": 189,
   "bytes": 6036011,
-  "workerBytes": 48657,
-  "preparationMs": 1278,
+  "workerBytes": 48745,
+  "preparationMs": 1218,
   "installButtonOffered": 0,
   "installOffers": [],
   "physicalInstallationVerified": false,

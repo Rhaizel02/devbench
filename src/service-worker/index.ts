@@ -20,9 +20,10 @@ const inventory: StaticInventory = JSON.parse('__DEVBENCH_STATIC_INVENTORY_V23__
 const cacheName = CACHE_PREFIX + version;
 const origin = self.location.origin;
 const metadataURL = origin + INVENTORY_PATH;
-const declared = [...immutable, ...assets, ...prerendered].map(
-	({ path }) => '/' + path.replace(/^\//, '')
-);
+const declared = [...immutable, ...assets, ...prerendered].map(({ path }) => {
+	const url = '/' + path.replace(/^\//, '');
+	return url.endsWith('/index.html') ? url.slice(0, -10) : url;
+});
 const clientVersions = new Map<string, string>();
 let completed = 0,
 	preparation: Promise<void> | undefined;
@@ -111,7 +112,11 @@ async function prepare() {
 			throw new Error('Invalid build inventory.');
 		const paths = new Set(inventory.entries.map((entry) => entry.path));
 		for (const path of declared) {
-			if (['/_headers', '/_redirects', '/service-worker.js', INVENTORY_PATH].includes(path))
+			if (
+				['/_headers', '/_redirects', '/404.html', '/service-worker.js', INVENTORY_PATH].includes(
+					path
+				)
+			)
 				continue;
 			if (!paths.has(path)) throw new Error('Build inventory coverage mismatch.');
 		}
@@ -249,7 +254,7 @@ async function serve(request: Request, clientId: string, resultingClientId: stri
 		const entry = inventory.entries.find((item) => item.path === path && item.kind === 'html');
 		const cache = await caches.open(cacheName);
 		if (!entry) {
-			const notFound = await cache.match(origin + '/404.html');
+			const notFound = await cache.match(origin + '/offline-not-found/');
 			return new Response(notFound ? await notFound.arrayBuffer() : 'Not found', {
 				status: 404,
 				headers: { 'Content-Type': 'text/html' }
@@ -259,7 +264,7 @@ async function serve(request: Request, clientId: string, resultingClientId: stri
 			try {
 				await prepare();
 			} catch {
-				const notice = await cache.match(origin + '/offline-unavailable.html');
+				const notice = await cache.match(origin + '/offline-unavailable/');
 				return new Response(
 					notice
 						? await notice.arrayBuffer()

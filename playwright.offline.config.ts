@@ -19,6 +19,7 @@ export default defineConfig({
 	grep: /(PWA |release matrix:|all seven V1.2 routes|V1.3 |a stale tab|V2 real marquee|V2 independent three-level|V2 local raster|V2 dark\/light|V2.2 bend|V2.2 focus|OpenAPI comparison|OpenAPI editable preview|OpenAPI import,|EXPLAIN real analysis|XML SOAP,|Pipeline V2 |Test Data V2 |Dataset V2 )/,
 	workers: 1,
 	fullyParallel: false,
+	maxFailures: 1,
 	timeout: 90_000,
 	outputDir: 'test-results/offline',
 	reporter: 'list',

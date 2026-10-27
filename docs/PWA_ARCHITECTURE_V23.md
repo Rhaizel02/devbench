@@ -19,6 +19,8 @@ Complete preparation fetches only this inventory with credentials omitted, no re
 
 Admission requires exact same-origin HTTP(S) path, GET, empty search, expected destination and a declared resource. Authorization/range requests bypass it. Redirects, opaque/error responses, private/no-store responses, unsafe Vary and unexpected MIME reject preparation. Unknown navigations receive the cached genuine404 document with status404; arbitrary requests and query-bearing paths do not become cache keys. A cache miss for an old build cannot silently fetch a newer mutable resource into its shell.
 
+The deployed-host gate found Pages canonicalizes root `.html` URLs with308. Consequently the finalizer preserves the original host404.html but precaches its explicit `/offline-not-found/` directory-index copy; incomplete recovery also uses `/offline-unavailable/`. These portable directory URLs work without accepting redirects or depending on Firebase clean-URL rewrites. Build-only index canonicalization is not applied to arbitrary incoming requests. The compressed controlled server reproduces this hosting rule to prevent recurrence.
+
 ## Version affinity and activation
 
 Visible build SHA and Kit version share the explicit build identity. Default identity is Cloudflare's commit SHA / local Git HEAD; a documented test-only build override produces two distinguishable real artifacts. Do not reuse an identity for changed deployed bytes. Cache names use a DevBench-only namespace and this identity; no Canvas database operations occur in the worker.

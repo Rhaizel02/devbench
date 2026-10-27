@@ -44,6 +44,11 @@ test('PWA two actual builds: failed candidate, Later, old-tab lazy worker, expli
 	await page.setViewportSize({ width: 1440, height: 1000 });
 	const { aVersion, bVersion, bRoot } = await offlineArtifacts();
 	await prepareOffline(page);
+	await page.evaluate(async () => {
+		await (
+			await caches.open('other-app-static-fixture')
+		).put('/manifest.webmanifest', await fetch('/manifest.webmanifest'));
+	});
 	await page.goto('/tools/architecture-canvas/');
 	await expect(page.locator('[data-save-state="saved"]')).toBeVisible();
 	await page.getByRole('button', { name: 'Projects', exact: true }).click();
@@ -56,9 +61,31 @@ test('PWA two actual builds: failed candidate, Later, old-tab lazy worker, expli
 	const marker = 'PRIVATE_OLD_BUILD_' + crypto.randomUUID();
 	await old.locator('.cm-content[aria-label="JSON input"]').fill(JSON.stringify({ marker }));
 	const inventory = JSON.parse(await readFile(bRoot + '/offline-build.json', 'utf8'));
-	const failPath = inventory.entries.find((entry: { path: string }) =>
-		entry.path.endsWith('.woff2')
-	).path;
+	await request.post('/__pwa_test__/control', { data: { active: 'b', delay: 100 } });
+	await panel(page);
+	await page.getByRole('button', { name: 'Check for updates', exact: true }).click();
+	await expect
+		.poll(() =>
+			page.evaluate(
+				async (name) => (await (await caches.open(name)).keys()).length,
+				CACHE_PREFIX + bVersion
+			)
+		)
+		.toBeGreaterThan(8);
+	await context.setOffline(true); // Interrupt real candidate requests after observable partial download.
+	await expect(
+		page.getByRole('alert').filter({ hasText: /Offline|download|resources|complete/i })
+	).toBeVisible({ timeout: 90_000 });
+	expect(
+		await page.evaluate(
+			async (name) => !!(await (await caches.open(name)).match('/offline-build.json')),
+			CACHE_PREFIX + bVersion
+		)
+	).toBe(false);
+	await old.getByRole('button', { name: 'Format JSON', exact: true }).click();
+	await expect(old.locator('.cm-content[aria-label="JSON output"]')).toContainText(marker);
+	await context.setOffline(false);
+	const failPath = inventory.entries.at(-1).path;
 	await request.post('/__pwa_test__/control', { data: { active: 'b', failPath, delay: 15 } });
 	await panel(page);
 	await page.getByRole('button', { name: 'Check for updates', exact: true }).click();
@@ -80,6 +107,7 @@ test('PWA two actual builds: failed candidate, Later, old-tab lazy worker, expli
 	await request.post('/__pwa_test__/control', { data: { active: 'b' } });
 	await page.getByRole('button', { name: 'Check for updates', exact: true }).click();
 	await waiting(page);
+	await page.screenshot({ path: 'screenshots/actual/v23-update-available.png', fullPage: true });
 	await page.getByRole('button', { name: 'Later', exact: true }).click();
 	await expect(
 		page.getByText('Update postponed. Your current version stays available.', { exact: true })
@@ -114,10 +142,19 @@ test('PWA two actual builds: failed candidate, Later, old-tab lazy worker, expli
 		'Build ' + aVersion
 	);
 	const names = await page.evaluate(() => caches.keys());
-	expect(names.sort()).toEqual([CACHE_PREFIX + aVersion, CACHE_PREFIX + bVersion].sort());
+	expect(names.sort()).toEqual(
+		[CACHE_PREFIX + aVersion, CACHE_PREFIX + bVersion, 'other-app-static-fixture'].sort()
+	);
+	expect(
+		await page.evaluate(
+			async () =>
+				!!(await (await caches.open('other-app-static-fixture')).match('/manifest.webmanifest'))
+		)
+	).toBe(true);
 	const snapshots = await page.evaluate(async () => {
 		const output = [];
 		for (const name of await caches.keys()) {
+			if (!name.startsWith('devbench-static-v23-')) continue;
 			const cache = await caches.open(name);
 			const metadata = await cache.match('/offline-build.json');
 			if (!metadata) throw Error('Completed cache metadata missing.');
@@ -136,6 +173,7 @@ test('PWA two actual builds: failed candidate, Later, old-tab lazy worker, expli
 				aVersion,
 				bVersion,
 				failedCandidatePreservedA: true,
+				interruptedCandidatePreservedA: true,
 				oldTabReloaded: false,
 				canvasUnchanged: true,
 				snapshots
