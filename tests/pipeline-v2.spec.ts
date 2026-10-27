@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test';
+import { test, expect } from './support/test';
 import { readFile, mkdir } from 'node:fs/promises';
 import { evidencePath } from './support/environment';
 test('Pipeline V2 actual configuration-only import/export, reorder/disable, bytes and privacy', async ({
@@ -132,18 +132,41 @@ test('Pipeline V2 worker cancellation, safe XML operation and source edits inval
 	await expect(page.locator('.parse-error').first()).toContainText('Step 1 failed');
 	await page.getByLabel('Step 1 operation', { exact: true }).selectOption('text-trim');
 	await page.getByRole('textbox', { name: 'Pipeline input', exact: true }).fill('  cancel me  ');
-	let requested!: () => void, release!: () => void;
-	const hit = new Promise<void>((r) => (requested = r)),
-		gate = new Promise<void>((r) => (release = r));
-	await page.route(/pipeline\.worker.*\.js/, async (route) => {
-		requested();
-		await gate;
-		await route.continue().catch(() => {});
-	});
-	await page.getByRole('button', { name: 'Run pipeline', exact: true }).click();
-	await hit;
-	await page.getByRole('button', { name: 'Cancel running pipeline', exact: true }).click();
-	release();
+	if (process.env.DEVBENCH_OFFLINE_MODE === '1') {
+		// Cached SW responses bypass page.route. Cancel the real new worker through its actual UI.
+		await page.getByRole('button', { name: 'Run pipeline', exact: true }).evaluate(
+			(run) =>
+				new Promise<void>((resolve) => {
+					const observer = new MutationObserver(cancel);
+					function cancel() {
+						const button = [...document.querySelectorAll('button')].find(
+							(item) => item.textContent?.trim() === 'Cancel running pipeline'
+						);
+						if (button) {
+							observer.disconnect();
+							button.click();
+							resolve();
+						}
+					}
+					observer.observe(document.body, { childList: true, subtree: true });
+					(run as HTMLElement).click();
+					queueMicrotask(cancel);
+				})
+		);
+	} else {
+		let requested!: () => void, release!: () => void;
+		const hit = new Promise<void>((r) => (requested = r)),
+			gate = new Promise<void>((r) => (release = r));
+		await page.route(/pipeline\.worker.*\.js/, async (route) => {
+			requested();
+			await gate;
+			await route.continue().catch(() => {});
+		});
+		await page.getByRole('button', { name: 'Run pipeline', exact: true }).click();
+		await hit;
+		await page.getByRole('button', { name: 'Cancel running pipeline', exact: true }).click();
+		release();
+	}
 	await expect(page.locator('.parse-error').first()).toContainText('cancelled');
 	await page.unroute(/pipeline\.worker.*\.js/);
 	await page.getByRole('button', { name: 'Run pipeline', exact: true }).click();

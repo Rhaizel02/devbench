@@ -1,0 +1,19 @@
+{
+  "aVersion": "c8ef84fa11da265a06b8ed08fb5ddd4c3da0c6f9",
+  "bVersion": "c8ef84fa11da265a06b8ed08fb5ddd4c3da0c6f9-update",
+  "failedCandidatePreservedA": true,
+  "oldTabReloaded": false,
+  "canvasUnchanged": true,
+  "snapshots": [
+    {
+      "name": "devbench-static-v23-c8ef84fa11da265a06b8ed08fb5ddd4c3da0c6f9",
+      "entries": 190,
+      "bytes": 6036011
+    },
+    {
+      "name": "devbench-static-v23-c8ef84fa11da265a06b8ed08fb5ddd4c3da0c6f9-update",
+      "entries": 190,
+      "bytes": 6036697
+    }
+  ]
+}

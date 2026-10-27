@@ -1728,7 +1728,8 @@
 		width: 100%;
 		height: 100dvh;
 		max-width: none;
-		padding: 10px;
+		padding: max(10px, env(safe-area-inset-top, 0px)) max(10px, env(safe-area-inset-right, 0px))
+			max(10px, env(safe-area-inset-bottom, 0px)) max(10px, env(safe-area-inset-left, 0px));
 		background: var(--color-bg);
 		overflow: hidden;
 	}

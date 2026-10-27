@@ -1,4 +1,4 @@
-import { test, expect, type Page } from '@playwright/test';
+import { test, expect, type Page } from './support/test';
 import { readFile, mkdir, writeFile } from 'node:fs/promises';
 import { performance } from 'node:perf_hooks';
 import { evidencePath } from './support/environment';

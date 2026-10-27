@@ -1,4 +1,4 @@
-import { test, expect, type Page } from '@playwright/test';
+import { test, expect, type Page } from './support/test';
 import { readFile, mkdir } from 'node:fs/promises';
 import { evidencePath } from './support/environment';
 import type { Project } from '../src/lib/canvas/model';

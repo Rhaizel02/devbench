@@ -1,0 +1,129 @@
+{
+  "version": "c8ef84fa11da265a06b8ed08fb5ddd4c3da0c6f9",
+  "timings": [
+    {
+      "slug": "sql-explain-analyzer",
+      "driverNavigationMs": 202
+    },
+    {
+      "slug": "xml-toolkit",
+      "driverNavigationMs": 150
+    },
+    {
+      "slug": "openapi-explorer",
+      "driverNavigationMs": 167
+    },
+    {
+      "slug": "architecture-canvas",
+      "driverNavigationMs": 1039
+    },
+    {
+      "slug": "test-data-generator",
+      "driverNavigationMs": 217
+    },
+    {
+      "slug": "pipeline-builder",
+      "driverNavigationMs": 176
+    },
+    {
+      "slug": "log-inspector",
+      "driverNavigationMs": 171
+    },
+    {
+      "slug": "environment-comparator",
+      "driverNavigationMs": 137
+    },
+    {
+      "slug": "http-request",
+      "driverNavigationMs": 173
+    },
+    {
+      "slug": "http-headers",
+      "driverNavigationMs": 153
+    },
+    {
+      "slug": "json-query",
+      "driverNavigationMs": 152
+    },
+    {
+      "slug": "json-schema",
+      "driverNavigationMs": 184
+    },
+    {
+      "slug": "json-studio",
+      "driverNavigationMs": 174
+    },
+    {
+      "slug": "json-diff",
+      "driverNavigationMs": 160
+    },
+    {
+      "slug": "json-yaml",
+      "driverNavigationMs": 170
+    },
+    {
+      "slug": "base64-toolkit",
+      "driverNavigationMs": 164
+    },
+    {
+      "slug": "url-toolkit",
+      "driverNavigationMs": 200
+    },
+    {
+      "slug": "jwt-inspector",
+      "driverNavigationMs": 151
+    },
+    {
+      "slug": "hash-generator",
+      "driverNavigationMs": 176
+    },
+    {
+      "slug": "sql-formatter",
+      "driverNavigationMs": 195
+    },
+    {
+      "slug": "regex-tester",
+      "driverNavigationMs": 156
+    },
+    {
+      "slug": "text-diff",
+      "driverNavigationMs": 167
+    },
+    {
+      "slug": "id-generator",
+      "driverNavigationMs": 147
+    },
+    {
+      "slug": "timestamp-converter",
+      "driverNavigationMs": 147
+    },
+    {
+      "slug": "json-csv",
+      "driverNavigationMs": 170
+    },
+    {
+      "slug": "json-code",
+      "driverNavigationMs": 170
+    },
+    {
+      "slug": "curl-inspector",
+      "driverNavigationMs": 181
+    },
+    {
+      "slug": "cron-explorer",
+      "driverNavigationMs": 144
+    },
+    {
+      "slug": "string-toolkit",
+      "driverNavigationMs": 162
+    },
+    {
+      "slug": "sql-in-builder",
+      "driverNavigationMs": 167
+    }
+  ],
+  "errors": [],
+  "failed": [],
+  "markerLeaked": false,
+  "cacheBytesVerified": 6036011
+}

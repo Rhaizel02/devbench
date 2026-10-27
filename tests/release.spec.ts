@@ -1,6 +1,7 @@
+import { expectCacheNames } from './support/pwa';
 import { evidencePath } from './support/environment';
 import { targetOrigin } from './support/environment';
-import { test, expect } from '@playwright/test';
+import { test, expect } from './support/test';
 import { mkdir, writeFile } from 'node:fs/promises';
 import { tools } from '../src/lib/tools/tool-registry';
 
@@ -265,7 +266,7 @@ test('release matrix: all 18 static tools operate, copy, reset, reload and handl
 		else expect(value).toEqual({});
 	}
 	expect(state.cookie).toBe('');
-	expect(state.caches).toEqual([]);
+	expectCacheNames(state.caches);
 	expect(state.databases).toEqual([]);
 	expect(JSON.stringify(state)).not.toContain(marker);
 	expect(JSON.stringify(state)).not.toContain(jwt);

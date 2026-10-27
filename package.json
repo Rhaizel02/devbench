@@ -15,6 +15,7 @@
 		"test:unit": "vitest",
 		"test": "npm run test:unit -- --run",
 		"test:e2e": "playwright test",
+		"test:offline": "node scripts/prepare-offline-builds.mjs && playwright test --config playwright.offline.config.ts",
 		"preview:static": "node scripts/serve-static.mjs",
 		"capture": "node scripts/capture.mjs",
 		"capture:v12": "node scripts/capture-v12.mjs"

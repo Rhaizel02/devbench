@@ -1,4 +1,5 @@
-import { test, expect, type Page } from '@playwright/test';
+import { expectCacheNames } from './support/pwa';
+import { test, expect, type Page } from './support/test';
 import { mkdir, writeFile, readFile } from 'node:fs/promises';
 import { countText } from '../src/lib/tools/string-toolkit/text-count';
 import { validateGTIN } from '../src/lib/tools/test-data/gtin-engine';
@@ -67,7 +68,7 @@ function observe(page: Page) {
 		}));
 		expect(Object.keys(state.local).every((key) => key === 'devbench.preferences.v1')).toBe(true);
 		expect(state.cookies).toBe('');
-		expect(state.caches).toEqual([]);
+		expectCacheNames(state.caches);
 		expect(state.databases).toEqual([]);
 		for (const payload of payloads)
 			expect(JSON.stringify(state) + requests.join('') + consoleMessages.join('')).not.toContain(

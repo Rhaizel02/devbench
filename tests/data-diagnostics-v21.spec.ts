@@ -1,4 +1,4 @@
-import { test, expect, type Page } from '@playwright/test';
+import { test, expect, type Page } from './support/test';
 import { readFile, mkdir, writeFile } from 'node:fs/promises';
 import { smallPlan, complexPlan } from '../src/lib/tools/sql-explain/fixtures';
 import { soapSample } from '../src/lib/tools/xml/fixtures';

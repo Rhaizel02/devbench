@@ -9,26 +9,26 @@
 
 ## Milestones
 
-| Milestone                        | State                        | Evidence / next gate                                                                                       |
-| -------------------------------- | ---------------------------- | ---------------------------------------------------------------------------------------------------------- |
-| H0 contract and continuity       | Done                         | Complete attachment33,546bytes + substantive implementation notes; this log                                |
-| H1 architecture comparison       | Done                         | docs/PWA_ARCHITECTURE_V23.md; Kit3 native manifest/context, strict integrity inventory and client affinity |
-| H2 manifest/install              | Pending                      | Real capability-driven installation; local original icons                                                  |
-| H3 strict static cache           | Pending                      | Exact inventory/URL/response admission and no payload persistence                                          |
-| H4 complete precache             | Pending                      | All30routes, lazy chunks, workers and fonts                                                                |
-| H5 state UX                      | Pending                      | Verified readiness/progress/error and nonblocking controls                                                 |
-| H6 safe update                   | Pending                      | Two real builds, waiting/defer/explicit apply, failure rollback, old clients                               |
-| H7 Canvas offline                | Pending                      | Existing schema1/2/3, images/groups/hierarchy/history/save/export/reload/CAS                               |
-| H8 ephemeral tools offline       | Pending                      | Real representative operations for all30 tools and marker privacy                                          |
-| H9 installed/responsive          | Pending                      | Both themes390/768/1440; distinguish physical install/emulation                                            |
-| H10 Firebase                     | Pending, optional deployment | Config/documentation mandatory; no credentials requested                                                   |
-| H11 measured storage/performance | Pending                      | Inventory actual bytes, baseline delta, preparation/navigation/retention                                   |
-| H12 real offline tests           | Pending                      | Production build, real SW and workers, setOffline, two builds                                              |
-| H13 visual review                | Pending                      | Actual screenshots and inspection                                                                          |
-| H14 invariants                   | Pending                      | Cache/URL/storage privacy and no regressions                                                               |
-| H15 checkpoints/CI               | In progress                  | Publish coherent checkpoints, exact final CI                                                               |
-| H16 documentation                | In progress                  | Architecture, acceptance, hosting, release, pertinent current docs                                         |
-| H17 RC publication               | Pending                      | Exact final preview/CI, clean tree, main untouched, GO/NO-GO                                               |
+| Milestone                        | State                      | Evidence / next gate                                                                                       |
+| -------------------------------- | -------------------------- | ---------------------------------------------------------------------------------------------------------- |
+| H0 contract and continuity       | Done                       | Complete attachment33,546bytes + substantive implementation notes; this log                                |
+| H1 architecture comparison       | Done                       | docs/PWA_ARCHITECTURE_V23.md; Kit3 native manifest/context, strict integrity inventory and client affinity |
+| H2 manifest/install              | Pass locally               | Real capability-driven installation; local original icons                                                  |
+| H3 strict static cache           | Pass locally               | Exact inventory/URL/response admission and no payload persistence                                          |
+| H4 complete precache             | Pass locally               | All30routes, lazy chunks, workers and fonts                                                                |
+| H5 state UX                      | Pass locally               | Verified readiness/progress/error and nonblocking controls                                                 |
+| H6 safe update                   | Pass locally               | Two real builds, waiting/defer/explicit apply, failure rollback, old clients                               |
+| H7 Canvas offline                | Pass locally               | Existing schema1/2/3, images/groups/hierarchy/history/save/export/reload/CAS                               |
+| H8 ephemeral tools offline       | Pass locally               | Real representative operations for all30 tools and marker privacy                                          |
+| H9 installed/responsive          | Emulation pass / native P2 | Both themes390/768/1440; distinguish physical install/emulation                                            |
+| H10 Firebase                     | Prepared / no deployment   | Config/documentation mandatory; no credentials requested                                                   |
+| H11 measured storage/performance | Pending                    | Inventory actual bytes, baseline delta, preparation/navigation/retention                                   |
+| H12 real offline tests           | Pass locally               | Production build, real SW and workers, setOffline, two builds                                              |
+| H13 visual review                | Pending                    | Actual screenshots and inspection                                                                          |
+| H14 invariants                   | Pass locally               | Cache/URL/storage privacy and no regressions                                                               |
+| H15 checkpoints/CI               | In progress                | Publish coherent checkpoints, exact final CI                                                               |
+| H16 documentation                | In progress                | Architecture, acceptance, hosting, release, pertinent current docs                                         |
+| H17 RC publication               | Pending                    | Exact final preview/CI, clean tree, main untouched, GO/NO-GO                                               |
 
 ## Risks and decisions
 
@@ -36,11 +36,25 @@ Native SvelteKit3 SW selected after installed-source/official-documentation revi
 
 ## Tests / commits
 
-No V2.3 product tests or product changes yet. The baseline has479unit cases and59Chromium flows plus2historical remote audits explicitly skipped; these are historical results, not a V2.3 claim. Checkpoint SHA is the commit containing this log, inspect git log when resuming.
+Current local gate:494 unit cases/32files;27 real offline Chromium flows pass, including all30 workspaces/operations and two actual builds. Check/lint and default full suite are repeated at the final clean gate. Previous core c8ef84f CI40493296808 was green; final exact CI remains pending. Checkpoint identity is the commit containing this log; inspect git log when resuming.
 
 ## Next action
 
-Implement manifest/icons, build finalizer and native worker strict precache; wire compact offline/install/update controls and minimal Canvas save/export callbacks. Add pure admission tests and a real static-build preparation/offline smoke before expanding acceptance.
+Publish the offline-acceptance checkpoint after check/lint; finish storage/bundle measurements and visual evidence, then clean npm ci/check/lint/units/build/default Playwright and offline suite. Verify exact published CI and Cloudflare HTTPS preparation/workers/Canvas, finish release report, commit/push and keep main untouched.
+
+## Checkpoint C — real offline acceptance in progress
+
+Published core c8ef84fa11da265a06b8ed08fb5ddd4c3da0c6f9 has exact green CI40493296808. Working source now contains real A/B static-artifact harness, gzip transport, actual context disconnection, strict original-build cache-byte verification and reuse of existing functional tests. No mocked workers. Initial run16/17 passed; legacy Pipeline cancellation awaited a network route now correctly served by the SW, so its offline variant cancels the actual worker immediately after the Run state transition instead. Current expanded run is in progress, not accepted yet.
+
+New evidence already demonstrated: all30 previously unvisited workspaces and CodeMirror initialize offline; genuine JSON copy/download; full cache key/body equality; synthetic marker absent from URL/history/requests/logs/cookies/local/session/IndexedDB; offline404; missing bootstrap produces honest503 and reconnect repairs without changing saved Canvas JSON. Preliminary preparation:189resources, about6.04MB uncompressed, around1.2s browser/driver-inclusive on this machine. Final values must be measured from final artifacts.
+
+Corrected after actual visual review: first installation could be offered as an update due to installed-state timing; waiting now requires an existing active worker. A tab whose peer already activated a newer worker gets an explicit guarded reload offer through activeVersion metadata. Fetch-decoded gzip/Brotli bodies have wire Content-Encoding/Length removed before reconstruction. Hosting Cache-Control rules no longer overlap immutable headers on Cloudflare. Mobile safe-area padding uses existing geometry at zero insets. Canvas domain/persistence/serialization remain untouched.
+
+Next gate: finish real A/B failure/defer/old-tab/update, failed Canvas-save rescue and actual CDP cache-quota tests; complete frozen legacy/image/offline export flows. Run proportional check/lint, publish coherent test checkpoint, then final documentation/measurements/clean full quality gate and exact CI/preview. Do not count earlier artifacts carrying c8 identity as the immutable c8 published source: these are explicitly local working-tree builds with a test identity.
+
+Checkpoint C local acceptance:27/27 real offline flows pass (work/v23-offline-third.log),494/494 units pass. Includes browser-enforced1KiB Cache Storage quota denial/retry, static-only query/auth/POST/external probes, all30 cold lazy workspaces, all representative tools, v1/v2/v3 semantic imports, local raster/PNG/portable JSON/reload, groups/rotation/curves/hierarchy/independent duplicate/CAS, failed Canvas-save rescue and two actual builds (failed candidate, Later, explicit activation, retained old-tab XML worker without reload). Earlier failures were fixed test-harness assumptions: hardcoded4173 privacy origin and clicking a Canvas export through an open platform popover. No forced clicks, skipped tests or weakened privacy assertions were used.
+
+Native installation boundary: Chromium156 persistent-profile installability and manifest report no errors; no genuine beforeinstallprompt was offered in this runner and PWA.install CDP returns "'PWA.install' wasn't found". Therefore no OS installation/physical Android claim. Manifest/install controls and mobile layouts are verified; OS/physical checks remain P2. Evidence screenshots/actual/v23-installability.json. Current existing default CI will now also run the actual offline suite.
 
 ## Checkpoint B — native platform core (working tree)
 

@@ -1,5 +1,9 @@
 # DevBench — Arquitectura y decisiones (ADR-001)
 
+## V2.3 native platform layer
+
+Native Kit3 service-worker entry and `$app/manifest` inventory, finalized after adapter-static with exact public-resource bytes/SHA256. Manual preparation/registration, static-only admission, version-specific caches, per-window in-memory build identification and explicit guarded activation; no Workbox or runtime dependency added. Cache Storage stores application code/assets only. Canvas domain/serialization/schema/IndexedDB remain unchanged; per-layout save/edit/export callbacks connect the voluntary reload guard. All other payloads remain in workspace/worker memory. [Full ADR and lifecycle](docs/PWA_ARCHITECTURE_V23.md).
+
 ## Canvas 2.0 — evolución acotada (rama RC)
 
 OpenAPI V1.5 ya integrado en main c3cd929a; catálogo28 sin cambios. Canvas2 conserva Konva/svelte-konva y separa DTO/migración (`model`, `legacy-serialization`, `serialization`), transformaciones puras (`operations`), historial, persistencia CAS y render/gestos. Schema3 añade grupos planos por IDs, rotación local con pivote central, geometría de conexión y recursos raster inmutables autocontenidos. Lector legacy v1/v2 aislado, fixtures congelados, ningún cambio destructivo en IndexedDB físico. Abrir migra solo en memoria; primer guardado real conserva original JSON y rechaza concurrentes/schemas futuros. Import/codec se validan antes de sustituir el proyecto abierto.

@@ -1,5 +1,5 @@
 import type { OfflineStatus } from './policy';
-export type WorkerReply = Partial<OfflineStatus> & { applying?: boolean };
+export type WorkerReply = Partial<OfflineStatus> & { applying?: boolean; activeVersion?: string };
 export function workerMessage(
 	worker: ServiceWorker,
 	type: 'STATUS' | 'PREPARE' | 'APPLY',

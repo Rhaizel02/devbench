@@ -4,6 +4,7 @@ const baseURL = externalURL ? new URL(externalURL).href : 'http://127.0.0.1:4173
 const productionOnly = process.env.PLAYWRIGHT_PRODUCTION === '1';
 export default defineConfig({
 	testDir: './tests',
+	testIgnore: '**/offline/**',
 	testMatch: productionOnly ? '**/production.spec.ts' : '**/*.spec.ts',
 	fullyParallel: false,
 	workers: 1,

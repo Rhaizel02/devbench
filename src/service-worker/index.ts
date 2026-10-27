@@ -79,15 +79,11 @@ async function status(build = version): Promise<OfflineStatus> {
 		ready:
 			!!metadata &&
 			JSON.stringify(metadata) === JSON.stringify(target) &&
-			present === target.entries.length
+			present === target.entries.length &&
+			keys.size === target.entries.length + 1
 	};
 }
-async function obtain(entry: StaticEntry): Promise<Response> {
-	const response = await fetch(origin + entry.path, {
-		cache: 'no-store',
-		credentials: 'omit',
-		redirect: 'error'
-	});
+async function verifyResponse(entry: StaticEntry, response: Response): Promise<Response> {
 	if (!responseAllowed(response, entry.kind)) throw new Error('Static response rejected.');
 	const bytes = await response.arrayBuffer();
 	const digest = [...new Uint8Array(await crypto.subtle.digest('SHA-256', bytes))]
@@ -95,7 +91,18 @@ async function obtain(entry: StaticEntry): Promise<Response> {
 		.join('');
 	if (bytes.byteLength !== entry.bytes || digest !== entry.sha256)
 		throw new Error('Static integrity mismatch.');
-	return new Response(bytes, { status: 200, headers: response.headers });
+	const headers = new Headers(response.headers);
+	// Fetch already decoded transport compression. A reconstructed byte body must not retain
+	// the old wire encoding/length (Cloudflare and the compressed test harness use gzip/Brotli).
+	for (const name of ['content-encoding', 'content-length', 'transfer-encoding'])
+		headers.delete(name);
+	return new Response(bytes, { status: 200, headers });
+}
+async function obtain(entry: StaticEntry): Promise<Response> {
+	return verifyResponse(
+		entry,
+		await fetch(origin + entry.path, { cache: 'no-store', credentials: 'omit', redirect: 'error' })
+	);
 }
 async function prepare() {
 	if (preparation) return preparation;
@@ -115,11 +122,21 @@ async function prepare() {
 		const cache = await caches.open(cacheName);
 		completed = 0;
 		let next = 0;
-		await Promise.all(
+		const attempts = await Promise.allSettled(
 			Array.from({ length: 6 }, async () => {
 				while (next < inventory.entries.length) {
 					const entry = inventory.entries[next++];
-					await cache.put(origin + entry.path, await obtain(entry));
+					const cached = await cache.match(origin + entry.path);
+					let verified = false;
+					if (cached) {
+						try {
+							await verifyResponse(entry, cached);
+							verified = true;
+						} catch {
+							/* Repair only this known static entry. */
+						}
+					}
+					if (!verified) await cache.put(origin + entry.path, await obtain(entry));
 					completed++;
 					if (completed % 8 === 0 || completed === inventory.entries.length)
 						await broadcast({
@@ -131,6 +148,8 @@ async function prepare() {
 				}
 			})
 		);
+		const failure = attempts.find((attempt) => attempt.status === 'rejected');
+		if (failure?.status === 'rejected') throw failure.reason;
 		await cache.put(
 			metadataURL,
 			new Response(JSON.stringify(inventory), { headers: { 'Content-Type': 'application/json' } })
@@ -186,9 +205,10 @@ self.addEventListener('message', (event) => {
 		(async () => {
 			try {
 				if (event.data?.type === 'STATUS')
-					port.postMessage(
-						await status(validVersion(event.data.build) ? event.data.build : version)
-					);
+					port.postMessage({
+						...(await status(validVersion(event.data.build) ? event.data.build : version)),
+						activeVersion: version
+					});
 				else if (event.data?.type === 'PREPARE') {
 					await prepare();
 					port.postMessage(await status());
@@ -234,6 +254,19 @@ async function serve(request: Request, clientId: string, resultingClientId: stri
 				status: 404,
 				headers: { 'Content-Type': 'text/html' }
 			});
+		}
+		if (!(await status()).ready) {
+			try {
+				await prepare();
+			} catch {
+				const notice = await cache.match(origin + '/offline-unavailable.html');
+				return new Response(
+					notice
+						? await notice.arrayBuffer()
+						: 'Offline resources are incomplete. Reconnect and retry.',
+					{ status: 503, headers: { 'Content-Type': 'text/html' } }
+				);
+			}
 		}
 		return (await cache.match(origin + path)) ?? unavailable();
 	}

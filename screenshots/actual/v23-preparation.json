@@ -1,0 +1,43 @@
+{
+  "version": "c8ef84fa11da265a06b8ed08fb5ddd4c3da0c6f9",
+  "resources": 189,
+  "bytes": 6036011,
+  "workerBytes": 48657,
+  "preparationMs": 1278,
+  "installButtonOffered": 0,
+  "installOffers": [],
+  "physicalInstallationVerified": false,
+  "measurement": "browser/driver-inclusive wall time, not universal throughput",
+  "responsive": [
+    {
+      "width": 1440,
+      "theme": "dark",
+      "documentWidth": 1440
+    },
+    {
+      "width": 1440,
+      "theme": "light",
+      "documentWidth": 1440
+    },
+    {
+      "width": 768,
+      "theme": "dark",
+      "documentWidth": 768
+    },
+    {
+      "width": 768,
+      "theme": "light",
+      "documentWidth": 768
+    },
+    {
+      "width": 390,
+      "theme": "dark",
+      "documentWidth": 390
+    },
+    {
+      "width": 390,
+      "theme": "light",
+      "documentWidth": 390
+    }
+  ]
+}

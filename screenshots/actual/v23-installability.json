@@ -1,0 +1,14 @@
+{
+  "browser": "156.0.8078.4",
+  "persistentProfile": true,
+  "errors": {
+    "installabilityErrors": []
+  },
+  "manifestURL": "http://127.0.0.1:4173/manifest.webmanifest",
+  "manifestErrors": [],
+  "offers": [],
+  "installation": {
+    "error": "cdpSession.send: Protocol error (PWA.install): 'PWA.install' wasn't found"
+  },
+  "physicalAndroid": false
+}

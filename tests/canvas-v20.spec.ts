@@ -1,6 +1,6 @@
-import { test, expect, type Page } from '@playwright/test';
+import { test, expect, type Page } from './support/test';
 import { readFile, mkdir } from 'node:fs/promises';
-import { evidencePath } from './support/environment';
+import { evidencePath, targetOrigin } from './support/environment';
 import { connectorGrip, bendConnector } from '../src/lib/canvas/operations';
 import type { Project } from '../src/lib/canvas/model';
 import rasters from '../src/lib/canvas/fixtures/local-rasters.json' with { type: 'json' };
@@ -304,7 +304,7 @@ test('V2 dark/light responsive toolbar, real touch pinch, keyboard marquee cance
 	);
 	expect(meta + requests.join('') + messages.join('')).not.toContain(marker);
 	expect(messages).toEqual([]);
-	expect(requests.every((url) => url.startsWith('http://127.0.0.1:4173/'))).toBe(true);
+	expect(requests.every((url) => url.startsWith(targetOrigin + '/'))).toBe(true);
 });
 test('V2 local raster decode, quota recovery, actual PNG pixels, portable backups and corrupt-image rollback', async ({
 	page
@@ -426,6 +426,6 @@ test('V2 local raster decode, quota recovery, actual PNG pixels, portable backup
 		})
 	);
 	expect(meta + requests.join('')).not.toContain(rasters[0].data);
-	expect(requests.every((url) => url.startsWith('http://127.0.0.1:4173/'))).toBe(true);
+	expect(requests.every((url) => url.startsWith(targetOrigin + '/'))).toBe(true);
 	expect(errors).toEqual([]);
 });

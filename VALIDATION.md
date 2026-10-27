@@ -1,5 +1,11 @@
 # B1 validation report
 
+## V2.3 RC — platform validation
+
+The existing default Chromium suite remains online and is joined by `npm run test:offline` in CI. The latter generates two real static builds, uses actual service workers and bundled workers, disconnects contexts and reuses representative operations across the30-tool catalog. Additional risk gates cover exact cache key/body integrity, privacy, missing-cache503/recovery, Canvas frozen v1/v2/v3/image export/reload/CAS, browser-enforced quota, failed-save rescue and explicit multi-tab updates. No lifecycle mock substitutes for the two-build scenario.
+
+Current observed unit gate:494cases/32files; check0errors/0warnings. Exact final clean-install/full-suite/CI/preview status is recorded in [V2.3 progress](GOAL_PROGRESS_V23.md) and [acceptance](docs/PWA_OFFLINE_ACCEPTANCE_V23.md), rather than inferred from earlier checkpoints. Historical results below are unchanged.
+
 ## V2.2 — Canvas experience and workflow studio
 
 Stable release integration: integration/devbench-v22-release → main, preserving the complete feature/canvas-workflow-v22 history and **30 available tools**. Canvas2.1, Data DiagnosticsV2.1, PipelineV2 and Test DataV2 are included. The original RC branches remain intact; historical reports below retain their original branch states.

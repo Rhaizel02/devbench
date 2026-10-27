@@ -1,0 +1,65 @@
+[
+  {
+    "slug": "json-query",
+    "operation": "Run query",
+    "copy": "passed",
+    "staleResult": "passed",
+    "reset": "passed",
+    "reload": 200,
+    "privacy": "passed"
+  },
+  {
+    "slug": "json-schema",
+    "operation": "Validate document",
+    "copy": "passed",
+    "staleResult": "passed",
+    "reset": "passed",
+    "reload": 200,
+    "privacy": "passed"
+  },
+  {
+    "slug": "http-request",
+    "operation": "Generate request code",
+    "copy": "passed",
+    "staleResult": "passed",
+    "reset": "passed",
+    "reload": 200,
+    "privacy": "passed"
+  },
+  {
+    "slug": "http-headers",
+    "operation": "Inspect headers",
+    "copy": "passed",
+    "staleResult": "passed",
+    "reset": "passed",
+    "reload": 200,
+    "privacy": "passed"
+  },
+  {
+    "slug": "log-inspector",
+    "operation": "Inspect logs",
+    "copy": "passed",
+    "staleResult": "passed",
+    "reset": "passed",
+    "reload": 200,
+    "privacy": "passed"
+  },
+  {
+    "slug": "environment-comparator",
+    "operation": "Compare environments",
+    "copy": "passed",
+    "staleResult": "passed",
+    "reset": "passed",
+    "reload": 200,
+    "privacy": "passed"
+  },
+  {
+    "slug": "pipeline-builder",
+    "operation": "Run pipeline",
+    "copy": "passed",
+    "staleResult": "passed",
+    "reset": "passed",
+    "reload": 200,
+    "privacy": "passed"
+  }
+]

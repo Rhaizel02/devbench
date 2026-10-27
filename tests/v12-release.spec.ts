@@ -1,5 +1,6 @@
+import { expectCacheNames } from './support/pwa';
 import { targetOrigin } from './support/environment';
-import { test, expect } from '@playwright/test';
+import { test, expect } from './support/test';
 import { tools } from '../src/lib/tools/tool-registry';
 import { mkdir, writeFile } from 'node:fs/promises';
 import { evidencePath } from './support/environment';
@@ -82,7 +83,7 @@ test('all seven V1.2 routes operate, reset, reload and keep payloads out of pers
 		}));
 		expect(JSON.stringify(state)).not.toContain(marker);
 		expect(Object.keys(state.local).every((key) => key === 'devbench.preferences.v1')).toBe(true);
-		expect(state.caches).toEqual([]);
+		expectCacheNames(state.caches);
 		expect(state.databases).toEqual([]);
 		expect(await context.cookies()).toEqual([]);
 		const copy = page.getByRole('button', { name: 'Copy output', exact: true });

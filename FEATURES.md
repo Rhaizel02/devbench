@@ -1,5 +1,11 @@
 # DevBench — Alcance funcional cerrado
 
+## V2.3 RC — platform extension
+
+Exactly30 available entries; no new tools. Native PWA manifest/icons, explicit complete offline preparation from the actual static build, capability-driven installation and compact platform controls. Unvisited lazy editors/workspaces and bundled workers are included. Strict same-origin static-only SHA256 inventory; no runtime document/request/result caching. Missing assets produce honest incomplete status and recoverable503, not a false Ready or SPA fallback. Unknown paths remain404.
+
+Updates wait for explicit acknowledgement, support Later, retain live old-client code and check Canvas save/edit state before activation and reload. Rescue JSON is available if save fails. No general input persistence, Canvas schema or IndexedDB migration. Firebase Hosting is configured as an optional independent static origin; real deployment requires the user's project/authentication. Native physical installation and browser-managed eviction are outside automation guarantees. [Acceptance and limits](docs/PWA_OFFLINE_ACCEPTANCE_V23.md).
+
 ## V2.2 — Canvas experience and workflow studio
 
 Stable release integration: integration/devbench-v22-release → main, preserving the complete feature/canvas-workflow-v22 history and **30 available tools**. Canvas2.1, Data DiagnosticsV2.1, PipelineV2 and Test DataV2 are included. The original RC branches remain intact; historical reports below retain their original branch states.

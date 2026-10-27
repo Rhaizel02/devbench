@@ -1,5 +1,15 @@
 # DevBench
 
+## V2.3 RC — Platform & Offline
+
+The branch `feature/platform-offline-v23` adds an installable native PWA while preserving exactly **30 tools** and Canvas2.1. Open the header's **Offline and install → Prepare offline** once before disconnecting. Ready means the complete build inventory, including unvisited tool chunks, CodeMirror, fonts and actual workers, has downloaded and the page is controlled. Installation and offline preparation are separate actions. Use the browser install menu where supported; no notifications, accounts or permissions are requested.
+
+Only verified own static application resources enter Cache Storage. Ephemeral inputs/results remain in memory and clear on navigation/reload. Canvas alone retains its existing IndexedDB projects, schema and v1/v2/v3 backup compatibility. Browser eviction or clearing site data can remove offline files and projects; export JSON backups first. Different domains/devices have separate stores; Firebase does not synchronize them.
+
+Updates download in the background and offer **Update / Later**. Applying explicitly acknowledges ephemeral input loss; Canvas must finish edits and save, or the reload is blocked with rescue JSON. Other tabs keep their work and compatible old resources. Failed candidates preserve the active build. Reconnect and retry preparation if offline assets are incomplete.
+
+Validation: `npm ci`, `npm run check`, `npm run lint`, `npm run test`, `npm run build`, `npm run test:e2e`, **`npm run test:offline`**. The last command creates two actual builds and tests real disconnected workers/lifecycle; it restores the default first build. See [architecture](docs/PWA_ARCHITECTURE_V23.md), [acceptance](docs/PWA_OFFLINE_ACCEPTANCE_V23.md), [optional Firebase Hosting](docs/HOSTING_ALTERNATIVE_V23.md) and [progress](GOAL_PROGRESS_V23.md). This RC is not merged into main.
+
 ## V2.2 — Canvas experience and workflow studio
 
 Stable release integration: integration/devbench-v22-release → main, preserving the complete feature/canvas-workflow-v22 history and **30 available tools**. Canvas2.1, Data DiagnosticsV2.1, PipelineV2 and Test DataV2 are included. The original RC branches remain intact; historical reports below retain their original branch states.

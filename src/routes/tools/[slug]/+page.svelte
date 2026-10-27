@@ -34,7 +34,11 @@
 </script>
 
 <svelte:head><title>{data.tool.name} — DevBench</title></svelte:head>
-<div class="workspace-page" class:canvas-workspace={data.tool.slug === 'architecture-canvas'}>
+<div
+	class="workspace-page"
+	data-workspace={loadedSlug}
+	class:canvas-workspace={data.tool.slug === 'architecture-canvas'}
+>
 	{#if data.tool.slug === 'architecture-canvas'}
 		<div class="canvas-meta">
 			<span>Architecture Canvas {release.canvas}</span><button

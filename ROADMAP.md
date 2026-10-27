@@ -1,5 +1,11 @@
 # DevBench — Roadmap
 
+## V2.3 RC — Platform & Offline
+
+Native static-only PWA, explicit complete preparation covering all30 tools, safe deferred updates with Canvas rescue/save guards and old-client retention. No new tools or document schema. Branch feature/platform-offline-v23 remains separate from stable main. Firebase configuration/docs prepared as an independent optional host. [Progress](GOAL_PROGRESS_V23.md), [architecture](docs/PWA_ARCHITECTURE_V23.md), [acceptance](docs/PWA_OFFLINE_ACCEPTANCE_V23.md).
+
+P2: physical Android/iOS and OS-installed-window verification; expanded Firefox/WebKit installation coverage; actual Firebase publication without configured credentials. Browser installability checks and emulation must be distinguished from these manual platform checks. No new scope is implied by this backlog.
+
 ## V2.2 — Canvas experience and workflow studio
 
 Stable release integration: integration/devbench-v22-release → main, preserving the complete feature/canvas-workflow-v22 history and **30 available tools**. Canvas2.1, Data DiagnosticsV2.1, PipelineV2 and Test DataV2 are included. The original RC branches remain intact; historical reports below retain their original branch states.

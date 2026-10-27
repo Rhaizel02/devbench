@@ -1,4 +1,4 @@
-import { test, expect, type Page } from '@playwright/test';
+import { test, expect, type Page } from './support/test';
 import { sampleContract } from '../src/lib/tools/openapi/fixtures';
 import { evidencePath } from './support/environment';
 import { mkdir, writeFile } from 'node:fs/promises';

@@ -36,13 +36,17 @@
 			? 'Offline unavailable'
 			: preparing
 				? `Preparing ${completed}/${total || '…'}`
-				: ready
-					? offline
-						? 'Offline ready'
-						: 'Ready offline'
-					: offline
-						? 'Offline incomplete'
-						: 'Prepare offline'
+				: updateReady && !deferred
+					? 'Update ready'
+					: updateDownloading
+						? 'Downloading update'
+						: ready
+							? offline
+								? 'Offline ready'
+								: 'Ready offline'
+							: offline
+								? 'Offline incomplete'
+								: 'Prepare offline'
 	);
 	async function refresh() {
 		const worker = registration?.active;
@@ -56,12 +60,20 @@
 			needsControl = !!status.ready && !navigator.serviceWorker.controller;
 			ready = !!status.ready && !needsControl;
 			preparing = false;
+			if (status.activeVersion && status.activeVersion !== release.sha) {
+				updateReady = true;
+				reloadPending = true;
+			} else if (!registration?.waiting && !updateDownloading && !reloadPending)
+				updateReady = false;
 		} catch (reason) {
-			if (!disposed) error = (reason as Error).message;
+			if (!disposed) {
+				ready = false;
+				error = (reason as Error).message;
+			}
 		}
 	}
 	async function detectWaiting() {
-		if (!registration?.waiting) return;
+		if (!registration?.active || !registration.waiting) return;
 		try {
 			const status = await workerMessage(registration.waiting, 'STATUS');
 			if (!disposed) {
@@ -155,8 +167,7 @@
 			if (!reloadPending && registration?.waiting) {
 				const worker = registration.waiting,
 					activated = waitForActivation(worker);
-				await workerMessage(worker, 'APPLY');
-				await activated;
+				await Promise.all([workerMessage(worker, 'APPLY'), activated]);
 				reloadPending = true;
 			}
 			if (!(await safeToReload())) return;
@@ -193,6 +204,11 @@
 		mode();
 		media.addEventListener('change', mode);
 		const beforeInstall = (event: Event) => {
+			if (
+				typeof (event as InstallEvent).prompt !== 'function' ||
+				!(event as InstallEvent).userChoice
+			)
+				return;
 			event.preventDefault();
 			installEvent = event as InstallEvent;
 		};
@@ -288,7 +304,9 @@
 			if (open) void refresh();
 		}}
 	>
-		{#if ready}<Check size={16} />{:else}<WifiOff size={16} />{/if}<span>{label}</span>
+		{#if updateReady && !deferred}<RefreshCw size={16} />{:else if ready}<Check
+				size={16}
+			/>{:else}<WifiOff size={16} />{/if}<span>{label}</span>
 	</button>
 	{#if open}
 		<section class="platform-panel" aria-label="Offline and installation">
