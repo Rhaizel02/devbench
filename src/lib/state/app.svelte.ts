@@ -10,6 +10,10 @@ export class AppState {
 	preferences = $state<Preferences>(defaultPreferences());
 	pendingPaste: PendingPaste | null = null;
 	paletteOpen = $state(false);
+	// Per-layout, client-only callbacks. No document enters platform messages or persistent state.
+	canvasSave?: () => Promise<boolean>;
+	canvasExport?: () => void;
+	canvasEditing?: () => boolean;
 	toggleFavorite(id: string) {
 		this.preferences.favorites = this.preferences.favorites.includes(id)
 			? this.preferences.favorites.filter((item) => item !== id)

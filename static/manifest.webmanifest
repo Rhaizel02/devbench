@@ -1,0 +1,17 @@
+{
+	"id": "/",
+	"name": "DevBench",
+	"short_name": "DevBench",
+	"description": "A local-first developer workbench. Prepare all 30 tools for private offline work.",
+	"lang": "en",
+	"start_url": "/",
+	"scope": "/",
+	"display": "standalone",
+	"theme_color": "#0e0e10",
+	"background_color": "#0e0e10",
+	"icons": [
+		{ "src": "/icons/devbench-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+		{ "src": "/icons/devbench-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+		{ "src": "/icons/devbench-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+	]
+}

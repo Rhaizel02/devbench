@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { onMount, onDestroy, tick } from 'svelte';
 	import { beforeNavigate, goto } from '$app/navigation';
+	import { useAppState } from '#lib/state/app.svelte.js';
 	import { FolderOpen, Plus, Upload, RefreshCw } from '@lucide/svelte';
 	import { emptyProject, newId, LIMITS, type Project } from './model';
 	import { parseProject } from './serialization';
@@ -35,6 +36,7 @@
 		working = $state(false),
 		newTitle = $state('Untitled board');
 	let actionMessage = $state('');
+	const app = useAppState();
 	let dialog = $state<HTMLDialogElement>(),
 		trigger: HTMLButtonElement;
 	const saver = createAutosaver(
@@ -101,7 +103,14 @@
 		}
 	}
 	onMount(() => {
+		app.canvasSave = async () => {
+			await tick();
+			return ready && !working && !!store && (await saver.flush());
+		};
 		void initialize();
+		return () => {
+			app.canvasSave = undefined;
+		};
 	});
 	async function show() {
 		dialog?.showModal();

@@ -41,3 +41,17 @@ No V2.3 product tests or product changes yet. The baseline has479unit cases and5
 ## Next action
 
 Implement manifest/icons, build finalizer and native worker strict precache; wire compact offline/install/update controls and minimal Canvas save/export callbacks. Add pure admission tests and a real static-build preparation/offline smoke before expanding acceptance.
+
+## Checkpoint B — native platform core (working tree)
+
+Architecture checkpoint5f3229f4f814c00a6e97150dfb4b2d0a8d372782 is published. Current implementation adds native Kit3 worker/manual registration, original192/512/maskable assets, manifest, SHA256 post-adapter inventory, strict static-only admission, full preparation/status/install/update controls and per-layout Canvas editing/save/export callbacks. Canvas domain/schema/serializer/history/database are unchanged. Firebase config/documentation is prepared, not deployed.
+
+Observed baseline before product changes:180files /5,929,945bytes,317,596font bytes,2,565,760JS bytes,111,913CSS bytes (work/v23-baseline-size.json). This pre-platform product source equals stable main3b03a3e; the command recorded documentation-only HEAD5f3229f at completion, not a new stable main. Native build now yields188precache resources /6,033,831bytes /30tool routes, excluding the worker/inventory's own digest loop. These are preliminary build observations, not final RC measurements.
+
+Checks: svelte-check0errors/0warnings and worker TypeScript pass before the subsequent small native-resource routing fix;15policy unit cases pass. First complete real browser preparation claimed its same-build client, then context.setOffline(true) loaded never-visited JSON Studio/CodeMirror on a full document navigation with no page errors. Raw work/v23-first-smoke.log and work/v23-first-offline-{ready,json}.png are intermediate evidence, not acceptance of all30tools or safe updates.
+
+Findings corrected: local server's text-license MIME was application/octet-stream, properly rejected by strict admission (server now serves text/plain); Vite minifier emits backtick literals (finalizer insertion recognizes all quote forms); native Kit chunk filenames may be only hashes, so immutable recovery now uses actual declared inventories/digest agreement and binds document resultingClientId before hydration instead of relying on a basename-dot regex. False Ready from incomplete install was never accepted. Need retained-build/two-tab/failure tests to validate this routing beyond first install.
+
+Next exact action: add production-build PWA coverage/strict-cache tests and a two-artifact controlled-server lifecycle harness; reuse representative existing30-tool flows under a real preprepared/offline fixture. Add incomplete-cache recovery, verify Canvas update-save guard/rescue and responsive standalone states. Then type/lint/full policy checks, checkpoint commit/push, continue offline acceptance. No claim of physical installation, two-build safety, all-tool offline or finalCI yet.
+
+Checkpoint B gate: latest check0errors/0warnings including separate worker tsc, lint and15pure policy tests pass; complete production build/finalizer and actual initial preparation + cold offline JSON/CodeMirror smoke pass. Core published checkpoint is the commit containing this paragraph. Safe multi-build activation, all30operations, Canvas reload/export and finalCI remain mandatory next gates.

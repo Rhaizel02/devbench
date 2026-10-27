@@ -5,6 +5,7 @@ import adapter from '@sveltejs/adapter-static';
 import { sveltekit } from '@sveltejs/kit/vite';
 
 const buildSha =
+	process.env.DEVBENCH_BUILD_ID ||
 	process.env.CF_PAGES_COMMIT_SHA ||
 	execFileSync('git', ['rev-parse', 'HEAD'], { encoding: 'utf8' }).trim();
 export default defineConfig({
@@ -12,6 +13,8 @@ export default defineConfig({
 	plugins: [
 		tailwindcss(),
 		sveltekit({
+			version: { name: buildSha },
+			serviceWorker: { register: false },
 			compilerOptions: {
 				// Force runes mode for the project, except for libraries. Can be removed in svelte 6.
 				runes: ({ filename }) =>

@@ -15,6 +15,7 @@
 	import { listedTools } from '#lib/tools/tool-registry.js';
 	import Sidebar from '#lib/components/Sidebar.svelte';
 	import CommandPalette from '#lib/components/CommandPalette.svelte';
+	import PwaControls from '#lib/pwa/PwaControls.svelte';
 	import favicon from '#lib/assets/favicon.svg';
 	let { children }: LayoutProps = $props();
 	const app = createAppState();
@@ -111,6 +112,7 @@
 			><Search size={15} /><span>Search tools, commands, or categories…</span><kbd>⌘ K</kbd></button
 		>
 		<span class="header-caption">YOUR LOCAL WORKBENCH</span>
+		<PwaControls />
 		<div class="theme-control">
 			<label class="sr-only" for="theme">Color theme</label
 			>{#if app.preferences.theme === 'dark'}<Moon

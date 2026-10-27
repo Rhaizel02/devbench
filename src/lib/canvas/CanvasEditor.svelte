@@ -1,5 +1,6 @@
 <script lang="ts">
-	import { onDestroy, tick } from 'svelte';
+	import { onMount, onDestroy, tick } from 'svelte';
+	import { useAppState } from '#lib/state/app.svelte.js';
 	import { resolve } from '$app/paths';
 	import { release } from '#lib/release.js';
 	import {
@@ -70,6 +71,15 @@
 		...parseProject(JSON.stringify(createDemoProject())),
 		id: newId('project')
 	};
+	const app = useAppState();
+	onMount(() => {
+		app.canvasExport = exportJSON;
+		app.canvasEditing = () => !!(loading || busy || editing || preview);
+		return () => {
+			app.canvasExport = undefined;
+			app.canvasEditing = undefined;
+		};
+	});
 	let project = $state.raw<Project>(initialProject);
 	let path = $state([initialProject.rootDiagramId]),
 		selection = $state<string[]>([]),
