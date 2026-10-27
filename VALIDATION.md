@@ -4,7 +4,7 @@
 
 The existing default Chromium suite remains online and is joined by `npm run test:offline` in CI. The latter generates two real static builds, uses actual service workers and bundled workers, disconnects contexts and reuses representative operations across the30-tool catalog. Additional risk gates cover exact cache key/body integrity, privacy, missing-cache503/recovery, Canvas frozen v1/v2/v3/image export/reload/CAS, browser-enforced quota, failed-save rescue and explicit multi-tab updates. No lifecycle mock substitutes for the two-build scenario.
 
-Current observed unit gate:494cases/32files; check0errors/0warnings. Exact final clean-install/full-suite/CI/preview status is recorded in [V2.3 progress](GOAL_PROGRESS_V23.md) and [acceptance](docs/PWA_OFFLINE_ACCEPTANCE_V23.md), rather than inferred from earlier checkpoints. Historical results below are unchanged.
+Local acceptance: clean install with zero audited vulnerabilities;494cases/32files; check0errors/0warnings, lint/build,59default Chromium passes with2historical remote-audit skips, and28real offline flows. Canonical-host checkpoint3c7e55c has exact green CI40499834623 and valid public HTTPS preparation/30cold routes/actual worker+Canvas smoke. The closing commit must additionally pass its own exact CI and preview identity check. [Release report](docs/DEVBENCH_V23_RELEASE.md), [V2.3 progress](GOAL_PROGRESS_V23.md) and [acceptance](docs/PWA_OFFLINE_ACCEPTANCE_V23.md) distinguish those gates; historical results below remain unchanged.
 
 ## V2.2 — Canvas experience and workflow studio
 

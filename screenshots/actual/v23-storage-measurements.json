@@ -1,5 +1,5 @@
 {
-  "version": "d4c56f31b956c2b625d288da4f9a552e57d21959",
+  "version": "3c7e55c3247581b7d8001de6a319dd8bb93843ee",
   "baseline": {
     "sha": "5f3229f4f814c00a6e97150dfb4b2d0a8d372782",
     "files": 180,
@@ -9,12 +9,12 @@
     "cssBytes": 111913
   },
   "resources": 189,
-  "precacheBytes": 6036011,
-  "fullPublicBuildFiles": 192,
-  "fullPublicBuildBytes": 6114305,
-  "incrementalPublicBuildBytes": 184360,
-  "workerScriptBytes": 48657,
-  "inventoryMetadataBytes": 28783,
+  "precacheBytes": 6036007,
+  "fullPublicBuildFiles": 193,
+  "fullPublicBuildBytes": 6114933,
+  "incrementalPublicBuildBytes": 184988,
+  "workerScriptBytes": 48745,
+  "inventoryMetadataBytes": 28789,
   "partitions": {
     "html": {
       "files": 34,
@@ -30,7 +30,7 @@
     },
     "js": {
       "files": 91,
-      "bytes": 1927489
+      "bytes": 1927485
     },
     "workers": {
       "files": 8,
@@ -99,10 +99,6 @@
       "bytes": 627
     },
     {
-      "path": "/_app/immutable/chunks/Bpz8QXY3.js",
-      "bytes": 97
-    },
-    {
       "path": "/_app/immutable/chunks/BYB-BaB9.js",
       "bytes": 279
     },
@@ -143,6 +139,10 @@
       "bytes": 307
     },
     {
+      "path": "/_app/immutable/chunks/DQX-jqjG.js",
+      "bytes": 97
+    },
+    {
       "path": "/_app/immutable/chunks/FSIjnsCd.js",
       "bytes": 41648
     },
@@ -159,7 +159,7 @@
       "bytes": 726
     },
     {
-      "path": "/_app/immutable/entry/app.Dc2SoblG.js",
+      "path": "/_app/immutable/entry/app.k-egCLau.js",
       "bytes": 1928
     },
     {
@@ -171,8 +171,8 @@
       "bytes": 600
     },
     {
-      "path": "/_app/immutable/nodes/0.D1pNpTcz.js",
-      "bytes": 22047
+      "path": "/_app/immutable/nodes/0.2h8TU19X.js",
+      "bytes": 22043
     },
     {
       "path": "/_app/immutable/nodes/1.ByOslVcj.js",
@@ -183,7 +183,7 @@
       "bytes": 10606
     }
   ],
-  "initialHomeBytes": 460791,
+  "initialHomeBytes": 460787,
   "deferredJavaScriptBytes": 2417480,
   "note": "Actual decoded resource bytes, not compressed network transfer size or universal load performance. Initial Home recorded in fresh Chromium, before registering SW. Precaching intentionally includes all deferred tools/workers. Full-public-build comparison includes host configuration, worker and inventory overhead; baseline documentation-only HEAD has stable V2.2 product source."
 }

@@ -17,9 +17,19 @@ test('PWA Canvas frozen v1/v2/v3 semantic backups, offline local image, reload, 
 	await request.post('/__pwa_test__/control', { data: { active: 'a' } });
 	await page.setViewportSize({ width: 1440, height: 1000 });
 	await prepareOffline(page);
-	await context.setOffline(true);
 	await page.goto('/tools/architecture-canvas/');
 	await expect(page.locator('[data-save-state="saved"]')).toBeVisible();
+	await page.getByRole('button', { name: 'Projects', exact: true }).click();
+	await page
+		.getByLabel('Import project JSON')
+		.setInputFiles('src/lib/canvas/fixtures/frozen-v20-v3.json');
+	await expect(page.getByRole('dialog')).toBeHidden();
+	await expect(page.locator('[data-save-state="saved"]')).toBeVisible();
+	const onlineProject = await json(page);
+	await context.setOffline(true);
+	await page.reload();
+	await expect(page.locator('[data-save-state="saved"]')).toBeVisible();
+	expect(await json(page)).toEqual(onlineProject);
 	for (const fixture of ['legacy-v1.json', 'legacy-v2.json', 'frozen-v20-v3.json']) {
 		const file = 'src/lib/canvas/fixtures/' + fixture;
 		const expected = parseProject(await readFile(file, 'utf8'));

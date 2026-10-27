@@ -1,10 +1,138 @@
 {
-  "origin": "https://436c9f6d.devbench-aw3.pages.dev",
-  "expected": "d4c56f31b956c2b625d288da4f9a552e57d21959",
-  "timestamp": "2026-10-27T11:42:29.845Z",
+  "origin": "https://68629055.devbench-aw3.pages.dev",
+  "expected": "3c7e55c3247581b7d8001de6a319dd8bb93843ee",
+  "timestamp": "2026-10-27T11:57:52.588Z",
   "tlsBypass": false,
-  "timings": [],
-  "operations": [],
+  "timings": [
+    {
+      "path": "/tools/architecture-canvas/",
+      "driverNavigationMs": 151
+    },
+    {
+      "path": "/tools/base64-toolkit/",
+      "driverNavigationMs": 123
+    },
+    {
+      "path": "/tools/cron-explorer/",
+      "driverNavigationMs": 64
+    },
+    {
+      "path": "/tools/curl-inspector/",
+      "driverNavigationMs": 84
+    },
+    {
+      "path": "/tools/environment-comparator/",
+      "driverNavigationMs": 65
+    },
+    {
+      "path": "/tools/hash-generator/",
+      "driverNavigationMs": 65
+    },
+    {
+      "path": "/tools/http-headers/",
+      "driverNavigationMs": 79
+    },
+    {
+      "path": "/tools/http-request/",
+      "driverNavigationMs": 78
+    },
+    {
+      "path": "/tools/id-generator/",
+      "driverNavigationMs": 71
+    },
+    {
+      "path": "/tools/json-code/",
+      "driverNavigationMs": 75
+    },
+    {
+      "path": "/tools/json-csv/",
+      "driverNavigationMs": 80
+    },
+    {
+      "path": "/tools/json-diff/",
+      "driverNavigationMs": 76
+    },
+    {
+      "path": "/tools/json-query/",
+      "driverNavigationMs": 67
+    },
+    {
+      "path": "/tools/json-schema/",
+      "driverNavigationMs": 84
+    },
+    {
+      "path": "/tools/json-studio/",
+      "driverNavigationMs": 69
+    },
+    {
+      "path": "/tools/json-yaml/",
+      "driverNavigationMs": 78
+    },
+    {
+      "path": "/tools/jwt-inspector/",
+      "driverNavigationMs": 69
+    },
+    {
+      "path": "/tools/log-inspector/",
+      "driverNavigationMs": 97
+    },
+    {
+      "path": "/tools/openapi-explorer/",
+      "driverNavigationMs": 107
+    },
+    {
+      "path": "/tools/pipeline-builder/",
+      "driverNavigationMs": 124
+    },
+    {
+      "path": "/tools/regex-tester/",
+      "driverNavigationMs": 77
+    },
+    {
+      "path": "/tools/sql-explain-analyzer/",
+      "driverNavigationMs": 73
+    },
+    {
+      "path": "/tools/sql-formatter/",
+      "driverNavigationMs": 82
+    },
+    {
+      "path": "/tools/sql-in-builder/",
+      "driverNavigationMs": 74
+    },
+    {
+      "path": "/tools/string-toolkit/",
+      "driverNavigationMs": 77
+    },
+    {
+      "path": "/tools/test-data-generator/",
+      "driverNavigationMs": 59
+    },
+    {
+      "path": "/tools/text-diff/",
+      "driverNavigationMs": 103
+    },
+    {
+      "path": "/tools/timestamp-converter/",
+      "driverNavigationMs": 62
+    },
+    {
+      "path": "/tools/url-toolkit/",
+      "driverNavigationMs": 82
+    },
+    {
+      "path": "/tools/xml-toolkit/",
+      "driverNavigationMs": 64
+    }
+  ],
+  "operations": [
+    "XML SOAP/format/XPath real worker offline",
+    "EXPLAIN complex plan real worker offline",
+    "OpenAPI parse and operations real worker offline",
+    "Pipeline real transformation worker offline",
+    "Related datasets real worker/FK offline",
+    "Canvas v3 image/group import IndexedDB reload and PNG offline"
+  ],
   "errors": [],
   "failed": [],
   "inventory": {
@@ -13,25 +141,25 @@
   },
   "headers": {
     "/": {
-      "date": "Tue, 27 Oct 2026 11:42:32 GMT",
+      "date": "Tue, 27 Oct 2026 11:57:54 GMT",
       "content-type": "text/html; charset=utf-8",
       "transfer-encoding": "chunked",
       "connection": "keep-alive",
       "access-control-allow-origin": "*",
       "cache-control": "public, max-age=0, must-revalidate",
       "nel": "{\"report_to\":\"cf-nel\",\"success_fraction\":0.0,\"max_age\":604800}",
-      "link": "<./_app/immutable/entry/start.BEyZRI4h.js>; rel=\"modulepreload\", <./_app/immutable/entry/payload.DSmR2FwN.js>; rel=\"modulepreload\", <./_app/immutable/chunks/CRzLMJPS.js>; rel=\"modulepreload\", <./_app/immutable/chunks/Dhm2L_-2.js>; rel=\"modulepreload\", <./_app/immutable/chunks/FSIjnsCd.js>; rel=\"modulepreload\", <./_app/immutable/chunks/CgZfct53.js>; rel=\"modulepreload\", <./_app/immutable/chunks/B__yVS3q.js>; rel=\"modulepreload\", <./_app/immutable/chunks/GLzI72S9.js>; rel=\"modulepreload\", <./_app/immutable/chunks/vjKIhpxE.js>; rel=\"modulepreload\", <./_app/immutable/entry/app.Dc2SoblG.js>; rel=\"modulepreload\", <./_app/immutable/nodes/0.D1pNpTcz.js>; rel=\"modulepreload\", <./_app/immutable/chunks/XKyaHtl9.js>; rel=\"modulepreload\", <./_app/immutable/chunks/CeV5F1BK.js>; rel=\"modulepreload\", <./_app/immutable/chunks/C1rCnSww.js>; rel=\"modulepreload\", <./_app/immutable/chunks/DET7XOWi.js>; rel=\"modulepreload\", <./_app/immutable/chunks/BIsY-nQG.js>; rel=\"modulepreload\", <./_app/immutable/chunks/C7HRvtqi.js>; rel=\"modulepreload\", <./_app/immutable/chunks/BZAJJdwU.js>; rel=\"modulepreload\", <./_app/immutable/chunks/BYB-BaB9.js>; rel=\"modulepreload\", <./_app/immutable/chunks/BJNgPDkU.js>; rel=\"modulepreload\", <./_app/immutable/chunks/BNuvyAqs.js>; rel=\"modulepreload\", <./_app/immutable/chunks/BpHHya25.js>; rel=\"modulepreload\", <./_app/immutable/chunks/Bpz8QXY3.js>; rel=\"modulepreload\", <./_app/immutable/nodes/2.CqlrzNcn.js>; rel=\"modulepreload\", <./_app/immutable/chunks/Dlh86i7D.js>; rel=\"modulepreload\", <./_app/immutable/chunks/BGuBCukN.js>; rel=\"modulepreload\"",
+      "link": "<./_app/immutable/entry/start.BEyZRI4h.js>; rel=\"modulepreload\", <./_app/immutable/entry/payload.DSmR2FwN.js>; rel=\"modulepreload\", <./_app/immutable/chunks/CRzLMJPS.js>; rel=\"modulepreload\", <./_app/immutable/chunks/Dhm2L_-2.js>; rel=\"modulepreload\", <./_app/immutable/chunks/FSIjnsCd.js>; rel=\"modulepreload\", <./_app/immutable/chunks/CgZfct53.js>; rel=\"modulepreload\", <./_app/immutable/chunks/B__yVS3q.js>; rel=\"modulepreload\", <./_app/immutable/chunks/GLzI72S9.js>; rel=\"modulepreload\", <./_app/immutable/chunks/vjKIhpxE.js>; rel=\"modulepreload\", <./_app/immutable/entry/app.Cga7ofiM.js>; rel=\"modulepreload\", <./_app/immutable/nodes/0.CO2QQC8q.js>; rel=\"modulepreload\", <./_app/immutable/chunks/XKyaHtl9.js>; rel=\"modulepreload\", <./_app/immutable/chunks/CeV5F1BK.js>; rel=\"modulepreload\", <./_app/immutable/chunks/C1rCnSww.js>; rel=\"modulepreload\", <./_app/immutable/chunks/DET7XOWi.js>; rel=\"modulepreload\", <./_app/immutable/chunks/BIsY-nQG.js>; rel=\"modulepreload\", <./_app/immutable/chunks/C7HRvtqi.js>; rel=\"modulepreload\", <./_app/immutable/chunks/BZAJJdwU.js>; rel=\"modulepreload\", <./_app/immutable/chunks/BYB-BaB9.js>; rel=\"modulepreload\", <./_app/immutable/chunks/BJNgPDkU.js>; rel=\"modulepreload\", <./_app/immutable/chunks/BNuvyAqs.js>; rel=\"modulepreload\", <./_app/immutable/chunks/BpHHya25.js>; rel=\"modulepreload\", <./_app/immutable/chunks/DQX-jqjG.js>; rel=\"modulepreload\", <./_app/immutable/nodes/2.CqlrzNcn.js>; rel=\"modulepreload\", <./_app/immutable/chunks/Dlh86i7D.js>; rel=\"modulepreload\", <./_app/immutable/chunks/BGuBCukN.js>; rel=\"modulepreload\"",
       "referrer-policy": "strict-origin-when-cross-origin",
       "x-content-type-options": "nosniff",
       "x-robots-tag": "noindex",
-      "report-to": "{\"group\":\"cf-nel\",\"max_age\":604800,\"endpoints\":[{\"url\":\"https://a.nel.cloudflare.com/report/v4?s=fPkweA38MQM4tDLSyGlCCkTnDy3zoRgcJYSV34PLpsU8Q%2B2UmfXoJEl6RLJPSbxI9yYCplkjSjUUN1u2Eekahx9vhN2kfHKD3%2BpSvpNsUyPxr9GTLSVnti801GffCDDHnBVUA3wGfFjOMwYy2SbcES2s\"}]}",
+      "report-to": "{\"group\":\"cf-nel\",\"max_age\":604800,\"endpoints\":[{\"url\":\"https://a.nel.cloudflare.com/report/v4?s=DZT8oXGroqr93KvKz%2F210ijZybdx2PRfZzZIHdPm8ZiFjrzvJXFbnMmTUZw%2BekgzSvtaDo8cn7yTOSf6vXSDf0IzFNegO1xPBlq1oB3gQhOZVsNQy4dnIUWmNKzhfhZ7OSf9k5Y1PthFC6PjkgrOOECv\"}]}",
       "content-encoding": "br",
       "server": "cloudflare",
-      "cf-ray": "a511701b6871f40c-MAD",
+      "cf-ray": "a511869fb9e726b3-MAD",
       "alt-svc": "h3=\":443\"; ma=86400"
     },
     "/manifest.webmanifest": {
-      "date": "Tue, 27 Oct 2026 11:42:32 GMT",
+      "date": "Tue, 27 Oct 2026 11:57:54 GMT",
       "content-type": "application/manifest+json",
       "transfer-encoding": "chunked",
       "connection": "keep-alive",
@@ -41,15 +169,15 @@
       "referrer-policy": "strict-origin-when-cross-origin",
       "x-content-type-options": "nosniff",
       "x-robots-tag": "noindex",
-      "report-to": "{\"group\":\"cf-nel\",\"max_age\":604800,\"endpoints\":[{\"url\":\"https://a.nel.cloudflare.com/report/v4?s=gBjeiK9DEVH7%2FN5J1Q76YnIMa6VkqtSFPfJ02mS1Bw%2BoliLcFUqJMPDrdKz%2FTL4NH4VhbkPlip6o6Rz2hmMpfb5POItp0PJt3CxRkTS%2F8j%2Bh6vCjJ8Q2uo2Fzo5zt4fB%2FhM4QVmXcDgYOBJPKxy8NVEk\"}]}",
+      "report-to": "{\"group\":\"cf-nel\",\"max_age\":604800,\"endpoints\":[{\"url\":\"https://a.nel.cloudflare.com/report/v4?s=A6Av79Nuwdw8QkpJIf2vwQ4nlnhIEbFVPWKK%2BTfys3PZuN1hNj9BzTSMm0jslOZpItM7XAMjuixihjJUTfmOPLqZu%2B3PqhYmNZsAM8eBF5iI%2FP8EHAj3FokxGcyNq%2FbeJDFHADNAxxHRFMEllBPWmStV\"}]}",
       "etag": "W/\"1a2bc05fe98f2b6d30e701c2538edaa8\"",
       "content-encoding": "br",
       "server": "cloudflare",
-      "cf-ray": "a511701be948f40c-MAD",
+      "cf-ray": "a51186a04a3b26b3-MAD",
       "alt-svc": "h3=\":443\"; ma=86400"
     },
     "/service-worker.js": {
-      "date": "Tue, 27 Oct 2026 11:42:32 GMT",
+      "date": "Tue, 27 Oct 2026 11:57:54 GMT",
       "content-type": "application/javascript",
       "transfer-encoding": "chunked",
       "connection": "keep-alive",
@@ -60,15 +188,15 @@
       "service-worker-allowed": "/",
       "x-content-type-options": "nosniff",
       "x-robots-tag": "noindex",
-      "report-to": "{\"group\":\"cf-nel\",\"max_age\":604800,\"endpoints\":[{\"url\":\"https://a.nel.cloudflare.com/report/v4?s=ZOMeabkAl644pusk3%2B6ePLMrx6Gr8xx4ANyjlHjVQU3hfdwkbpzYFXLvnM3uxGQA0rUkfcUp1%2FllutEG7gsIGyoKgH1V1WWw4%2FaCJrTy2%2F2EPEGemNM8xqmvZMQcaSI6H8T6Gp1AL31xpf00O36Lvghv\"}]}",
-      "etag": "W/\"3e0d84d99accd0f4a0c30a828d616fc2\"",
+      "report-to": "{\"group\":\"cf-nel\",\"max_age\":604800,\"endpoints\":[{\"url\":\"https://a.nel.cloudflare.com/report/v4?s=5zKc5yGT56mi2XP9zYdvpWwYeaaGz%2FnlAvZcNziNTFSAEpcFzdWwnnT3zMC4IJ%2FHt7jNkkEqzr8t0UC2E%2BKseXRHO4dshgG6T6ZY2Lt%2BVGXHaO4eaai6Z6fsxNipuqYrr0acm6gNZ6WoLWiLwvwyRheo\"}]}",
+      "etag": "W/\"94979b27217a46c326fbdc8ee7e07ae6\"",
       "content-encoding": "br",
       "server": "cloudflare",
-      "cf-ray": "a511701d7bbaf40c-MAD",
+      "cf-ray": "a51186a0ca8d26b3-MAD",
       "alt-svc": "h3=\":443\"; ma=86400"
     },
     "/_app/version.json": {
-      "date": "Tue, 27 Oct 2026 11:42:32 GMT",
+      "date": "Tue, 27 Oct 2026 11:57:55 GMT",
       "content-type": "application/json",
       "transfer-encoding": "chunked",
       "connection": "keep-alive",
@@ -78,15 +206,15 @@
       "referrer-policy": "strict-origin-when-cross-origin",
       "x-content-type-options": "nosniff",
       "x-robots-tag": "noindex",
-      "report-to": "{\"group\":\"cf-nel\",\"max_age\":604800,\"endpoints\":[{\"url\":\"https://a.nel.cloudflare.com/report/v4?s=p0qigCggWP6ciNgWSaGAR2wXhUcuCgm2Kuk3wKSaCAowiRCC0Ai5Sb6YYK%2FPPilehaKQKeI8IyZt9cgGAEgMtsHSAMJzOcInh%2BvplSiAalQqtXy9fv65X71NH6acRDXhV05lDp1FM68zdJ488HyTJ2Gy\"}]}",
-      "etag": "W/\"fd22fc8cd78da79bd90a1a5d04e03305\"",
+      "report-to": "{\"group\":\"cf-nel\",\"max_age\":604800,\"endpoints\":[{\"url\":\"https://a.nel.cloudflare.com/report/v4?s=DiqKawkPcIFhNP5s0dKSQYrA3cb10ihQ6plZhxatOXLBwCgvQcpebjlJbtLJHnmV208pcF2TtXwOxZ4LexjmsGQ1fSFKV5otGIk5wI0SCrCqOs5q9iDZAAMo5G2wptjA4xmDVRl35%2Br1x4P9iQiOTh8q\"}]}",
+      "etag": "W/\"8a2c74ef82e6ffdde98cb4d6c0bce731\"",
       "content-encoding": "br",
       "server": "cloudflare",
-      "cf-ray": "a511701eddb3f40c-MAD",
+      "cf-ray": "a51186a2ecb226b3-MAD",
       "alt-svc": "h3=\":443\"; ma=86400"
     },
     "/_app/immutable/chunks/_i4GyHsC.js": {
-      "date": "Tue, 27 Oct 2026 11:42:33 GMT",
+      "date": "Tue, 27 Oct 2026 11:57:55 GMT",
       "content-type": "application/javascript",
       "transfer-encoding": "chunked",
       "connection": "keep-alive",
@@ -96,14 +224,22 @@
       "referrer-policy": "strict-origin-when-cross-origin",
       "x-content-type-options": "nosniff",
       "x-robots-tag": "noindex",
-      "report-to": "{\"group\":\"cf-nel\",\"max_age\":604800,\"endpoints\":[{\"url\":\"https://a.nel.cloudflare.com/report/v4?s=xj9vf%2BV2eLmQWJ%2BCnjrvWFHdlQ8J%2BHATW5pW2mRyLRXYCBi%2BhqgDK%2BCM3atgAoI0hfQtoqc%2ByDs9Z00GW9azV442%2BZ521h6qITdV3kFrC6h55UeHoNmKhRQFbpACnCCC8IALPE7dVDAwk4yAF96bUDTC\"}]}",
+      "report-to": "{\"group\":\"cf-nel\",\"max_age\":604800,\"endpoints\":[{\"url\":\"https://a.nel.cloudflare.com/report/v4?s=GgO2SyuGKldc28rwCcHUHLrJMhHsZJC6%2F55qFke2O20Ueavbh8MaD0pKkPxw4nCDixzZ93IIJmOzyrEjpxtOjCxBqoGQZyLHi1OC%2F2keYA%2BNqPXdv61BkNfse7Ty0voXfbROZeVn7F70A62KKjEUWpHG\"}]}",
       "etag": "W/\"ffcae0eaefd6e2b5a48e6d00c521b87f\"",
       "content-encoding": "br",
       "server": "cloudflare",
-      "cf-ray": "a5117021299bf40c-MAD",
+      "cf-ray": "a51186a4febe26b3-MAD",
       "alt-svc": "h3=\":443\"; ma=86400"
     }
   },
-  "result": "FAIL",
-  "failure": "expect(locator).toBeVisible() failed\n\nLocator: locator('[data-offline-state=\"ready\"]')\nExpected: visible\nTimeout: 120000ms\nError: element(s) not found\n\nCall log:\n  - Expect \"toBeVisible\" locator('[data-offline-state=\"ready\"]') with timeout 120000ms\n  - waiting for locator('[data-offline-state=\"ready\"]')\n"
+  "preparationMs": 7638,
+  "workerScope": "https://68629055.devbench-aw3.pages.dev/",
+  "cached": {
+    "names": [
+      "devbench-static-v23-3c7e55c3247581b7d8001de6a319dd8bb93843ee"
+    ],
+    "keys": 190,
+    "errors": []
+  },
+  "result": "PASS"
 }

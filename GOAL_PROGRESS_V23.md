@@ -22,12 +22,12 @@
 | H8 ephemeral tools offline       | Pass locally               | Real representative operations for all30 tools and marker privacy                                          |
 | H9 installed/responsive          | Emulation pass / native P2 | Both themes390/768/1440; distinguish physical install/emulation                                            |
 | H10 Firebase                     | Prepared / no deployment   | Config/documentation mandatory; no credentials requested                                                   |
-| H11 measured storage/performance | Pending                    | Inventory actual bytes, baseline delta, preparation/navigation/retention                                   |
+| H11 measured storage/performance | Done / evidence recorded   | Inventory actual bytes, baseline delta, preparation/navigation/retention                                   |
 | H12 real offline tests           | Pass locally               | Production build, real SW and workers, setOffline, two builds                                              |
-| H13 visual review                | Pending                    | Actual screenshots and inspection                                                                          |
+| H13 visual review                | Done / evidence recorded   | Actual screenshots and inspection                                                                          |
 | H14 invariants                   | Pass locally               | Cache/URL/storage privacy and no regressions                                                               |
 | H15 checkpoints/CI               | In progress                | Publish coherent checkpoints, exact final CI                                                               |
-| H16 documentation                | In progress                | Architecture, acceptance, hosting, release, pertinent current docs                                         |
+| H16 documentation                | Done / evidence recorded   | Architecture, acceptance, hosting, release, pertinent current docs                                         |
 | H17 RC publication               | Pending                    | Exact final preview/CI, clean tree, main untouched, GO/NO-GO                                               |
 
 ## Risks and decisions
@@ -67,6 +67,20 @@ Correction in progress: preserve host404.html, produce an explicit directory-ind
 Corrected source passes27/27 offline flows against the compressed/redirecting host harness. Two additional focused update cases pass after adding a real context disconnection during partial B download and an unrelated static-cache preservation sentinel. Check0/0 and lint pass. A stale generated asset captured during an overlapping in-progress build was avoided by moving only the verified generated build/output directories into an ignored backup folder, preserving their contents, then rebuilding from settled sources. No user projects/database/files were deleted. Finalizer now rejects non-index HTML precache entries early. CI offline acceptance stops after the first failure to avoid repeating a broken shared preparation fixture; no retries/skips hide failures.
 
 Measured CI40497714321 browser installation took10m15s (11:40:05–11:50:20UTC), while unit/build gates were short. Add a lockfile/OS-keyed cache for the existing Playwright binaries; keep actual install/dependency verification and both browser suites. This is CI preparation overhead only, no runtime dependency or product redesign. Next: publish canonical-host fix, normal-TLS public preparation/30cold routes/actual workers/Canvas smoke, finish final evidence/release doc and wait for exact final CI.
+
+## Final acceptance and handoff gate
+
+Canonical-host checkpoint3c7e55c3247581b7d8001de6a319dd8bb93843ee is published with exact green CI40499834623. Normal-TLS immutable preview https://68629055.devbench-aw3.pages.dev passed complete preparation (189resources/6,035,821decoded bytes;7,638ms browser+driver/network),30cold disconnected workspaces, actual XML SOAP/XPath, EXPLAIN, OpenAPI, Pipeline, related dataset FK checks and Canvas v3 group/image import→IndexedDB reload→PNG. Cache190entries all match declared original bytes; zero page errors/failed requests. Raw screenshots/actual/v23-public-smoke.json. Earlier Pages308 P1 is resolved and verified publicly; no known open P0/P1.
+
+Final local expanded offline suite:28/28 pass (work/v23-acceptance-final-offline.log), now explicitly includes both YAML directions, an online saved rich Canvas project loaded after full disconnect and manually created three-level hierarchy. Seven PWA-specific cases plus21existing functional flows, not28new implementations. Actual network interruption during partial B installation, controlled503, retry, Later, explicit update, old-client XML execution, foreign static-cache preservation, browser-enforced cache quota and simulated Canvas-save rescue all pass. The only final product correction after3c is truthful standalone detection after appinstalled: installation alone does not change the current tab's display mode.
+
+Observed local budgets in screenshots/actual/v23-storage-measurements.json:189resources/6,036,007bytes;193public files/6,114,933bytes;184,988byte increase over stable-product source (~3.1%);8workers650,142bytes; fonts317,596bytes; initial Home460,787decoded bytes/33responses; deferred JS2,417,480bytes. Local preparation1,243ms, not a network/performance promise. Public/local compiled bytes differ slightly by identity/platform; each cache is checked against its own actual build. Loopback test identities describe working-source snapshots, not a claim that earlier published commits had those modified bytes.
+
+CI log follow-up: the10m15s first preparation was dominated by OS dependency installation; browser archive downloads themselves took about7s. Binary caching does not fix OS package latency. The next complete install took25s and CI3c was green; do not present this as an application optimization or universal CI timing.
+
+Current product/catalog/backups/privacy and visual gates pass. Reports, all30operation matrix and actual1440/768/390 dark/light/Focus/child/update/error/worker captures are complete. Native OS install, physical Android/iOS, expanded cross-browser installation and actual Firebase deployment are explicit P2, not hidden failures. Firebase config/docs are prepared without credentials/services. No domain/model/serializer/physical database changes or old-branch modifications.
+
+Next exact action: format/check/lint final source/docs; commit/push this closing checkpoint; wait for the exact delivery commit's CI (including all28offline flows), then verify its normal-TLS Cloudflare preview/build SHA and repeat public critical smoke. Keep main unchanged. Do not close the goal using3c's green CI as a substitute. Once those post-push gates pass, record exact SHA/run/preview in the final handoff and mark the goal complete; no additional feature work remains.
 
 ## Checkpoint B — native platform core (working tree)
 

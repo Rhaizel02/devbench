@@ -8,7 +8,7 @@ Only verified own static application resources enter Cache Storage. Ephemeral in
 
 Updates download in the background and offer **Update / Later**. Applying explicitly acknowledges ephemeral input loss; Canvas must finish edits and save, or the reload is blocked with rescue JSON. Other tabs keep their work and compatible old resources. Failed candidates preserve the active build. Reconnect and retry preparation if offline assets are incomplete.
 
-Validation: `npm ci`, `npm run check`, `npm run lint`, `npm run test`, `npm run build`, `npm run test:e2e`, **`npm run test:offline`**. The last command creates two actual builds and tests real disconnected workers/lifecycle; it restores the default first build. See [architecture](docs/PWA_ARCHITECTURE_V23.md), [acceptance](docs/PWA_OFFLINE_ACCEPTANCE_V23.md), [optional Firebase Hosting](docs/HOSTING_ALTERNATIVE_V23.md) and [progress](GOAL_PROGRESS_V23.md). This RC is not merged into main.
+Validation: `npm ci`, `npm run check`, `npm run lint`, `npm run test`, `npm run build`, `npm run test:e2e`, **`npm run test:offline`**. The last command creates two actual builds and tests real disconnected workers/lifecycle; it restores the default first build. See [release report](docs/DEVBENCH_V23_RELEASE.md), [architecture](docs/PWA_ARCHITECTURE_V23.md), [acceptance](docs/PWA_OFFLINE_ACCEPTANCE_V23.md), [optional Firebase Hosting](docs/HOSTING_ALTERNATIVE_V23.md) and [progress](GOAL_PROGRESS_V23.md). This RC is not merged into main.
 
 ## V2.2 — Canvas experience and workflow studio
 

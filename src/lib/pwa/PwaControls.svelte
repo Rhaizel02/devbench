@@ -214,7 +214,7 @@
 		};
 		const installed = () => {
 			installEvent = null;
-			standalone = true;
+			mode(); // Installation does not turn the current browser tab into a standalone window.
 		};
 		const connectivity = () => {
 			offline = !navigator.onLine;

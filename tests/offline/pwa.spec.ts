@@ -190,6 +190,16 @@ test('PWA all 30 never-visited lazy workspaces load offline; actual JSON copy/do
 	expect(errors).toEqual([]);
 	expect(failed).toEqual([]);
 	const marker = 'PWA_PRIVATE_' + crypto.randomUUID();
+	await page.goto('/tools/json-yaml/');
+	await source(page, 'JSON input', JSON.stringify({ marker }));
+	await page.getByRole('button', { name: 'Convert', exact: true }).click();
+	await page.getByRole('button', { name: 'Copy output', exact: true }).click();
+	const yaml = await page.evaluate(() => navigator.clipboard.readText());
+	await page.getByLabel('Conversion direction', { exact: true }).selectOption('yaml-json');
+	await source(page, 'YAML input', yaml);
+	await page.getByRole('button', { name: 'Convert', exact: true }).click();
+	await page.getByRole('button', { name: 'Copy output', exact: true }).click();
+	expect(JSON.parse(await page.evaluate(() => navigator.clipboard.readText()))).toEqual({ marker });
 	await page.goto('/tools/json-studio/');
 	await source(page, 'JSON input', JSON.stringify({ marker, values: [1, 2] }));
 	await page.getByRole('button', { name: 'Format JSON', exact: true }).click();
@@ -243,6 +253,7 @@ test('PWA all 30 never-visited lazy workspaces load offline; actual JSON copy/do
 				errors,
 				failed,
 				markerLeaked: false,
+				yamlBidirectionalOffline: true,
 				cacheBytesVerified: inventory.bytes
 			},
 			null,
