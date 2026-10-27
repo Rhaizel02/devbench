@@ -1,16 +1,16 @@
 # B1 validation report
 
-## V2.2 RC — Canvas experience and workflow studio
+## V2.2 — Canvas experience and workflow studio
 
-Review branch: feature/canvas-workflow-v22. Normal merge preserves both Canvas2.0 and Data DiagnosticsV2.1 histories; **30 available tools**. Main and both source RC branches are unchanged; this RC must not be merged without acceptance.
+Stable release integration: integration/devbench-v22-release → main, preserving the complete feature/canvas-workflow-v22 history and **30 available tools**. Canvas2.1, Data DiagnosticsV2.1, PipelineV2 and Test DataV2 are included. The original RC branches remain intact; historical reports below retain their original branch states.
 
 - **Canvas2.1:** intersecting box selection (B also supports touch), atomic groups/multi-style mixed states, actual native scene layering, direct midpoint bending and viewport Focus with a collapsible left desktop inspector. Schema3 and v1/v2/v3 backups remain compatible; only Canvas persists documents.
 - **PipelineV2:** ordered/duplicate/enabled steps, accessible reorder plus drag/drop, configuration-only versioned recipe import/export, five built-ins, text/literal/JSONPath/XML operations, real cancellation and bounded intermediate inspection.
 - **Test DataV2:** editable scalar schemas, seeded fixtures, five presets, related one-to-many collections with validated foreign keys, bounded JSON/page/CSV, formula-protected CSV. Lorem and standalone cryptographic GTIN functionality remain.
 
-Reports: [Canvas audit](docs/CANVAS_UX_AUDIT_V22.md), [acceptance](docs/CANVAS_UX_V22_ACCEPTANCE.md), [Pipeline](docs/PIPELINE_V2.md), [datasets](docs/TEST_DATA_V2.md), [release progress](GOAL_PROGRESS_V22.md). Screenshots use screenshots/actual/v22-*. Final controls/CI and immutable preview are recorded in progress; do not infer final approval from historical reports below.
+Stable release evidence: [integration, tests, CI and production](docs/DEVBENCH_V22_RELEASE.md). Supporting reports: [Canvas audit](docs/CANVAS_UX_AUDIT_V22.md), [RC acceptance](docs/CANVAS_UX_V22_ACCEPTANCE.md), [Pipeline](docs/PIPELINE_V2.md), [datasets](docs/TEST_DATA_V2.md). Historical RC evidence remains unchanged; current app/Canvas display versions and build SHA come from src/lib/release.ts.
 
-Current V2.2 local gate: clean install (zero vulnerabilities), check0/0, lint,479 unit tests/31 files, static build,59 Chromium passes and2 configured historical remote-audit skips. Full suite includes Canvas data integrity/UX and all30 catalog tools. Exact final CI/preview decision is recorded in GOAL_PROGRESS_V22.md.
+Current V2.2 local gate: clean install (zero vulnerabilities), check0/0, lint,479 unit tests/31 files, static build,59 Chromium passes and2 configured historical remote-audit skips. Full suite includes Canvas data integrity/UX and all30 catalog tools. The stable integration repeats these controls; exact CI and production evidence are recorded in docs/DEVBENCH_V22_RELEASE.md.
 
 ## V2.1 Data Diagnostics RC
 

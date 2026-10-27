@@ -5,6 +5,7 @@
 	import { ArrowLeft, Star, Construction } from '@lucide/svelte';
 	import { toolWorkspaces } from '#lib/tools/tool-workspaces.js';
 	import { useAppState } from '#lib/state/app.svelte.js';
+	import { release } from '#lib/release.js';
 	let { data }: PageProps = $props();
 	const app = useAppState();
 	let Workspace = $state<Component | null>(null);
@@ -36,7 +37,7 @@
 <div class="workspace-page" class:canvas-workspace={data.tool.slug === 'architecture-canvas'}>
 	{#if data.tool.slug === 'architecture-canvas'}
 		<div class="canvas-meta">
-			<span>Architecture Canvas · Release candidate</span><button
+			<span>Architecture Canvas {release.canvas}</span><button
 				class="button"
 				aria-pressed={app.preferences.favorites.includes(data.tool.id)}
 				onclick={() => app.toggleFavorite(data.tool.id)}

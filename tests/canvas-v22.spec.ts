@@ -45,6 +45,9 @@ test('V2.2 partial marquee, atomic group styles, focus inspector, child navigati
 	page
 }) => {
 	await ready(page);
+	await expect(page.locator('.desktop-sidebar .brand .version')).toHaveText('V2.2');
+	await expect(page.locator('.canvas-meta > span')).toHaveText('Architecture Canvas 2.1');
+	await expect(page.locator('.board-heading .eyebrow')).toHaveText('ARCHITECTURE CANVAS · 2.1');
 	await shape(page, 100, 200, '#dcecf9');
 	await shape(page, 360, 200, '#d6f5ed');
 	await shape(page, 680, 200, '#efe2fa');

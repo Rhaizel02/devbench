@@ -1,5 +1,7 @@
 # AGENTS.md — reglas de Codex para DevBench
 
+**Release estable V2.2 autorizada:** la petición de integración final autoriza incorporar feature/canvas-workflow-v22 desde main actualizado en integration/devbench-v22-release, validar y promover a main conservando todo el historial, sin force push. Esta autorización sustituye las restricciones históricas de no fusionar las RC para esta release. Mantener intactas las ramas originales, los formatos Canvas v1/v2/v3 y su IndexedDB; no añadir funcionalidades. Evidencia de integración, CI y producción en docs/DEVBENCH_V22_RELEASE.md.
+
 **Autorización V2.2 vigente:** V22_CANVAS_WORKFLOW_GOAL.md y GOAL_PROGRESS_V22.md gobiernan la rama feature/canvas-workflow-v22. El usuario autoriza integrar allí las RC V2.1 y Canvas 2.0 mediante merge normal, conservando historia y treinta herramientas. No modificar main ni las ramas RC originales, no force push. Canvas conserva lectura v1/v2/v3 e IndexedDB no destructivo. Pipeline y Test Data siguen exclusivamente en memoria; export/import de configuraciones es explícito.
 
 
